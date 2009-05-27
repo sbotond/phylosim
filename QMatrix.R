@@ -1,0 +1,1274 @@
+##	$Id: QMatrix.R,v 1.12 2009-04-30 17:10:22 sbotond Exp $
+##
+##	Class: QMatrix
+##	Descriprion: 
+##	
+##	
+##	
+##	
+##	
+##	
+##	
+## Copyright 2009 Botond Sipos	
+## See the file ../COPYING for licensing issues.	
+##	
+setConstructorS3(
+  "QMatrix",
+  function( 
+		name="Anonymous",
+		alphabet=NA,
+		rate.list=NA,
+		process=NA,
+		... 
+		)	{
+
+		this<-PSRoot();
+    this<-extend(
+      this,
+      "QMatrix",
+			.name=NA,
+			.alphabet=NA,
+			.rate.matrix=NA,
+			.orig.matrix=NA,
+		  .norm.const=NA,
+			.process=NA,
+			.is.q.matrix=TRUE
+    );
+		
+		this$name<-name;
+
+		if(!missing(process)){
+			this$process<-process;
+		}
+
+		if(!missing(alphabet)){
+			this$alphabet<-alphabet;
+		}
+
+		if(!missing(rate.list)){
+			if(missing(alphabet)){
+				throw("Cannot set rates because the alphabet is not specified!\n")
+			}
+			this$rateList<-rate.list;
+		}
+
+    return(this);
+  },
+  enforceRCC=TRUE
+);
+
+##	
+## Method: .buildRateMatrix
+##	
+setMethodS3(
+	".buildRateMatrix", 
+	class="QMatrix", 
+	function(
+		this,
+		...
+	){
+
+		size<-this$alphabet$size;
+		symbols<-this$alphabet$symbols;
+
+		# Setting the dimension names
+		# for the original rates matrix:
+		if(!isEmpty(this$.alphabet)){
+			this$.orig.matrix<-matrix(nrow=size,ncol=size);
+			colnames(this$.orig.matrix)<-symbols;
+			rownames(this$.orig.matrix)<-symbols;
+		}
+		# Copy to the scaled matrix:
+		this$.rate.matrix<-this$.orig.matrix;
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: checkConsistency
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="QMatrix", 
+	function(
+		this,
+		check.process=TRUE,
+		...
+	){
+
+			if(is.Process(this$.process)){
+
+      		wp<-this$.process$.write.protected;
+      		if (wp) {
+					# Cannot use virtual field here because of 
+					# some obscure errror:
+        	this$.process$.write.protected<-FALSE;
+      	}
+			}
+      may.fail<-function(this) {
+					
+				# Reassing name:
+				this$name<-this$name;
+				# Do not reassign alphabet as that will wipe out the rates!
+				if(!is.na(this$.alphabet) & !is.Alphabet(this$.alphabet)){
+					throw("QMatrix alphabet is invalid!\n");
+				}
+		
+				# Check if the original rate matrix is a matrix or NA.
+				if(!is.matrix(this$.orig.matrix) & !all(is.na(this$.orig.matrix))){
+						throw("The original rates matrix is invalid!\n");
+				}	
+				# Check original rates matrix size:
+				else if(!all(dim(this$.orig.matix) != c(this$.alphabet$.size, this$.alphabet$.size))) {
+					throw("The original rates matrix is of wrong size!");
+				}
+				
+				# Check if the rescaled rate matrix is a matrix or NA.
+				if(!is.matrix(this$.rate.matrix) & !all(is.na(this$.rate.matrix))){
+						throw("The rescaled rates matrix is invalid!\n");
+				}	
+				# Check rescaled rates matrix size:
+				else if(!all(dim(this$.rates.matix) != c(this$.alphabet$.size, this$.alphabet$.size))) {
+					throw("The original rates matrix is of wrong size!");
+				}
+
+				# Flag for not having NA-as in the matrices.
+				COMPLETE<-TRUE;
+
+			
+				if(is.matrix(this$.orig.matrix) ){
+					if(any(is.na(this$.orig.matrix))){
+						warning("Some rates are undefined!\n");
+						COMPLETE<-FALSE;
+					}
+					else if (!all(is.numeric(this$.orig.matrix))){
+						throw("The original rates matrix has non-numeric elements!\n");
+					}
+				}
+				
+				if(is.matrix(this$.orig.matrix) ){
+					if( any(is.na(this$.orig.matrix)) & COMPLETE ){
+						COMPLETE<-FALSE;
+						throw("The original rates matrix is complete, but the rescaled matrix has undefined elements!\n");
+					}
+					else if (!all(is.numeric(this$.orig.matrix))){
+						throw("The rescaled rates matrix has non-numeric elements!\n");
+					}
+				}
+
+				# Check the normalizing constant:
+				if( length(this$.norm.const) != 1 | (!is.na(this$.norm.const) & !is.numeric(this$.norm.const)) ){
+					 throw("Normalizing constant is invalid!\n");
+				}
+
+				# Check the normalization:
+				if(is.matrix(this$.orig.matrix) & is.matrix(this$.rate.matrix) & COMPLETE ){
+						if(!PSRoot$all.equal(this$.rate.matrix, (this$.norm.const * this$.orig.matrix)) ){
+							throw("The scaled matrix is inconsistent with the original matrix and the normalizing constant!\n");
+						}
+				}
+
+				# Check the process:
+				if(check.process==TRUE){
+					 if(is.Process(this$.process)){
+							# Check for alphabet compatibility:
+							if(this$.alphabet != this$.process$alphabet){
+								throw("Process/QMatrix alphabet mismatch!\n");
+							}
+							# Check if the parent process QMatrix is this object:
+							if(!equals(this$.process$.q.matrix, this) ){
+								throw("Parent process QMatrix is not identical with self!\n");
+							}
+					 }
+					 else if(!is.na(this$.process)){
+							throw("Process entry is invalid!\n");
+					 }
+				}
+				
+      
+			}
+      tryCatch(may.fail(this),finally={if(is.Process(this$.process)){this$.process$.write.protected<-wp}});
+			return(invisible(TRUE));
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .callRateRescaling
+##	
+setMethodS3(
+	".callRateRescaling", 
+	class="QMatrix", 
+	function(
+		this,
+		guess.equ=TRUE,
+		...
+	){
+
+		# Usually called when the rate matrix chenges.
+		# If the Q matrix has a parent process with a valid equilibrium distribution:
+		if(is.Process(this$.process) & !any(is.na(as.vector(this$.orig.matrix))) ){
+
+		if(guess.equ){
+			# Try to guess the new equlibrium distribution:
+			if(!.setEquDistFromGuess(this$.process)){
+						# Fill with NA-s if failed with guessing:
+      	    .initEquDist(this$.process);
+      	}
+		}
+			# Rescale if the equilibrium distribution was succesfully set:
+			if(all(!is.na(this$.process$equDist))){
+				rescaleQMatrix(this$.process);
+			}
+
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getName
+##	
+setMethodS3(
+	"getName", 
+	class="QMatrix", 
+	function(
+		this,
+		...
+	){
+
+		this$.name;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setName
+##	
+setMethodS3(
+	"setName", 
+	class="QMatrix", 
+	function(
+		this,
+		value,
+		...
+	){
+
+	.checkWriteProtection(this);
+	if(missing(value)){
+		throw("No new value provided!\n");
+	}
+	else{
+		value<-as.character(value);
+		if(stringLength(value) == 0){
+			throw("Cannot set empty name!");
+		} else {
+			this$.name<-value;
+		}
+	}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getProcess
+##	
+setMethodS3(
+	"getProcess", 
+	class="QMatrix", 
+	function(
+		this,
+		...
+	){
+
+		this$.process;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setProcess
+##	
+setMethodS3(
+	"setProcess", 
+	class="QMatrix", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if(missing(value)){
+			throw("No new value provided!\n");
+		}
+		else if (!is.Process(value)){
+			throw("Process object invalid!\n");
+		} 
+		else {
+			this$.process<-value;
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getAlphabet
+##	
+setMethodS3(
+	"getAlphabet", 
+	class="QMatrix", 
+	function(
+		this,
+		...
+	){
+
+		this$.alphabet;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setAlphabet
+##	
+setMethodS3(
+	"setAlphabet", 
+	class="QMatrix", 
+	function(
+		this,
+		value,
+		...
+	){
+
+	.checkWriteProtection(this);
+	if(missing(value)){
+		throw("No new value provided!\n");
+	}
+	else if(!is.Alphabet(value)) {
+		throw("Alphabet object invalid!\n");
+	}
+	else if(is.Process(this$.process)){
+		if(value != this$.process$alphabet){
+		throw("The new alphabet should match with the one from the subsitution process!\n");
+		}
+	}
+	if(is.matrix(this$.rate.matrix)){
+			warning("Be aware that setting a new alphabet wipes out completely the rate matrix!\n");
+	}
+		this$.alphabet<-value;
+		.buildRateMatrix(this);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .nameToDim
+##	
+setMethodS3(
+	".nameToDim", 
+	class="QMatrix", 
+	function(
+		this,
+		name,
+		...
+	){
+
+		if(missing(name)){
+			throw("No name provided!\n");
+		}
+
+		# split the name
+		substitution<-rbind(strsplit(name,split="->")[[1]]);
+		if(length(substitution) != 2 ) {
+			throw("Substitution event name was invalid!");
+		}
+
+		# Check if symbols are valid:
+		if(!hasSymbols(this$.alphabet, substitution)){
+				throw("All symbols must be in the alphabet!\n");
+		}
+
+		# Return a vector with the DIMNAMES:
+		colnames(substitution)<-c("from","to");
+		rownames(substitution)<-c("Substitution");
+		substitution;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .dimToName
+##	
+setMethodS3(
+	".dimToName", 
+	class="QMatrix", 
+	function(
+		this,
+		dim,
+		...
+	){
+
+		if(missing(dim)){
+			throw("No event vector provided!\n");
+		}
+		else if(length(dim) != 2) {
+			throw("Event vector is invalid!\n");
+		}
+		# FIXME alphabet check
+		paste(dim,collapse="->");
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getEventRate
+##	
+setMethodS3(
+	"getEventRate", 
+	class="QMatrix", 
+	function(
+		this,
+		name=NA,
+		from=NA,
+		to=NA,
+		...
+	){
+
+			if (isEmpty(this$.alphabet)){
+				throw("Alphabet is valid but empty, so no rates are defined!\n");
+			}
+			# Event specified by name:
+			else if(!missing(name) & missing(from) & missing(to)){
+				# convert to dimnames
+				tmp<-.nameToDim(this, name);
+				# Return the rate from the rescaled matrix: 
+				return(this$.rate.matrix[tmp[1],tmp[2]]);
+			}
+			# Event specified by from= and to=
+			else if(missing(name) & !missing(from) & !missing(to)){
+				# Check symbols:
+				if(!hasSymbols(this$.alphabet, c(from,to))){
+					throw("All symbols must be in the alphabet!\n")
+				}
+				else{
+					# Get the rate from the rescaled matrix:
+					return(this$.rate.matrix[as.character(from),as.character(to)]);
+				}
+			}
+			else {
+				throw("The substitution should be specified by name or by the \"from\" and \"to\" arguments!\n");
+			}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getRate
+##	
+setMethodS3(
+	"getRate", 
+	class="QMatrix", 
+	function(
+		this,
+		name=NA,
+		from=NA,
+		to=NA,
+		...
+	){
+
+			if (isEmpty(this$.alphabet)){
+				throw("Alphabet is valid but empty, so no rates are defined!\n");
+			}
+			# Event specified by name:
+			else if(!missing(name) & missing(from) & missing(to)){
+				# Convert to dimnames:
+				tmp<-.nameToDim(this, name);
+				# return unscaled rate:
+				return(this$.orig.matrix[tmp[1],tmp[2]]);
+			}
+			# Event specified by from= and to=:
+			else if(missing(name) & !missing(from) & !missing(to)){
+				# check symbols:
+				if(!hasSymbols(this$.alphabet, c(from,to))){
+					throw("All symbols must be in the alphabet!\n")
+				}
+				else{
+				# return unscaled rate:
+					return(this$.orig.matrix[as.character(from),as.character(to)]);
+				}
+			}
+			else {
+				throw("The substitution should be specified by name or by the \"from\" and \"to\" arguments!\n");
+			}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+##	
+## Method: setRate
+##	
+setMethodS3(
+	"setRate", 
+	class="QMatrix", 
+	function(
+		this,
+		name=NA,
+		value,
+		from=NA,
+		to=NA,
+		scale=TRUE,
+		diag=TRUE,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if (isEmpty(this$.alphabet)){
+				throw("Alphabet is valid but empty, so no rates are defined!\n");
+		}
+		else if(missing(value)) {
+			throw("No new value provided!\n");}
+		else if(!is.numeric(value)) {
+			throw("Rate must be numeric!\n");
+		} else {
+			
+			.from<-character();		
+			.to<-character();		
+		
+			# Event specified by name:		
+			if(!missing(name) & missing(from) & missing(to)){
+				# convert to dimnames:
+				tmp<-.nameToDim(this, name);
+				.from<-tmp[1];
+				.to<-tmp[2];
+				
+			}
+			# Event specified by from= and to=:
+			else if(missing(name) & !missing(from) & !missing(to)){
+				# check the symbols
+				if(!hasSymbols(this$.alphabet, c(from,to))){
+					throw("All symbols must be in the alphabet!\n")
+				}
+				else{
+				.from<-as.character(from);
+				.to<-as.character(to);
+				}
+			}
+			else {
+				throw("The substitution should be specified by name or by the \"from\" and \"to\" arguments!\n");
+			}
+				
+				# Complain if tried to modify a diagonal element:
+				if(.from == .to){
+					throw("Modification of diagonal elements is not allowed!\n");
+				}
+				else {
+				
+					# Set the rate in the original rates matrix:	
+			 		this$.orig.matrix[.from, .to]<-value;
+			 		# Set the new diagonal element in the original rates matrix:
+					if (diag == TRUE) {
+			 			this$.orig.matrix[.from, .from]<-.calculateDiagonal(this, symbol=.from);
+					}
+					
+					# Call rate rescaling, this will set the new values
+					# in the rescaled rates matrix:
+			 		if(scale==TRUE){
+						.callRateRescaling(this);
+			 		}
+			}
+		 return(invisible(value));
+
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+##	
+## Method: .getRateList
+##	
+setMethodS3(
+	".getRateList", 
+	class="QMatrix", 
+	function(
+		this,
+		type="ORIGINAL",
+		...
+	){
+
+		# Be gentle and return an ampty list if the
+		# alphabet is empty:
+		if( isEmpty(this$.alphabet) ){
+				return(list());	
+		}
+		else {
+				# Fill in the rates list:
+				rates<-list();
+				for(i in this$.alphabet$symbols){
+					for(j in this$.alphabet$symbols){
+						if(i != j){
+							name<-paste(i,j,sep="->");
+							# with the original rates:
+							if(type == "ORIGINAL"){
+							# or with the rescaled ones:
+								rate<-getRate(this, from=i, to=j);
+							} 
+							else {
+								rate<-getEventRate(this, from=i, to=j);
+							}
+							rates[[name]]<-rate;
+						}
+					}
+				}
+				return(rates);
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getRateList
+##	
+setMethodS3(
+	"getRateList", 
+	class="QMatrix", 
+	function(
+		this,
+		type=NA,
+		...
+	){
+		
+		.getRateList(this, type="ORIGINIAL");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateList
+##	
+setMethodS3(
+	"setRateList", 
+	class="QMatrix", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if(!is.Alphabet(this$.alphabet)){
+			throw("Cannot set rates because alphabet is undefined!\n");
+		}
+		if(missing(value)) {
+			throw("No new value provided!\n");}
+		else if(!is.list(value)) {
+			throw("The new value must be a list!\n");
+		} else {
+
+			# Check if all of the rates are specified!
+			expected<-.genExpected(this);
+	
+			# Check for missing rates:		
+			if(length(tmp<-setdiff(expected,names(value))) != 0 ){
+					throw("The rate matrix is not specified correctly, the following rates are missing: ",paste(tmp,collapse=" "),"!\n");
+			}
+
+			# Warn the user about the superfluous rates:
+			if(length(tmp<-setdiff(names(value),expected)) != 0 ){
+					warning("The following rates were not expected by this process: ",paste(tmp,collapse=" "),", so they were ignored!\n");
+					# Getting rid of unexpected rates:
+					value[tmp]<-NULL;
+			}
+
+				# set the rate matrix if all is OK!
+				for (name in names(value)){
+					setRate(this,name=name,value=(value[[name]]),scale=FALSE,diag=FALSE);
+				}
+
+				# Set diagonal elements:
+				for (sym in this$alphabet$symbols){
+					this$.orig.matrix[sym, sym]<-.calculateDiagonal(this, sym);
+				}
+	
+				# Call the parent process object to guess the new equlibrium distribution and rescale
+				# rates:
+				.callRateRescaling(this);
+
+			
+
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .genExpected
+##	
+setMethodS3(
+	".genExpected", 
+	class="QMatrix", 
+	function(
+		this,
+		...
+	){
+
+      expected<-list();
+      sym<-this$alphabet$symbols;
+
+      # Cretae the list of expected rates:
+      for(i in sym){
+        for(j in sym){
+          if(i != j){
+          expected<-c(expected,paste(i,j,sep="->"));
+          }
+        }
+      }
+			return(expected);
+		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getEventRateList
+##	
+setMethodS3(
+	"getEventRateList", 
+	class="QMatrix", 
+	function(
+		this,
+		type=NA,
+		...
+	){
+		
+		.getRateList(this, type="SCALED");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setEventRateList
+##	
+setMethodS3(
+	"setEventRateList", 
+	class="QMatrix", 
+	function(
+		this,
+		type=NA,
+		...
+	){
+		
+		.virtualAssignmentForbidden(this);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .calculateDiagonal
+##	
+setMethodS3(
+	".calculateDiagonal", 
+	class="QMatrix", 
+	function(
+		this,
+		symbol=NA,
+		...
+	){
+
+		if(!missing(symbol)){
+			# convert diname to dim:
+			index<-.symToIndex(this, symbol=symbol);
+		}
+		else {
+			throw("Symbol not specified!\n");
+		}
+			# Return -1 * sum of the off-diagonal elements
+			# from the row specified by the index:
+			return(-sum((this$.orig.matrix[symbol,])[-index] ));
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .symToIndex
+##	
+setMethodS3(
+	".symToIndex", 
+	class="QMatrix", 
+	function(
+		this,
+		symbol=NA,
+		...
+	){
+
+		if(missing(symbol)){
+			throw("No symbol specified");
+		} else {
+			index<-which(rownames(this$.orig.matrix) == symbol);
+			if(length(index) == 0){
+				print(symbol);
+				throw("Symbol not in rate matrix!\n");
+			}
+			else if (length(index) > 1){
+				throw("Rate matrix is inconsistent!\n");
+			}
+			return(index);
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getMatrix
+##	
+setMethodS3(
+	"getMatrix", 
+	class="QMatrix", 
+	function(
+		this,
+		...
+	){
+
+		this$.orig.matrix;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setMatrix
+##	
+setMethodS3(
+	"setMatrix", 
+	class="QMatrix", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		.virtualAssignmentForbidden(this);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getScaledMatrix
+##	
+setMethodS3(
+	"getScaledMatrix", 
+	class="QMatrix", 
+	function(
+		this,
+		...
+	){
+
+		this$.rate.matrix;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setMatrix
+##	
+setMethodS3(
+	"setScaledMatrix", 
+	class="QMatrix", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		.virtualAssignmentForbidden(this);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: Scale
+##	
+setMethodS3(
+	"Scale", 
+	class="QMatrix", 
+	function(
+		this,
+		constant=NA,
+		...
+	){
+
+		if(missing(constant)){
+			throw("No scaling constant specified!\n");
+		if(!is.numeric(constant)){
+			throw("Scaling constant must be numeric!\n");
+		}
+		} else {
+			 
+			 # Set the rescaled matrix to the original matrix
+			 # multiplied by the given constant:
+			 this$.rate.matrix<-(this$.orig.matrix * constant);
+			 # store the current rescaling constant:
+			 this$.norm.const<-constant;
+			 return(invisible(this));
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: summary
+##	
+setMethodS3(
+	"as.character", 
+	class="QMatrix", 
+	function(
+		this,
+		...
+	){
+		
+		this$id
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: print
+##	
+setMethodS3(
+	"print", 
+	class="QMatrix", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		print.default(this$.orig.matrix);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: print
+##	
+setMethodS3(
+	"summary", 
+	class="QMatrix", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		this$.summary$"Name"<-this$name;
+		this$.summary$"Id"<-this$id;
+		this$.summary$"Attached to process"<-this$process;
+	  this$.summary$"Unscaled rate matrix"<-paste( "\n\n\t",paste(capture.output(print(this$.orig.matrix)),collapse="\n\t"),"\n",sep="");
+		this$.summary$"Scaling factor"<-this$.norm.const;
+	  this$.summary$"Scaled rate matrix"<-paste( "\n\n\t",paste(capture.output(print(this$.rate.matrix)),collapse="\n\t"),"\n",sep="");
+	
+		
+		NextMethod();
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## setId
+##
+setMethodS3(
+  "setId",
+  class="QMatrix",
+  function(
+    this,
+    value,
+    ...
+  ){
+
+  throw("Id is generated automatically and it cannot be set!\n");
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getId
+##
+setMethodS3(
+  "getId",
+  class="QMatrix",
+  function(
+    this,
+    ...
+  ){
+
+  this.class<-class(this)[1];
+  id<-paste(this.class,this$.name,hashCode(this),sep=":");
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+##
+## Method: getwWriteProtected
+##
+setMethodS3(
+  "getWriteProtected",
+  class="QMatrix",
+  function(
+    this,
+    ...
+  ){
+
+	# return false if no process is attached:
+	if(!is.Process(this$.process)) {
+			return(FALSE);
+	}
+	else {
+			# The flag from the parent process is used!
+			return(getWriteProtected(this$.process));
+	}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: is.QMatrix
+##
+setMethodS3(
+  "is.QMatrix",
+  class="default",
+  function(
+    this,
+    ...
+  ){
+
+    if(!is.PSRoot(this)) {return(FALSE)}
+    if(!is.null(this$.is.process)){return(TRUE)}
+    if ( inherits(this, "QMatrix")) {
+      this$.is.q.matrix<-TRUE;
+      return(TRUE);
+    } else {
+      return(FALSE)
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+##
+## Method: setWriteProtected
+##
+setMethodS3(
+  "setWriteProtected",
+  class="QMatrix",
+  function(
+    this,
+		value,
+    ...
+  ){
+
+		throw("The QMatrix objects use the write protection flags of the enclosing substitution process, modify that (if exists)!\n");
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: .checkWriteProtection
+##
+setMethodS3(
+  ".checkWriteProtection",
+  class="QMatrix",
+  function(
+    this,
+    ...
+  ){
+
+    if(this$writeProtected) {throw("Cannot set value because the object is write protected!\n")}
+    else {return(FALSE)}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+

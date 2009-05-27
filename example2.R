@@ -1,0 +1,126 @@
+#!/usr/bin/env Rscript
+library(R.oo)
+library(ape)
+source("./FullSource.R");
+####################################################
+#
+# Example script file showing how to set up a simple simualtion:
+#
+
+#
+# Setting up the processes:
+#
+
+jc69<-JC69();	# Create a Jukes-Cantor substitution process.
+
+# Create a discrete deletor process object:
+del.proc<-DiscreteDeletor(
+						rate=0.005,					# the global rate for this deletion process
+						sizes=c(1:10),			# the deletion sizes
+						probs=rep(1/10,10) 	# and the corresponding probabilities
+					);
+
+# Creating the template sequence for the insertion process:
+templ.seq<-NucleotideSequence(length=10); # this is just a sequence with length 10.
+# Note that the template sequence state is undefined, so the states
+# will be sampled from the equlibrium distribution of the substitution process(es). 
+
+# Create a discrete insertor process object:
+ins.proc<-DiscreteInsertor(
+						rate=0.005,							# the global rate for this insertion process
+						sizes=c(1:10),					# the deletion sizes
+						probs=rep(1/10,10),  		# and the corresponding probabilities
+					);
+
+# Setting up the template sequence for the insertion process:
+attachProcess(templ.seq, del.proc);	# Attach the deletion process to every site from templ.seq.
+attachProcess(templ.seq, ins.proc);	# Attach the insertion process to every site from templ.seq.
+attachProcess(templ.seq, jc69);	    # Attach the substitution process to every site from templ.seq. 
+
+# Disabling write protection for the insertion process:
+ins.proc$writeProtected<-FALSE;
+
+# Setting the template sequence for the insertion process:
+ins.proc$templateSeq<-templ.seq;
+
+# Setting up the insert hook for the insertion process:
+ins.proc$insertHook<-function(seq){
+	# Create rate variation among the sites of seq by the +I+G model.
+	plusInvGamma(
+						seq,					# the sequence
+						process=jc69, # the substitution process
+						pinv=0.5,			# the proportion of invarian sites.
+						shape=0.6			# gamma shape parameter.
+					);
+	return(seq);
+	
+}
+
+#
+# Setting up the root sequence:
+#
+
+seq<-NucleotideSequence(length=2000); # Create a sequence of length 2000.
+
+# Attaching the processes:
+seq$processes<-list(list(jc69,del.proc,ins.proc)); # Alternative syntax for attaching processes.
+
+# Create rate variation among the sites of seq by the +I+G model.
+plusInvGamma(
+					seq,					# the sequence
+					process=jc69, # the substitution process
+					pinv=0.5,			# the proportion of invariant sites
+					shape=0.6			# gamma shape parameter
+				);
+
+# Create an absolutely constrained region:
+
+# Set the deletion tolerance:
+setDeletionTolerance(
+		seq,							# the sequence
+		process=del.proc,	# the deletion process
+		value=0,					# set the tolerance to zero, so the sites
+		index=500:600			# in the range 100:150 cannot be deleted.
+		)
+
+# Set the insertion tolerance:
+setInsertionTolerance(
+		seq,							# the sequence
+		process=ins.proc,	# the insertion process
+		value=0,					# set tolerance to zero, so no inserts
+		index=500:600			# are allowed between the sites in the region 100:150.
+		)
+
+# Set the site specific rate to zero:
+setRateMultipliers(
+		seq,							# the sequence
+		process=jc69,			# the substitution process
+		value=0,					# 
+		index=500:600			# no substitution events in this range.
+		);
+
+# Sample the states from the attached substitution process(es):
+sampleStates(seq);
+
+# Read in the tree using APE:
+tree<-read.tree(
+		file="demotree.nwk"	# the path to the tree file
+	);
+
+# Create the simulation object:
+sim<-PhyloSim(
+			phylo=tree,		# the tree as an APE phylo object
+			root.seq=seq	# the root sequence.
+		);
+
+# Run the simulation:
+time<-system.time(Simulate(sim));
+print(time);
+
+# And finally save the resulting alignment:
+saveAlignment(
+		sim,			# the phylo object	
+		file="example2_aln.fas"		# filename for alignment
+	);
+
+
