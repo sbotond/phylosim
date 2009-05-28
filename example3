@@ -2,7 +2,6 @@
 library(R.oo)
 library(ape)
 source("./FullSource.R");
-pdf(file="example3.pdf")
 ####################################################
 #
 # Example script file showing how to set up a quite complicated simulation:
