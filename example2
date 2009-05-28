@@ -4,14 +4,14 @@ library(ape)
 source("./FullSource.R");
 ####################################################
 #
-# Example script file showing how to set up a simple simualtion:
+# Example script file showing how to set up a more complicated simulation.
 #
 
 #
 # Setting up the processes:
 #
 
-jc69<-JC69();	# Create a Jukes-Cantor substitution process.
+jc69<-JC69();										# Create a Jukes-Cantor substitution process.
 
 # Create a discrete deletor process object:
 del.proc<-DiscreteDeletor(
@@ -21,8 +21,10 @@ del.proc<-DiscreteDeletor(
 					);
 
 # Creating the template sequence for the insertion process:
-templ.seq<-NucleotideSequence(length=10); # this is just a sequence with length 10.
-# Note that the template sequence state is undefined, so the states
+
+templ.seq<-NucleotideSequence(length=10); 	# this is just an empty sequence of length 10.
+
+# Note that the template sequence states are undefined, so the actual states
 # will be sampled from the equlibrium distribution of the substitution process(es). 
 
 # Create a discrete insertor process object:
@@ -60,7 +62,7 @@ ins.proc$insertHook<-function(seq){
 # Setting up the root sequence:
 #
 
-seq<-NucleotideSequence(length=2000); # Create a sequence of length 2000.
+				seq<-NucleotideSequence(length=1000); # Create a sequence of length 1000.
 
 # Attaching the processes:
 seq$processes<-list(list(jc69,del.proc,ins.proc)); # Alternative syntax for attaching processes.
@@ -80,7 +82,7 @@ setDeletionTolerance(
 		seq,							# the sequence
 		process=del.proc,	# the deletion process
 		value=0,					# set the tolerance to zero, so the sites
-		index=500:600			# in the range 100:150 cannot be deleted.
+		index=500:600			# in the range 500:600 cannot be deleted.
 		)
 
 # Set the insertion tolerance:
@@ -88,7 +90,7 @@ setInsertionTolerance(
 		seq,							# the sequence
 		process=ins.proc,	# the insertion process
 		value=0,					# set tolerance to zero, so no inserts
-		index=500:600			# are allowed between the sites in the region 100:150.
+		index=500:600			# are allowed between in the region 500:600.
 		)
 
 # Set the site specific rate to zero:
@@ -104,7 +106,7 @@ sampleStates(seq);
 
 # Read in the tree using APE:
 tree<-read.tree(
-		file="demotree.nwk"	# the path to the tree file
+		file="smalldemotree.nwk"	# the path to the tree file
 	);
 
 # Create the simulation object:
@@ -114,12 +116,11 @@ sim<-PhyloSim(
 		);
 
 # Run the simulation:
-time<-system.time(Simulate(sim));
-print(time);
+Simulate(sim);
 
 # And finally save the resulting alignment:
 saveAlignment(
-		sim,			# the phylo object	
+		sim,											# the phylo object	
 		file="example2_aln.fas"		# filename for alignment
 	);
 
