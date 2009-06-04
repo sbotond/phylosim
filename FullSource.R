@@ -3740,6 +3740,195 @@ setMethodS3(
 
 
 
+##	$Id: ContinousDeletor.R,v 1.4 2009-04-24 10:12:27 sbotond Exp $
+##
+##	Class: FieldDeletor
+##	Descriprion: 
+##	
+##	
+##	
+##	
+##	
+##	
+##	
+## Copyright 2009 Botond Sipos	
+## See the file ../COPYING for licensing issues.	
+##	
+setConstructorS3(
+  "FieldDeletor",
+  function( 
+		name="Anonymous",
+		type="exponential",
+		... 
+		)	{
+
+		this<-GeneralDeletor(
+			...
+		);
+    this<-extend(
+      this,
+      "FieldDeletor",
+			.type=type,
+			.q.max=NA
+    );
+		# Using virtual field to clear Id cache:
+		this$name<-name;
+
+		if(type == "exponential"){
+
+			this$proposeBy<-function(seq,pos){
+
+					# Find out the maximum deletion tolerance parameter:					
+					# FIXME - this is very slow!
+					q<-c();
+
+					for(site in seq$.sites){
+							if(isAttached(site, this)){
+									tmp<-getParameterAtSite(this, site, id="deletion.tolerance")$value;
+									tmp<-exp(-tmp);
+									q<-c(q,tmp);
+							}
+					} # for site
+					q.max<-max(q);
+					
+					express<-expression(rgeom(1,(1-q.max))+1);
+					tmp<-round(eval(express));
+					this$.q.max<-q.max;
+					cat("Proposed",tmp,"\n");
+					return(tmp);
+
+			} # if exponetial
+		
+			this$acceptBy<-function(sequence,range){
+
+				q.max<-this$.q.max;
+				this$.q.max<-NA;
+
+				q<-c();
+				# FIXME - missing process conceptual issue!
+				for(site in seq$.sites[range]){
+							if(isAttached(site, this)){
+									tmp<-getParameterAtSite(this, site, id="deletion.tolerance")$value;
+									q<-c(q,tmp);
+							}
+					} # for site
+				
+				K<-length(q);
+				q<-prod(exp(-q));
+
+				accept.prob<-(q/(q.max^K));
+        # Accept/reject:
+        tmp<-( sample(c(TRUE,FALSE),replace=FALSE,prob=c(accept.prob,(1-accept.prob)),size=1) );
+				return(tmp);
+	
+			}
+		
+		
+		} # /exponential
+
+
+    return(this);
+  },
+  enforceRCC=TRUE
+);
+
+##	
+## Method: checkConsistency
+##	
+setMethodS3(
+  "checkConsistency",
+  class="FieldDeletor",
+  function(
+    this,
+    ...
+  ){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+
+      may.fail<-function(this) {
+
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+      NextMethod();
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: proposeLength
+##	
+setMethodS3(
+  "proposeLength",
+  class="FieldDeletor",
+  function(
+    this,
+    ...
+  ){
+
+			throw("Disabled for FieldDeletion processes!\n");
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+##	
+## Method: getType
+##	
+setMethodS3(
+  "getType",
+  class="FieldDeletor",
+  function(
+    this,
+    ...
+  ){
+
+		this$.type;
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setType
+##	
+setMethodS3(
+  "setType",
+  class="FieldDeletor",
+  function(
+    this,
+    ...
+  ){
+
+		throw("The type of the FieldDeletor process cannot be modified. Please set it by the constructor argument.");
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+
+
 ##	$Id: GeneralIndel.R,v 1.9 2009-05-01 08:48:21 sbotond Exp $
 ##
 ##	Class: GenarlIn and GeneralDel
@@ -6112,6 +6301,922 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##	
+## Method: JC69
+##	
+setConstructorS3(
+  "JC69",
+  function( 
+		name="Anonymous",
+		... 
+		)	{
+		
+		this<-UNREST(rate.list=list(
+  		"A->T"=1,
+  		"A->C"=1,
+  		"A->G"=1,
+  		"T->A"=1,
+  		"T->C"=1,
+  		"T->G"=1,
+  		"C->A"=1,
+  		"C->T"=1,
+  		"C->G"=1,
+  		"G->A"=1,
+  		"G->T"=1,
+  		"G->C"=1
+		));
+		
+		this<-extend(this,"JC69");
+		this$name<-name;
+		return(this);
+	
+  },
+  enforceRCC=TRUE
+);
+
+##	
+## Method: checkConsistency
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="JC69", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# FIXME - what's to do here?	
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+#
+# Constructor: GTR
+#
+setConstructorS3(
+  "GTR",
+  function( 
+		name="Anonymous", 
+		rate.params=list(
+				"a"=1,
+				"b"=1,
+				"c"=1,
+				"d"=1,
+				"e"=1,
+				"f"=1
+		),	
+		base.freqs=rep(0.25,times=4),
+		... 
+		)	{
+
+		this<-UNREST();
+
+		this<-extend(
+			this,
+			"GTR",
+			.rate.params=list(
+					"a"=NA,
+					"b"=NA,
+					"c"=NA,
+					"d"=NA,
+					"e"=NA,
+					"f"=NA
+				)
+		);
+		this$name<-name;
+		setEquDist(this,value=base.freqs,force=TRUE)	
+		if(!missing(rate.params)){
+			setRateParamList(this,value=rate.params);
+		}
+
+		return(this);
+	
+  },
+  enforceRCC=TRUE
+);
+
+##	
+## Method: checkConsistency
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="GTR", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# FIXME - what's to do here?	
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getRateParam
+##	
+setMethodS3(
+	"getRateParam", 
+	class="GTR", 
+	function(
+		this,
+		name,
+		...
+	){
+
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		}
+		else if(length(intersect(name,names(this$.rate.params))) == 0){
+			throw("The specified rate parameter name is not valid!\n");
+		}
+		else {
+			return(this$.rate.params[[name]]);
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParam
+##	
+setMethodS3(
+	"setRateParam", 
+	class="GTR", 
+	function(
+		this,
+		name,
+		value,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		}
+		else if(length(intersect(name,names(this$.rate.params))) == 0){
+			throw("The specified rate parameter name is not valid!\n");
+		}
+		else if(missing(value)){
+			throw("No new value given!\n")
+		}
+		else if(length(value) != 1|any(!is.numeric(value))){
+			throw("The new value must be a numeric vector of length 1!\n");	
+		}
+		else if(any(is.na(this$.equ.dist))){
+			throw("Cannot set rate parameter because the nucleotide frequencies are not defined properly!\n");
+		}
+		else {
+			this$.rate.params[[name]]<-value;
+
+			# The parmeters are named as in 
+			# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
+			this$rateParamList<-this$.rate.params;
+			# FIXME - explain this!
+										
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getRateParamList
+##	
+setMethodS3(
+	"getRateParamList", 
+	class="GTR", 
+	function(
+		this,
+		...
+	){
+
+		this$.rate.params;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParamList
+##	
+setMethodS3(
+	"setRateParamList", 
+	class="GTR", 
+	function(
+		this,
+		value,
+		...
+	){
+
+	.checkWriteProtection(this);
+	if(missing(value)){
+		throw("No new value provided!\n");
+	}
+	else if(!is.list(value)){
+		throw("The provided value must be a list!\n");
+	}
+	else {
+
+		# Get the rate parameter names:
+		names<-names(this$.rate.params);
+		value.names<-names(value);
+
+		# Check for illegal rate parameter names:
+		if(length((illegal<-setdiff(value.names, names))) != 0){
+			throw("The following parameter names are illegal: ",paste(illegal, collapse=", ")," !\n");
+		}
+		else {
+
+			missing<-setdiff(names, value.names);
+			if(length(missing) > 0) {
+				throw("Cannot build the model because the following rate parameters are missing: ",paste(missing,coll=", ")," \n");	
+			}
+			else {
+				# Set the rate parameters:
+				rate.list=list(
+
+                "T->C"=(value[["a"]] * this$.equ.dist[1,"T"] ),
+                "C->T"=(value[["a"]] * this$.equ.dist[1,"T"] ),
+                "T->A"=(value[["b"]] * this$.equ.dist[1,"A"] ),
+                "A->T"=(value[["b"]] * this$.equ.dist[1,"T"] ),
+                "T->G"=(value[["c"]] * this$.equ.dist[1,"G"] ),
+                "G->T"=(value[["c"]] * this$.equ.dist[1,"C"] ),
+                "C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
+                "A->C"=(value[["d"]] * this$.equ.dist[1,"C"] ),
+                "C->G"=(value[["e"]] * this$.equ.dist[1,"G"] ),
+                "G->C"=(value[["e"]] * this$.equ.dist[1,"C"] ),
+                "A->G"=(value[["f"]] * this$.equ.dist[1,"G"] ),
+                "G->A"=(value[["f"]] * this$.equ.dist[1,"A"] )
+
+                );
+			this$.rate.params<-value;
+			setRateList(this,rate.list);
+			}
+
+		}
+
+	}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getBaseFreqs
+##	
+setMethodS3(
+	"getBaseFreqs", 
+	class="GTR", 
+	function(
+		this,
+		...
+	){
+
+		this$.equ.dist;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setBaseFreqs
+##	
+setMethodS3(
+	"setBaseFreqs", 
+	class="GTR", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		.checkWriteProtection(this);
+		# FIXME - explain this + more chekings
+		setEquDist(this,value,force=TRUE);
+		setRateParamList(this,value=this$.rate.params);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: summary.GTR
+##	
+setMethodS3(
+	"summary", 
+	class="GTR", 
+	function(
+		this,
+		...
+	){
+
+		.addSummaryNameId(this);
+    .addSummaryAlphabet(this);
+		this$.summary$"Rate parameters"<-paste(names(this$.rate.params),this$.rate.params,sep=" = ",collapse=", ");
+		NextMethod();
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+######### end of GTR methods ############
+##	$Id: PSRoot.R,v 1.24 2009-04-30 09:51:11 sbotond Exp $
+##
+##	Class: 
+##	Descriprion: 
+##	
+##	
+##	
+##	
+##	
+##	
+##	
+## Copyright 2009 Botond Sipos	
+## See the file ../COPYING for licensing issues.	
+setConstructorS3(
+  "PSRoot",
+  function(...){
+  extend(Object(), "PSRoot",
+		.comments=character(0),
+		.summary=list()
+  );
+  },
+  ###
+  enforceRCC=TRUE
+);
+
+
+##	
+## Method: virtualAssignmentForbidden
+##	
+setMethodS3(
+	"virtualAssignmentForbidden", 
+	class="PSRoot", 
+	###
+	function(
+		this,
+		...
+	){
+		throw("You cannot set the value of this virtual field directly!");
+	},
+	###
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: enableVirtual
+##	
+setMethodS3(
+	"enableVirtual", 
+	class="PSRoot", 
+	###
+	function(
+		this,
+		...
+	){
+			attr(this,"disableGetMethods")<-NULL;
+			attr(this,"disableSetMethods")<-NULL;
+			this;
+	},
+	###
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+##	
+## Method: stringLength
+##	
+setMethodS3(
+	"stringLength", 
+	class="default", 
+	function(
+		this,
+		...
+	){
+		
+		this<-as.character(this);	
+		if (length(this) != 1){throw("This function can handle only vectors of length 1!")};
+
+		return(length(strsplit(this,split="")[[1]]));	
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+##	
+## Method: stringLengthVector
+##	
+setMethodS3(
+	"stringLengthVector", 
+	class="character", 
+	function(
+		this,
+		...
+	){
+	
+		as.numeric(apply(as.array(this),1,stringLength));
+	
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getMethodsList
+##
+setMethodS3(
+  "getMethodsList",
+  class="PSRoot",
+  function(
+    this,
+    ...
+  ){
+
+			class<-class(this)[[1]];
+			mlist<-getMethods.Class(this);
+
+			# If the class has no methods, do not 
+			# consider the methods from the parent class.
+			if(names(mlist)[[1]] == class){	
+      	as.character(names(mlist[[1]]));
+			}
+			else {
+				return(character(0));
+			}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: listMethods
+##
+setMethodS3(
+  "setMethodsList",
+  class="PSRoot",
+  function(
+    this,
+		value,
+    ...
+  ){
+
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: listMethods
+##
+setMethodS3(
+  "ll",
+  class="PSRoot",
+  function(
+    this,
+		quiet=FALSE,
+    ...
+  ){
+		
+		class<-class(this);
+		parents<-class[-1];
+		class<-class[[1]]
+		methods<-getMethodsList(this);
+		fields<-getFields(this);
+		text<-character(0);	
+
+		pretty.print<-function(vec,text){
+
+				tmp<-"";
+				if(length(vec) > 0 ){
+					tmp<-paste(tmp,"  ",vec,sep="",collapse="\n");
+				  paste(text,tmp,"\n",sep="");
+				} else {
+					return(text);
+				}
+		}
+
+	
+		text<-paste(text,"\nClass: ",class,"\n",sep="");
+		text<-paste(text,"Inherits from: ",paste(parents,collapse=" "),"\n",sep="");
+		text<-paste(text,"Fields (",length(fields),"):\n",sep="");
+		text<-pretty.print(fields,text);	
+
+		# Discriminate between the methods implementing 
+		# virtual fileds and the rest:
+	
+		vfields<-character(0);
+		methods.not.virtual<-character(0);
+
+		num.args<-function(fun){
+			length(formals(fun))
+		}
+
+		method.to.field<-function(method){
+
+			 method<-sub('^(get|set)(.*)','\\2',method);
+			 tmp<-as.array(strsplit(method,""))[[1]];
+       tmp[1]<-tolower(tmp[1]);
+       paste(tmp,collapse="");			
+
+		}
+
+		classify.method<-function(method,limit) {
+
+				if( num.args( paste(method,".",class(this)[[1]],sep="") ) == limit){
+                vfields<<-c(vfields,method.to.field(method));
+            } else {
+              methods.not.virtual<<-c(methods.not.virtual,method);
+            }
+
+		}
+
+		for(method in methods){
+			
+				# Get methods for virtual fields have 2 aguments: "this" and "...".
+				if(length(grep("^get",method,perl=TRUE)) == 1) {
+					classify.method (method,limit=2)
+				}
+				# Set methods for virtual fields have 3 aguments: "this", "..." and "value".
+				else if (length(grep("^set",method,perl=TRUE)) == 1) {
+					classify.method (method,limit=3)
+				} else {
+					methods.not.virtual<-c(methods.not.virtual,method);
+				}
+		
+		}
+		vfields<-sort(unique(vfields));	
+
+		lapply(methods.not.virtual,
+			function(name) {
+				tmp<-method.to.field(name);
+				if (length(intersect(tmp,vfields)) > 0 ) {
+					print(intersect(tmp,vfields));
+					throw("Method classification inconsistency! Blaming ",paste(intersect(tmp,vfields),collapse=" "),". \n");
+				}
+			}
+		);
+		
+		text<-paste(text,"Virtual fields (",length(vfields),"):\n",sep="");
+		text<-pretty.print(vfields,text);
+		text<-paste(text,"Methods implemented in ",class," (",length(methods.not.virtual),"):\n",sep="");
+		text<-pretty.print(sort(methods.not.virtual),text);
+		text<-paste(text,"\n",sep="");
+		
+		if(!quiet){ cat(text) }	
+
+		invisible(text);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: getComments
+##
+setMethodS3(
+  "getComments",
+  class="PSRoot",
+  function(
+    this,
+    ...
+  ){
+			this$.comments;
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: setComments
+##
+setMethodS3(
+  "setComments",
+  class="PSRoot",
+  function(
+    this,
+		new_value,
+    ...
+  ){
+			this$.comments<-new_value;
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: PSRoot$all.equal
+##
+setMethodS3(
+  "all.equal",
+  class="PSRoot",
+  function(
+    this,
+		one,
+		two,
+    ...
+  ){
+
+		TOLERANCE<-.Machine$double.eps ^ 0.5;
+		if(missing(one) | missing (two)){
+			throw("Two objects are needed for comparison!\n");
+		}
+		else {
+			one<-as.double(one);
+			two<-as.double(two);
+			return(isTRUE(all.equal(one,two, tolerance=TOLERANCE)));
+		}
+		
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: summary.PSRoot
+##
+setMethodS3(
+  "summary",
+  class="PSRoot",
+  function(
+    this,
+		verbose=FALSE,
+    ...
+  ){
+		
+		# Adding the Comments field:
+		if(length(this$.comments) > 0 ) {
+		this$.summary$Comments<-paste(this$.comments, collapse=", ");
+		}
+		# Adding ll() output in verbose mode:
+		if(verbose == TRUE ) {
+
+			tmp<-ll(this,quiet=TRUE);
+			tmp<-strsplit(tmp,split="\n",extended=TRUE)[[1]];
+			tmp<-paste(tmp, collapse="\n  ");
+		  this$.summary$"\nObject information"<-tmp;
+
+		}
+	
+		obj<-PSRootSummary(summary=this$.summary);
+		this$.summary<-list();
+		# Return a summary object:
+		return(obj);
+
+	},
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+
+##
+## Constructor: summary.PSRoot
+##
+setConstructorS3(
+  "PSRootSummary",
+  function(summary=list(),...){
+			
+			# Stepping out of the R.oo framework to provide 
+			# the expected behaviour.
+			class(summary)<-c("PSRootSummary");
+			summary;
+  },
+  ###
+  enforceRCC=FALSE
+);
+
+##
+## Method: print.summary.PSRoot
+##
+setMethodS3(
+  "print",
+  class="PSRootSummary",
+  function(
+    this,
+    ...
+  ){
+	
+		cat("\n");
+		for (i in names(this)){
+        cat(paste(i,": ",this[[i]],"\n",sep=""));
+   	}
+		cat("\n");
+		invisible(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: is.na.PSRoot
+##
+setMethodS3(
+  "is.na",
+  class="PSRoot",
+  function(
+    this,
+    ...
+  ){
+		
+		# We don't want our objects to be NA-s!	
+		return(FALSE);
+		
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: is.PSRoot.default
+##
+setMethodS3(
+  "is.PSRoot",
+  class="default",
+  function(
+    this,
+    ...
+  ){
+
+		# FIXME - some safe speedup here!	
+		if(!is.object(this)) {return(FALSE)}
+		inherits(this,"PSRoot");
+		
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: checkConsistency;
+##
+setMethodS3(
+  "checkConsistency",
+  class="PSRoot",
+  function(
+		this,
+    ...
+  ){
+		
+		warning("Consistency check is not implemented in class ",class(this)[[1]],"!\n");	
+		return(invisible(TRUE));
+		
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+	static=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: globalConsistencyCheck;
+##
+setMethodS3(
+  "globalConsistencyCheck",
+  class="PSRoot",
+  function(
+    ...
+  ){
+		
+		for(name in ls(envir=.GlobalEnv)) {
+				obj<-get(name,envir=.GlobalEnv);
+				if (is.PSRoot(obj)) {
+					cat("Checking ",name," ... ");	
+					if( checkConsistency((obj)) ) {
+							cat("OK\n");
+					}
+				}
+		}
+		return(invisible(TRUE));
+		
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+	static=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: plot.PSRoot
+##
+setMethodS3(
+  "plot",
+  class="PSRoot",
+  function(
+    ...
+  ){
+	
+		cat("No plot method defined for this object!\n");	
+		return(invisible(FALSE));
+		
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+	static=TRUE,
+  conflict="warning"
+);
 ##	$Id: GeneralSubstitution.R,v 1.24 2009-05-01 16:06:13 sbotond Exp $
 ##
 ##	Class: PhyloSim
@@ -8098,207 +9203,6 @@ setConstructorS3(
 );
 
 
-##	$Id: ProcessesList.R,v 1.2 2009-04-29 08:35:19 sbotond Exp $
-##
-##	Class: ProcessesList
-##	Descriprion: 
-##	
-##	
-##	
-##	
-##	
-##	
-##	
-## Copyright 2009 Botond Sipos	
-## See the file ../COPYING for licensing issues.	
-##	
-setConstructorS3(
-	"ProcessesList",
-	function(
-		...,
-		seq=NA
-	){
-	
-		this<-extend(
-			PSRoot(),
-			"ProcessesList",
-			.seq=NA
-		);
-
-		if(!missing(seq)) {
-			if(!is.Sequence(seq)) {
-				throw("Sequence object not valid!\n");
-			} else {
-				this$.seq=seq;
-			}
-		}
-
-		return(this);
-	},
-	enforceRCC=TRUE
-);
-
-##	
-## Method: is.ProcessesList
-##	
-setMethodS3(
-	"is.ProcessesList", 
-	class="default", 
-	function(
-		this,
-		...
-	){
-
-		if(!is.PSRoot(this)) {return(FALSE)}
-		inherits(this, "ProcessesList");
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
-## Method: checkConsistency
-##	
-setMethodS3(
-	"checkConsistency", 
-	class="ProcessesList", 
-	function(
-		this,
-		...
-	){
-
-		if(!is.Sequence(this$.seq)){
-			throw("Process list sequence reference is invalid!\n");
-		}
-		return(TRUE);
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
-## Method: [.ProcessesList
-##	
-setMethodS3(
-	"[", 
-	class="ProcessesList", 
-	function(
-		this,
-		index
-	){
-
-		getProcesses(this$.seq,index);	
-	
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
-## Method: [<-.ProcessesList
-##	
-setMethodS3(
-	"[<-", 
-	class="ProcessesList", 
-	function(
-		this,
-		index,
-		value
-	){
-
-		setProcesses(this$.seq,value,index);
-	
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
-## Method: [[.ProcessesList
-##	
-setMethodS3(
-	"[[", 
-	class="ProcessesList", 
-	function(
-		this,
-		index
-	){
-		
-		if (length(index) > 1 ) {
-			throw("Attempted to select more than one element!\n");	
-		}
-		getProcesses(this$.seq,index)[[1]];
-	
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
-## Method: [[<-.ProcessesList
-##	
-setMethodS3(
-	"[[<-", 
-	class="ProcessesList", 
-	function(
-		this,
-		index,
-		value
-	){
-		
-		if (length(index) > 1 ) {
-			throw("Attempted to select more than one element!\n");	
-		} else if (length(value) > 1) {
-			warning("Value vector longer than one!\n");
-		}
-		setProcesses(this$.seq,value,index);
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
-## Method: as.character
-##	
-setMethodS3(
-	"as.character", 
-	class="ProcessesList", 
-	function(
-		this,
-		...
-	){
-		
-		this[];	
-	
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
 ##	$Id: Process.R,v 1.32 2009-05-04 14:34:10 sb Exp $
 ##
 ##	Class: Process
@@ -9075,9 +9979,9 @@ setMethodS3(
 );
 
 
-##	$Id: PSRoot.R,v 1.24 2009-04-30 09:51:11 sbotond Exp $
+##	$Id: ProcessesList.R,v 1.2 2009-04-29 08:35:19 sbotond Exp $
 ##
-##	Class: 
+##	Class: ProcessesList
 ##	Descriprion: 
 ##	
 ##	
@@ -9088,77 +9992,47 @@ setMethodS3(
 ##	
 ## Copyright 2009 Botond Sipos	
 ## See the file ../COPYING for licensing issues.	
+##	
 setConstructorS3(
-  "PSRoot",
-  function(...){
-  extend(Object(), "PSRoot",
-		.comments=character(0),
-		.summary=list()
-  );
-  },
-  ###
-  enforceRCC=TRUE
-);
-
-
-##	
-## Method: virtualAssignmentForbidden
-##	
-setMethodS3(
-	"virtualAssignmentForbidden", 
-	class="PSRoot", 
-	###
+	"ProcessesList",
 	function(
-		this,
-		...
+		...,
+		seq=NA
 	){
-		throw("You cannot set the value of this virtual field directly!");
+	
+		this<-extend(
+			PSRoot(),
+			"ProcessesList",
+			.seq=NA
+		);
+
+		if(!missing(seq)) {
+			if(!is.Sequence(seq)) {
+				throw("Sequence object not valid!\n");
+			} else {
+				this$.seq=seq;
+			}
+		}
+
+		return(this);
 	},
-	###
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
+	enforceRCC=TRUE
 );
 
 ##	
-## Method: enableVirtual
+## Method: is.ProcessesList
 ##	
 setMethodS3(
-	"enableVirtual", 
-	class="PSRoot", 
-	###
-	function(
-		this,
-		...
-	){
-			attr(this,"disableGetMethods")<-NULL;
-			attr(this,"disableSetMethods")<-NULL;
-			this;
-	},
-	###
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-##	
-## Method: stringLength
-##	
-setMethodS3(
-	"stringLength", 
+	"is.ProcessesList", 
 	class="default", 
 	function(
 		this,
 		...
 	){
-		
-		this<-as.character(this);	
-		if (length(this) != 1){throw("This function can handle only vectors of length 1!")};
 
-		return(length(strsplit(this,split="")[[1]]));	
+		if(!is.PSRoot(this)) {return(FALSE)}
+		inherits(this, "ProcessesList");
+
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -9167,19 +10041,42 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-
 ##	
-## Method: stringLengthVector
+## Method: checkConsistency
 ##	
 setMethodS3(
-	"stringLengthVector", 
-	class="character", 
+	"checkConsistency", 
+	class="ProcessesList", 
 	function(
 		this,
 		...
 	){
-	
-		as.numeric(apply(as.array(this),1,stringLength));
+
+		if(!is.Sequence(this$.seq)){
+			throw("Process list sequence reference is invalid!\n");
+		}
+		return(TRUE);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: [.ProcessesList
+##	
+setMethodS3(
+	"[", 
+	class="ProcessesList", 
+	function(
+		this,
+		index
+	){
+
+		getProcesses(this$.seq,index);	
 	
 	},
 	private=FALSE,
@@ -9189,427 +10086,100 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-##
-## Method: getMethodsList
-##
+##	
+## Method: [<-.ProcessesList
+##	
 setMethodS3(
-  "getMethodsList",
-  class="PSRoot",
-  function(
-    this,
-    ...
-  ){
+	"[<-", 
+	class="ProcessesList", 
+	function(
+		this,
+		index,
+		value
+	){
 
-			class<-class(this)[[1]];
-			mlist<-getMethods.Class(this);
-
-			# If the class has no methods, do not 
-			# consider the methods from the parent class.
-			if(names(mlist)[[1]] == class){	
-      	as.character(names(mlist[[1]]));
-			}
-			else {
-				return(character(0));
-			}
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: listMethods
-##
-setMethodS3(
-  "setMethodsList",
-  class="PSRoot",
-  function(
-    this,
-		value,
-    ...
-  ){
-
-		virtualAssignmentForbidden(this);
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: listMethods
-##
-setMethodS3(
-  "ll",
-  class="PSRoot",
-  function(
-    this,
-		quiet=FALSE,
-    ...
-  ){
-		
-		class<-class(this);
-		parents<-class[-1];
-		class<-class[[1]]
-		methods<-getMethodsList(this);
-		fields<-getFields(this);
-		text<-character(0);	
-
-		pretty.print<-function(vec,text){
-
-				tmp<-"";
-				if(length(vec) > 0 ){
-					tmp<-paste(tmp,"  ",vec,sep="",collapse="\n");
-				  paste(text,tmp,"\n",sep="");
-				} else {
-					return(text);
-				}
-		}
-
+		setProcesses(this$.seq,value,index);
 	
-		text<-paste(text,"\nClass: ",class,"\n",sep="");
-		text<-paste(text,"Inherits from: ",paste(parents,collapse=" "),"\n",sep="");
-		text<-paste(text,"Fields (",length(fields),"):\n",sep="");
-		text<-pretty.print(fields,text);	
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
 
-		# Discriminate between the methods implementing 
-		# virtual fileds and the rest:
+##	
+## Method: [[.ProcessesList
+##	
+setMethodS3(
+	"[[", 
+	class="ProcessesList", 
+	function(
+		this,
+		index
+	){
+		
+		if (length(index) > 1 ) {
+			throw("Attempted to select more than one element!\n");	
+		}
+		getProcesses(this$.seq,index)[[1]];
 	
-		vfields<-character(0);
-		methods.not.virtual<-character(0);
-
-		num.args<-function(fun){
-			length(formals(fun))
-		}
-
-		method.to.field<-function(method){
-
-			 method<-sub('^(get|set)(.*)','\\2',method);
-			 tmp<-as.array(strsplit(method,""))[[1]];
-       tmp[1]<-tolower(tmp[1]);
-       paste(tmp,collapse="");			
-
-		}
-
-		classify.method<-function(method,limit) {
-
-				if( num.args( paste(method,".",class(this)[[1]],sep="") ) == limit){
-                vfields<<-c(vfields,method.to.field(method));
-            } else {
-              methods.not.virtual<<-c(methods.not.virtual,method);
-            }
-
-		}
-
-		for(method in methods){
-			
-				# Get methods for virtual fields have 2 aguments: "this" and "...".
-				if(length(grep("^get",method,perl=TRUE)) == 1) {
-					classify.method (method,limit=2)
-				}
-				# Set methods for virtual fields have 3 aguments: "this", "..." and "value".
-				else if (length(grep("^set",method,perl=TRUE)) == 1) {
-					classify.method (method,limit=3)
-				} else {
-					methods.not.virtual<-c(methods.not.virtual,method);
-				}
-		
-		}
-		vfields<-sort(unique(vfields));	
-
-		lapply(methods.not.virtual,
-			function(name) {
-				tmp<-method.to.field(name);
-				if (length(intersect(tmp,vfields)) > 0 ) {
-					print(intersect(tmp,vfields));
-					throw("Method classification inconsistency! Blaming ",paste(intersect(tmp,vfields),collapse=" "),". \n");
-				}
-			}
-		);
-		
-		text<-paste(text,"Virtual fields (",length(vfields),"):\n",sep="");
-		text<-pretty.print(vfields,text);
-		text<-paste(text,"Methods implemented in ",class," (",length(methods.not.virtual),"):\n",sep="");
-		text<-pretty.print(sort(methods.not.virtual),text);
-		text<-paste(text,"\n",sep="");
-		
-		if(!quiet){ cat(text) }	
-
-		invisible(text);
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-##
-## Method: getComments
-##
+##	
+## Method: [[<-.ProcessesList
+##	
 setMethodS3(
-  "getComments",
-  class="PSRoot",
-  function(
-    this,
-    ...
-  ){
-			this$.comments;
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: setComments
-##
-setMethodS3(
-  "setComments",
-  class="PSRoot",
-  function(
-    this,
-		new_value,
-    ...
-  ){
-			this$.comments<-new_value;
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: PSRoot$all.equal
-##
-setMethodS3(
-  "all.equal",
-  class="PSRoot",
-  function(
-    this,
-		one,
-		two,
-    ...
-  ){
-
-		TOLERANCE<-.Machine$double.eps ^ 0.5;
-		if(missing(one) | missing (two)){
-			throw("Two objects are needed for comparison!\n");
-		}
-		else {
-			one<-as.double(one);
-			two<-as.double(two);
-			return(isTRUE(all.equal(one,two, tolerance=TOLERANCE)));
-		}
+	"[[<-", 
+	class="ProcessesList", 
+	function(
+		this,
+		index,
+		value
+	){
 		
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: summary.PSRoot
-##
-setMethodS3(
-  "summary",
-  class="PSRoot",
-  function(
-    this,
-		verbose=FALSE,
-    ...
-  ){
-		
-		# Adding the Comments field:
-		if(length(this$.comments) > 0 ) {
-		this$.summary$Comments<-paste(this$.comments, collapse=", ");
+		if (length(index) > 1 ) {
+			throw("Attempted to select more than one element!\n");	
+		} else if (length(value) > 1) {
+			warning("Value vector longer than one!\n");
 		}
-		# Adding ll() output in verbose mode:
-		if(verbose == TRUE ) {
-
-			tmp<-ll(this,quiet=TRUE);
-			tmp<-strsplit(tmp,split="\n",extended=TRUE)[[1]];
-			tmp<-paste(tmp, collapse="\n  ");
-		  this$.summary$"\nObject information"<-tmp;
-
-		}
-	
-		obj<-PSRootSummary(summary=this$.summary);
-		this$.summary<-list();
-		# Return a summary object:
-		return(obj);
+		setProcesses(this$.seq,value,index);
 
 	},
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-
-##
-## Constructor: summary.PSRoot
-##
-setConstructorS3(
-  "PSRootSummary",
-  function(summary=list(),...){
-			
-			# Stepping out of the R.oo framework to provide 
-			# the expected behaviour.
-			class(summary)<-c("PSRootSummary");
-			summary;
-  },
-  ###
-  enforceRCC=FALSE
-);
-
-##
-## Method: print.summary.PSRoot
-##
+##	
+## Method: as.character
+##	
 setMethodS3(
-  "print",
-  class="PSRootSummary",
-  function(
-    this,
-    ...
-  ){
-	
-		cat("\n");
-		for (i in names(this)){
-        cat(paste(i,": ",this[[i]],"\n",sep=""));
-   	}
-		cat("\n");
-		invisible(this);
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: is.na.PSRoot
-##
-setMethodS3(
-  "is.na",
-  class="PSRoot",
-  function(
-    this,
-    ...
-  ){
-		
-		# We don't want our objects to be NA-s!	
-		return(FALSE);
-		
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: is.PSRoot.default
-##
-setMethodS3(
-  "is.PSRoot",
-  class="default",
-  function(
-    this,
-    ...
-  ){
-
-		# FIXME - some safe speedup here!	
-		if(!is.object(this)) {return(FALSE)}
-		inherits(this,"PSRoot");
-		
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: checkConsistency;
-##
-setMethodS3(
-  "checkConsistency",
-  class="PSRoot",
-  function(
+	"as.character", 
+	class="ProcessesList", 
+	function(
 		this,
-    ...
-  ){
+		...
+	){
 		
-		warning("Consistency check is not implemented in class ",class(this)[[1]],"!\n");	
-		return(invisible(TRUE));
-		
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-	static=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: globalConsistencyCheck;
-##
-setMethodS3(
-  "globalConsistencyCheck",
-  class="PSRoot",
-  function(
-    ...
-  ){
-		
-		for(name in ls(envir=.GlobalEnv)) {
-				obj<-get(name,envir=.GlobalEnv);
-				if (is.PSRoot(obj)) {
-					cat("Checking ",name," ... ");	
-					if( checkConsistency((obj)) ) {
-							cat("OK\n");
-					}
-				}
-		}
-		return(invisible(TRUE));
-		
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-	static=TRUE,
-  conflict="warning"
-);
-
-##
-## Method: plot.PSRoot
-##
-setMethodS3(
-  "plot",
-  class="PSRoot",
-  function(
-    ...
-  ){
+		this[];	
 	
-		cat("No plot method defined for this object!\n");	
-		return(invisible(FALSE));
-		
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-	static=TRUE,
-  conflict="warning"
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
 ##	$Id: QMatrix.R,v 1.12 2009-04-30 17:10:22 sbotond Exp $
 ##
 ##	Class: QMatrix
@@ -11018,305 +11588,6 @@ setMethodS3(
 	overwrite=FALSE,
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-##	$Id: SequenceIndel.R,v 1.11 2009-05-01 08:48:21 sbotond Exp $
-##
-##	Class: Sequence - indel related methods
-##	Descriprion: 
-##	
-##	
-##	
-##	
-##	
-##	
-##	
-## Copyright 2009 Botond Sipos	
-## See the file ../COPYING for licensing issues.	
-##	
-
-##
-## Method: insertSequence
-##
-setMethodS3(
-  "insertSequence",
-  class="Sequence",
-  function(
-    this,
-		insert,
-		position,
-		process=NA,
-		sloppy=FALSE,
-		paranoid=FALSE,
-    ...
-  ){
-
-		.checkWriteProtection(this);
-		if(missing(insert)) {
-			throw("Insert sequence object is missing!\n");
-		}
-		else if (missing(position)) {
-			throw("Insertion position is missing!\n");
-		}
-
-		if ( sloppy == FALSE ) {
-			if(!is.Sequence(insert)) {
-				throw("Insert object not valid!\n");
-			}
-			else if (this$length == 0 & position != 0 ) {
-				throw("Acceptor sequence length is zero! The only valid insertion position is 0!\n");	
-			}
-			else if ( !( position >= 0 & position <=(this$.length + 1))) {
-				throw("Insertion position ",position," is invalid!\n");
-			}
-	 }
-
-	 # Just return if insert has zero length:	
-	 if(insert$length == 0){
-			warning("The length of the sequence to be inserted is zero! Nothing to do here!\n");
-			return(invisible(FALSE));	
-	 } 
-	 # Clone insert object:
-	 insert<-clone(insert);
-
-	 # Set the generator process:
-	 if(!missing(process)) {
-			if( (length(process) == 0) | !is.Process(process)){
-				throw("Process object invalid!\n");
-			}
-	 } else {
-			process<-Sequence$.root.ins;
-	 }
-	 for(site in insert$.sites) {
-				site$.ancestral<-process;
-				site$sequence<-this;
-	 }
-
-	 # Recalculate cumulative rates if the flag is on:
-	 if(this$.cumulative.rate.flag) {
-			.recalculateCumulativeRates(this);
-	 }
-
-	 # Flagging cumulative rates:
-		.flagCumulativeRates(this);
-
-		# Inserting new site objects:
-
-		if ( position == this$.length) {
-			# Insertion at the end of the sequence;
-			this$.sites<-c(this$.sites,insert$.sites);
-			this$.total.rates<-c(this$.total.rates,rep(c(NA),times=insert$.length) );
-			this$.cumulative.rates<-c(this$.cumulative.rates,rep(NA,times=insert$.length) );
-
-		} else if (position == 0) {
-			# Insertion in the sequence
-			this$.sites<-c(insert$.sites, this$.sites);
-			this$.total.rates<-c(rep(NA,times=insert$.length),this$.total.rates);
-      this$.cumulative.rates<-c(rep(NA,times=insert$.length),this$.cumulative.rates);
-
-		} else {
-			# Insertion at position 0
-			this$.sites<-c(this$.sites[1:position],insert$.sites,this$.sites[(position+1):this$.length]);
-			this$.total.rates<-c(this$.total.rates[1:position],rep(NA,times=insert$.length),this$.total.rates[(position+1):this$.length]);
-			this$.cumulative.rates<-c(this$.cumulative.rates[1:position],rep(NA,times=insert$.length),this$.cumulative.rates[(position+1):this$.length]);
-
-		}
-
-	 # Checking if lengths are consistent:
-		
-		if(length(this$.sites) != (this$.length + insert$.length)) {
-			throw("Length inconsistency after insertion!\n");
-		} else {
-			this$.length<-(this$.length + insert$.length);
-		}
-
-	# Flagging the inserted sites:
-		this$.flagged.sites<-c(this$.flagged.sites,(position+1):(position+insert$.length));
-
-	if( sloppy == FALSE ) {
-		if(length(this$.total.rates) != this$.length) {
-			throw("Total rates vector inconsistency after insertion!\n");
-		}
-		if(length(this$.cumulative.rates) != this$.length) {
-			throw("Cumulative rates vector inconsistency after insertion!\n");
-		}
-	}
-
-	# Recalculating cumulative rates:
-		.recalculateCumulativeRates(this);
-
-	# Paranoid check of total rates:
-
-	if(paranoid) {	
-		for (i in 1:this$.length) {
-				if(this$.sites[[i]]$totalRate != this$.total.rates[[i]]) {
-					throw("Object total rates inconsistent with total rates vector!\n");
-				}
-		}
-	}
-
-	# Deleting the insert:
-	rm(insert);
-
-	return(invisible(this));
-
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=FALSE,
-  conflict="warning",
-  validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##
-## Method: deleteSubSequence
-##
-setMethodS3(
-  "deleteSubSequence",
-  class="Sequence",
-  function(
-    this,
-		index,
-		sloppy=FALSE,
-    ...
-  ){
-
-		.checkWriteProtection(this);
-		if(missing(index)) {
-			 throw("No index vector specified!\n");
-		} else if (sloppy != FALSE) {
-			index<-.checkIndexSanity(this, index);
-		}
-		if(length(index) == 0) {
-			return(FALSE);
-		} else {
-
-			# Avoid deletion on dirty sequence as
-			# that will cause havoc.
-			if(this$.cumulative.rate.flag){
-			 .recalculateCumulativeRates(this);	
-			}
-			# Flagging cumulative rates:	
-			.flagCumulativeRates(this);
-			min.index<-min(index);
-			# Deleting site objects:	
-			this$.sites[index]<-NULL;
-			# Updating rate vectors:
-			this$.total.rates<-this$.total.rates[-index];
-			this$.cumulative.rates<-this$.cumulative.rates[-index];
-			
-			# Flag the site before the deletion to
-			# to force cumulative rate recalculation:
-			# FIXME: this will call site$totalRate
-			if (min.index > 2 ) {
-				this$.flagged.sites<-c(this$.flagged.sites,(min.index - 1));
-			}
-
-			if( length(this$.sites) != (this$.length - length(index) ) ) {
-				throw("Inconsistency after deleting sites!\n");
-			} else{
-				this$.length<-length(this$.sites);
-			}
-			.recalculateCumulativeRates(this);	
-				return(invisible(TRUE));
-		
-		}
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=FALSE,
-  conflict="warning",
-  validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##
-## Method: copySubSequence
-##
-setMethodS3(
-  "copySubSequence",
-  class="Sequence",
-  function(
-    this,
-		index,
-		process=NA,
-		sloppy=FALSE,
-    ...
-  ){
-
-		if(missing(index)) {
-				index<-seq(along=this$.sites);
-		}
-		else {
-			index<-.checkIndexSanity(this, index);
-		}
-		if(!is.na(process) & !is.Process(process)) {
-			throw("Process object invalid!\n");		
-		} else {
-
-			# Avoid copying from dirty sequence:
-			if(this$.cumulative.rate.flag){
-			 .recalculateCumulativeRates(this);	
-			}
-
-			length<-length(index);
-
-			# Create an empty sequence object:
-			copy<-Sequence();
-
-			# Flag copy cumulative rates:
-			copy$.cumulative.rate.flag<-TRUE;
-
-			if(is.na(process)){
-				# Getting the root insertion process:
-				process<-Sequence$.root.ins;
-			}
-			# Setting the ancestral to sequence:
-			copy$.ancestral.obj<-process;
-			
-			# Setting copy name:
-			copy$name<-paste("Copied from",this$name);
-
-			# Setting length:
-			copy$.length<-length;
-
-			# Clone the sites:
-			copy$.sites<-lapply(this$.sites[index],
-				function(site){
-					site.copy<-clone(site);
-					site.copy$.ancestral<-process;
-					return(site.copy);
-				}
-			);
-
-			# Copy total rates:	
-			copy$.total.rates<-this$.total.rates[index];
-
-			# Create cumulative rates vector:
-			copy$.cumulative.rates<-cumsum(copy$.total.rates);
-
-			copy$.cumulative.rate.flag<-FALSE;
-
-			if(length(copy$.sites) != length){
-				throw("Sites list length mismatch!\n")
-			}
-			else if(length(copy$.total.rates) != length){
-				throw("Total rates vector length mismatch!\n")
-			}
-			else if(length(copy$.cumulative.rates) != length){
-				throw("Cumulative rates vector length mismatch!\n")
-			}
-
-			return(copy);
-		
-		}
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=FALSE,
-  conflict="warning",
-  validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 ##	$Id: Sequence.R,v 1.44 2009-05-01 08:48:21 sbotond Exp $
 ##
@@ -13401,6 +13672,305 @@ setMethodS3(
 );
 
 
+##	$Id: SequenceIndel.R,v 1.11 2009-05-01 08:48:21 sbotond Exp $
+##
+##	Class: Sequence - indel related methods
+##	Descriprion: 
+##	
+##	
+##	
+##	
+##	
+##	
+##	
+## Copyright 2009 Botond Sipos	
+## See the file ../COPYING for licensing issues.	
+##	
+
+##
+## Method: insertSequence
+##
+setMethodS3(
+  "insertSequence",
+  class="Sequence",
+  function(
+    this,
+		insert,
+		position,
+		process=NA,
+		sloppy=FALSE,
+		paranoid=FALSE,
+    ...
+  ){
+
+		.checkWriteProtection(this);
+		if(missing(insert)) {
+			throw("Insert sequence object is missing!\n");
+		}
+		else if (missing(position)) {
+			throw("Insertion position is missing!\n");
+		}
+
+		if ( sloppy == FALSE ) {
+			if(!is.Sequence(insert)) {
+				throw("Insert object not valid!\n");
+			}
+			else if (this$length == 0 & position != 0 ) {
+				throw("Acceptor sequence length is zero! The only valid insertion position is 0!\n");	
+			}
+			else if ( !( position >= 0 & position <=(this$.length + 1))) {
+				throw("Insertion position ",position," is invalid!\n");
+			}
+	 }
+
+	 # Just return if insert has zero length:	
+	 if(insert$length == 0){
+			warning("The length of the sequence to be inserted is zero! Nothing to do here!\n");
+			return(invisible(FALSE));	
+	 } 
+	 # Clone insert object:
+	 insert<-clone(insert);
+
+	 # Set the generator process:
+	 if(!missing(process)) {
+			if( (length(process) == 0) | !is.Process(process)){
+				throw("Process object invalid!\n");
+			}
+	 } else {
+			process<-Sequence$.root.ins;
+	 }
+	 for(site in insert$.sites) {
+				site$.ancestral<-process;
+				site$sequence<-this;
+	 }
+
+	 # Recalculate cumulative rates if the flag is on:
+	 if(this$.cumulative.rate.flag) {
+			.recalculateCumulativeRates(this);
+	 }
+
+	 # Flagging cumulative rates:
+		.flagCumulativeRates(this);
+
+		# Inserting new site objects:
+
+		if ( position == this$.length) {
+			# Insertion at the end of the sequence;
+			this$.sites<-c(this$.sites,insert$.sites);
+			this$.total.rates<-c(this$.total.rates,rep(c(NA),times=insert$.length) );
+			this$.cumulative.rates<-c(this$.cumulative.rates,rep(NA,times=insert$.length) );
+
+		} else if (position == 0) {
+			# Insertion in the sequence
+			this$.sites<-c(insert$.sites, this$.sites);
+			this$.total.rates<-c(rep(NA,times=insert$.length),this$.total.rates);
+      this$.cumulative.rates<-c(rep(NA,times=insert$.length),this$.cumulative.rates);
+
+		} else {
+			# Insertion at position 0
+			this$.sites<-c(this$.sites[1:position],insert$.sites,this$.sites[(position+1):this$.length]);
+			this$.total.rates<-c(this$.total.rates[1:position],rep(NA,times=insert$.length),this$.total.rates[(position+1):this$.length]);
+			this$.cumulative.rates<-c(this$.cumulative.rates[1:position],rep(NA,times=insert$.length),this$.cumulative.rates[(position+1):this$.length]);
+
+		}
+
+	 # Checking if lengths are consistent:
+		
+		if(length(this$.sites) != (this$.length + insert$.length)) {
+			throw("Length inconsistency after insertion!\n");
+		} else {
+			this$.length<-(this$.length + insert$.length);
+		}
+
+	# Flagging the inserted sites:
+		this$.flagged.sites<-c(this$.flagged.sites,(position+1):(position+insert$.length));
+
+	if( sloppy == FALSE ) {
+		if(length(this$.total.rates) != this$.length) {
+			throw("Total rates vector inconsistency after insertion!\n");
+		}
+		if(length(this$.cumulative.rates) != this$.length) {
+			throw("Cumulative rates vector inconsistency after insertion!\n");
+		}
+	}
+
+	# Recalculating cumulative rates:
+		.recalculateCumulativeRates(this);
+
+	# Paranoid check of total rates:
+
+	if(paranoid) {	
+		for (i in 1:this$.length) {
+				if(this$.sites[[i]]$totalRate != this$.total.rates[[i]]) {
+					throw("Object total rates inconsistent with total rates vector!\n");
+				}
+		}
+	}
+
+	# Deleting the insert:
+	rm(insert);
+
+	return(invisible(this));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: deleteSubSequence
+##
+setMethodS3(
+  "deleteSubSequence",
+  class="Sequence",
+  function(
+    this,
+		index,
+		sloppy=FALSE,
+    ...
+  ){
+
+		.checkWriteProtection(this);
+		if(missing(index)) {
+			 throw("No index vector specified!\n");
+		} else if (sloppy != FALSE) {
+			index<-.checkIndexSanity(this, index);
+		}
+		if(length(index) == 0) {
+			return(FALSE);
+		} else {
+
+			# Avoid deletion on dirty sequence as
+			# that will cause havoc.
+			if(this$.cumulative.rate.flag){
+			 .recalculateCumulativeRates(this);	
+			}
+			# Flagging cumulative rates:	
+			.flagCumulativeRates(this);
+			min.index<-min(index);
+			# Deleting site objects:	
+			this$.sites[index]<-NULL;
+			# Updating rate vectors:
+			this$.total.rates<-this$.total.rates[-index];
+			this$.cumulative.rates<-this$.cumulative.rates[-index];
+			
+			# Flag the site before the deletion to
+			# to force cumulative rate recalculation:
+			# FIXME: this will call site$totalRate
+			if (min.index > 2 ) {
+				this$.flagged.sites<-c(this$.flagged.sites,(min.index - 1));
+			}
+
+			if( length(this$.sites) != (this$.length - length(index) ) ) {
+				throw("Inconsistency after deleting sites!\n");
+			} else{
+				this$.length<-length(this$.sites);
+			}
+			.recalculateCumulativeRates(this);	
+				return(invisible(TRUE));
+		
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: copySubSequence
+##
+setMethodS3(
+  "copySubSequence",
+  class="Sequence",
+  function(
+    this,
+		index,
+		process=NA,
+		sloppy=FALSE,
+    ...
+  ){
+
+		if(missing(index)) {
+				index<-seq(along=this$.sites);
+		}
+		else {
+			index<-.checkIndexSanity(this, index);
+		}
+		if(!is.na(process) & !is.Process(process)) {
+			throw("Process object invalid!\n");		
+		} else {
+
+			# Avoid copying from dirty sequence:
+			if(this$.cumulative.rate.flag){
+			 .recalculateCumulativeRates(this);	
+			}
+
+			length<-length(index);
+
+			# Create an empty sequence object:
+			copy<-Sequence();
+
+			# Flag copy cumulative rates:
+			copy$.cumulative.rate.flag<-TRUE;
+
+			if(is.na(process)){
+				# Getting the root insertion process:
+				process<-Sequence$.root.ins;
+			}
+			# Setting the ancestral to sequence:
+			copy$.ancestral.obj<-process;
+			
+			# Setting copy name:
+			copy$name<-paste("Copied from",this$name);
+
+			# Setting length:
+			copy$.length<-length;
+
+			# Clone the sites:
+			copy$.sites<-lapply(this$.sites[index],
+				function(site){
+					site.copy<-clone(site);
+					site.copy$.ancestral<-process;
+					return(site.copy);
+				}
+			);
+
+			# Copy total rates:	
+			copy$.total.rates<-this$.total.rates[index];
+
+			# Create cumulative rates vector:
+			copy$.cumulative.rates<-cumsum(copy$.total.rates);
+
+			copy$.cumulative.rate.flag<-FALSE;
+
+			if(length(copy$.sites) != length){
+				throw("Sites list length mismatch!\n")
+			}
+			else if(length(copy$.total.rates) != length){
+				throw("Total rates vector length mismatch!\n")
+			}
+			else if(length(copy$.cumulative.rates) != length){
+				throw("Cumulative rates vector length mismatch!\n")
+			}
+
+			return(copy);
+		
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
 ##	$Id: Site-Process.R,v 1.17 2009-05-01 08:48:21 sbotond Exp $
 ##
 ##	Methods for Site/Process interactions
