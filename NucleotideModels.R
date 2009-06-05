@@ -399,6 +399,40 @@ setMethodS3(
 );
 
 ##	
+## Method: .checkRateParamList
+##	
+setMethodS3(
+	".checkRateParamList", 
+	class="GTR", 
+	function(
+		this,
+		names,
+		value.names,
+		...
+	){
+
+		# Check for illegal rate parameter names:
+		if(length((illegal<-setdiff(value.names, names))) != 0){
+			throw("The following rate parameter names are illegal: ",paste(illegal, collapse=", ")," !\n");
+		}
+		else {
+			missing<-setdiff(names, value.names);
+			if(length(missing) > 0) {
+				throw("Cannot build the model because the following rate parameters are missing: ",paste(missing,coll=", ")," \n");	
+		} else {
+					return(TRUE);
+			}
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
 ## Method: setRateParamList
 ##	
 setMethodS3(
@@ -594,40 +628,6 @@ setMethodS3(
 );
 
 ##	
-## Method: .checkRateParamList
-##	
-setMethodS3(
-	".checkRateParamList", 
-	class="GTR", 
-	function(
-		this,
-		names,
-		value.names,
-		...
-	){
-
-		# Check for illegal rate parameter names:
-		if(length((illegal<-setdiff(value.names, names))) != 0){
-			throw("The following rate parameter names are illegal: ",paste(illegal, collapse=", ")," !\n");
-		}
-		else {
-			missing<-setdiff(names, value.names);
-			if(length(missing) > 0) {
-				throw("Cannot build the model because the following rate parameters are missing: ",paste(missing,coll=", ")," \n");	
-		} else {
-					return(TRUE);
-			}
-		}
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
 ## Method: setRateParamList
 ##	
 setMethodS3(
@@ -763,7 +763,7 @@ setMethodS3(
 );
 
 ##	
-## Method: getBaseFreqs
+## Method: setBaseFreqs
 ##	
 setMethodS3(
 	"setBaseFreqs", 
