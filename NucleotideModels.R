@@ -504,7 +504,7 @@ setConstructorS3(
 		... 
 		)	{
 		
-		this<-GTR();
+		this<-GTR(...);
 		
 		this<-extend(
 			this,
@@ -517,6 +517,7 @@ setConstructorS3(
 			);
 
 		this$name<-name;
+		this$rateParamList<-rate.params;
 
 		return(this);
 	
@@ -615,26 +616,19 @@ setMethodS3(
 			
 				this$.tn93.params<-value;
 				# Setting the GTR rate parameters:
-				rate.list=list(
-
-                "T->C"=(value[["a"]] * this$.equ.dist[1,"T"] ),
-                "C->T"=(value[["a"]] * this$.equ.dist[1,"T"] ),
-                "T->A"=(value[["b"]] * this$.equ.dist[1,"A"] ),
-                "A->T"=(value[["b"]] * this$.equ.dist[1,"T"] ),
-                "T->G"=(value[["c"]] * this$.equ.dist[1,"G"] ),
-                "G->T"=(value[["c"]] * this$.equ.dist[1,"C"] ),
-                "C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
-                "A->C"=(value[["d"]] * this$.equ.dist[1,"C"] ),
-                "C->G"=(value[["e"]] * this$.equ.dist[1,"G"] ),
-                "G->C"=(value[["e"]] * this$.equ.dist[1,"C"] ),
-                "A->G"=(value[["f"]] * this$.equ.dist[1,"G"] ),
-                "G->A"=(value[["f"]] * this$.equ.dist[1,"A"] )
-
-                );
-			setRateList(this,rate.list);
-			}
+				gtr.params<-list(
+					"a"=value[["Alpha1"]],
+					"b"=value[["Beta"]],
+					"c"=value[["Beta"]],
+					"d"=value[["Beta"]],
+					"e"=value[["Beta"]],
+					"f"=value[["Alpha2"]]
+				);
+				setRateParamList.GTR(this, value=gtr.params);
 
 		}
+
+	}
 
 	},
 	private=FALSE,
@@ -667,6 +661,33 @@ setMethodS3(
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
 			NextMethod();		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: summary.TN93
+##	
+setMethodS3(
+	"summary", 
+	class="TN93", 
+	function(
+		this,
+		...
+	){
+
+		.addSummaryNameId(this);
+    .addSummaryAlphabet(this);
+		if (class(this)[[1]] == "TN93") {
+		this$.summary$"Rate parameters"<-paste(names(this$.tn93.params),this$.tn93.params,sep=" = ",collapse=", ");
+		}
+
+		NextMethod();
 
 	},
 	private=FALSE,
