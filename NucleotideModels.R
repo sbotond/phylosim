@@ -1242,7 +1242,7 @@ setMethodS3(
 
 
 ##	
-## Method: checkConsistency.TN93
+## Method: checkConsistency.F81
 ##	
 setMethodS3(
 	"checkConsistency", 
@@ -1296,3 +1296,4 @@ setMethodS3(
 
 
 ######### end of F81 methods ############
+
