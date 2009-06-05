@@ -1532,3 +1532,242 @@ setMethodS3(
 );
 
 ######### end of K80 methods ############
+
+##	
+## Constructor: K81
+##	
+setConstructorS3(
+  "K81",
+  function( 
+		name="Anonymous",
+		rate.params=list(
+				"Alpha"  	=1,
+      	"Beta"    =1,
+				"Gamma"		=1
+			),
+			... 
+		)	{
+		
+		this<-GTR(...);
+		
+		this<-extend(
+			this,
+			"K81",
+			.k81.params=list(
+					"Alpha"	 	=NA,
+					"Beta"		=NA,
+					"Gamma"		=NA
+				)
+			);
+
+		this$name<-name;
+		this$rateParamList<-rate.params;
+		return(this);
+	
+  },
+  enforceRCC=TRUE
+);
+
+##	
+## Method: getRateParamList
+##	
+setMethodS3(
+	"getRateParamList", 
+	class="K81", 
+	function(
+		this,
+		...
+	){
+
+		this$.k81.params;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParamList
+##	
+setMethodS3(
+	"setRateParamList", 
+	class="K81", 
+	function(
+		this,
+		value,
+		...
+	){
+
+	.checkWriteProtection(this);
+	if(missing(value)){
+		throw("No new value provided!\n");
+	}
+	else if(!is.list(value)){
+		throw("The provided value must be a list!\n");
+	}
+	else if(any((as.numeric(value)) < 0)){
+ 		throw("Cannot set negative rate parameter!\n");
+	}
+	else {
+
+		# Get the rate parameter names:
+		names<-names(this$.k81.params);
+		value.names<-names(value);
+
+		if(.checkRateParamList(this,names,value.names)) {
+
+				this$.k81.params<-value;
+				# Setting the GTR rate parameters:
+				# FIXME - doublecheck this!
+				gtr.params<-list(
+					"a"=value[["Alpha"]],
+					"b"=value[["Beta"]],
+					"c"=value[["Gamma"]],
+					"d"=value[["Gamma"]],
+					"e"=value[["Beta"]],
+					"f"=value[["Alpha"]]
+				);
+				setRateParamList.GTR(this, value=gtr.params);
+
+		}
+
+	}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getRateParam
+##	
+setMethodS3(
+	"getRateParam", 
+	class="K81", 
+	function(
+		this,
+		name,
+		...
+	){
+
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		}
+		else {
+			.getRateParam(this,name,this$.k81.params);
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParam
+##	
+setMethodS3(
+	"setRateParam", 
+	class="K81", 
+	function(
+		this,
+		name,
+		value,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		} else {
+			.setRateParam(this,name,value,this$.k81.params);
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getBaseFreqs
+##	
+setMethodS3(
+	"getBaseFreqs", 
+	class="K81", 
+	function(
+		this,
+		...
+	){
+
+		getBaseFreqs.GTR(this);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setBaseFreqs
+##	
+setMethodS3(
+	"setBaseFreqs", 
+	class="K81", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		throw("You are not allowed to set the base frequencies for the K81 model!\n");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: summary.K81
+##	
+setMethodS3(
+	"summary", 
+	class="K81", 
+	function(
+		this,
+		...
+	){
+
+		.addSummaryNameId(this);
+    .addSummaryAlphabet(this);
+		if (class(this)[[1]] == "K81") {
+		this$.summary$"Rate parameters"<-paste(names(this$.k81.params),this$.k81.params,sep=" = ",collapse=", ");
+		}
+
+		NextMethod();
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+######### end of K81 methods ############
