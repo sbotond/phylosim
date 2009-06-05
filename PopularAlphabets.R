@@ -34,7 +34,7 @@ setConstructorS3(
   "NucleotideAlphabet",
   function(... ){
 
-		this<-Alphabet(type="Nucleotide",symbols=c("A","C","G","T"));
+		this<-Alphabet(type="Nucleotide",symbols=c("T","C","A","G"));
 		extend(this,"NucleotideAlphabet");
 
   },
