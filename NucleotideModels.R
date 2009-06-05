@@ -467,12 +467,12 @@ setMethodS3(
 
 				rate.list=list(
 
-                "T->C"=(value[["a"]] * this$.equ.dist[1,"T"] ),
+                "T->C"=(value[["a"]] * this$.equ.dist[1,"C"] ),
                 "C->T"=(value[["a"]] * this$.equ.dist[1,"T"] ),
                 "T->A"=(value[["b"]] * this$.equ.dist[1,"A"] ),
                 "A->T"=(value[["b"]] * this$.equ.dist[1,"T"] ),
                 "T->G"=(value[["c"]] * this$.equ.dist[1,"G"] ),
-                "G->T"=(value[["c"]] * this$.equ.dist[1,"C"] ),
+                "G->T"=(value[["c"]] * this$.equ.dist[1,"T"] ),
                 "C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
                 "A->C"=(value[["d"]] * this$.equ.dist[1,"C"] ),
                 "C->G"=(value[["e"]] * this$.equ.dist[1,"G"] ),
