@@ -847,6 +847,246 @@ setMethodS3(
 ######### end of TN93 methods ############
 
 ##	
+## Constructor: HKY
+##	
+setConstructorS3(
+  "HKY",
+  function( 
+		name="Anonymous",
+		rate.params=list(
+				"Alpha"  	=1,
+      	"Beta"    =1
+			),
+			... 
+		)	{
+		
+		this<-GTR(...);
+		
+		this<-extend(
+			this,
+			"HKY",
+			.hky.params=list(
+					"Alpha"	 	=NA,
+					"Beta"		=NA
+				)
+			);
+
+		this$name<-name;
+		this$rateParamList<-rate.params;
+		return(this);
+	
+  },
+  enforceRCC=TRUE
+);
+
+##	
+## Method: getRateParamList
+##	
+setMethodS3(
+	"getRateParamList", 
+	class="HKY", 
+	function(
+		this,
+		...
+	){
+
+		this$.hky.params;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParamList
+##	
+setMethodS3(
+	"setRateParamList", 
+	class="HKY", 
+	function(
+		this,
+		value,
+		...
+	){
+
+	.checkWriteProtection(this);
+	if(missing(value)){
+		throw("No new value provided!\n");
+	}
+	else if(!is.list(value)){
+		throw("The provided value must be a list!\n");
+	}
+	else if(any((as.numeric(value)) < 0)){
+ 		throw("Cannot set negative rate parameter!\n");
+	}
+	else {
+
+		# Get the rate parameter names:
+		names<-names(this$.hky.params);
+		value.names<-names(value);
+
+		if(.checkRateParamList(this,names,value.names)) {
+
+				# Set the rate parameters:
+				# The parmeters are named as in 
+				# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
+			
+				this$.hky.params<-value;
+				# Setting the GTR rate parameters:
+				gtr.params<-list(
+					"a"=value[["Alpha"]],
+					"b"=value[["Beta"]],
+					"c"=value[["Beta"]],
+					"d"=value[["Beta"]],
+					"e"=value[["Beta"]],
+					"f"=value[["Alpha"]]
+				);
+				setRateParamList.GTR(this, value=gtr.params);
+
+		}
+
+	}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getRateParam
+##	
+setMethodS3(
+	"getRateParam", 
+	class="HKY", 
+	function(
+		this,
+		name,
+		...
+	){
+
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		}
+		else {
+			.getRateParam(this,name,this$.hky.params);
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParam
+##	
+setMethodS3(
+	"setRateParam", 
+	class="HKY", 
+	function(
+		this,
+		name,
+		value,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		} else {
+			.setRateParam(this,name,value,this$.hky.params);
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getBaseFreqs
+##	
+setMethodS3(
+	"getBaseFreqs", 
+	class="HKY", 
+	function(
+		this,
+		...
+	){
+
+		getBaseFreqs.GTR(this);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setBaseFreqs
+##	
+setMethodS3(
+	"setBaseFreqs", 
+	class="HKY", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		setBaseFreqs.GTR(this,value);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: summary.HKY
+##	
+setMethodS3(
+	"summary", 
+	class="HKY", 
+	function(
+		this,
+		...
+	){
+
+		.addSummaryNameId(this);
+    .addSummaryAlphabet(this);
+		if (class(this)[[1]] == "HKY") {
+		this$.summary$"Rate parameters"<-paste(names(this$.hky.params),this$.hky.params,sep=" = ",collapse=", ");
+		}
+
+		NextMethod();
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+######### end of TN93 methods ############
+
+##	
 ## Constructor: F81
 ##	
 setConstructorS3(
@@ -1056,60 +1296,3 @@ setMethodS3(
 
 
 ######### end of F81 methods ############
-
-##	
-## Constructor: HKY
-##	
-setConstructorS3(
-  "HKY",
-  function( 
-		name="Anonymous",
-		... 
-		)	{
-		
-		this<-GTR();
-		
-		this<-extend(this,"HKY");
-
-		this$name<-name;
-
-		return(this);
-	
-  },
-  enforceRCC=TRUE
-);
-
-##	
-## Method: checkConsistency.HKY
-##	
-setMethodS3(
-	"checkConsistency", 
-	class="HKY", 
-	function(
-		this,
-		...
-	){
-
-      wp<-this$writeProtected;
-      if (wp) {
-        this$writeProtected<-FALSE;
-      }
-			
-		  may.fail<-function(this) {
-				
-				# FIXME - what's to do here?	
-		
-      }
-      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
-			NextMethod();		
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-
-######### end of HKY methods ############
