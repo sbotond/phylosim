@@ -6694,6 +6694,30 @@ setMethodS3(
 ######### end of GTR methods ############
 
 ##	
+## Constructor: TN93
+##	
+setConstructorS3(
+  "TN93",
+  function( 
+		name="Anonymous",
+		... 
+		)	{
+		
+		this<-GTR();
+		
+		this<-extend(this,"TN93");
+
+		this$name<-name;
+
+		return(this);
+	
+  },
+  enforceRCC=TRUE
+);
+
+######### end of TN93 methods ############
+
+##	
 ## Constructor: HKY
 ##	
 setConstructorS3(
@@ -6714,6 +6738,8 @@ setConstructorS3(
   },
   enforceRCC=TRUE
 );
+
+######### end of HKY methods ############
 ##	$Id: PSRoot.R,v 1.24 2009-04-30 09:51:11 sbotond Exp $
 ##
 ##	Class: 
