@@ -110,7 +110,7 @@ setMethodS3(
 );
 
 ##	
-## Method: JC69
+## Constructor: JC69
 ##	
 setConstructorS3(
   "JC69",
@@ -316,6 +316,7 @@ setMethodS3(
 
 			# The parmeters are named as in 
 			# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
+
 			this$rateParamList<-this$.rate.params;
 			# FIXME - explain this!
 										
@@ -369,6 +370,9 @@ setMethodS3(
 	else if(!is.list(value)){
 		throw("The provided value must be a list!\n");
 	}
+	else if(any((as.numeric(value)) < 0)){
+ 		throw("Cannot set negative rate parameter!\n");
+	}
 	else {
 
 		# Get the rate parameter names:
@@ -387,6 +391,9 @@ setMethodS3(
 			}
 			else {
 				# Set the rate parameters:
+				# The parmeters are named as in 
+				# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
+
 				rate.list=list(
 
                 "T->C"=(value[["a"]] * this$.equ.dist[1,"T"] ),
@@ -478,7 +485,10 @@ setMethodS3(
 
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
+		if (class(this)[[1]] == "GTR") {
 		this$.summary$"Rate parameters"<-paste(names(this$.rate.params),this$.rate.params,sep=" = ",collapse=", ");
+		}
+
 		NextMethod();
 
 	},
@@ -490,3 +500,25 @@ setMethodS3(
 );
 
 ######### end of GTR methods ############
+
+##	
+## Constructor: HKY
+##	
+setConstructorS3(
+  "HKY",
+  function( 
+		name="Anonymous",
+		... 
+		)	{
+		
+		this<-GTR();
+		
+		this<-extend(this,"HKY");
+
+		this$name<-name;
+
+		return(this);
+	
+  },
+  enforceRCC=TRUE
+);
