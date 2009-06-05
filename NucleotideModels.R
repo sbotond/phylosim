@@ -844,8 +844,218 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-
 ######### end of TN93 methods ############
+
+##	
+## Constructor: F81
+##	
+setConstructorS3(
+  "F81",
+  function( 
+		name="Anonymous"
+		)	{
+		
+		this<-GTR();
+		
+		this<-extend(
+			this,
+			"F81"
+			);
+
+		this$name<-name;
+		return(this);
+	
+  },
+  enforceRCC=TRUE
+);
+
+##	
+## Method: getRateParamList
+##	
+setMethodS3(
+	"getRateParamList", 
+	class="F81", 
+	function(
+		this,
+		...
+	){
+
+		cat("The F81 model has no rate parameters!\n");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParamList
+##	
+setMethodS3(
+	"setRateParamList", 
+	class="F81", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		cat("The F81 model has no rate parameters!\n");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getRateParam
+##	
+setMethodS3(
+	"getRateParam", 
+	class="F81", 
+	function(
+		this,
+		name,
+		...
+	){
+
+		cat("The F81 model has no rate parameters!\n");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParam
+##	
+setMethodS3(
+	"setRateParam", 
+	class="F81", 
+	function(
+		this,
+		name,
+		value,
+		...
+	){
+
+		cat("The F81 model has no rate parameters!\n");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getBaseFreqs
+##	
+setMethodS3(
+	"getBaseFreqs", 
+	class="F81", 
+	function(
+		this,
+		...
+	){
+
+		getBaseFreqs.GTR(this);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setBaseFreqs
+##	
+setMethodS3(
+	"setBaseFreqs", 
+	class="F81", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		setBaseFreqs.GTR(this,value);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+##	
+## Method: checkConsistency.TN93
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="F81", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# FIXME - what's to do here?	
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: summary.F81
+##	
+setMethodS3(
+	"summary", 
+	class="F81", 
+	function(
+		this,
+		...
+	){
+
+		NextMethod();
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+######### end of F81 methods ############
 
 ##	
 ## Constructor: HKY
