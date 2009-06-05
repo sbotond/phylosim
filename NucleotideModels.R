@@ -209,9 +209,7 @@ setConstructorS3(
 		);
 		this$name<-name;
 		setEquDist(this,value=base.freqs,force=TRUE)	
-		if(!missing(rate.params)){
-			setRateParamList(this,value=rate.params);
-		}
+		setRateParamList(this,value=rate.params);
 
 		return(this);
 	
@@ -252,6 +250,35 @@ setMethodS3(
 );
 
 ##	
+## Method: .getRateParam
+##	
+setMethodS3(
+	".getRateParam", 
+	class="GTR", 
+	function(
+		this,
+		name,
+		param.list,
+		...
+	){
+
+		if(length(intersect(name,names(param.list))) == 0){
+			throw("The specified rate parameter name is not valid!\n");
+		}
+		else {
+			return(param.list[[name]]);
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
 ## Method: getRateParam
 ##	
 setMethodS3(
@@ -266,13 +293,53 @@ setMethodS3(
 		if(missing(name)){
 			throw("No rate parameter name specified!\n");
 		}
-		else if(length(intersect(name,names(this$.gtr.params))) == 0){
-			throw("The specified rate parameter name is not valid!\n");
-		}
 		else {
-			return(this$.gtr.params[[name]]);
+			.getRateParam(this,name,this$.gtr.params);
 		}
 
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .setRateParam
+##	
+setMethodS3(
+	".setRateParam", 
+	class="GTR", 
+	function(
+		this,
+		name,
+		value,
+		param.list,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if(length(intersect(name,names(param.list))) == 0){
+			throw("The specified rate parameter name is not valid!\n");
+		}
+		else if(missing(value)){
+			throw("No new value given!\n")
+		}
+		else if(length(value) != 1|any(!is.numeric(value))){
+			throw("The new value must be a numeric vector of length 1!\n");	
+		}
+		else if(any(is.na(this$.equ.dist))){
+			throw("Cannot set rate parameter because the nucleotide frequencies are not defined properly!\n");
+		}
+		else {
+			param.list[[name]]<-value;
+
+			# FIXME - explain this!
+			setRateParamList(this, param.list);
+										
+		}
 
 	},
 	private=FALSE,
@@ -298,28 +365,8 @@ setMethodS3(
 		.checkWriteProtection(this);
 		if(missing(name)){
 			throw("No rate parameter name specified!\n");
-		}
-		else if(length(intersect(name,names(this$.gtr.params))) == 0){
-			throw("The specified rate parameter name is not valid!\n");
-		}
-		else if(missing(value)){
-			throw("No new value given!\n")
-		}
-		else if(length(value) != 1|any(!is.numeric(value))){
-			throw("The new value must be a numeric vector of length 1!\n");	
-		}
-		else if(any(is.na(this$.equ.dist))){
-			throw("Cannot set rate parameter because the nucleotide frequencies are not defined properly!\n");
-		}
-		else {
-			this$.gtr.params[[name]]<-value;
-
-			# The parmeters are named as in 
-			# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
-
-			this$rateParamList<-this$.gtr.params;
-			# FIXME - explain this!
-										
+		} else {
+			.setRateParam(this,name,value,this$.gtr.params);
 		}
 
 	},
@@ -450,7 +497,7 @@ setMethodS3(
 		.checkWriteProtection(this);
 		# FIXME - explain this + more chekings
 		setEquDist(this,value,force=TRUE);
-		setRateParamList(this,value=this$.gtr.params);
+		setRateParamList.GTR(this,value=this$.gtr.params);
 
 	},
 	private=FALSE,
@@ -637,6 +684,106 @@ setMethodS3(
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##	
+## Method: getRateParam
+##	
+setMethodS3(
+	"getRateParam", 
+	class="TN93", 
+	function(
+		this,
+		name,
+		...
+	){
+
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		}
+		else {
+			.getRateParam(this,name,this$.tn93.params);
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParam
+##	
+setMethodS3(
+	"setRateParam", 
+	class="TN93", 
+	function(
+		this,
+		name,
+		value,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		} else {
+			.setRateParam(this,name,value,this$.tn93.params);
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getBaseFreqs
+##	
+setMethodS3(
+	"getBaseFreqs", 
+	class="TN93", 
+	function(
+		this,
+		...
+	){
+
+		getBaseFreqs.GTR(this);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getBaseFreqs
+##	
+setMethodS3(
+	"setBaseFreqs", 
+	class="TN93", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		setBaseFreqs.GTR(this,value);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 
 ##	
 ## Method: checkConsistency.TN93
