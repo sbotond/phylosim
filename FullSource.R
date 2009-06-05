@@ -6836,6 +6836,39 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##	
+## Method: checkConsistency.TN93
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="TN93", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# FIXME - what's to do here?	
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
 ######### end of TN93 methods ############
 
 ##	
@@ -6859,6 +6892,39 @@ setConstructorS3(
   },
   enforceRCC=TRUE
 );
+
+##	
+## Method: checkConsistency.HKY
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="HKY", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# FIXME - what's to do here?	
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 
 ######### end of HKY methods ############
 ##	$Id: PSRoot.R,v 1.24 2009-04-30 09:51:11 sbotond Exp $
