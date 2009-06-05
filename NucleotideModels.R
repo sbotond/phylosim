@@ -198,7 +198,7 @@ setConstructorS3(
 		this<-extend(
 			this,
 			"GTR",
-			.rate.params=list(
+			.gtr.params=list(
 					"a"=NA,
 					"b"=NA,
 					"c"=NA,
@@ -266,11 +266,11 @@ setMethodS3(
 		if(missing(name)){
 			throw("No rate parameter name specified!\n");
 		}
-		else if(length(intersect(name,names(this$.rate.params))) == 0){
+		else if(length(intersect(name,names(this$.gtr.params))) == 0){
 			throw("The specified rate parameter name is not valid!\n");
 		}
 		else {
-			return(this$.rate.params[[name]]);
+			return(this$.gtr.params[[name]]);
 		}
 
 
@@ -299,7 +299,7 @@ setMethodS3(
 		if(missing(name)){
 			throw("No rate parameter name specified!\n");
 		}
-		else if(length(intersect(name,names(this$.rate.params))) == 0){
+		else if(length(intersect(name,names(this$.gtr.params))) == 0){
 			throw("The specified rate parameter name is not valid!\n");
 		}
 		else if(missing(value)){
@@ -312,12 +312,12 @@ setMethodS3(
 			throw("Cannot set rate parameter because the nucleotide frequencies are not defined properly!\n");
 		}
 		else {
-			this$.rate.params[[name]]<-value;
+			this$.gtr.params[[name]]<-value;
 
 			# The parmeters are named as in 
 			# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
 
-			this$rateParamList<-this$.rate.params;
+			this$rateParamList<-this$.gtr.params;
 			# FIXME - explain this!
 										
 		}
@@ -341,7 +341,7 @@ setMethodS3(
 		...
 	){
 
-		this$.rate.params;
+		this$.gtr.params;
 
 	},
 	private=FALSE,
@@ -376,20 +376,10 @@ setMethodS3(
 	else {
 
 		# Get the rate parameter names:
-		names<-names(this$.rate.params);
+		names<-names(this$.gtr.params);
 		value.names<-names(value);
 
-		# Check for illegal rate parameter names:
-		if(length((illegal<-setdiff(value.names, names))) != 0){
-			throw("The following parameter names are illegal: ",paste(illegal, collapse=", ")," !\n");
-		}
-		else {
-
-			missing<-setdiff(names, value.names);
-			if(length(missing) > 0) {
-				throw("Cannot build the model because the following rate parameters are missing: ",paste(missing,coll=", ")," \n");	
-			}
-			else {
+		if(.checkRateParamList(this,names,value.names)) {
 				# Set the rate parameters:
 				# The parmeters are named as in 
 				# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
@@ -410,13 +400,11 @@ setMethodS3(
                 "G->A"=(value[["f"]] * this$.equ.dist[1,"A"] )
 
                 );
-			this$.rate.params<-value;
+			this$.gtr.params<-value;
 			setRateList(this,rate.list);
 			}
 
 		}
-
-	}
 
 	},
 	private=FALSE,
@@ -462,7 +450,7 @@ setMethodS3(
 		.checkWriteProtection(this);
 		# FIXME - explain this + more chekings
 		setEquDist(this,value,force=TRUE);
-		setRateParamList(this,value=this$.rate.params);
+		setRateParamList(this,value=this$.gtr.params);
 
 	},
 	private=FALSE,
@@ -486,7 +474,7 @@ setMethodS3(
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "GTR") {
-		this$.summary$"Rate parameters"<-paste(names(this$.rate.params),this$.rate.params,sep=" = ",collapse=", ");
+		this$.summary$"Rate parameters"<-paste(names(this$.gtr.params),this$.gtr.params,sep=" = ",collapse=", ");
 		}
 
 		NextMethod();
@@ -508,12 +496,25 @@ setConstructorS3(
   "TN93",
   function( 
 		name="Anonymous",
+		rate.params=list(
+				"Alpha1"  =1,
+      	"Alpha2"  =1,
+      	"Beta"    =1
+			),
 		... 
 		)	{
 		
 		this<-GTR();
 		
-		this<-extend(this,"TN93");
+		this<-extend(
+			this,
+			"TN93",
+			.tn93.params=list(
+					"Alpha1"	=NA,
+					"Alpha2"	=NA,
+					"Beta"		=NA
+				)
+			);
 
 		this$name<-name;
 
@@ -521,6 +522,126 @@ setConstructorS3(
 	
   },
   enforceRCC=TRUE
+);
+
+##	
+## Method: getRateParamList
+##	
+setMethodS3(
+	"getRateParamList", 
+	class="TN93", 
+	function(
+		this,
+		...
+	){
+
+		this$.tn93.params;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .checkRateParamList
+##	
+setMethodS3(
+	".checkRateParamList", 
+	class="GTR", 
+	function(
+		this,
+		names,
+		value.names,
+		...
+	){
+
+		# Check for illegal rate parameter names:
+		if(length((illegal<-setdiff(value.names, names))) != 0){
+			throw("The following rate parameter names are illegal: ",paste(illegal, collapse=", ")," !\n");
+		}
+		else {
+			missing<-setdiff(names, value.names);
+			if(length(missing) > 0) {
+				throw("Cannot build the model because the following rate parameters are missing: ",paste(missing,coll=", ")," \n");	
+		} else {
+					return(TRUE);
+			}
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParamList
+##	
+setMethodS3(
+	"setRateParamList", 
+	class="TN93", 
+	function(
+		this,
+		value,
+		...
+	){
+
+	.checkWriteProtection(this);
+	if(missing(value)){
+		throw("No new value provided!\n");
+	}
+	else if(!is.list(value)){
+		throw("The provided value must be a list!\n");
+	}
+	else if(any((as.numeric(value)) < 0)){
+ 		throw("Cannot set negative rate parameter!\n");
+	}
+	else {
+
+		# Get the rate parameter names:
+		names<-names(this$.tn93.params);
+		value.names<-names(value);
+
+		if(.checkRateParamList(this,names,value.names)) {
+
+				# Set the rate parameters:
+				# The parmeters are named as in 
+				# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
+			
+				this$.tn93.params<-value;
+				# Setting the GTR rate parameters:
+				rate.list=list(
+
+                "T->C"=(value[["a"]] * this$.equ.dist[1,"T"] ),
+                "C->T"=(value[["a"]] * this$.equ.dist[1,"T"] ),
+                "T->A"=(value[["b"]] * this$.equ.dist[1,"A"] ),
+                "A->T"=(value[["b"]] * this$.equ.dist[1,"T"] ),
+                "T->G"=(value[["c"]] * this$.equ.dist[1,"G"] ),
+                "G->T"=(value[["c"]] * this$.equ.dist[1,"C"] ),
+                "C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
+                "A->C"=(value[["d"]] * this$.equ.dist[1,"C"] ),
+                "C->G"=(value[["e"]] * this$.equ.dist[1,"G"] ),
+                "G->C"=(value[["e"]] * this$.equ.dist[1,"C"] ),
+                "A->G"=(value[["f"]] * this$.equ.dist[1,"G"] ),
+                "G->A"=(value[["f"]] * this$.equ.dist[1,"A"] )
+
+                );
+			setRateList(this,rate.list);
+			}
+
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
 ######### end of TN93 methods ############
