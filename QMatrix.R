@@ -595,6 +595,8 @@ setMethodS3(
 			throw("No new value provided!\n");}
 		else if(!is.numeric(value)) {
 			throw("Rate must be numeric!\n");
+		else if (value < 0){
+			throw("Cannot set negative rate!\n");
 		} else {
 			
 			.from<-character();		
