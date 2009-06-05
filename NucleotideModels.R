@@ -1071,8 +1071,9 @@ setMethodS3(
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "HKY") {
-		this$.summary$"Rate parameters"<-paste(names(this$.hky.params),this$.hky.params,sep=" = ",collapse=", ");
+			this$.summary$"Rate parameters"<-paste(names(this$.hky.params),this$.hky.params,sep=" = ",collapse=", ");
 		}
+			this$.summary$"Transition/transversion rate ratio"<-(this$.hky.params[["Alpha"]]/this$.hky.params[["Beta"]]);
 
 		NextMethod();
 
@@ -1084,7 +1085,7 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-######### end of TN93 methods ############
+######### end of HKY methods ############
 
 ##	
 ## Constructor: F81
@@ -1518,8 +1519,9 @@ setMethodS3(
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "K80") {
-		this$.summary$"Rate parameters"<-paste(names(this$.k80.params),this$.k80.params,sep=" = ",collapse=", ");
+			this$.summary$"Rate parameters"<-paste(names(this$.k80.params),this$.k80.params,sep=" = ",collapse=", ");
 		}
+		this$.summary$"Transition/transversion rate ratio"<-(this$.k80.params[["Alpha"]]/this$.k80.params[["Beta"]]);
 
 		NextMethod();
 
@@ -1771,3 +1773,265 @@ setMethodS3(
 );
 
 ######### end of K81 methods ############
+
+##	
+## Constructor: T92
+##	
+setConstructorS3(
+  "T92",
+  function( 
+		name="Anonymous",
+		rate.params=list(
+				"Alpha"  	=1,
+      	"Beta"    =1
+			),
+		theta=0.5,
+		... 
+		)	{
+		
+		this<-GTR(...);
+		
+		this<-extend(
+			this,
+			"T92",
+			.theta=NA,
+			.t92.params=list(
+					"Alpha"	 	=NA,
+					"Beta"		=NA
+				)
+			);
+
+		this$name<-name;
+		this$theta<-theta;
+		this$rateParamList<-rate.params;
+		return(this);
+	
+  },
+  enforceRCC=TRUE
+);
+
+##	
+## Method: getRateParamList
+##	
+setMethodS3(
+	"getRateParamList", 
+	class="T92", 
+	function(
+		this,
+		...
+	){
+
+		this$.t92.params;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParamList
+##	
+setMethodS3(
+	"setRateParamList", 
+	class="T92", 
+	function(
+		this,
+		value,
+		...
+	){
+
+	.checkWriteProtection(this);
+	if(missing(value)){
+		throw("No new value provided!\n");
+	}
+	else if(!is.list(value)){
+		throw("The provided value must be a list!\n");
+	}
+	else if(any((as.numeric(value)) < 0)){
+ 		throw("Cannot set negative rate parameter!\n");
+	}
+	else {
+
+		# Get the rate parameter names:
+		names<-names(this$.t92.params);
+		value.names<-names(value);
+
+		if(.checkRateParamList(this,names,value.names)) {
+
+				# Set the rate parameters:
+				# The parmeters are named as in 
+				# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
+			
+				this$.t92.params<-value;
+				# Setting the GTR rate parameters:
+				gtr.params<-list(
+					"a"=value[["Alpha"]],
+					"b"=value[["Beta"]],
+					"c"=value[["Beta"]],
+					"d"=value[["Beta"]],
+					"e"=value[["Beta"]],
+					"f"=value[["Alpha"]]
+				);
+				setRateParamList.GTR(this, value=gtr.params);
+
+		}
+
+	}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getRateParam
+##	
+setMethodS3(
+	"getRateParam", 
+	class="T92", 
+	function(
+		this,
+		name,
+		...
+	){
+
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		}
+		else {
+			.getRateParam(this,name,this$.t92.params);
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParam
+##	
+setMethodS3(
+	"setRateParam", 
+	class="T92", 
+	function(
+		this,
+		name,
+		value,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		} else {
+			.setRateParam(this,name,value,this$.t92.params);
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getTheta
+##	
+setMethodS3(
+	"getTheta", 
+	class="T92", 
+	function(
+		this,
+		...
+	){
+
+		this$.theta;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setTheta
+##	
+setMethodS3(
+	"setTheta", 
+	class="T92", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		if(missing(value)){
+			throw("No new value provided!\n");
+		}
+		else if(!is.numeric(value)){
+			throw("Theta must be numeric!\n");
+		}
+		else if (length(value) != 1){
+			throw("The value of theta must be a vector of length 1!\n");
+		}
+		else {
+			this$.theta<-value;
+			base.freqs<-c(
+				((1-this$.theta)/2),	# A
+				(this$.theta/2),			# C
+				((this$.theta)/2),		# G
+				((1-this$.theta)/2)		# T
+		);
+	}
+		print(base.freqs);
+		setBaseFreqs.GTR(this,base.freqs);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: summary.T92
+##	
+setMethodS3(
+	"summary", 
+	class="T92", 
+	function(
+		this,
+		...
+	){
+
+		.addSummaryNameId(this);
+    .addSummaryAlphabet(this);
+		if (class(this)[[1]] == "T92") {
+			this$.summary$"Rate parameters"<-paste(names(this$.t92.params),this$.t92.params,sep=" = ",collapse=", ");
+			this$.summary$"Theta (GC content)"<-this$.theta;
+			this$.summary$"Transition/transversion rate ratio"<-(this$.t92.params[["Alpha"]]/this$.t92.params[["Beta"]]);
+		}
+
+		NextMethod();
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
