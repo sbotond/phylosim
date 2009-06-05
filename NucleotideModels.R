@@ -1990,10 +1990,10 @@ setMethodS3(
 		else {
 			this$.theta<-value;
 			base.freqs<-c(
-				((1-this$.theta)/2),	# A
+				((1-this$.theta)/2),	# T
 				(this$.theta/2),			# C
-				((this$.theta)/2),		# G
-				((1-this$.theta)/2)		# T
+				((1-this$.theta)/2),	# A
+				((this$.theta)/2)		# G
 		);
 	}
 		print(base.freqs);
