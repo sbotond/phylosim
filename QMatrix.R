@@ -131,6 +131,9 @@ setMethodS3(
 				if(!is.matrix(this$.rate.matrix) & !all(is.na(this$.rate.matrix))){
 						throw("The rescaled rates matrix is invalid!\n");
 				}	
+
+				# FIXME - check here for negative rates!
+
 				# Check rescaled rates matrix size:
 				else if(!all(dim(this$.rates.matix) != c(this$.alphabet$.size, this$.alphabet$.size))) {
 					throw("The original rates matrix is of wrong size!");

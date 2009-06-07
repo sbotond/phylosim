@@ -15,9 +15,9 @@
 setConstructorS3(
   "UNREST",
   function( 
-		name="Anonymous", 
-		rate.list=NA,	
-		equ.dist=NA,
+		name="Anonymous", # name of the object
+		rate.list=NA,	  # list of unscaled rates
+		equ.dist=NA,      # equlibrium distribution
 		... 
 		)	{
 
@@ -115,10 +115,11 @@ setMethodS3(
 setConstructorS3(
   "JC69",
   function( 
-		name="Anonymous",
+		name="Anonymous", # object name
 		... 
 		)	{
-		
+	
+		# Set all rates to be equal.	
 		this<-UNREST(rate.list=list(
   		"A->T"=1,
   		"A->C"=1,
@@ -181,6 +182,7 @@ setConstructorS3(
   "GTR",
   function( 
 		name="Anonymous", 
+		# The GTR rate parameters:
 		rate.params=list(
 				"a"=1,
 				"b"=1,
@@ -189,6 +191,7 @@ setConstructorS3(
 				"e"=1,
 				"f"=1
 		),	
+		# Base frequencies (equlibrium distribution):
 		base.freqs=rep(0.25,times=4),
 		... 
 		)	{
@@ -335,8 +338,9 @@ setMethodS3(
 		}
 		else {
 			param.list[[name]]<-value;
-
-			# FIXME - explain this!
+				
+			# We call setRateParamList to rebuild the whole rate
+			# matrix with the new values if one of the rates changed:
 			setRateParamList(this, param.list);
 										
 		}
@@ -461,27 +465,33 @@ setMethodS3(
 		value.names<-names(value);
 
 		if(.checkRateParamList(this,names,value.names)) {
-				# Set the rate parameters:
-				# The parmeters are named as in 
-				# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
+		
+		# Set the rate parameters:
+		# The parmeters are named as in 
+		# "Ziheng Yang: Computational Molecular Evolution, 
+		# Oxford university Press, Oxford, 2006", pp. 34.
 
-				rate.list=list(
+		rate.list=list(
 
-                "T->C"=(value[["a"]] * this$.equ.dist[1,"C"] ),
-                "C->T"=(value[["a"]] * this$.equ.dist[1,"T"] ),
-                "T->A"=(value[["b"]] * this$.equ.dist[1,"A"] ),
-                "A->T"=(value[["b"]] * this$.equ.dist[1,"T"] ),
-                "T->G"=(value[["c"]] * this$.equ.dist[1,"G"] ),
-                "G->T"=(value[["c"]] * this$.equ.dist[1,"T"] ),
-                "C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
-                "A->C"=(value[["d"]] * this$.equ.dist[1,"C"] ),
-                "C->G"=(value[["e"]] * this$.equ.dist[1,"G"] ),
-                "G->C"=(value[["e"]] * this$.equ.dist[1,"C"] ),
-                "A->G"=(value[["f"]] * this$.equ.dist[1,"G"] ),
-                "G->A"=(value[["f"]] * this$.equ.dist[1,"A"] )
+                	"T->C"=(value[["a"]] * this$.equ.dist[1,"C"] ),
+                	"C->T"=(value[["a"]] * this$.equ.dist[1,"T"] ),
+                	"T->A"=(value[["b"]] * this$.equ.dist[1,"A"] ),
+                	"A->T"=(value[["b"]] * this$.equ.dist[1,"T"] ),
+                	"T->G"=(value[["c"]] * this$.equ.dist[1,"G"] ),
+                	"G->T"=(value[["c"]] * this$.equ.dist[1,"T"] ),
+			"C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
+			# Can you spot the pattern here: "A->C" .* "d" .* "c" :)
+                	"A->C"=(value[["d"]] * this$.equ.dist[1,"C"] ),
+                	"C->G"=(value[["e"]] * this$.equ.dist[1,"G"] ),
+                	"G->C"=(value[["e"]] * this$.equ.dist[1,"C"] ),
+                	"A->G"=(value[["f"]] * this$.equ.dist[1,"G"] ),
+                	"G->A"=(value[["f"]] * this$.equ.dist[1,"A"] )
 
                 );
+			# Setting the parameter field:
 			this$.gtr.params<-value;
+			# Calling setRateList, which will set the 
+			# elements of the rate matrix.
 			setRateList(this,rate.list);
 			}
 
@@ -506,6 +516,7 @@ setMethodS3(
 		...
 	){
 
+		# Its just the .equ.dist field from UNREST.
 		this$.equ.dist;
 
 	},
@@ -573,14 +584,18 @@ setMethodS3(
 ##	
 ## Constructor: TN93
 ##	
+## Tamura, K., and M. Nei. 1993. Estimation of the number of nucleotide substitutions 
+## in the control region of mitochondrial DNA in humans and chimpanzees. 
+## Molecular Biology and Evolution 10:512-526.
+##
 setConstructorS3(
   "TN93",
   function( 
 		name="Anonymous",
 		rate.params=list(
 				"Alpha1"  =1,
-      	"Alpha2"  =1,
-      	"Beta"    =1
+      				"Alpha2"  =1,
+      				"Beta"    =1
 			),
 		... 
 		)	{
@@ -657,10 +672,6 @@ setMethodS3(
 
 		if(.checkRateParamList(this,names,value.names)) {
 
-				# Set the rate parameters:
-				# The parmeters are named as in 
-				# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
-			
 				this$.tn93.params<-value;
 				# Setting the GTR rate parameters:
 				gtr.params<-list(
@@ -803,7 +814,7 @@ setMethodS3(
 			
 		  may.fail<-function(this) {
 				
-				# FIXME - what's to do here?	
+		  # FIXME - what's to do here?	
 		
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
@@ -849,13 +860,16 @@ setMethodS3(
 ##	
 ## Constructor: HKY
 ##	
+## Hasegawa, M., H. Kishino, and T. Yano. (1985) Dating of human-ape splitting by a molecular clock
+## of mitochondrial DNA. Journal of Molecular Evolution, 22, 160-174.
+##
 setConstructorS3(
   "HKY",
   function( 
 		name="Anonymous",
 		rate.params=list(
-				"Alpha"  	=1,
-      	"Beta"    =1
+							"Alpha"   =1,
+      				"Beta"    =1
 			),
 			... 
 		)	{
@@ -930,10 +944,6 @@ setMethodS3(
 
 		if(.checkRateParamList(this,names,value.names)) {
 
-				# Set the rate parameters:
-				# The parmeters are named as in 
-				# "Ziheng Yang: Computational Molecular Evolution, Oxford university Press, Oxford, 2006", pp. 34.
-			
 				this$.hky.params<-value;
 				# Setting the GTR rate parameters:
 				gtr.params<-list(
@@ -1090,13 +1100,16 @@ setMethodS3(
 ##	
 ## Constructor: F81
 ##	
+## Felsenstein, J. (1981) Evolutionary trees from DNA sequences: a maximum likelihood approach.
+## Journal of Molecular Evolution, 17, 368-376.
+##
 setConstructorS3(
   "F81",
   function( 
 		name="Anonymous"
 		)	{
 		
-		this<-GTR();
+		this<-GTR(...);
 		
 		this<-extend(
 			this,
@@ -1260,7 +1273,7 @@ setMethodS3(
 			
 		  may.fail<-function(this) {
 				
-				# FIXME - what's to do here?	
+			# FIXME - what's to do here?	
 		
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
@@ -1300,7 +1313,10 @@ setMethodS3(
 
 ##	
 ## Constructor: K80
-##	
+##
+## Kimura, M. (1980) A simple method for estimating evolutionary rates of base substitutions 
+## through comparative studies of nucleotide sequences. Journal of Molecular Evolution, 16, 111-120.
+##
 setConstructorS3(
   "K80",
   function( 
@@ -1312,7 +1328,7 @@ setConstructorS3(
 			... 
 		)	{
 		
-		this<-GTR(...);
+		this<-GTR();
 		
 		this<-extend(
 			this,
@@ -1495,6 +1511,7 @@ setMethodS3(
 		...
 	){
 
+		# Do not allow to modify the default base frequency distribution, which is uniform.
 		throw("You are not allowed to set the base frequencies for the K80 model!\n");
 
 	},
@@ -1538,6 +1555,9 @@ setMethodS3(
 ##	
 ## Constructor: K81
 ##	
+## M. Kimura, Estimation of evolutionary sequences between homologous nucleotide sequences,
+## Proc. Natl. Acad. Sci. USA 78 (1981), pp. 454–458.
+##
 setConstructorS3(
   "K81",
   function( 
@@ -1550,7 +1570,7 @@ setConstructorS3(
 			... 
 		)	{
 		
-		this<-GTR(...);
+		this<-GTR();
 		
 		this<-extend(
 			this,
@@ -1777,6 +1797,9 @@ setMethodS3(
 ##	
 ## Constructor: T92
 ##	
+## Tamura, K. 1992. Estimation of the number of nucleotide substitutions when
+## there are strong transition-transversion and G+C content biases. Molecular Biology and Evolution 9:678-687. 
+##
 setConstructorS3(
   "T92",
   function( 
@@ -1785,11 +1808,11 @@ setConstructorS3(
 				"Alpha"  	=1,
       	"Beta"    =1
 			),
-		theta=0.5,
+		theta=0.5, # GC content
 		... 
 		)	{
 		
-		this<-GTR(...);
+		this<-GTR();
 		
 		this<-extend(
 			this,
@@ -1989,14 +2012,15 @@ setMethodS3(
 		}
 		else {
 			this$.theta<-value;
+			# WARNING - here we rely on the T C G A symbol order in the nucleotide alphabet.
 			base.freqs<-c(
 				((1-this$.theta)/2),	# T
 				(this$.theta/2),			# C
 				((1-this$.theta)/2),	# A
-				((this$.theta)/2)		# G
+				((this$.theta)/2)		  # G
 		);
 	}
-		print(base.freqs);
+		# Set the GTR base frequencies:
 		setBaseFreqs.GTR(this,base.freqs);	
 
 	},
