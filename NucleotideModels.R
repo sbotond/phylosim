@@ -1106,7 +1106,8 @@ setMethodS3(
 setConstructorS3(
   "F81",
   function( 
-		name="Anonymous"
+		name="Anonymous",
+		...
 		)	{
 		
 		this<-GTR(...);
@@ -1891,13 +1892,13 @@ setMethodS3(
 				this$.t92.params<-value;
 				# Setting the GTR rate parameters:
 				gtr.params<-list(
-					"a"=value[["Alpha"]],
-					"b"=value[["Beta"]],
-					"c"=value[["Beta"]],
-					"d"=value[["Beta"]],
-					"e"=value[["Beta"]],
-					"f"=value[["Alpha"]]
-				);
+          "a"=value[["Alpha"]],
+          "b"=value[["Beta"]],
+          "c"=value[["Beta"]],
+          "d"=value[["Beta"]],
+          "e"=value[["Beta"]],
+          "f"=value[["Alpha"]]
+        );
 				setRateParamList.GTR(this, value=gtr.params);
 
 		}
@@ -2059,3 +2060,288 @@ setMethodS3(
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+######### end of T92 methods ############
+
+##	
+## Constructor: F84
+##	
+## Hasegawa, M., H. Kishino, and T. Yano. (1985) Dating of human-ape splitting by a molecular clock
+## of mitochondrial DNA. Journal of Molecular Evolution, 22, 160-174.
+##
+setConstructorS3(
+  "F84",
+  function( 
+		name="Anonymous",
+		rate.params=list(
+							"Kappa"   =0
+			),
+			... 
+		)	{
+		
+		this<-GTR(...);
+		
+		this<-extend(
+			this,
+			"F84",
+			.f84.params=list(
+					"Kappa"	 	=NA
+				)
+			);
+
+		this$name<-name;
+		this$rateParamList<-rate.params;
+		return(this);
+	
+  },
+  enforceRCC=TRUE
+);
+
+##	
+## Method: getRateParamList
+##	
+setMethodS3(
+	"getRateParamList", 
+	class="F84", 
+	function(
+		this,
+		...
+	){
+
+		this$.f84.params;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParamList
+##	
+setMethodS3(
+	"setRateParamList", 
+	class="F84", 
+	function(
+		this,
+		value,
+		...
+	){
+
+	.checkWriteProtection(this);
+	if(missing(value)){
+		throw("No new value provided!\n");
+	}
+	else if(!is.list(value)){
+		throw("The provided value must be a list!\n");
+	}
+	else if(any((as.numeric(value)) < 0)){
+ 		throw("Cannot set negative rate parameter!\n");
+	}
+	else {
+
+		# Get the rate parameter names:
+		names<-names(this$.f84.params);
+		value.names<-names(value);
+
+		if(.checkRateParamList(this,names,value.names)) {
+
+				this$.f84.params<-value;
+				# Setting the GTR rate parameters:
+  			kappa<-value[["Kappa"]];
+        y<-(this$.equ.dist[1,"T"] + this$.equ.dist[1,"C"] );
+        r<-(this$.equ.dist[1,"A"] + this$.equ.dist[1,"G"] );
+        gtr.params<-list(
+          "a"=(1 + (kappa/y) ),
+          "b"=1,
+          "c"=1,
+          "d"=1,
+          "e"=1,
+          "f"=(1 + (kappa/r) )
+        );
+				setRateParamList.GTR(this, value=gtr.params);
+
+		}
+
+	}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getRateParam
+##	
+setMethodS3(
+	"getRateParam", 
+	class="F84", 
+	function(
+		this,
+		name,
+		...
+	){
+
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		}
+		else {
+			.getRateParam(this,name,this$.f84.params);
+		}
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setRateParam
+##	
+setMethodS3(
+	"setRateParam", 
+	class="F84", 
+	function(
+		this,
+		name,
+		value,
+		...
+	){
+
+		.checkWriteProtection(this);
+		if(missing(name)){
+			throw("No rate parameter name specified!\n");
+		} else {
+			.setRateParam(this,name,value,this$.f84.params);
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getKappa
+##	
+setMethodS3(
+	"getKappa", 
+	class="F84", 
+	function(
+		this,
+		...
+	){
+
+			getRateParam(this, "Kappa");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setKappa
+##	
+setMethodS3(
+	"setKappa", 
+	class="F84", 
+	function(
+		this,
+		value,
+		...
+	){
+
+			setRateParam(x,"Kappa",value);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getBaseFreqs
+##	
+setMethodS3(
+	"getBaseFreqs", 
+	class="F84", 
+	function(
+		this,
+		...
+	){
+
+		getBaseFreqs.GTR(this);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setBaseFreqs
+##	
+setMethodS3(
+	"setBaseFreqs", 
+	class="F84", 
+	function(
+		this,
+		value,
+		...
+	){
+
+		setBaseFreqs.GTR(this,value);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: summary.F84
+##	
+setMethodS3(
+	"summary", 
+	class="F84", 
+	function(
+		this,
+		...
+	){
+
+		.addSummaryNameId(this);
+    .addSummaryAlphabet(this);
+		if (class(this)[[1]] == "F84") {
+			this$.summary$"Rate parameters"<-paste(names(this$.f84.params),this$.f84.params,sep=" = ",collapse=", ");
+		}
+
+		NextMethod();
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+######### end of F84 methods ############
