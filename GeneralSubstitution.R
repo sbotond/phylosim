@@ -117,6 +117,10 @@ setMethodS3(
 			if(!any(is.na(this$.equ.dist))){
 				this$equDist<-this$equDist;
 			}
+			# Negative rates are impossible:
+			if(any(as.numeric(this$rateList) <0 )){
+				throw("The rate matrix has negative off-diagonal elements!\n");	
+			}
 			
 			# QMatrix should never be NA!
 			this$QMatrix<-this$QMatrix;

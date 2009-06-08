@@ -126,13 +126,10 @@ setMethodS3(
 				else if(!all(dim(this$.orig.matix) != c(this$.alphabet$.size, this$.alphabet$.size))) {
 					throw("The original rates matrix is of wrong size!");
 				}
-				
 				# Check if the rescaled rate matrix is a matrix or NA.
 				if(!is.matrix(this$.rate.matrix) & !all(is.na(this$.rate.matrix))){
 						throw("The rescaled rates matrix is invalid!\n");
 				}	
-
-				# FIXME - check here for negative rates!
 
 				# Check rescaled rates matrix size:
 				else if(!all(dim(this$.rates.matix) != c(this$.alphabet$.size, this$.alphabet$.size))) {
@@ -159,7 +156,7 @@ setMethodS3(
 						throw("The original rates matrix is complete, but the rescaled matrix has undefined elements!\n");
 					}
 					else if (!all(is.numeric(this$.orig.matrix))){
-						throw("The rescaled rates matrix has non-numeric elements!\n");
+						throw("The original rates matrix has non-numeric elements!\n");
 					}
 				}
 
