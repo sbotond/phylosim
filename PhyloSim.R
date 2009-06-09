@@ -28,7 +28,8 @@ setConstructorS3(
 			.root.sequence=NA, 
 			.sequences=list(),	# references to the sequence objects
 			.node.hooks=list(),	# references to the node hook functions.
-			.alignment=NA				# the resulting alignment in fasat format.
+			.alignment=NA,			# the resulting alignment in fasat format.
+			.log.file=NA				# the name of the log file.
 		);
 
 		if(!all(is.na(phylo))){
@@ -42,6 +43,8 @@ setConstructorS3(
 		if(!missing(name)){
 			this$name<-name;
 		}
+
+		this$logFile<-"phylosim.log";
 
 		return(this);
 
