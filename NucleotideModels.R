@@ -2535,7 +2535,7 @@ setMethodS3(
 		...
 	){
 
-			setRateParam.F84(x,"Kappa",value);
+			setRateParam.F84(this,"Kappa",value);
 
 	},
 	private=FALSE,
