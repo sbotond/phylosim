@@ -388,16 +388,18 @@ setMethodS3(
 			# Attach root sequence to root node:
 			Log(this,paste("Attaching root sequence ",this$.root.sequence$id,sep=""));
 			attachSeqToNode(this, node=getRootNode(this),seq=this$.root.sequence);
+
 			# Write protecting the root sequence:
 			Log(this,paste("Write protecting root sequence ",this$.root.sequence$id,sep=""));
 			this$.root.sequence$writeProtected<-TRUE;
 
-			Log(this,paste("Starting simulation on the object",this$id));	
 			# Traverse the tree and simulate:
+			Log(this,paste("Starting simulation on the object",this$id));	
 			edge.counter<-1;
 			n.edges<-this$nedges;
 			for(edge in 1:n.edges){
-				cat("Simulating edge ",edge," of ", n.edges,"\n");
+				cat("Simulating edge",edge,"of", n.edges,"\n");
+				Log(this,paste("Starting to simulate edge",edge,"of",n.edges));	
 				simulateEdge(this,number=edge);
 				edge.counter<-edge.counter+1;
 			}
