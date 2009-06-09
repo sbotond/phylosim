@@ -66,5 +66,136 @@ setMethodS3(
 	overwrite=FALSE,
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
-)
+);
+
+##	
+## Method: .getMessageTemplate
+##	
+setMethodS3(
+	".getMessageTemplate", 
+	class="PhyloSim", 
+	function(
+		this,
+		...
+	){
+
+		template<-list(
+			time=paste("[",Sys.time(),"]",sep=""),
+			level="Info",
+			event=""
+		);
+
+		return(template);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .logMessage
+##	
+setMethodS3(
+	".logMessage", 
+	class="PhyloSim", 
+	function(
+		this,
+		message,
+		...
+	){
+
+			if(missing(message)){
+				throw("No message given!\n");
+			}
+			else if (!is.list(message)){
+				throw("The message should be a list");
+			}
+			else if( length(intersect(names(message),c("time","level","event"))) != 3){
+				print(message);
+				throw("The \"time\", \"level\" and \"event\" elements are mandatory in the message list!\n");
+			}
+			else {
+				cat(file=this$.log.file, append=TRUE,message[["time"]]," ",sep="");
+				message[["time"]]<-NULL;
+				cat(file=this$.log.file, append=TRUE,message[["level"]],": ",sep="");
+				message[["level"]]<-NULL;
+				cat(file=this$.log.file, append=TRUE,message[["event"]]," ",sep="");
+				message[["event"]]<-NULL;
+				cat(file=this$.log.file,append=TRUE,paste(message,collapse=", "),sep="");
+				cat(file=this$.log.file,append=TRUE,"\n");
+				return(TRUE);
+			}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: Log
+##	
+setMethodS3(
+	"Log", 
+	class="PhyloSim", 
+	function(
+		this,
+		message,
+		...
+	){
+		
+			if(missing(message)){
+				throw("No message given!\n");
+			} else {
+				template<-.getMessageTemplate(this);
+				template$level<-"Info";
+				message<-c(template,as.list(message));
+				print(message);
+				.logMessage(this, message);
+				return(TRUE);
+			}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: Debug
+##	
+setMethodS3(
+	"Debug", 
+	class="PhyloSim", 
+	function(
+		this,
+		message,
+		...
+	){
+		
+			if(missing(message)){
+				throw("No message given!\n");
+			} else {
+				template<-.getMessageTemplate(this);
+				template$level<-"Debug";
+				message<-c(template,as.list(message));
+				print(message);
+				.logMessage(this, message);
+				return(TRUE);
+			}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
 

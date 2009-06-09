@@ -29,7 +29,7 @@ setConstructorS3(
 			.sequences=list(),	# references to the sequence objects
 			.node.hooks=list(),	# references to the node hook functions.
 			.alignment=NA,			# the resulting alignment in fasat format.
-			.log.file=NA				# the name of the log file.
+			.log.file=NA 				# the name of the log file.
 		);
 
 		if(!all(is.na(phylo))){
@@ -44,7 +44,15 @@ setConstructorS3(
 			this$name<-name;
 		}
 
-		this$logFile<-"phylosim.log";
+		# Setting default log file:
+		tmp<-this$id;
+		tmp<-gsub(":","_",tmp);
+		this$.log.file<-paste(tmp,".log",sep="");
+
+		# Create/wipe out log file if the instance is not static.
+		if(class(getStaticInstance(this))[[1]] == "PhyloSim"){
+			cat(file=this$.log.file, append=FALSE,"");
+		}
 
 		return(this);
 
@@ -380,7 +388,8 @@ setMethodS3(
 			attachSeqToNode(this, node=getRootNode(this),seq=this$.root.sequence);
 			# Write protecting the root sequence:
 			this$.root.sequence$writeProtected<-TRUE;
-	
+
+			Log(this,paste("Starting simulation on the object",this$id));	
 			# Traverse the tree and simulate:
 			edge.counter<-1;
 			n.edges<-this$nedges;
