@@ -4,7 +4,7 @@ cat: *.R
 com: *.R
 	rm FullSource.R;cat *.R > FullSource.R ;git commit -a
 push:
-	git push linear master	
+	git push
 gt:
 	gitk --all
 
