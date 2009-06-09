@@ -69,6 +69,57 @@ setMethodS3(
 );
 
 ##	
+## Method: getDebugFlag
+##	
+setMethodS3(
+	"getDebugFlag", 
+	class="PhyloSim", 
+	function(
+		this,
+		...
+	){
+
+		this$.debug.flag;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setDebugFlag
+##	
+setMethodS3(
+	"setDebugFlag", 
+	class="PhyloSim", 
+	function(
+		this,
+		value,
+		...
+	){
+
+			if(missing(value)){
+				throw("No value provided!\n");
+			}
+			if((!is.logical(value)) | length(value) != 1 ){
+				throw("The new value must be a logical vector of length 1!\n");
+			}
+			else{ 
+				this$.debug.flag<-value;
+			}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
 ## Method: .getMessageTemplate
 ##	
 setMethodS3(
@@ -182,7 +233,11 @@ setMethodS3(
 		
 			if(missing(message)){
 				throw("No message given!\n");
-			} else {
+			} 
+			else if(!this$.debug.flag){
+					return(TRUE);
+			}
+			else {
 				template<-.getMessageTemplate(this);
 				template$level<-"Debug";
 				message<-c(template,as.list(message));

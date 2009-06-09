@@ -29,7 +29,8 @@ setConstructorS3(
 			.sequences=list(),	# references to the sequence objects
 			.node.hooks=list(),	# references to the node hook functions.
 			.alignment=NA,			# the resulting alignment in fasat format.
-			.log.file=NA 				# the name of the log file.
+			.log.file=NA, 			# the name of the log file.
+			.debug.flag=FALSE		# debug flag.
 		);
 
 		if(!all(is.na(phylo))){
@@ -385,8 +386,10 @@ setMethodS3(
 			}
 		
 			# Attach root sequence to root node:
+			Log(this,paste("Attaching root sequence ",this$.root.sequence$id,sep=""));
 			attachSeqToNode(this, node=getRootNode(this),seq=this$.root.sequence);
 			# Write protecting the root sequence:
+			Log(this,paste("Write protecting root sequence ",this$.root.sequence$id,sep=""));
 			this$.root.sequence$writeProtected<-TRUE;
 
 			Log(this,paste("Starting simulation on the object",this$id));	
