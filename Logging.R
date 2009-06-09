@@ -69,17 +69,17 @@ setMethodS3(
 );
 
 ##	
-## Method: getDebugFlag
+## Method: getLogLevel
 ##	
 setMethodS3(
-	"getDebugFlag", 
+	"getLogLevel", 
 	class="PhyloSim", 
 	function(
 		this,
 		...
 	){
 
-		this$.debug.flag;
+		this$.log.level;
 
 	},
 	private=FALSE,
@@ -90,10 +90,10 @@ setMethodS3(
 );
 
 ##	
-## Method: setDebugFlag
+## Method: setLogLevel
 ##	
 setMethodS3(
-	"setDebugFlag", 
+	"setLogLevel", 
 	class="PhyloSim", 
 	function(
 		this,
@@ -104,11 +104,18 @@ setMethodS3(
 			if(missing(value)){
 				throw("No value provided!\n");
 			}
-			if((!is.logical(value)) | length(value) != 1 ){
-				throw("The new value must be a logical vector of length 1!\n");
+			if((!is.numeric(value)) | length(value) != 1 ){
+				throw("The new value must be a numeric vector of length 1!\n");
 			}
 			else{ 
-				this$.debug.flag<-value;
+    		# Create/wipe out log file.
+				if(value >= 0 ){
+						if(file.access(this$.log.file,mode=0) == c(0)){
+							warning("The log file already existed, so it was wiped out!\n");
+						}
+      			cat(file=this$.log.file, append=FALSE,"");
+				}
+				this$.log.level<-value;
 			}
 
 	},
@@ -165,7 +172,6 @@ setMethodS3(
 				throw("The message should be a list");
 			}
 			else if( length(intersect(names(message),c("time","level","event"))) != 3){
-				print(message);
 				throw("The \"time\", \"level\" and \"event\" elements are mandatory in the message list!\n");
 			}
 			else {
@@ -199,16 +205,18 @@ setMethodS3(
 		message,
 		...
 	){
-		
+	
+			if(this$.log.level < 0){
+				return(invisible(FALSE))
+			}
 			if(missing(message)){
 				throw("No message given!\n");
 			} else {
 				template<-.getMessageTemplate(this);
 				template$level<-"Info";
 				message<-c(template,as.list(message));
-				print(message);
 				.logMessage(this, message);
-				return(TRUE);
+				return(invisible(message));
 			}
 
 	},
@@ -234,16 +242,15 @@ setMethodS3(
 			if(missing(message)){
 				throw("No message given!\n");
 			} 
-			else if(!this$.debug.flag){
-					return(TRUE);
+			else if( this$.log.level <= 0){
+				return(invisible(FALSE))
 			}
 			else {
 				template<-.getMessageTemplate(this);
 				template$level<-"Debug";
 				message<-c(template,as.list(message));
-				print(message);
 				.logMessage(this, message);
-				return(TRUE);
+				return(invisible(message));
 			}
 
 	},

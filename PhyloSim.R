@@ -30,7 +30,7 @@ setConstructorS3(
 			.node.hooks=list(),	# references to the node hook functions.
 			.alignment=NA,			# the resulting alignment in fasat format.
 			.log.file=NA, 			# the name of the log file.
-			.debug.flag=FALSE		# debug flag.
+			.log.level=-1				# The default log level is -1, so no logging is performed.
 		);
 
 		if(!all(is.na(phylo))){
@@ -49,11 +49,6 @@ setConstructorS3(
 		tmp<-this$id;
 		tmp<-gsub(":","_",tmp);
 		this$.log.file<-paste(tmp,".log",sep="");
-
-		# Create/wipe out log file if the instance is not static.
-		if(class(getStaticInstance(this))[[1]] == "PhyloSim"){
-			cat(file=this$.log.file, append=FALSE,"");
-		}
 
 		return(this);
 

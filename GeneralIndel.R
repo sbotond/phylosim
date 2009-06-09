@@ -447,6 +447,7 @@ setConstructorS3(
 					 # Using temporary varibales for clarity:
 					 position<-event$.position;
 					 sequence<-getSequence(getSite(event));
+					 details<-list();
 
 					 # Propose the direction:
 					 direction<-sample(c("LEFT","RIGHT"),replace=FALSE,size=1);
@@ -465,18 +466,22 @@ setConstructorS3(
 					 else {
 						throw("You should never see this message!\n");
 					}
+					details$position<-insert.pos;
+					details$accepted<-FALSE;
 
 					# Discard illegal positions:
 					window<-window[ window > 0 & window <= sequence$.length];
 				  if(this$.accept.by(sequence,window)){
+							details$accepted<-TRUE;
 							insert<-generateInsert(this);
-
+							details$length<-insert$length;
 							# Call the insert hook:
 							if(is.function(this$.insert.hook)){
 								insert<-this$.insert.hook(insert);
 							}
 							insertSequence(sequence,insert, insert.pos,process=this);
 					}
+					return(details);
 					
 				}
 		 }
@@ -924,6 +929,8 @@ setConstructorS3(
 					 # Using temporary varibales for clarity:
 					 position<-event$.position;
 					 sequence<-getSequence(getSite(event));
+					 details<-list();
+					 details$accepted<-FALSE;
 
 					 # Propose a sequence length:
 					 length<-this$proposeBy(this=this,seq=sequence, pos=position);
@@ -943,11 +950,17 @@ setConstructorS3(
 
 					 # Discard potential negative values and values larger than the sequence length:
 					 range<-range[ range > 0 & range <= sequence$.length];
+					 details$range<-c(min(range),max(range));
 					 
 					 # Perform the deletion if it is accepted:
 					 if (this$.accept.by(sequence=sequence,range=range) == TRUE) {
+						details$accepted<-TRUE;
 					 	deleteSubSequence(sequence,range);
-					}
+					}					
+			
+					# Return event details:	
+					return(details);
+
 				}
 		 }
 

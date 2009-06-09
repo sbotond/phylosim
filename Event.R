@@ -493,12 +493,12 @@ setMethodS3(
 			}
 
 			# Call the event handler to perform event:
-			this$.handler(this);
+			output<-this$.handler(this);
 
 			# Event will self-destruct to prevent trouble:
 			.setHandler(this, function(event=this) { throw("You can perform an event only once!\n") } );
 
-			return(invisible(TRUE));
+			return(output);
 		}
 	
 	},

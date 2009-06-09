@@ -7,5 +7,7 @@ push:
 	git push
 gt:
 	gitk --all
+clean:
+	rm *.log
 
 
