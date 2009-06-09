@@ -1,4 +1,3 @@
-##	$Id: PopularAlphabets.R,v 1.2 2009-05-01 16:06:14 sbotond Exp $
 ##
 ##	Class: *
 ##	Descriprion: 

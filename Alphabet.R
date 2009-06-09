@@ -1,4 +1,3 @@
-##	$Id: Alphabet.R,v 1.27 2009-04-30 11:26:45 sbotond Exp $
 ##
 ##	Class: Alphabet
 ##	Descriprion: 

@@ -1,4 +1,3 @@
-##	$Id: Site-Process.R,v 1.17 2009-05-01 08:48:21 sbotond Exp $
 ##
 ##	Methods for Site/Process interactions
 ##	Descriprion: 

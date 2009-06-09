@@ -1,4 +1,3 @@
-##	$Id: Sequence.R,v 1.44 2009-05-01 08:48:21 sbotond Exp $
 ##
 ##	Class: Sequence
 ##	Descriprion: 

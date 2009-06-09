@@ -1,4 +1,3 @@
-##	$Id: ContinousInsertor.R,v 1.2 2009-04-23 16:46:26 sbotond Exp $
 ##
 ##	Class: DsiscreteInsertor
 ##	Descriprion: 

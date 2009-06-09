@@ -1,4 +1,3 @@
-##	$Id: ProcessesList.R,v 1.2 2009-04-29 08:35:19 sbotond Exp $
 ##
 ##	Class: ProcessesList
 ##	Descriprion: 

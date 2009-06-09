@@ -1,4 +1,3 @@
-##	$Id: ContinousDeletor.R,v 1.4 2009-04-24 10:12:27 sbotond Exp $
 ##
 ##	Class: FieldDeletor
 ##	Descriprion: 

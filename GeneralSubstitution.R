@@ -1,4 +1,3 @@
-##	$Id: GeneralSubstitution.R,v 1.24 2009-05-01 16:06:13 sbotond Exp $
 ##
 ##	Class: GenarlIn and GeneralDel
 ##	Descriprion: 

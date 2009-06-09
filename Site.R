@@ -1,4 +1,3 @@
-##	$Id: Site.R,v 1.46 2009-04-30 13:27:43 sbotond Exp $
 ##
 ##	Class: Site
 ##	Descriprion: 

@@ -1,4 +1,3 @@
-##	$Id: QMatrix.R,v 1.12 2009-04-30 17:10:22 sbotond Exp $
 ##
 ##	Class: QMatrix
 ##	Descriprion: 

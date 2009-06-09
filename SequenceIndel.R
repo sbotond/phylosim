@@ -1,4 +1,3 @@
-##	$Id: SequenceIndel.R,v 1.11 2009-05-01 08:48:21 sbotond Exp $
 ##
 ##	Class: Sequence - indel related methods
 ##	Descriprion: 

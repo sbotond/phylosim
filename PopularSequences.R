@@ -1,4 +1,3 @@
-##	$Id: PopularSequences.R,v 1.1 2009-04-27 08:47:17 sbotond Exp $
 ##
 ##	Class: *
 ##	Descriprion: 

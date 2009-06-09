@@ -1,4 +1,3 @@
-##	$Id: PSRoot.R,v 1.24 2009-04-30 09:51:11 sbotond Exp $
 ##
 ##	Class: 
 ##	Descriprion: 

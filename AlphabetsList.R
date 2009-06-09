@@ -1,4 +1,3 @@
-##	$Id: AlphabetsList.R,v 1.2 2009/04/14 16:08:13 sbotond Exp $
 ##
 ##	Class: AlphabetsList
 ##	Descriprion: 

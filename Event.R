@@ -1,4 +1,3 @@
-##	$Id: Event.R,v 1.25 2009-04-29 13:28:25 sbotond Exp $
 ##
 ##	Class: Event
 ##	Descriprion: 

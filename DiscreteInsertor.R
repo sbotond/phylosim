@@ -1,4 +1,3 @@
-##	$Id: DiscreteInsertor.R,v 1.4 2009-04-27 17:38:09 sbotond Exp $
 ##
 ##	Class: DsiscreteInsertor
 ##	Descriprion: 

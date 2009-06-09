@@ -1,4 +1,3 @@
-##	$Id: GeneralIndel.R,v 1.9 2009-05-01 08:48:21 sbotond Exp $
 ##
 ##	Class: GenarlIn and GeneralDel
 ##	Descriprion: 

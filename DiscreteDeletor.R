@@ -1,4 +1,3 @@
-##	$Id: DiscreteDeletor.R,v 1.7 2009-04-27 17:38:09 sbotond Exp $
 ##
 ##	Class: DsiscreteDeletor
 ##	Descriprion: 

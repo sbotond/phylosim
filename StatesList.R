@@ -1,4 +1,3 @@
-##	$Id: StatesList.R,v 1.6 2009-04-29 08:35:19 sbotond Exp $
 ##
 ##	Class: StatesList
 ##	Descriprion: 

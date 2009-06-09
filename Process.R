@@ -1,4 +1,3 @@
-##	$Id: Process.R,v 1.32 2009-05-04 14:34:10 sb Exp $
 ##
 ##	Class: Process
 ##	Descriprion: 

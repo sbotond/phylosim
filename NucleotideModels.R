@@ -1,4 +1,3 @@
-##	$Id: NucleotideModels.R,v 1.1 2009-05-01 16:06:14 sbotond Exp $
 ##
 ##	Class: NucleotideModels*
 ##	Descriprion: 
