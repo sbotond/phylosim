@@ -118,7 +118,7 @@ setMethodS3(
 				this$equDist<-this$equDist;
 			}
 			# Negative rates are impossible:
-			if(any(as.numeric(this$rateList) <0 )){
+			if(all(!is.na(this$rateList)) & any(as.numeric(this$rateList) < 0 )){
 				throw("The rate matrix has negative off-diagonal elements!\n");	
 			}
 			

@@ -160,8 +160,18 @@ setMethodS3(
       }
 			
 		  may.fail<-function(this) {
-				
-				# FIXME - what's to do here?	
+
+					qmat<-this$.q.matrix$Matrix;	
+					# This is a dumb method to check the sanity of the rates, but consistency checking
+					# should not be called frequently.
+					diag(qmat)<-1;
+					if(any(qmat != 1)){
+						throw("The unscaled rate matrix is not consistent with the JC69 model!\n");
+					}
+
+					if ( !all.equal(as.numeric(this$.equ.dist), as.numeric(rep(0.25,times=4)) ) ){
+						throw("The equlibrium distribution of the JC69 model should be uniform!\n");
+					}
 		
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
@@ -237,8 +247,35 @@ setMethodS3(
       }
 			
 		  may.fail<-function(this) {
-				
-				# FIXME - what's to do here?	
+	
+			# All rate parameters should be positive:					
+			if (any( as.numeric(this$.gtr.params) < 0 ) ){
+				throw("Found negative GTR rate parameters!\n");
+			}
+			else {
+			
+				rates<-this$.q.matrix$Matrix;
+		
+						if (	
+                 !PSRoot$all.equal( rates[["T","C"]] , (this$.gtr.params[["a"]] * this$.equ.dist[1,"C"] ) )|
+                 !PSRoot$all.equal( rates[["C","T"]] , (this$.gtr.params[["a"]] * this$.equ.dist[1,"T"] )	)|
+                 !PSRoot$all.equal( rates[["T","A"]] , (this$.gtr.params[["b"]] * this$.equ.dist[1,"A"] )	)|
+                 !PSRoot$all.equal( rates[["A","T"]] , (this$.gtr.params[["b"]] * this$.equ.dist[1,"T"] )	)|
+                 !PSRoot$all.equal( rates[["T","G"]] , (this$.gtr.params[["c"]] * this$.equ.dist[1,"G"] )	)|
+                 !PSRoot$all.equal( rates[["G","T"]] , (this$.gtr.params[["c"]] * this$.equ.dist[1,"T"] )	)|
+								 !PSRoot$all.equal( rates[["C","A"]] , (this$.gtr.params[["d"]] * this$.equ.dist[1,"A"] )	)|
+                 !PSRoot$all.equal( rates[["A","C"]] , (this$.gtr.params[["d"]] * this$.equ.dist[1,"C"] )	)|
+                 !PSRoot$all.equal( rates[["C","G"]] , (this$.gtr.params[["e"]] * this$.equ.dist[1,"G"] )	)|
+                 !PSRoot$all.equal( rates[["G","C"]] , (this$.gtr.params[["e"]] * this$.equ.dist[1,"C"] )	)|
+                 !PSRoot$all.equal( rates[["A","G"]] , (this$.gtr.params[["f"]] * this$.equ.dist[1,"G"] )	)|
+                 !PSRoot$all.equal( rates[["G","A"]] , (this$.gtr.params[["f"]] * this$.equ.dist[1,"A"] )	)
+						) {
+						
+								throw("Rate matrix is not consistent with the GTR rate parameters!\n");
+						
+						}
+
+			}
 		
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
@@ -813,8 +850,24 @@ setMethodS3(
       }
 			
 		  may.fail<-function(this) {
-				
-		  # FIXME - what's to do here?	
+	
+				# Rate parameters should not be negative:
+				if(any(this$.tn93.params < 0 )){
+					throw("Found negative TN93 rate parameters!\n");
+				}
+				else {
+
+					if(
+				  	this$.gtr.params[["a"]]!=this$.tn93.params[["Alpha1"]]|
+          	this$.gtr.params[["b"]]!=this$.tn93.params[["Beta"]]|
+          	this$.gtr.params[["c"]]!=this$.tn93.params[["Beta"]]|
+          	this$.gtr.params[["d"]]!=this$.tn93.params[["Beta"]]|
+          	this$.gtr.params[["e"]]!=this$.tn93.params[["Beta"]]|
+          	this$.gtr.params[["f"]]!=this$.tn93.params[["Alpha2"]]
+						) {
+							throw("The TN93 parameters are not consistent with the GTR parameters!\n");
+						}
+				}
 		
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
@@ -1068,6 +1121,54 @@ setMethodS3(
 );
 
 ##	
+## Method: checkConsistency.HKY
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="HKY", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# Rate parameters should not be negative:
+				if(any(this$.hky.params < 0 )){
+					throw("Found negative HKY rate parameters!\n");
+				}
+				else {
+
+					if(
+				  	this$.gtr.params[["a"]]!=this$.hky.params[["Alpha"]]|
+          	this$.gtr.params[["b"]]!=this$.hky.params[["Beta"]]|
+          	this$.gtr.params[["c"]]!=this$.hky.params[["Beta"]]|
+          	this$.gtr.params[["d"]]!=this$.hky.params[["Beta"]]|
+          	this$.gtr.params[["e"]]!=this$.hky.params[["Beta"]]|
+          	this$.gtr.params[["f"]]!=this$.hky.params[["Alpha"]]
+						) {
+							throw("The HKY parameters are not consistent with the GTR parameters!\n");
+						}
+				}
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
 ## Method: summary.HKY
 ##	
 setMethodS3(
@@ -1273,8 +1374,10 @@ setMethodS3(
       }
 			
 		  may.fail<-function(this) {
-				
-			# FIXME - what's to do here?	
+
+				if(any(as.numeric(this$.gtr.params) != 1)){
+					throw("GTR parameters are not consistent with the F81 model!\n");
+				}
 		
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
@@ -1524,6 +1627,59 @@ setMethodS3(
 );
 
 ##	
+## Method: checkConsistency.K80
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="K80", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# Rate parameters should not be negative:
+				if(any(this$.k80.params < 0 )){
+					throw("Found negative K80 rate parameters!\n");
+				}
+				else {
+
+					if(
+				  	this$.gtr.params[["a"]]!=this$.k80.params[["Alpha"]]|
+          	this$.gtr.params[["b"]]!=this$.k80.params[["Beta"]]|
+          	this$.gtr.params[["c"]]!=this$.k80.params[["Beta"]]|
+          	this$.gtr.params[["d"]]!=this$.k80.params[["Beta"]]|
+          	this$.gtr.params[["e"]]!=this$.k80.params[["Beta"]]|
+          	this$.gtr.params[["f"]]!=this$.k80.params[["Alpha"]]
+						) {
+							throw("The K80 parameters are not consistent with the GTR parameters!\n");
+						}
+						else if ( !all.equal(as.numeric(this$.equ.dist), as.numeric(rep(0.25,times=4)) ) ){
+							throw("The equlibrium distribution of the K80 model should be uniform!\n");
+						}
+				}
+
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+##	
 ## Method: summary.K80
 ##	
 setMethodS3(
@@ -1757,6 +1913,58 @@ setMethodS3(
 	){
 
 		throw("You are not allowed to set the base frequencies for the K81 model!\n");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: checkConsistency.K81
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="K81", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# Rate parameters should not be negative:
+				if(any(this$.k81.params < 0 )){
+					throw("Found negative K81 rate parameters!\n");
+				}
+				else {
+
+					if(
+				  	this$.gtr.params[["a"]]!=this$.k81.params[["Alpha"]]|
+          	this$.gtr.params[["b"]]!=this$.k81.params[["Beta"]]|
+          	this$.gtr.params[["c"]]!=this$.k81.params[["Gamma"]]|
+          	this$.gtr.params[["d"]]!=this$.k81.params[["Gamma"]]|
+          	this$.gtr.params[["e"]]!=this$.k81.params[["Beta"]]|
+          	this$.gtr.params[["f"]]!=this$.k81.params[["Alpha"]]
+						) {
+							throw("The K81 parameters are not consistent with the GTR parameters!\n");
+						}
+						else if ( !all.equal(as.numeric(this$.equ.dist), as.numeric(rep(0.25,times=4)) ) ){
+							throw("The equlibrium distribution of the K81 model should be uniform!\n");
+						}
+				}
+
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
 
 	},
 	private=FALSE,
@@ -2011,6 +2219,9 @@ setMethodS3(
 		else if (length(value) != 1){
 			throw("The value of theta must be a vector of length 1!\n");
 		}
+		else if(value > 1){
+			throw("Theta (GC content) cannot be larger than 1!\n");
+		}
 		else {
 			this$.theta<-value;
 			# WARNING - here we rely on the T C G A symbol order in the nucleotide alphabet.
@@ -2023,6 +2234,67 @@ setMethodS3(
 	}
 		# Set the GTR base frequencies:
 		setBaseFreqs.GTR(this,base.freqs);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: checkConsistency.T92
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="T92", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# Rate parameters should not be negative:
+				if(any(this$.t92.params < 0 ) | (this$.theta < 0)){
+					throw("Found negative T92 rate parameters!\n");
+				}
+				else {
+
+					if(
+				  	this$.gtr.params[["a"]]!=this$.t92.params[["Alpha"]]|
+          	this$.gtr.params[["b"]]!=this$.t92.params[["Beta"]]|
+          	this$.gtr.params[["c"]]!=this$.t92.params[["Beta"]]|
+          	this$.gtr.params[["d"]]!=this$.t92.params[["Beta"]]|
+          	this$.gtr.params[["e"]]!=this$.t92.params[["Beta"]]|
+          	this$.gtr.params[["f"]]!=this$.t92.params[["Alpha"]]
+						) {
+							throw("The HKY parameters are not consistent with the GTR parameters!\n");
+						}
+
+						# Checking if the equlibrium distribution is consistent with theta:
+						base.freqs<-c(
+							((1-this$.theta)/2),	# T
+							(this$.theta/2),			# C
+							((1-this$.theta)/2),	# A
+							((this$.theta)/2)		  # G
+						);
+					
+						if(any(!PSRoot$all.equal(base.freqs, this$equDist))){
+								throw("Equlibrium distribution is not consistent with the theta value!\n");
+						}
+
+				}
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
 
 	},
 	private=FALSE,
@@ -2191,7 +2463,7 @@ setMethodS3(
 			throw("No rate parameter name specified!\n");
 		}
 		else {
-			.getRateParam(this,name,this$.f84.params);
+			.getRateParam.GTR(this,name,this$.f84.params);
 		}
 
 
@@ -2220,7 +2492,7 @@ setMethodS3(
 		if(missing(name)){
 			throw("No rate parameter name specified!\n");
 		} else {
-			.setRateParam(this,name,value,this$.f84.params);
+			.setRateParam.GTR(this,name,value,this$.f84.params);
 		}
 
 	},
@@ -2242,7 +2514,7 @@ setMethodS3(
 		...
 	){
 
-			getRateParam(this, "Kappa");
+			getRateParam.F84(this, "Kappa");
 
 	},
 	private=FALSE,
@@ -2264,7 +2536,7 @@ setMethodS3(
 		...
 	){
 
-			setRateParam(x,"Kappa",value);
+			setRateParam.F84(x,"Kappa",value);
 
 	},
 	private=FALSE,
@@ -2308,6 +2580,60 @@ setMethodS3(
 	){
 
 		setBaseFreqs.GTR(this,value);	
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: checkConsistency.F84
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="F84", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+				
+				# Rate parameters should not be negative:
+				if( any(this$.f84.params < 0 ) ){
+					throw("Found negative F84 rate parameters!\n");
+				}
+				else {
+  			kappa<-this$.f84.params[["Kappa"]];
+        y<-(this$.equ.dist[1,"T"] + this$.equ.dist[1,"C"] );
+        r<-(this$.equ.dist[1,"A"] + this$.equ.dist[1,"G"] );
+
+        gtr.params<-list(
+          "a"=(1 + (kappa/y) ),
+          "b"=1,
+          "c"=1,
+          "d"=1,
+          "e"=1,
+          "f"=(1 + (kappa/r) )
+        );
+
+				if(any(names(gtr.params) != names(this$.gtr.params)) | any(!PSRoot$all.equal(as.numeric(gtr.params), as.numeric(this$.gtr.params) ) )){
+						throw("The Kappa value is not consistent with the GTR rate parameters!\n");
+				}
+
+				}
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
 
 	},
 	private=FALSE,

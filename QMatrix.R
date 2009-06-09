@@ -145,7 +145,9 @@ setMethodS3(
 						warning("Some rates are undefined!\n");
 						COMPLETE<-FALSE;
 					}
-					else if (!all(is.numeric(this$.orig.matrix))){
+					# Watch out for the operator precedence here!
+					else if ( (!all(is.numeric(this$.orig.matrix))) & (!all(is.na(this$.orig.matrix))) ){
+						print(this$.orig.matrix)
 						throw("The original rates matrix has non-numeric elements!\n");
 					}
 				}
@@ -155,7 +157,8 @@ setMethodS3(
 						COMPLETE<-FALSE;
 						throw("The original rates matrix is complete, but the rescaled matrix has undefined elements!\n");
 					}
-					else if (!all(is.numeric(this$.orig.matrix))){
+					# Watch out for the operator precedence here!
+					else if ( (!all(is.numeric(this$.orig.matrix)) & (!all(is.na(this$.orig.matrix)))) ){
 						throw("The original rates matrix has non-numeric elements!\n");
 					}
 				}
