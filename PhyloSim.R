@@ -399,6 +399,7 @@ setMethodS3(
 				edge.counter<-edge.counter+1;
 			}
 		}
+		Log(this, "Simulation finished, building alignment!\n");
 		this$.alignment<-.recoverAlignment(this);
 
 		return(invisible(this));

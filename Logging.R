@@ -247,7 +247,7 @@ setMethodS3(
 			}
 			else {
 				template<-.getMessageTemplate(this);
-				template$level<-"Debug";
+				template$level<-"DEBUG";
 				message<-c(template,as.list(message));
 				.logMessage(this, message);
 				return(invisible(message));
