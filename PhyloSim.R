@@ -26,11 +26,12 @@ setConstructorS3(
 			.name="Anonymous",
 			.phylo=NA,
 			.root.sequence=NA, 
-			.sequences=list(),	# references to the sequence objects
-			.node.hooks=list(),	# references to the node hook functions.
-			.alignment=NA,			# the resulting alignment in fasat format.
-			.log.file=NA, 			# the name of the log file.
-			.log.level=-1				# The default log level is -1, so no logging is performed.
+			.sequences=list(),		# references to the sequence objects
+			.node.hooks=list(),		# references to the node hook functions.
+			.branch.stats=list(), # branch statistics.
+			.alignment=NA,				# the resulting alignment in fasat format.
+			.log.file=NA, 				# the name of the log file.
+			.log.level=-1					# The default log level is -1, so no logging is performed.
 		);
 
 		if(!all(is.na(phylo))){
@@ -428,7 +429,7 @@ setMethodS3(
 		# Get parent node:
 		start.seq<-getSeqFromNode(this, edge[[1,"from"]]);
 		# Evolve sequence:
-		new.seq<-evolveBranch(this, start.seq=start.seq, branch.length=edge[1,"length"], old.node=edge[[1,"from"]],new.node=edge[[1,"to"]]);
+		new.seq<-evolveBranch(this, start.seq=start.seq, branch.length=edge[1,"length"], old.node=edge[[1,"from"]],new.node=edge[[1,"to"]], branch.number=number);
 		# Write protect the sequence:
 		new.seq$writeProtected<-TRUE;
 		# Attach sequence to children node:
@@ -793,7 +794,19 @@ setMethodS3(
 
 		# The list holding all the partial alignment matrices:
 		aln.mat<-list();
+		
+		# Assigning NA-s here to prevent creation of these variables in the global
+		# environment.
 		row.names<-NA;
+		from.node<-NA;
+		to.node<-NA;
+		from.seq<-NA;
+		to.seq<-NA;
+		edge<-NA;
+		from.name<-NA;
+		to.name<-NA;
+		from.mat<-NA;
+		to.mat<-NA;
 
 		# Initialize the variables:
 
@@ -1187,6 +1200,7 @@ setMethodS3(
 
 		plot(this$.phylo);
 		nodelabels();
+		#add.scale.bar();
 
 		return(invisible(this));
 
