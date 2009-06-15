@@ -50,7 +50,7 @@ setMethodS3(
 			}
 			value<-as.character(value);
 			if( length(value) != 1 ){
-				throw("The new value must be a charcter vector of length 1!\n");
+				throw("The new value must be a character vector of length 1!\n");
 			}
 			else{ 
 				if( file.access(value,mode=0) == c(0) ){
@@ -111,7 +111,7 @@ setMethodS3(
     		# Create/wipe out log file.
 				if(value >= 0 ){
 						if(file.access(this$.log.file,mode=0) == c(0)){
-							warning("The log file already existed, so it was wiped out!\n");
+							warning("The log file already existed and it was wiped out!\n");
 						}
       			cat(file=this$.log.file, append=FALSE,"");
 				}
