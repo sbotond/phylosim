@@ -261,3 +261,179 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##	
+## Method: UpdateBranchStats
+##	
+setMethodS3(
+	"UpdateBranchStats", 
+	class="PhyloSim", 
+	function(
+		this,
+		event,
+		details,
+		branch.number,
+		...
+	){
+
+		if(details$type == "substitution"){
+			
+			if(is.null(this$.branch.stats[[as.character(branch.number)]]$substitution)){
+				this$.branch.stats[[as.character(branch.number)]]$substitution<-1;
+			} else {
+			this$.branch.stats[[as.character(branch.number)]]$substitution<-(this$.branch.stats[[as.character(branch.number)]]$substitution + 1);
+			}
+			name<-event$name;
+	
+			if(is.null(this$.branch.stats[[as.character(branch.number)]][[name]])){
+				this$.branch.stats[[as.character(branch.number)]][[name]]<-1;
+			}
+			else {
+				this$.branch.stats[[as.character(branch.number)]][[name]]<-(this$.branch.stats[[as.character(branch.number)]][[name]] + 1);
+			}
+			
+
+		}
+		else if(details$type == "deletion"){
+			if(is.null(this$.branch.stats[[as.character(branch.number)]]$deletion)){
+				this$.branch.stats[[as.character(branch.number)]]$deletion<-1;
+			}
+			else {
+				this$.branch.stats[[as.character(branch.number)]]$deletion<-(this$.branch.stats[[as.character(branch.number)]]$deletion + 1);
+			}
+		}
+		else if(details$type == "insertion"){
+			if(is.null(this$.branch.stats[[as.character(branch.number)]]$insertion)){
+			this$.branch.stats[[as.character(branch.number)]]$insertion<-1;					
+			}
+			else {
+			this$.branch.stats[[as.character(branch.number)]]$insertion<-(this$.branch.stats[[as.character(branch.number)]]$insertion + 1);					
+
+			}
+		}
+		else {
+			throw("Invalid event type!\n");
+		}
+			
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getBranchEvents
+##	
+setMethodS3(
+	"getBranchEvents", 
+	class="PhyloSim", 
+	function(
+		this,
+		...
+	){
+
+		tmp<-character();
+		for(branch in this$.branch.stats){
+			tmp<-c(tmp,names(branch));
+		}
+		return(unique(sort(tmp)));
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setBranchEvents
+##	
+setMethodS3(
+	"setBranchEvents", 
+	class="PhyloSim", 
+	function(
+		this,
+		value,
+		...
+	){
+
+			virtualAssignmentForbidden(this);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: exportStatTree
+##	
+setMethodS3(
+	"exportStatTree", 
+	class="PhyloSim", 
+	function(
+		this,
+		event,
+		...
+	){
+
+ 		if(length(this$.branch.stats) != this$nedges){
+      throw("Simulation is not complete, cannot export statistics!\n");
+    }
+		else if(missing(event)){
+			throw("No event name specified!\n");
+		}
+		else if(length(intersect(event, this$branchEvents)) != 1 ){
+			throw("Invalid even name!");
+		}
+		else {
+
+			phylo.copy<-this$phylo;
+			phylo.copy$edge.length<-.getStatBrlen(this, event);
+			return(phylo.copy);		
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .getStatBrlen
+##	
+setMethodS3(
+	".getStatBrlen", 
+	class="PhyloSim", 
+	function(
+		this,
+		event,
+		...
+	){
+
+		tmp<-numeric();
+		for(i in dimnames(this$edges)[[1]]){
+				if(is.null(this$.branch.stats[[i]][[event]])){
+					tmp[[as.numeric(i)]]<-0;
+				}
+				else {
+					tmp[[as.numeric(i)]]<-this$.branch.stats[[i]][[event]];
+				}
+		}
+		return(tmp);
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);

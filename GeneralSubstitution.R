@@ -77,6 +77,13 @@ setConstructorS3(
 				# Just set the new state base on the event name:
 				setState(getSite(event), strsplit(event$name,split="->")[[1]][[2]]);
 				# The name *should* be valid and correct, so no more checking is needed.
+
+				# Return details:
+				return(
+					list(
+						type="substitution"
+					)
+				);	
 		}	
 
     return(this);

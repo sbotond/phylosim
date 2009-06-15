@@ -448,6 +448,7 @@ setConstructorS3(
 					 position<-event$.position;
 					 sequence<-getSequence(getSite(event));
 					 details<-list();
+					 details$type<-"insertion";
 
 					 # Propose the direction:
 					 direction<-sample(c("LEFT","RIGHT"),replace=FALSE,size=1);
@@ -466,6 +467,7 @@ setConstructorS3(
 					 else {
 						throw("You should never see this message!\n");
 					}
+
 					details$position<-insert.pos;
 					details$accepted<-FALSE;
 
@@ -930,6 +932,7 @@ setConstructorS3(
 					 position<-event$.position;
 					 sequence<-getSequence(getSite(event));
 					 details<-list();
+					 details$type<-"deletion";
 					 details$accepted<-FALSE;
 
 					 # Propose a sequence length:
