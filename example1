@@ -52,6 +52,12 @@ summary(sim)						# Summary for the simulation object.
 
 ll(sim)									# Methods in the PhyloSim class.
 
+# Set the log file:
+sim$logFile<-"phylosim.log";
+
+# Set the log level to 0, only messages passed through Log() will be logged.
+sim$logLevel<-0;
+
 # Run the simulation:
 Simulate(sim);
 
