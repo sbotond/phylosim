@@ -17,7 +17,7 @@
 ##	
 setMethodS3(
 	"plusGamma", 
-	class="default", 
+	class="Sequence", 
 	function(
 		this,
 		process,
@@ -65,7 +65,7 @@ setMethodS3(
 ##	
 setMethodS3(
 	"plusInvGamma", 
-	class="default", 
+	class="Sequence", 
 	function(
 		this,
 		process,
