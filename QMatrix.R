@@ -586,6 +586,7 @@ setMethodS3(
 		to=NA,
 		scale=TRUE,
 		diag=TRUE,
+		guess.equ=TRUE,
 		...
 	){
 
@@ -644,7 +645,7 @@ setMethodS3(
 					# Call rate rescaling, this will set the new values
 					# in the rescaled rates matrix:
 			 		if(scale==TRUE){
-						.callRateRescaling(this);
+						.callRateRescaling(this,guess.equ);
 			 		}
 			}
 		 return(invisible(value));
