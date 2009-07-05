@@ -333,13 +333,21 @@ setMethodS3(
 		this,
 		...
 	){
-			
-			paste(as.vector(lapply(this$.sites,
-				function(site){
-					if(is.na(site$state)){return("?")}
-					else {return(site$.state)}
-				}
-			)),collapse="");
+			str<-character();
+			for(site in this$.sites){
+					if(is.na(site$.state)){
+							if(is.Alphabet(site$.alphabet)){
+								str<-paste(str,paste(rep("?",site$.alphabet$symbolLength),collapse=""),sep="");
+							}
+							else {
+								str<-paste(str,"?",sep="");
+							}
+					}
+					else {
+						str<-paste(str,site$.state,sep="");
+					}
+			}
+			return(str);
 
 	},
 	private=FALSE,
