@@ -140,7 +140,7 @@ setConstructorS3(
 		this<-extend(
 			this,
 			"NY98",
-			.kappa=kappa
+			.kappa=NA
 		);
 
 		.addSiteSpecificParameter(
@@ -152,7 +152,7 @@ setConstructorS3(
     );
 
 		setEquDist(this,value=codon.freqs,force=TRUE);	
-		.buildNY98Rates(this);
+		this$kappa<-kappa;
 
 		this$name<-name;
 		return(this);
@@ -201,6 +201,15 @@ setMethodS3(
 		this,
 		...
 	){
+
+		
+		# Wiping out the rate matrices to prevent rescaling after
+		# modifying an individual rate. This could be more elegant.
+
+		# Wiping out the original rate matrix:
+		this$QMatrix$.orig.matrix[]<-NA;
+		# Wiping out the scaled rate matrix:
+		this$QMatrix$.rate.matrix[]<-NA;
 
 		alphabet<-this$alphabet;
 		symbols<-alphabet$symbols;
@@ -281,7 +290,7 @@ setMethodS3(
     ...
   ){
 
-		# FIXME
+		this$.kappa;
 
   },
   private=FALSE,
@@ -303,7 +312,18 @@ setMethodS3(
     ...
   ){
 
-		# FIXME
+			.checkWriteProtection(this);		
+			if(missing(value)){
+				throw("No new value provided");
+			}
+			else if (length(value) != 1 | !is.numeric(value)){
+				throw("The new value must be a numeric vector of length 1!\n");
+			}
+			else {
+				this$.kappa<-value;
+				.buildNY98Rates(this);
+				return(value);
+			}
 
   },
   private=FALSE,
@@ -324,7 +344,7 @@ setMethodS3(
     ...
   ){
 
-		# FIXME
+		this$.equ.dist;
 
   },
   private=FALSE,
@@ -346,7 +366,10 @@ setMethodS3(
     ...
   ){
 
-		# FIXME
+		.checkWriteProtection(this);
+		setEquDist(this,value,force=TRUE);
+		.buildNY98Rates(this);
+		
 
   },
   private=FALSE,
@@ -360,7 +383,7 @@ setMethodS3(
 ## Method: setOmegas
 ##  
 setMethodS3(
-  "setCodonFreqs",
+  "setOmegas",
   class="CodonSequence",
   function(
     this,
