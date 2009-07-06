@@ -37,16 +37,24 @@ setConstructorS3(
 				warning("The length of the provided string was not multiple of 3. The incomplete codon was discarded!\n");
 			}
 
-			# FIXME - superfluous counter
-			j<-1;
 			nuc<-strsplit(string,"")[[1]];
+
+
+			j<-1;	# counter for the codon position
 			for(i in seq(from=1,to=(flen * 3),by=3)){
+
+					# get the codon:
 					state<-paste(nuc[c(i,i+1,i+2)],collapse="");
-					print(state);
+
+					# Check for stop codons:
+					if( isStopCodon(this$.sites[[j]]$.alphabet, state) ){
+						throw("The CodonSequence objects does not accept stop codons as valid states!\n");
+					}
+
+					# Set the state:			
 					setStates(this,state,j);		
 					j<-j+1;
 			}
-			# FIXME - handle stop codon
 			
 		}
 		else if(!missing(length)){
