@@ -4463,31 +4463,32 @@ CODON.TABLES<-list(
 
 # end of genetic code tables #
 
-table.id<-as.character(table.id);
+	table.id<-as.character(table.id);
 
-# Figure out the symbols set by excluding stop codons:
+	# Figure out the symbols set by excluding stop codons:
 
-symbols<-character();
+	symbols<-character();
 
-for (codon in names(CODON.TABLES[[table.id]]$trans)) {
+	for (codon in names(CODON.TABLES[[table.id]]$trans)) {
 
-		if(CODON.TABLES[[table.id]]$trans[[codon]]$type != "STOP") {
+			if(CODON.TABLES[[table.id]]$trans[[codon]]$type != "STOP") {
 				symbols<-c(symbols,codon);
-		}
-}
+			}
+	}
 
-# Sort the codons alphabetically:
-symbols<-sort(symbols);
+	# Sort the codons alphabetically:
+	symbols<-sort(symbols);
 
-		this<-Alphabet(
-						type=CODON.TABLES[[table.id]]$name,
-						symbols=symbols
-						);
-		this<-extend(this,
-					"CodonAlphabet",
-					.table.id=table.id,
-					.trans.table=CODON.TABLES[[table.id]]$trans
-					);
+	this<-Alphabet(
+		type=CODON.TABLES[[table.id]]$name,
+		symbols=symbols
+		);
+
+	this<-extend(this,
+		"CodonAlphabet",
+		.table.id=table.id,
+		.trans.table=CODON.TABLES[[table.id]]$trans
+		);
 
 		return(this);
   },
@@ -4504,7 +4505,8 @@ setMethodS3(
     this,
     ...
   ){
-
+	
+		# FIXME 
 		NextMethod();
 
   },
@@ -4765,6 +4767,32 @@ setMethodS3(
   ){
 
 		# FIXME
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: is.CodonAlphabet
+##  
+setMethodS3(
+  "is.CodonAlphabet",
+  class="default",
+  function(
+    this,
+    ...
+  ){
+
+    if(!is.PSRoot(this)) {return(FALSE)}
+    if ( inherits(this, "CodonAlphabet")) {
+      return(TRUE);
+    } else {
+      return(FALSE)
+    }
 
   },
   private=FALSE,
