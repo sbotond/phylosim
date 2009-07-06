@@ -4468,17 +4468,12 @@ table.id<-as.character(table.id);
 # Figure out the symbols set by excluding stop codons:
 
 symbols<-character();
-stops<-character();
 
 for (codon in names(CODON.TABLES[[table.id]]$trans)) {
 
 		if(CODON.TABLES[[table.id]]$trans[[codon]]$type != "STOP") {
 				symbols<-c(symbols,codon);
 		}
-		else {
-			stops<-c(stops,codon);
-		}
-
 }
 
 # Sort the codons alphabetically:
