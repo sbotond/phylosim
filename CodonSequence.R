@@ -87,7 +87,18 @@ setMethodS3(
     ...
   ){ 
 
-		# FIXME		
+			# Create an amino acid sequence of proper length:
+			that<-AminoAcidSequence(
+					name=paste("Translation of",this$name),
+					length=this$length
+			);
+
+			# Setting the states, using the site alphabet to translate codons for greater flexibility.
+			for (pos in seq(along=this$.sites)){
+				setState(that$.sites[[pos]], translateCodon(this$.sites[[pos]]$alphabet, this$.sites[[pos]]$state) );
+			}
+
+			return(that);
 
   },
   private=FALSE,
