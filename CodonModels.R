@@ -188,6 +188,136 @@ setConstructorS3(
   enforceRCC=TRUE
 );
 
+##  
+## Method: is.NY98
+##  
+setMethodS3(
+  "is.NY98",
+  class="default",
+  function(
+    this,
+    ...
+  ){
+
+    if(!is.GeneralSubstitution(this)) {return(FALSE)}
+    if ( inherits(this, "NY98")) {
+      return(TRUE);
+    } else {
+      return(FALSE)
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getEventsAtSite.NY98
+##	
+setMethodS3(
+	"getEventsAtSite", 
+	class="NY98", 
+	function(
+		this,
+		target.site,
+		sloppy=FALSE,
+		...
+	){
+
+		# This method is almost an exact duplicate of the getEventsAtSite.GeneralSubstitution,
+		# with the exception of the portions dealing with the omega site-process specific parameters.
+		# Duplicating the method is not too elegant, but this way we can avoid the additonal method calls
+		# sloving down the simualtion.
+
+	 if(missing(target.site)) {
+      throw("No target site provided!\n");
+    } else if (!sloppy) {
+			# Additional checks. They can be
+			# disabled by sloppy=TRUE			
+
+      if(!is.Site(target.site)) {
+        throw("Target site invalid!\n");
+      }
+			# Commenting this out for performance:
+	 		#else if(!is.QMatrix(this$.q.matrix)){
+			#	throw("Cannot provide event objects because the rate matrix is not set!\n");	
+			#}
+			else if(!is.numeric(this$.equ.dist)){
+				throw("Cannot provide event objects because the equilibrium frequencies are not defined!\n");	
+			} 
+
+		} 
+
+			state<-getState(target.site);
+		  # Just return an empty list if the state is NA:
+			if(is.na(state)){
+				return(list());
+			}
+
+			symbols<-this$alphabet$symbols;
+			rest<-symbols[ which(symbols != state) ];
+
+			# Create the event objects:
+			events<-list();
+			for(new.state in rest){
+
+			  name<-paste(state,new.state,sep="->");
+		 		# Clone the event template object:
+     		event<-clone(this$.event.template);
+     		# Set event name:
+     		event$name<-name;
+     		# Set the generator process:
+     		event$process<-this;
+     		# Set the target position passed in a temporary field,
+				# Event objects are not aware of their posiitions in general!
+     		event$.position<-target.site$.position;
+     		# Set the target site:
+     		event$site<-target.site;
+     		# Set the target state object (good for consistency):
+     		event$targetState<-state;
+
+			  # The rate of the event is the product of the general rate and the
+     		# site specific rate multiplier:
+     		rate.multiplier<-getParameterAtSite(this,target.site,"rate.multiplier")$value;
+
+				# Return empty list if the rate multiplier is zero.
+     		if(rate.multiplier == 0 ) {
+      		return(list());
+     		}	
+		
+				# Figure out wether the event is a synonymous mutation ...
+				if(areSynonymous(target.site$.alphabet,c(state,new.state))){
+					# and ignore omega in that case
+					event$rate<-(rate.multiplier * getEventRate(this$.q.matrix, name ));
+				} else {
+					# deal with omega otherwise
+     			omega<-getParameterAtSite(this,target.site,"omega")$value;
+					event$rate<-(rate.multiplier * omega * getEventRate(this$.q.matrix, name ));
+				}
+
+				# Set the handler for the substitution event:
+     		.setHandler(event, this$.handler.template);
+   			 # Write protect the event object:
+    		event$writeProtected<-TRUE;
+				# Add to events list:	
+				events<-c(events, list(event));
+
+			}
+
+			return(events);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
 ##	
 ## Method: checkConsistency
 ##	
