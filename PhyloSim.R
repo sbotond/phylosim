@@ -31,6 +31,7 @@ setConstructorS3(
 			.branch.stats=list(), # branch statistics.
 			.alignment=NA,				# the resulting alignment in fasat format.
 			.log.file=NA, 				# the name of the log file.
+			.log.connection=NA,		# connection for the log file.
 			.log.level=-1					# The default log level is -1, so no logging is performed.
 		);
 
@@ -49,7 +50,7 @@ setConstructorS3(
 		# Setting default log file:
 		tmp<-this$id;
 		tmp<-gsub(":","_",tmp);
-		this$.log.file<-paste(tmp,".log",sep="");
+		this$logFile<-paste(tmp,".log",sep="");
 
 		return(this);
 

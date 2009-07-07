@@ -113,7 +113,8 @@ setMethodS3(
 						if(file.access(this$.log.file,mode=0) == c(0)){
 							warning("The log file already existed and it was wiped out!\n");
 						}
-      			cat(file=this$.log.file, append=FALSE,"");
+						# Creating the assotiated connection:
+						this$.log.connection<-file(paste(this$.log.file),"w+");
 				}
 				this$.log.level<-value;
 			}
@@ -175,14 +176,14 @@ setMethodS3(
 				throw("The \"time\", \"level\" and \"event\" elements are mandatory in the message list!\n");
 			}
 			else {
-				cat(file=this$.log.file, append=TRUE,message[["time"]]," ",sep="");
+				writeLines(paste(message[["time"]]," "),con=this$.log.connection,sep="");
 				message[["time"]]<-NULL;
-				cat(file=this$.log.file, append=TRUE,message[["level"]],": ",sep="");
+				writeLines(paste(message[["level"]]," "),con=this$.log.connection,sep="");
 				message[["level"]]<-NULL;
-				cat(file=this$.log.file, append=TRUE,message[["event"]]," ",sep="");
+				writeLines(paste(message[["event"]]," "),con=this$.log.connection,sep="");
 				message[["event"]]<-NULL;
-				cat(file=this$.log.file,append=TRUE,paste(message,collapse=", "),sep="");
-				cat(file=this$.log.file,append=TRUE,"\n");
+				writeLines(paste(message,collapse=", "),con=this$.log.connection,sep="");
+				writeLines("\n",con=this$.log.connection,sep="");
 				return(TRUE);
 			}
 
