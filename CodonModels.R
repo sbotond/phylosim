@@ -407,6 +407,36 @@ setMethodS3(
 );
 
 ##  
+## Method: getOmegas
+##  
+setMethodS3(
+  "getOmegas",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		index,
+    ...
+  ){
+
+		if(missing(process)){
+      throw("No process given!\n");
+    }
+    else if(!is.NY98(process)){
+      throw("The specified process is not a NY98 codon substitution process!\n");
+    }
+    rm<-getParameterAtSites(this=this,process=process,id="omega",index=index);
+    return(as.numeric(lapply(rm,function(param){param$value})));
+	
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+##  
 ## Method: setOmegas
 ##  
 setMethodS3(
@@ -420,7 +450,30 @@ setMethodS3(
     ...
   ){
 
-		# FIXME
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+    else if(missing(value)){
+      throw("No new value specified!\n");
+    }
+    else if(!all(is.numeric(value)) ){
+      throw("The new value must be a numeric vector!\n");
+    }
+    else {
+
+      if(missing(index)){
+        index<-seq(along=this$.sites);
+      }
+      else {
+        index<-.checkIndexSanity(this, index);
+      }
+
+      setParameterAtSites(this, process=process, id="omega",value=value,index=index);
+
+    }
 
   },
   private=FALSE,
