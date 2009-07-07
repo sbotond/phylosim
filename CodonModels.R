@@ -382,7 +382,7 @@ setMethodS3(
 				}
 				# transversion:
 				else if( all(sort(codonDiff(alphabet,c(i,j))) == sort( c("0","0","TV"))) ){
-					setRate(this,from=i,to=j,value=(this$.kappa * this$.equ.dist[1,j]));
+					setRate(this,from=i,to=j,value=(this$.equ.dist[1,j]));
 				}
 				# double substitution:
 				else {
@@ -415,6 +415,7 @@ setMethodS3(
     ...
   ){
 
+		# FIXME: try to do this faster!
     .checkWriteProtection(this);
     # Setting unscaled rate:
     if(!is.QMatrix(this$.q.matrix)){
