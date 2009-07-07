@@ -113,6 +113,33 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##  
+## Method: is.CodonUNREST
+##  
+setMethodS3(
+  "is.CodonUNREST",
+  class="default",
+  function(
+    this,
+    ...
+  ){
+
+    if(!is.GeneralSubstitution(this)) {return(FALSE)}
+    if ( inherits(this, "CodonUNREST")) {
+      return(TRUE);
+    } else {
+      return(FALSE)
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
 ##
 ## NY98
 ##
