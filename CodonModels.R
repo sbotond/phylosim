@@ -20,7 +20,7 @@ setConstructorS3(
   function( 
 		name="Anonymous", # name of the object
 		table.id=1,
-		rate.list=NA,	  # list of unscaled rates
+		rate.list=NA,	    # list of unscaled rates
 		equ.dist=NA,      # equlibrium distribution
 		... 
 		)	{
@@ -158,18 +158,22 @@ setConstructorS3(
 		... 
 		)	{
 
+		# Create a CodonUNREST object.
 		this<-CodonUNREST(table.id=table.id);
 
+		# Set codon frequencies to uniform if they are not provided:
 		if(missing(codon.freqs)){
 			codon.freqs<-rep((1/this$alphabet$size),this$alphabet$size);
 		}
 
+		# Extend:
 		this<-extend(
 			this,
 			"NY98",
 			.kappa=NA
 		);
 
+		# Add the "omega" site-process specific parameter:
 		.addSiteSpecificParameter(
       this,
       id="omega",
@@ -178,9 +182,12 @@ setConstructorS3(
       type="numeric"
     );
 
+		# Set the codon frequencies/equilibrium distribution.
 		setEquDist(this,value=codon.freqs,force=TRUE);	
+		# Set kappa:
 		this$kappa<-kappa;
 
+		# Set object name:
 		this$name<-name;
 		return(this);
 
@@ -262,6 +269,14 @@ setMethodS3(
 
 			# Create the event objects:
 			events<-list();
+			  
+			# The rate of the event is the product of the general rate and the
+     	# site specific rate multiplier:
+     	rate.multiplier<-getParameterAtSite(this,target.site,"rate.multiplier")$value;
+    
+			# Get the omega site-process specific parameter: 
+			omega<-getParameterAtSite(this,target.site,"omega")$value;
+			
 			for(new.state in rest){
 
 			  name<-paste(state,new.state,sep="->");
@@ -279,10 +294,6 @@ setMethodS3(
      		# Set the target state object (good for consistency):
      		event$targetState<-state;
 
-			  # The rate of the event is the product of the general rate and the
-     		# site specific rate multiplier:
-     		rate.multiplier<-getParameterAtSite(this,target.site,"rate.multiplier")$value;
-
 				# Return empty list if the rate multiplier is zero.
      		if(rate.multiplier == 0 ) {
       		return(list());
@@ -291,11 +302,10 @@ setMethodS3(
 				# Figure out wether the event is a synonymous mutation ...
 				if(areSynonymous(target.site$.alphabet,c(state,new.state))){
 					# and ignore omega in that case
-					event$rate<-(rate.multiplier * getEventRate(this$.q.matrix, name ));
+					event$rate<-(rate.multiplier * getEventRate(this$.q.matrix, from=state, to=new.state ));
 				} else {
-					# deal with omega otherwise
-     			omega<-getParameterAtSite(this,target.site,"omega")$value;
-					event$rate<-(rate.multiplier * omega * getEventRate(this$.q.matrix, name ));
+					# incorporate omega otherwise
+					event$rate<-(rate.multiplier * omega * getEventRate(this$.q.matrix, from=state, to=new.state ));
 				}
 
 				# Set the handler for the substitution event:
