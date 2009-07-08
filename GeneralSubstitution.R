@@ -196,7 +196,7 @@ setMethodS3(
 		} 
 
 			state<-getState(target.site);
-		# Just return an empty list if the state is NA:
+		  # Just return an empty list if the state is NA:
 			if(is.na(state)){
 				return(list());
 			}
@@ -205,6 +205,10 @@ setMethodS3(
 			rest<-symbols[ which(symbols != state) ];
 			# Generate the names of the possible events:
 			event.names<-paste(state,rest,sep="->");
+			
+			# The rate of the event is the product of the general rate and the
+     	# site specific rate multiplier:
+     	rate.multiplier<-getParameterAtSite(this,target.site,"rate.multiplier")$value;
 
 			# Create the event objects:
 			events<-list();
@@ -223,10 +227,6 @@ setMethodS3(
      		event$site<-target.site;
      		# Set the target state object (good for consistency):
      		event$targetState<-state;
-
-			  # The rate of the event is the product of the general rate and the
-     		# site specific rate multiplier:
-     		rate.multiplier<-getParameterAtSite(this,target.site,"rate.multiplier")$value;
 				
 				# Return empty list if the rate multiplier is zero.
      		if(rate.multiplier == 0 ) {
