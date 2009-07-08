@@ -388,19 +388,30 @@ setMethodS3(
 				if(i == j) { next }
 				# transition:
 				if( all(sort(codonDiff(alphabet,c(i,j))) == sort( c("0","0","TI"))) ){
-					setRate(this,from=i,to=j,value=(this$.kappa * this$.equ.dist[1,j]));
+					#setRate(this,from=i,to=j,value=(this$.kappa * this$.equ.dist[1,j]));
+					this$.q.matrix$.orig.matrix[i,j]<-(this$.kappa * this$.equ.dist[1,j]);
 				}
 				# transversion:
 				else if( all(sort(codonDiff(alphabet,c(i,j))) == sort( c("0","0","TV"))) ){
-					setRate(this,from=i,to=j,value=(this$.equ.dist[1,j]));
+					#setRate(this,from=i,to=j,value=(this$.equ.dist[1,j]));
+					this$.q.matrix$.orig.matrix[i,j]<-(this$.equ.dist[1,j]);
 				}
 				# double substitution:
 				else {
-					setRate(this,from=i,to=j,value=0);
+					#setRate(this,from=i,to=j,value=0);
+					this$.q.matrix$.orig.matrix[i,j]<-0;
 				}
 	
 			}
 		}
+
+		# Set the new diagonal element in the original rates matrix:
+		for(from in symbols){
+        this$.q.matrix$.orig.matrix[from, from]<-.calculateDiagonal(this$.q.matrix, symbol=from);
+		}
+		
+		# Call rate rescaling:
+		.callRateRescaling(this$.q.matrix,guess.equ=FALSE);
 
 	},
 	private=FALSE,
