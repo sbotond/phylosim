@@ -515,8 +515,8 @@ setMethodS3(
                 	"A->T"=(value[["b"]] * this$.equ.dist[1,"T"] ),
                 	"T->G"=(value[["c"]] * this$.equ.dist[1,"G"] ),
                 	"G->T"=(value[["c"]] * this$.equ.dist[1,"T"] ),
-			"C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
-			# Can you spot the pattern here: "A->C" .* "d" .* "c" :)
+									"C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
+									# Can you spot the pattern here: "A->C" .* "d" .* "c" :)
                 	"A->C"=(value[["d"]] * this$.equ.dist[1,"C"] ),
                 	"C->G"=(value[["e"]] * this$.equ.dist[1,"G"] ),
                 	"G->C"=(value[["e"]] * this$.equ.dist[1,"C"] ),

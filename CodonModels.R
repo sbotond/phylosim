@@ -378,12 +378,11 @@ setMethodS3(
 		# Wiping out the scaled rate matrix:
 		this$QMatrix$.rate.matrix[]<-NA;
 
-		alphabet<-this$alphabet;
+		alphabet<-this$.alphabet;
 		symbols<-alphabet$symbols;
 
 		purines<-c("A","G");
     pyrimidines<-c("C","T");
-
 
 		for(i in symbols){
 			for(j in symbols){
