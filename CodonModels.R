@@ -381,36 +381,47 @@ setMethodS3(
 		alphabet<-this$alphabet;
 		symbols<-alphabet$symbols;
 
+		purines<-c("A","G");
+    pyrimidines<-c("C","T");
+
+
 		for(i in symbols){
 			for(j in symbols){
-				
-				# diagonal element:
-				if(i == j) { next }
-				# transition:
-				if( all(sort(codonDiff(alphabet,c(i,j))) == sort( c("0","0","TI"))) ){
-					#setRate(this,from=i,to=j,value=(this$.kappa * this$.equ.dist[1,j]));
-					this$.q.matrix$.orig.matrix[i,j]<-(this$.kappa * this$.equ.dist[1,j]);
+
+				# Split codons:
+				nuc.i<-strsplit(i,"")[[1]];
+				nuc.j<-strsplit(j,"")[[1]];
+	
+				diff<-which( (nuc.i == nuc.j) == FALSE);
+
+				# Skip diagonal elements:
+				if( i == j) { 
+						next;
 				}
-				# transversion:
-				else if( all(sort(codonDiff(alphabet,c(i,j))) == sort( c("0","0","TV"))) ){
-					#setRate(this,from=i,to=j,value=(this$.equ.dist[1,j]));
-					this$.q.matrix$.orig.matrix[i,j]<-(this$.equ.dist[1,j]);
-				}
-				# double substitution:
-				else {
-					#setRate(this,from=i,to=j,value=0);
+				else if( length( diff ) > 1){
+					# We have multiple nucleotiode substiutions:
 					this$.q.matrix$.orig.matrix[i,j]<-0;
 				}
-	
-			}
-		}
+				else if ( 
+									length( intersect( purines, c(nuc.i[diff[1]],nuc.j[diff[1]])) ) == 2 |
+									length( intersect( pyrimidines, c(nuc.i[diff[1]],nuc.j[diff[1]])) ) == 2
+								){
+					# We have a single transition:
+					this$.q.matrix$.orig.matrix[i,j]<-(this$.kappa * this$.equ.dist[1,j]);
+				} else {
+					# The only possibility left is a single transversion:
+					this$.q.matrix$.orig.matrix[i,j]<-(this$.equ.dist[1,j]);
+				}
+
+			} # /for j
+		} # /for i
 
 		# Set the new diagonal element in the original rates matrix:
-		for(from in symbols){
-        this$.q.matrix$.orig.matrix[from, from]<-.calculateDiagonal(this$.q.matrix, symbol=from);
+		for(codon in symbols){
+        this$.q.matrix$.orig.matrix[codon, codon]<-.calculateDiagonal(this$.q.matrix, symbol=codon);
 		}
 		
-		# Call rate rescaling:
+		# Call rate rescaling, suppress equlibrium distribution guessing:
 		.callRateRescaling(this$.q.matrix,guess.equ=FALSE);
 
 	},
