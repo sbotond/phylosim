@@ -161,7 +161,7 @@ setMethodS3(
 				throw(message);
 			}	
 
-		}
+		} #/while
 
 		# FIXME - Calling the garbage collector:
 		gc();	

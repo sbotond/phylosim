@@ -429,7 +429,6 @@ setConstructorS3(
 			if(to.delete > 0){
 				deleteSubSequence(tmp,(tmp$length - to.delete + 1):tmp$length);
 			}
-			
 			return(tmp);
 				
 	 }
@@ -737,7 +736,7 @@ setMethodS3(
 );
 
 ##	
-## Method: setGenerateBy
+## Method: setTemplateSeq
 ##	
 setMethodS3(
 	"setTemplateSeq", 
