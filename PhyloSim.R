@@ -782,7 +782,7 @@ setMethodS3(
   class="PhyloSim",
   function(
     this,
-		paranoid=FALSE,
+		paranoid=TRUE,
     ...
   ){
 
@@ -905,9 +905,31 @@ setMethodS3(
 				return(equals(to.seq$.sites[[ to.pos ]]$.ancestral, from.seq$.sites[[ from.pos ]]));
 		}
 
-		make.gap.in.from<-function(label=NA){
+		# Get the symbol length from "to.seq" at position to.pos:
+		get.to.symlen<-function(pos=NA){
+				len<-stringLength(to.mat[to.name , pos]);
+				if( is.na(len) | (len < 1) ){
+					throw("Trouble in getting to.symlen!");
+				} else {
+					return(len);
+				}
+		}
+
+		# Get the symbol length from "from.seq" at position from.pos:
+		get.from.symlen<-function(pos=NA){
+				len<-stringLength(from.mat[from.name , pos]);
+				if( is.na(len) | (len < 1) ){
+					throw("Trouble in getting to.symlen!");
+				} else {
+					return(len);
+				}
+		}
+
+		make.gap.in.from<-function(label=NA,symlen=NA){
+				# Create the gap symbol:
+				gap<-paste(rep("-",times=symlen),collapse="");
 				# Create the vector with gaps:
- 				gaps<-cbind(rep(c("-"), times=dim(from.mat)[[1]] ));
+ 				gaps<-cbind(rep(gap, times=dim(from.mat)[[1]] ));
 				# Label the column:
         colnames(gaps)<-c(label);
 				# Bind the gaps with the corresponding column from to.mat,
@@ -919,9 +941,10 @@ setMethodS3(
         j<<-j+1;
 		}
 
-		make.gap.in.to<-function(label=NA){
+		make.gap.in.to<-function(label=NA,symlen=NA){
 			# See above.
-			gaps<-cbind(rep(c("-"), times=dim(to.mat)[[1]] ));
+			gap<-paste(rep("-",times=symlen),collapse="");
+			gaps<-cbind(rep(gap, times=dim(to.mat)[[1]] ));
 			colnames(gaps)<-c(label);
 			res.mat<<-cbind(res.mat, rbind(  cbind(from.mat[,i]), gaps  ) );
 			rownames(res.mat)<<-row.names;
@@ -969,7 +992,7 @@ setMethodS3(
 							# If i is greater than the length of from.mat, but we 
 							# are still iterating, that means that we have parts left from
 							# to.mat, so we have to create gaps in from.mat, and increment j.
-							make.gap.in.from();
+							make.gap.in.from(symlen=get.to.symlen(pos=j));
 							next();
 					}
 					else if (j > dim(to.mat)[[2]]){
@@ -977,7 +1000,7 @@ setMethodS3(
 							# that means that we have still some columns in from.mat, so we create
 							# gaps in to.mat and increment i. We label the new column with from.pos.
 							from.pos<-get.seq.pos(mat=from.mat, col=i);
-							make.gap.in.to(label=from.pos);
+							make.gap.in.to(label=from.pos,get.from.symlen(pos=i));
 							next();
 					}
 
@@ -990,13 +1013,13 @@ setMethodS3(
 					if(is.na(from.pos)){
 						# If we have a gap in from.mat,
 						# than emmit the columnt with a gap in "to":
-						make.gap.in.to();
+						make.gap.in.to(symlen=get.from.symlen(pos=i));
 						next();
 					}
 
 					if(is.na(to.pos)){
 						# Existent gap in to.mat:
-						make.gap.in.from();
+						make.gap.in.from(symlen=get.to.symlen(pos=j));
 						next();
 					}
 
@@ -1010,14 +1033,14 @@ setMethodS3(
 					else if(is.Process(to.seq$.sites[[to.pos]]$.ancestral)){
 						# The two columns are not homologous. The column in "to"
 						# was inserted by a process. Make gap in from:
-						make.gap.in.from();
+						make.gap.in.from(symlen=get.from.symlen(pos=i));
 						next();
 
 					} 
 					else {
 						# The only possibility left is a deletion in the child sequence.
 						# Make gaps in "to", label new column by from.pos:
-						make.gap.in.to(label=from.pos);
+						make.gap.in.to(label=from.pos,symlen=get.from.symlen(pos=i));
 						next();
 					}
 
@@ -1030,8 +1053,7 @@ setMethodS3(
 		} # for edge.number
 		alignment <-aln.mat[[ this$rootSeq$name ]];
 		# Check the correcteness of the alignment if paranoid:
-		# FXME - disable checking by default!
-		paranoid<-TRUE;
+		# FIXME - disable checking by default!
 		if(paranoid){
 			.checkAlignmentConsistency(this, alignment);
 		}
@@ -1063,7 +1085,7 @@ setMethodS3(
 	for(node in this$nodes){
 		seq.node<-getSeqFromNode(this, node);
 		seq.aln<-aln[seq.node$name, ];
-		seq.aln<-seq.aln[ which(seq.aln != "-") ];
+		seq.aln<-seq.aln[ grep("^[^-]+$",seq.aln) ];
 		seq.aln<-paste(seq.aln, collapse="");
 		if(seq.aln != seq.node$string){
 			throw("The alignment is inconsistent with the sequence objects!\n Blaming ",seq.node$name, ".\n");
@@ -1090,6 +1112,21 @@ setMethodS3(
 			# Initializing positions:
 			from.pos<-1;
 			to.pos<-1;
+
+			is.gap<-function(string){
+			
+					res<-length(grep("^-+$",string));
+					if( res == 1 ){
+							return(TRUE);
+					} 
+					else if (res > 1){
+							throw("is.gap: argument vector too long!\n");
+					}
+					else {
+							return(FALSE);
+					}
+	
+			}
 			
 			# Iterate over edges:
 			for (i in 1:dim(aln)[[2]]){
@@ -1097,7 +1134,7 @@ setMethodS3(
 					# Overflow in "from" counter,
 					if(from.pos > from.seq$length){
 						to.char<-aln[to.name,i];			
-						if(to.char != "-"){
+						if(is.gap(to.char)){
 							# we have a final insertion:
 							if(!is.Process(to.seq$.sites[[to.pos]]$.ancestral)){
 								throw("Alignment insertion inconsistency!\n");
@@ -1118,12 +1155,12 @@ setMethodS3(
 					from.char<-aln[from.name,i];			
 					to.char<-aln[to.name,i];			
 					
-					# If both are gaps:	
-					if(from.char == "-" | to.char == "-"){
-						if(from.char != "-"){
+					# If one of them is a gap:	
+					if( is.gap(from.char) | is.gap(to.char) ){
+						if( !is.gap(from.char) ){
 							from.pos<-(from.pos+1);
 						}
-						if(to.char != "-"){
+						if( !is.gap(to.char)){
 							# Check ancestral pointer for inserted sites:
 							if(!is.Process(to.seq$.sites[[to.pos]]$.ancestral)){
 								throw("Alignment insertion inconsistency!\n");
