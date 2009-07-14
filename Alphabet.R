@@ -82,6 +82,11 @@ setMethodS3(
 		...
 	){
 
+		# Check for the gap character "-", and die if present:
+		if(length(grep("^-+$",this)) != 0){
+			throw("The symbol sets cannot contain the character \"-\" as that is reserved as a gap symbol!\n");
+		}
+
 		if(length(this) != length(unique(this))){
 			throw("The alphabet must not contain duplicated symbols!");
 		} else {
