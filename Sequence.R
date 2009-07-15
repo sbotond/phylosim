@@ -2087,4 +2087,52 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##	
+## Method: setOmegas
+##	
+setMethodS3(
+	"setOmegas", 
+	class="Sequence", 
+	function(
+		this,
+		process,
+		index,
+		...
+	){
+		
+		# FIXME	- dummy method to force the creation of the generic function
+		warning("This is just a dummy method!");
 
+		
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getOmegas
+##	
+setMethodS3(
+	"getOmegas", 
+	class="Sequence", 
+	function(
+		this,
+		process,
+		index,
+		...
+	){
+		
+		# FIXME	- dummy method to force the creation of the generic function
+		warning("This is just a dummy method!");
+
+		
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
