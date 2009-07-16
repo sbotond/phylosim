@@ -114,7 +114,7 @@ setMethodS3(
 );
 
 ##  
-## Method: is.CodonUNREST
+# Method: is.CodonUNREST
 ##  
 setMethodS3(
   "is.CodonUNREST",
@@ -345,6 +345,49 @@ setMethodS3(
       }
 			
 		  may.fail<-function(this) {
+
+      # Check kappa:
+      if(!is.numeric(this$.kappa)){
+        throw("Kappa must be numeric!\n");
+      }
+      # Check codon.freqs
+      this$codonFreqs<-this$codonFreqs;
+
+			# Check rate sanity:
+			symbols<-this$alphabet$symbols;
+			alphabet<-this$alphabet;
+
+			for(from in symbols){
+				for(to in symbols){
+		
+				# Skip diagonal elements:
+				if(from == to) {next()};
+				
+				# Figure out codon differences:
+				diff<-sort(codonDiff(alphabet, c(from,to)));					
+
+				# Single transition:
+				if( all(diff == sort(c(0,0,"TI"))) ){
+					if( !PSRoot$all.equal ( this$.q.matrix$.orig.matrix[from, to], (this$.kappa * this$.equ.dist[1,to]) ) ){
+							throw("NY98 rate inconsistency. From:",from," To:",to,"!\n");
+
+						}
+				}
+				# Single transversion:
+				else if( all(diff == sort(c(0,0,"TV"))) ){
+					if( !PSRoot$all.equal ( this$.q.matrix$.orig.matrix[from, to], (this$.equ.dist[1,to]) ) ){
+					  throw("NY98 rate inconsistency. From:",from," To:",to,"!\n");
+					}
+				}
+				# Multiple nucleotide substitution:
+				else {
+					if( this$.q.matrix$.orig.matrix[from, to] != 0.0 ){
+						throw("NY98 rate inconsistency. From:",from," To:",to,"!\n");
+					}
+				}
+	
+				} #/for to
+			} #/for from
 	
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
