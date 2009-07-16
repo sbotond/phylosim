@@ -77,6 +77,14 @@ setMethodS3(
 				if (!any(is.na(this$.phylo)) & !is.phylo(this$.phylo) ){
 					throw("The phylo object is invalid!\n");
 				}
+				# Checking the log level:
+				if(!is.numeric(this$.log.level) | (length(this$.log.level) != 1) ){
+					throw("The log level must be numeric vector of length 1!\n");
+				}
+				# Checking lof file:
+				if(!is.character(this$.log.file) | (length(this$.log.level) != 1) ){
+					throw("The log file must be charcter vector of length 1!\n");
+				}
 				# Checking the sequences:
 				for (seq in this$.sequences){
 					if(is.Sequence(seq)){
@@ -97,7 +105,7 @@ setMethodS3(
 		
       }
       tryCatch(may.fail(this));
-			return(TRUE);
+			return(invisible(TRUE));
 
 	},
 	private=FALSE,
