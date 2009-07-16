@@ -19,7 +19,7 @@ setConstructorS3(
   "CodonUNREST",
   function( 
 		name="Anonymous", # name of the object
-		table.id=1,
+		table.id=1,				# the id of the genetic code table to use
 		rate.list=NA,	    # list of unscaled rates
 		equ.dist=NA,      # equlibrium distribution
 		... 
@@ -151,10 +151,10 @@ setConstructorS3(
   "NY98",
   function( 
 		name="Anonymous", # name of the object
-		table.id=1,				
-		kappa=1,
-		omega.default=1,
-		codon.freqs=NA,
+		table.id=1,				# id of the genetic code table to use
+		kappa=1,					# transition/transversion rate ratio
+		omega.default=1,  # the default value of the omega site-process specific parameter
+		codon.freqs=NA,   # codon frequencies 
 		... 
 		)	{
 
