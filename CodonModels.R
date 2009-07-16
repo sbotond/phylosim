@@ -612,6 +612,33 @@ setMethodS3(
 );
 
 ##  
+## Method: summary.NY98
+##  
+setMethodS3(
+  "summary",
+  class="NY98",
+  function(
+    this,
+    ...
+  ){
+
+    .addSummaryNameId(this);
+		this$.summary$"Kappa"<-this$.kappa;
+		this$.summary$"Genetic code table id"<-this$.alphabet$tableId;
+    .addSummaryAlphabet(this);
+		this$.summary$"Unscaled rate matrix"<-"not shown";
+
+    NextMethod();
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
 ## Method: getOmegas
 ##  
 setMethodS3(
