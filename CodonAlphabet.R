@@ -4798,6 +4798,49 @@ setMethodS3(
 );
 
 ##  
+## Method: getTransTable
+##  
+setMethodS3(
+  "getTransTable",
+  class="CodonAlphabet",
+  function(
+    this,
+    ...
+  ){
+
+		this$.trans.table
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: setTransTable
+##  
+setMethodS3(
+  "setTransTable",
+  class="CodonAlphabet",
+  function(
+    this,
+		value,
+    ...
+  ){
+
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
 ## Method: is.CodonAlphabet
 ##  
 setMethodS3(
