@@ -1264,27 +1264,32 @@ setMethodS3(
      this$.summary$"Name"<-this$name;
      this$.summary$"Id"<-this$id;
 
-		 root.seq<-NA;
 		 if(is.Sequence(this$rootSeq)){
 			root.seq<-this$rootSeq$id;
+		 } else {
+		 	this$.summary$"Root Sequence"<-"undefined";
 		 }
-		 this$.summary$"Root Sequence"<-root.seq;
-
 		 if(is.Sequence(this$rootSeq)){
 		 	this$.summary$"Root Sequence big rate"<-this$rootSeq$bigRate;
 		 }
-     this$.summary$"Tree length"<-this$treeLength;
-			
-		 phylo.details<-grep(pattern="[[:alnum:]]+",x=capture.output(print(this$.phylo)),perl=TRUE,value=TRUE);
-		 
-		 phylo.details<-paste("\n",phylo.details,collapse="",sep="\t");
-		 this$.summary$"Phylo object details"<-phylo.details;
+		 if(is.phylo(this$.phylo)){
+
+     	this$.summary$"Tree length"<-this$treeLength;
+		 	phylo.details<-grep(pattern="[[:alnum:]]+",x=capture.output(print(this$.phylo)),perl=TRUE,value=TRUE);
+		 	phylo.details<-paste("\n",phylo.details,collapse="",sep="\t");
+			this$.summary$"Phylo object details"<-phylo.details;
+
+		 } else {
+			this$.summary$"Phylo object details"<-"undefined";
+		 }
 
 		 aln<-"undefined";
 		 if(is.matrix(this$alignment)){
 				aln<-"defined";	
 		 }
      this$.summary$"Alignment"<-aln;
+     this$.summary$"Log file"<-this$.log.file;
+     this$.summary$"Log level"<-this$.log.level;
 
      NextMethod();
 
