@@ -4528,7 +4528,7 @@ setMethodS3(
     ...
   ){
 
-		this$.id;
+		this$.table.id;
 
   },
   private=FALSE,
