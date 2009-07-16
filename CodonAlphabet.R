@@ -4504,18 +4504,39 @@ setMethodS3(
   function(
     this,
     ...
-  ){
-	
-		# FIXME 
-		NextMethod();
+  ){ 
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+
+      may.fail<-function(this) {
+
+			if(!is.character(this$.table.id) | (length(this$.table.id) != 1) )	{
+				throw(".table.id inconsistency!\n");
+			}
+			if(!is.list(this$.trans.table)){
+				throw("Translation table is not a list!\n");
+			}
+			for (tmp in this$.trans.table){
+					if (length(intersect(names(tmp),c("aa","type"))) != 2){
+						throw("Translation table contains invalid entries!\n");
+					}
+			}
+
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+      NextMethod();
 
   },
-  private=TRUE,
+  private=FALSE,
   protected=FALSE,
   overwrite=FALSE,
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
 
 ##  
 ## Method: getTableId
