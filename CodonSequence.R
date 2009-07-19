@@ -84,6 +84,42 @@ setConstructorS3(
   enforceRCC=TRUE
 );
 
+##	
+## Method: checkConsistency
+##	
+setMethodS3(
+	"checkConsistency", 
+	class="CodonSequence", 
+	function(
+		this,
+		...
+	){
+
+      wp<-this$writeProtected;
+      if (wp) {
+        this$writeProtected<-FALSE;
+      }
+			
+		  may.fail<-function(this) {
+	
+				for(pos in seq(along=this$.sites)){
+					if(!is.CodonAlphabet(this$.sites[[pos]]$.alphabet)){
+						throw("The alphabet attached to site ",pos," is not a codon alphabet!\n");
+					}
+				}
+		
+      }
+      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+			NextMethod();		
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ##  
 ## Method: Translate
 ##  
