@@ -227,7 +227,7 @@ setMethodS3(
 				checkConsistency(site);
 			}
 		}
-		return(TRUE);
+		return(invisible(TRUE));
 
 	},
 	private=FALSE,
