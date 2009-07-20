@@ -385,16 +385,16 @@ setConstructorS3(
 			this$templateSeq<-template.seq;
 		}
 
-		this$acceptBy<-function(sequence,range){
+		this$acceptBy<-function(process=NA,sequence=NA,range=NA){
 			
 				accept.prob<-c();
 				for(site in sequence$.sites[range]){
 						# Discard the site if the process is not attached to it:
-						if(!isAttached(site, this)){
+						if(!isAttached(site, process)){
 							next();
 						}
 						else {
-							accept.prob<-c(accept.prob, getParameterAtSite(this, site, "insertion.tolerance")$value);
+							accept.prob<-c(accept.prob, getParameterAtSite(process, site, "insertion.tolerance")$value);
 						}
 				}
 				accept.prob<-prod(as.numeric(accept.prob));
@@ -406,12 +406,12 @@ setConstructorS3(
 
 	###	
 
-	 this$generateBy<-function(this,length=NA){
+	 this$generateBy<-function(process=NA,length=NA){
 
 			if(is.na(length) | (length(length) == 0) | length == 0){
 				throw("Invalid insert length!\n");
 			}	
-			else if(is.na(this$.template.seq)){
+			else if(is.na(process$.template.seq)){
 				throw("Cannot generate insert without template sequence!\n");
 			}
 
@@ -422,7 +422,7 @@ setConstructorS3(
 		
 			if( (times-1) > 0){
 				for(i in 1:(times-1)){
-					insertSequence(tmp,this$.template.seq,tmp$length);
+					insertSequence(tmp,process$.template.seq,tmp$length);
 				}
 			}
 
@@ -445,6 +445,7 @@ setConstructorS3(
 					 WINDOW.SIZE<-this$.accept.win;
 					 # Using temporary varibales for clarity:
 					 position<-event$.position;
+					 process<-event$.process;
 					 sequence<-getSequence(getSite(event));
 					 details<-list();
 					 details$type<-"insertion";
@@ -472,15 +473,15 @@ setConstructorS3(
 
 					# Discard illegal positions:
 					window<-window[ window > 0 & window <= sequence$.length];
-				  if(this$.accept.by(sequence,window)){
+				  if(process$.accept.by(process=process,sequence,window)){
 							details$accepted<-TRUE;
-							insert<-generateInsert(this);
+							insert<-generateInsert(process);
 							details$length<-insert$length;
 							# Call the insert hook:
 							if(is.function(this$.insert.hook)){
 								insert<-this$.insert.hook(insert);
 							}
-							insertSequence(sequence,insert, insert.pos,process=this);
+							insertSequence(sequence,insert, insert.pos,process=process);
 					}
 					return(details);
 					
@@ -649,9 +650,9 @@ setMethodS3(
 	){
 
 		if(missing(length)){
-			length<-this$.propose.by(this=this);
+			length<-this$.propose.by(process=this);
 		}
-		insert<-this$.generate.by(this,length);
+		insert<-this$.generate.by(process=this,length);
 		sampleStates(insert);	
 		return(insert);	
 
@@ -903,16 +904,16 @@ setConstructorS3(
       type="numeric"
     );
 
-		this$acceptBy<-function(sequence,range){
+		this$acceptBy<-function(process=NA,sequence=NA,range=NA){
 
 				accept.prob<-c();
 				for(site in sequence$.sites[range]){
 						# Reject if the range contains a site which is not attached to 
 						# the process:
-						if(!isAttached(site, this)){
+						if(!isAttached(site, process)){
 							return(FALSE);
 						}
-						accept.prob<-c(accept.prob, getParameterAtSite(this, site, "deletion.tolerance")$value);
+						accept.prob<-c(accept.prob, getParameterAtSite(process, site, "deletion.tolerance")$value);
 				}
 
 				# Calculate the product of the per-site 
@@ -929,13 +930,14 @@ setConstructorS3(
 
 					 # Using temporary varibales for clarity:
 					 position<-event$.position;
+					 process<-event$.process;
 					 sequence<-getSequence(getSite(event));
 					 details<-list();
 					 details$type<-"deletion";
 					 details$accepted<-FALSE;
 
 					 # Propose a sequence length:
-					 length<-this$proposeBy(this=this,seq=sequence, pos=position);
+					 length<-process$proposeBy(process=process,seq=sequence, pos=position);
 
 					 # Propose the direction:
 					 direction<-sample(c("LEFT","RIGHT"),replace=FALSE,size=1);
@@ -955,7 +957,7 @@ setConstructorS3(
 					 details$range<-c(min(range),max(range));
 					 
 					 # Perform the deletion if it is accepted:
-					 if (this$.accept.by(sequence=sequence,range=range) == TRUE) {
+					 if (process$.accept.by(process=process,sequence=sequence,range=range) == TRUE) {
 						details$accepted<-TRUE;
 					 	deleteSubSequence(sequence,range);
 					}					

@@ -49,14 +49,14 @@ setConstructorS3(
 			STATIC<-FALSE;
 		}
 
-		this$proposeBy<-function(this=NA,...){
-			 if( !is.numeric(this$.sizes) | !is.numeric(this$.probs) ){
+		this$proposeBy<-function(process=NA,...){
+			 if( !is.numeric(process$.sizes) | !is.numeric(process$.probs) ){
         throw("Cannot propose insert length because the length distribution is not defined properly!\n");
       }
-			if(length(this$.sizes) == 1){
-				return(this$.sizes[[1]]);
+			if(length(process$.sizes) == 1){
+				return(process$.sizes[[1]]);
 			} else {
-				return(sample(x=this$.sizes,size=1,replace=FALSE,prob=this$.probs));
+				return(sample(x=process$.sizes,size=1,replace=FALSE,prob=process$.probs));
 			}
 		}
 

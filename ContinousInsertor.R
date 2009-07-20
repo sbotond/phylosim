@@ -48,15 +48,15 @@ setConstructorS3(
 			STATIC<-FALSE;
 		}
 
-		this$proposeBy<-function(...){
-				if(!is.expression(this$.dist)){
+		this$proposeBy<-function(process=NA,...){
+				if(!is.expression(process$.dist)){
 					throw("\"dist\" is undefined, so cannot propose insertion length!\n");
 				}
-				else if(is.na(this$.max.length)){
+				else if(is.na(process$.max.length)){
 					throw("\"maxLength\" is undefined, so cannot propose insertion length!\n");
 				}
-				tmp<-round(eval(this$.dist));
-				while( tmp > this$.max.length | tmp < 1){  tmp<-round(eval(this$.dist)) };	
+				tmp<-round(eval(process$.dist));
+				while( tmp > process$.max.length | tmp < 1){  tmp<-round(eval(process$.dist)) };	
 				return(tmp);
 		}
 
