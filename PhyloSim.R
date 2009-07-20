@@ -1141,17 +1141,16 @@ setMethodS3(
 
 					# Overflow in "from" counter,
 					if(from.pos > from.seq$length){
+
 						to.char<-aln[to.name,i];			
-						if(is.gap(to.char)){
+						if(!is.gap(to.char)){
 							# we have a final insertion:
 							if(!is.Process(to.seq$.sites[[to.pos]]$.ancestral)){
 								throw("Alignment insertion inconsistency!\n");
 							}
 							to.pos<-to.pos+1;
+						} 
 							next();
-						} else {
-							break();
-						}
 					}				
 					
 					# Overflow in "to" counter (final deletion):
@@ -1162,20 +1161,25 @@ setMethodS3(
 					# Get the symbols from alignment:	
 					from.char<-aln[from.name,i];			
 					to.char<-aln[to.name,i];			
-					
-					# If one of them is a gap:	
-					if( is.gap(from.char) | is.gap(to.char) ){
-						if( !is.gap(from.char) ){
-							from.pos<-(from.pos+1);
-						}
-						if( !is.gap(to.char)){
+
+					is.gap.to<-is.gap(to.char);
+					is.gap.from<-is.gap(from.char);
+	
+					# Skip if we have to gap symbols:	
+					if( is.gap.from & is.gap.to ){
+						next();
+					}
+					# Deletion in to.seq:
+					else if(is.gap.to & !is.gap.from ){
+						from.pos<-(from.pos+1);
+					}
+					# Insertion in to.seq:
+					else if(!is.gap.to & is.gap.from ){
 							# Check ancestral pointer for inserted sites:
 							if(!is.Process(to.seq$.sites[[to.pos]]$.ancestral)){
 								throw("Alignment insertion inconsistency!\n");
 							}
 							to.pos<-(to.pos+1);
-						}
-						next();
 					} else {
 							 # We must have a homology here:						
 							 if(!equals(to.seq$.sites[[ to.pos ]]$.ancestral, from.seq$.sites[[ from.pos ]])){
