@@ -15,76 +15,101 @@ setConstructorS3(
   "FieldDeletor",
   function( 
 		name="Anonymous",
-		type="exponential",
+		type="geometric",
 		... 
 		)	{
 
+		# Creating a GeneralDeletor Process.
 		this<-GeneralDeletor(
 			...
 		);
+
+		# Extending as FieldDeletor:
     this<-extend(
       this,
       "FieldDeletor",
 			.type=type,
 			.q.max=NA
     );
+
 		# Using virtual field to clear Id cache:
 		this$name<-name;
 
-		if(type == "exponential"){
+		# Set the function proposing deletion lengths:
 
-			this$proposeBy<-function(seq,pos){
+	  this$proposeBy<-function(process,seq,pos){
 
-					# Find out the maximum deletion tolerance parameter:					
-					# FIXME - this is very slow!
-					q<-c();
+					# Get all deletion tolerance parameters for this process:					
+					deletion.tolerance<-c();
 
 					for(site in seq$.sites){
-							if(isAttached(site, this)){
-									tmp<-getParameterAtSite(this, site, id="deletion.tolerance")$value;
-									tmp<-exp(-tmp);
-									q<-c(q,tmp);
+							if(isAttached(site, process)){
+									deletion.tolerance<-c(deletion.tolerance, getParameterAtSite(process, site, id="deletion.tolerance")$value);
 							}
 					} # for site
-					q.max<-max(q);
 					
-					express<-expression(rgeom(1,(1-q.max))+1);
-					tmp<-round(eval(express));
-					this$.q.max<-q.max;
-					cat("Proposed",tmp,"\n");
-					return(tmp);
+					# Calculate the "q vector":
+					q<-exp(-deletion.tolerance);
 
-			} # if exponetial
+					# Get the maximal q value:
+					q.max<-max(q);
+				
+					# Set the actual q.max for this process. acceptyBy will use this:
+					process$.q.max<-q.max;
+					
+					# express<-expression(rgeom(1,(1-q.max))+1);
+
+				  # FIXME
+
+					return( round( eval(express) ) );
+					
+
+
+			} # /proposeBy
 		
-			this$acceptBy<-function(sequence,range){
+			# Set the function performing the accept/reject step:
+			this$acceptBy<-function(process,sequence,range){
 
-				q.max<-this$.q.max;
-				this$.q.max<-NA;
+				# Get the actual q.max
+				q.max<-process$.q.max;
+				# And remove from the process object to guard against trouble:
+				process$.q.max<-NA;
 
-				q<-c();
-				# FIXME - missing process conceptual issue!
+				# Get the deletion tolerance parameters from the proposed range:
+				deletion.tolerance<-c();
+				
 				for(site in seq$.sites[range]){
-							if(isAttached(site, this)){
-									tmp<-getParameterAtSite(this, site, id="deletion.tolerance")$value;
-									q<-c(q,tmp);
+
+				if(isAttached(site, process)){
+
+									deletion.tolerance<-c(deletion.tolerance, getParameterAtSite(process, site, id="deletion.tolerance")$value);
+
+							} else {
+
+								# Reject the proposed deletion if that contains sites which are not attached to the process.
+								# This will create an edge effect of course! 
+								return(FALSE);
+
 							}
 					} # for site
-				
-				K<-length(q);
-				q<-prod(exp(-q));
 
-				accept.prob<-(q/(q.max^K));
+				# Get the length of the proposed deletion:				
+				K<-length(deletion.tolerance);
+
+				# Calculate the q.prod:
+				q.prod<-prod(exp(-deletion.tolerance));
+		
+				# Calculate the acceptance probability:
+				accept.prob<-(q.prod/(q.max^K));
+
         # Accept/reject:
-        tmp<-( sample(c(TRUE,FALSE),replace=FALSE,prob=c(accept.prob,(1-accept.prob)),size=1) );
-				return(tmp);
+        return ( sample(c(TRUE,FALSE),replace=FALSE,prob=c(accept.prob,(1-accept.prob)),size=1) );
 	
-			}
-		
-		
-		} # /exponential
-
+			} # /acceptBy
+			
 
     return(this);
+
   },
   enforceRCC=TRUE
 );
