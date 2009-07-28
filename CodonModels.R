@@ -170,7 +170,8 @@ setConstructorS3(
 		this<-extend(
 			this,
 			"NY98",
-			.kappa=NA
+			.kappa=NA,
+			.is.ny98=TRUE
 		);
 
 		# Add the "omega" site-process specific parameter:
@@ -206,8 +207,10 @@ setMethodS3(
     ...
   ){
 
-    if(!is.GeneralSubstitution(this)) {return(FALSE)}
+		if(!is.PSRoot(this)) {return(FALSE)}
+    if(!is.null(this$.is.ny98)){return(TRUE)}
     if ( inherits(this, "NY98")) {
+      this$.is.process<-TRUE;
       return(TRUE);
     } else {
       return(FALSE)
