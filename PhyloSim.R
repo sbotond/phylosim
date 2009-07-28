@@ -411,7 +411,10 @@ setMethodS3(
 		}
 		Log(this, "Simulation finished, building alignment!\n");
 		this$.alignment<-.recoverAlignment(this);
-
+		# Flush the log connection:
+		if(!is.na(this$.log.connection)){
+				flush(this$.log.connection);
+		}
 		return(invisible(this));
   },
   private=FALSE,
