@@ -306,9 +306,13 @@ setMethodS3(
 				if(areSynonymous(target.site$.alphabet,c(state,new.state))){
 					# and ignore omega in that case
 					event$rate<-(rate.multiplier * getEventRate(this$.q.matrix, from=state, to=new.state ));
+					# Mark substitution as synonymous.
+					event$.type<-"synonymous";
 				} else {
 					# incorporate omega otherwise
 					event$rate<-(rate.multiplier * omega * getEventRate(this$.q.matrix, from=state, to=new.state ));
+					# Mark substitution as non-synonymous.
+					event$.type<-"non-synonymous";
 				}
 
 				# Set the handler for the substitution event:
