@@ -413,7 +413,7 @@ setMethodS3(
 		this$.alignment<-.recoverAlignment(this);
 		# Flush the log connection:
 		if(!is.na(this$.log.connection)){
-				flush(this$.log.connection);
+				close(this$.log.connection);
 		}
 		return(invisible(this));
   },
