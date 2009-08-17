@@ -1,37 +1,36 @@
-##########################################################################/**                       
-#
-# @RdocClass Classname                                                                                
-#                                                                                                   
-# @title "The class"                     
-#                                                                                                   
-# \description{                                                                                     
-#  @classhierarchy                                                                                  
+##########################################################################/** 
+
+# @RdocClass Classname
+# 
+# @title "The class"
+# 
+# \description{ 
+#		@classhierarchy
 # 
 #	
-#                                                                                                  
-# }                                                                                                 
-#                                                                                                   
-# @synopsis                                                                                         
-#                                                                                                   
-# \arguments{                                                                                       
-#   \item{}{}
-#                                                                                                  
-#                                                                                                   
-# \section{Fields and Methods}{                                                                     
 #	
-# }                                                                                                 
-#                                                                                                   
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{}{}
+#
+# 
+# \section{Fields and Methods}{ 
+# 
+# }
+# 
 # \examples{ 
 #
-# }                                               
-#                                                                                                   
-# @author                                                                                           
-#
-#
-# \seealso{                                                                                         
-#   @seeclass                                                                                       
 # }
-#                                                                                                   
-# \keyword{}                                                                             
+# 
+# @author
+#
+#
+# \seealso{ 
+# 	@seeclass 
+# }
+# 
 #*/###########################################################################
 
