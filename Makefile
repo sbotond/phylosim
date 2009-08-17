@@ -8,6 +8,8 @@ push:
 	git push
 gt:
 	gitk --all
+rd: *.R
+	( R --vanilla < ./misc/compileman.R)
 clean:
 	rm *.log
 
