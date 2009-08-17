@@ -1,0 +1,37 @@
+##########################################################################/**                       
+#
+# @RdocClass Classname                                                                                
+#                                                                                                   
+# @title "The class"                     
+#                                                                                                   
+# \description{                                                                                     
+#  @classhierarchy                                                                                  
+# 
+#	
+#                                                                                                  
+# }                                                                                                 
+#                                                                                                   
+# @synopsis                                                                                         
+#                                                                                                   
+# \arguments{                                                                                       
+#   \item{}{}
+#                                                                                                  
+#                                                                                                   
+# \section{Fields and Methods}{                                                                     
+#	
+# }                                                                                                 
+#                                                                                                   
+# \examples{ 
+#
+# }                                               
+#                                                                                                   
+# @author                                                                                           
+#
+#
+# \seealso{                                                                                         
+#   @seeclass                                                                                       
+# }
+#                                                                                                   
+# \keyword{}                                                                             
+#*/###########################################################################
+
