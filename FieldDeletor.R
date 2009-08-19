@@ -16,6 +16,9 @@ setConstructorS3(
   function( 
 		name="Anonymous",
 		type="geometric",
+		length.param.1=NA,
+		length.param.2=NA,
+		tolerance.margin=0,
 		... 
 		)	{
 
@@ -24,13 +27,35 @@ setConstructorS3(
 			...
 		);
 
+		# Check if the type is valid:
+		if(length(intersect(c("geometric"),type)) != 1){
+			throw("The specified field model type is invalid!\n");
+		}
+
 		# Extending as FieldDeletor:
     this<-extend(
       this,
       "FieldDeletor",
 			.type=type,
+			.tolerance.margin=NA,
+			.tolerance.max=NA,
+			.length.param.1=NA,
+			.length.param.2=NA,
 			.q.max=NA
     );
+
+		# Set length parameter 1 if not missing:
+		if(!missing(length.param.1)){
+			this$lengthParam1<-length.param.1;
+		}
+		
+		# Set length parameter 2 if not missing:
+		if(!missing(length.param.2)){
+			this$lengthParam1<-length.param.2;
+		}
+
+		# Set tolerance margin:
+		setToleranceMargin(this, tolerance.margin);
 
 		# Using virtual field to clear Id cache:
 		this$name<-name;
@@ -39,41 +64,22 @@ setConstructorS3(
 
 	  this$proposeBy<-function(process,seq,pos){
 
-					# Get all deletion tolerance parameters for this process:					
-					deletion.tolerance<-c();
-
-					for(site in seq$.sites){
-							if(isAttached(site, process)){
-									deletion.tolerance<-c(deletion.tolerance, getParameterAtSite(process, site, id="deletion.tolerance")$value);
-							}
-					} # for site
+					# Check the length parameters:
+					if(is.na(this$.length.param.1)){
+						throw("Length parameter 1 is NA! Cannot propose length!\n");
+					}
 					
-					# Calculate the "q vector":
-					q<-exp(-deletion.tolerance);
-
-					# Get the maximal q value:
-					q.max<-max(q);
-				
-					# Set the actual q.max for this process. acceptyBy will use this:
-					process$.q.max<-q.max;
+					if(this$.type == "geometric"){
+						express<-expression( rgeom(1,prob=( 1 - ( this$.length.param.1 * this$.tolerance.max) ) ) );
+					}
 					
-					# express<-expression(rgeom(1,(1-q.max))+1);
-
-				  # FIXME
-
 					return( round( eval(express) ) );
-					
-
 
 			} # /proposeBy
+
 		
 			# Set the function performing the accept/reject step:
 			this$acceptBy<-function(process,sequence,range){
-
-				# Get the actual q.max
-				q.max<-process$.q.max;
-				# And remove from the process object to guard against trouble:
-				process$.q.max<-NA;
 
 				# Get the deletion tolerance parameters from the proposed range:
 				deletion.tolerance<-c();
@@ -93,14 +99,8 @@ setConstructorS3(
 							}
 					} # for site
 
-				# Get the length of the proposed deletion:				
-				K<-length(deletion.tolerance);
-
-				# Calculate the q.prod:
-				q.prod<-prod(exp(-deletion.tolerance));
-		
 				# Calculate the acceptance probability:
-				accept.prob<-(q.prod/(q.max^K));
+				accept.prob<-( prod(deletion.tolerance) / this$.tolerance.max);
 
         # Accept/reject:
         return ( sample(c(TRUE,FALSE),replace=FALSE,prob=c(accept.prob,(1-accept.prob)),size=1) );
@@ -144,18 +144,63 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-##	
-## Method: proposeLength
-##	
+##  
+## Method: getEventsAtSite
+##  
 setMethodS3(
-  "proposeLength",
+  "getEventsAtSite",
   class="FieldDeletor",
   function(
     this,
+    target.site,
+    sloppy=TRUE,
     ...
   ){
 
-			throw("Disabled for FieldDeletion processes!\n");
+    if(missing(target.site)) {
+      throw("No target site provided!\n");
+    } else if (!sloppy) {
+      if(!is.Site(target.site)) {
+        throw("Target site invalid!\n");
+      }
+      else if(!is.function(this$.propose.by)) {
+        throw("proposeBy is not set, cannot propose deletion!\n");
+      }
+      else if (!is.function(this$.accept.by)){
+        throw("acceptBy is not set, cannot generate deletion event deletion!\n");
+      }
+    } #/!sloppy
+
+     # Complain if sequence has a zero length:
+     if(target.site$.sequence$.length == 0) {
+       throw("Sequence has zero length so there is nothing to delete! How did you get here anyway?\n");
+     }
+
+     # Clone the event template object:
+     deletion.event<-clone(this$.event.template);
+     # Set the target position passed in a temporary field:
+ deletion.event$.position<-target.site$.position;
+     # Set the target site:
+     deletion.event$site<-target.site;
+     # Set the target state (good for consistency):
+     deletion.event$targetState<-getState(target.site);
+     # Set event name:
+     deletion.event$name<-"Deletion";
+     # Set the genrator process:
+     deletion.event$process<-this;
+
+     # Event rate is the product of the general rate, the field model scaling factor and the 
+     # site specific rate multiplier:
+     deletion.event$rate<-(this$rate * (getParameterAtSite(this,target.site,"rate.multiplier")$value) * .getScaleFactor(this,process=this,seq=target.site$.sequence) );
+
+     # Set the handler for the deletion event:
+     .setHandler(deletion.event, this$.handler.template);
+
+    # Write protect the event object: 
+    deletion.event$writeProtected<-TRUE;
+
+    # Return the event object in a list:
+    list(deletion.event);
 
   },
   private=FALSE,
@@ -164,7 +209,6 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
-
 
 ##	
 ## Method: getType
@@ -201,6 +245,28 @@ setMethodS3(
 		throw("The type of the FieldDeletor process cannot be modified. Please set it by the constructor argument.");
 
   },
+  private=TRUE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getLengthParam1
+##	
+setMethodS3(
+  "getLengthParam1",
+  class="FieldDeletor",
+  function(
+    this,
+    ...
+  ){
+
+		this$.length.param.1;
+;
+
+  },
   private=FALSE,
   protected=FALSE,
   overwrite=FALSE,
@@ -208,6 +274,190 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##	
+## Method: getLengthParam2
+##	
+setMethodS3(
+  "getLengthParam2",
+  class="FieldDeletor",
+  function(
+    this,
+    ...
+  ){
+
+		this$.length.param.2;
+;
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setLengthParam1
+##	
+setMethodS3(
+  "setLengthParam1",
+  class="FieldDeletor",
+  function(
+    this,
+		value,
+    ...
+  ){
+
+		if(missing(value)){
+			throw("No new length parameter value specified!\n");
+		}	
+		else if ((!is.numeric(value)) | (length(value) != 1 ) ) {
+			throw("The new value must be a numeric vector of length 1!\n");
+		}
+		else {
+			this$.length.param.1<-value;
+		}
 
 
+  },
+  private=TRUE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setLengthParam2
+##	
+setMethodS3(
+  "setLengthParam2",
+  class="FieldDeletor",
+  function(
+    this,
+		value,
+    ...
+  ){
+
+		if(missing(value)){
+			throw("No new length parameter value specified!\n");
+		}	
+		else if ((!is.numeric(value)) | (length(value) != 1 ) ) {
+			throw("The new value must be a numeric vector of length 1!\n");
+		}
+		else {
+			this$.length.param.2<-value;
+		}
+
+
+  },
+  private=TRUE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getToleranceMargin
+##	
+setMethodS3(
+  "getToleranceMargin",
+  class="FieldDeletor",
+  function(
+    this,
+    ...
+  ){
+
+		this$.tolerance.margin;
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setToleranceMargin
+##	
+setMethodS3(
+  "setToleranceMargin",
+  class="FieldDeletor",
+  function(
+    this,
+		value,
+    ...
+  ){
+
+		if(missing(value)){
+			throw("No new length parameter value specified!\n");
+		}	
+		else if ((!is.numeric(value)) | (length(value) != 1 ) ) {
+			throw("The new value must be a numeric vector of length 1!\n");
+		}
+		else {
+			this$.tolerance.margin<-value;
+		}
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .getScaleFactor
+##	
+setMethodS3(
+  ".getScaleFactor",
+  class="FieldDeletor",
+  function(
+    this,
+		process,
+		seq,
+    ...
+  ){
+
+		if(is.na(this$.tolerance.max)){
+
+			# Get all deletion tolerance parameters for this process:					
+			deletion.tolerance<-c();
+
+			for(site in seq$.sites){
+					if(isAttached(site, process)){
+						deletion.tolerance<-c(deletion.tolerance, getParameterAtSite(process, site, id="deletion.tolerance")$value);
+						}
+					} # for site
+
+			# Get the maximal tolerance value:
+			this$.tolerance.max<-max(deletion.tolerance);
+
+		}
+		
+		d<-this$.tolerance.max;
+		if(this$.tolerance.margin > d){
+			d<-this$.tolerance.margin;
+		}
+
+		# The type specific rate scaling factors:		
+		exp<-expression();
+
+		if(this$.type=="geometric"){
+			exp<-expression(d * (1 - this$.length.param.1) / (1 - (d * this$.length.param.1)) );
+		}
+			
+		return(eval(exp));	
+
+  },
+  private=TRUE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
 
