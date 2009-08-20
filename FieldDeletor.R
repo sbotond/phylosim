@@ -46,10 +46,10 @@ setConstructorS3(
 			.type=type,
 			.tolerance.margin=NA,
 			.tolerance.max=NA,
+			.d=NA,
 			.field.scaling.factor=NA,
 			.length.param.1=NA,
-			.length.param.2=NA,
-			.q.max=NA
+			.length.param.2=NA
     );
 
 		# Set length parameter 1 if not missing:
@@ -471,10 +471,8 @@ setMethodS3(
 
 		}
 		
-		d<-this$.tolerance.max;
-		if(this$.tolerance.margin > d){
-			d<-this$.tolerance.margin;
-		}
+		d<-max(this$.tolerance.max, this$.tolerance.margin);
+		this$.d<-d;
 
 		# The type specific rate scaling factors:		
 		exp<-expression();
