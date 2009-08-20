@@ -215,7 +215,7 @@ setMethodS3(
 
 		 # Calculate the field model specific scaling factor if it is not yet calculated:
 		 if(is.na(this$.field.scaling.factor)){
-				this$.field.scaling.factor<-.getScaleFactor(this,process=this,seq=target.site$.sequence);
+				this$.field.scaling.factor<-.getScalingFactor(this,process=this,seq=target.site$.sequence);
 		 }
 
      # Event rate is the product of the general rate, the field model scaling factor and the 
