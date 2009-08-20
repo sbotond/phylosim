@@ -16,7 +16,7 @@ setConstructorS3(
   function( 
 		name="Anonymous",
 		type="geometric",
-		length.param.1=NA,
+		length.param.1=NA,	# "Lambda"
 		length.param.2=NA,
 		tolerance.margin=0,
 		... 
@@ -28,8 +28,13 @@ setConstructorS3(
 		);
 
 		# Check if the type is valid:
-		if(length(intersect(c("geometric"),type)) != 1){
+		if(length(intersect(c("geometric","poisson","logarithmic","neg.binomial","compoisson"),type)) != 1){
 			throw("The specified field model type is invalid!\n");
+		}
+
+		# Load the compoisson package if the type is Conway-Maxwell-Poisson:
+		if(type == "compoisson" & (!require(compoisson))){
+			throw("The compoisson package cannot be loaded, so cannot use the Conway-Maxwell-Poisson density for sampling deletion lengths!\n");
 		}
 
 		# Extending as FieldDeletor:
@@ -51,7 +56,7 @@ setConstructorS3(
 		
 		# Set length parameter 2 if not missing:
 		if(!missing(length.param.2)){
-			this$lengthParam1<-length.param.2;
+			this$lengthParam2<-length.param.2;
 		}
 
 		# Set tolerance margin:
@@ -68,9 +73,27 @@ setConstructorS3(
 					if(is.na(this$.length.param.1)){
 						throw("Length parameter 1 is NA! Cannot propose length!\n");
 					}
-					
+				
+					# Type specific length sampling expressions:
+
+					# Geometric:	
 					if(this$.type == "geometric"){
 						express<-expression( rgeom(1,prob=( 1 - ( this$.length.param.1 * this$.tolerance.max) ) ) );
+					}
+				
+					# Poisson+1:	
+					if(this$.type == "poisson"){
+						express<-expression( 1 + rpois(1,lambda=(this$.length.param.1 * this$.tolerance.max) ) );
+					}
+					
+					# Negative Binomial + 1:
+					if(this$.type == "neg.binomial"){
+						express<-expression(1 + rnbinom(1,this$.length.param.2,prob=( 1 - ( this$.length.param.1 * this$.tolerance.max))) );
+					}
+					
+					# Conway-Maxwell-Poisson + 1:
+					if(this$.type == "compoisson"){
+						express<-expression(1 + rcom(1,lambda=( this$.length.param.1 * this$.tolerance.max), nu = this$.length.param.2));
 					}
 					
 					return( round( eval(express) ) );
@@ -447,8 +470,24 @@ setMethodS3(
 		# The type specific rate scaling factors:		
 		exp<-expression();
 
+		# Geometric:
 		if(this$.type=="geometric"){
 			exp<-expression(d * (1 - this$.length.param.1) / (1 - (d * this$.length.param.1)) );
+		}
+	
+		# Poisson+1:	
+		if(this$.type=="poisson"){
+			exp<-expression(d * exp( - ( this$.length.param.1 * (1 - d ) ) ) );
+		}
+
+		# Negative Binomial + 1:
+		if(this$.type=="neg.binomial"){
+			exp<-expression( d * ( ( (1 - this$.length.param.1) / (1 - (d * this$.length.param.1))) ^ this$.length.param.2) );
+		}
+	
+		# Conway-Maxwell-Poisson	+ 1:
+		if(this$.type=="compoisson"){
+			exp<-expression( d * (com.compute.z(lambda=this$.length.param.1,nu=this$.length.param.2 ) / com.compute.z(lambda=(d * this$.length.param.1),nu=this$.length.param.2 )) );
 		}
 			
 		return(eval(exp));	
