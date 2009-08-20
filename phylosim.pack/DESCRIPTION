@@ -1,0 +1,15 @@
+Package: phylosim
+Version: 0.1
+Date: 2009-08-20
+Title: R packge for simulating sequence evolution
+Author: Botond Sipos <sbotond@gmail.com>
+Maintainer: Botond Sipos <sbotond@gmail.com>
+Depends: R, R.oo, ape, compoisson
+Suggests:	 
+Imports: ape, R.oo, compoisson
+Description: R packge for simulating sequence evolution
+License: GPL-3
+URL: http://github.com/sbotond/phylosim
+DevelURL: http://github.com/sbotond/phylosim
+LazyLoad: TRUE
+Packaged: 2009-06-08 03:03:27 UTC; rforge
