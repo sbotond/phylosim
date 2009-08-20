@@ -70,7 +70,7 @@ setConstructorS3(
 
 		# Set the function proposing deletion lengths:
 
-	  this$proposeBy<-function(process,seq,pos){
+	  this$proposeBy<-function(process=NA,seq=NA,pos=NA){
 
 					# Check the length parameters:
 					if(is.na(this$.length.param.1)){
