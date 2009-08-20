@@ -619,7 +619,7 @@ setMethodS3(
 		 }
 		 insertion.event$rate<-(this$rate * rate.multiplier );
 
-		 # Set the handler for the deletion event:
+		 # Set the handler for the insertion event:
 		 .setHandler(insertion.event, this$.handler.template);
 
 		# Write protect the event object:	
