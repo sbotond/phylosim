@@ -44,6 +44,7 @@ setConstructorS3(
 			.type=type,
 			.tolerance.margin=NA,
 			.tolerance.max=NA,
+			.field.scaling.factor=NA,
 			.length.param.1=NA,
 			.length.param.2=NA,
 			.q.max=NA
@@ -212,9 +213,14 @@ setMethodS3(
      # Set the genrator process:
      deletion.event$process<-this;
 
+		 # Calculate the field model specific scaling factor if it is not yet calculated:
+		 if(is.na(this$.field.scaling.factor)){
+				this$.field.scaling.factor<-.getScaleFactor(this,process=this,seq=target.site$.sequence);
+		 }
+
      # Event rate is the product of the general rate, the field model scaling factor and the 
      # site specific rate multiplier:
-     deletion.event$rate<-(this$rate * (getParameterAtSite(this,target.site,"rate.multiplier")$value) * .getScaleFactor(this,process=this,seq=target.site$.sequence) );
+     deletion.event$rate<-(this$rate * (getParameterAtSite(this,target.site,"rate.multiplier")$value) * this$.field.scaling.factor );
 
      # Set the handler for the deletion event:
      .setHandler(deletion.event, this$.handler.template);
@@ -434,10 +440,10 @@ setMethodS3(
 );
 
 ##	
-## Method: .getScaleFactor
+## Method: .getScalingFactor
 ##	
 setMethodS3(
-  ".getScaleFactor",
+  ".getScalingFactor",
   class="FieldDeletor",
   function(
     this,
@@ -445,6 +451,7 @@ setMethodS3(
 		seq,
     ...
   ){
+
 
 		if(is.na(this$.tolerance.max)){
 
