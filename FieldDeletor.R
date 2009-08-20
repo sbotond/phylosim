@@ -27,14 +27,16 @@ setConstructorS3(
 			...
 		);
 
-		# Check if the type is valid:
+		# Check if the specified type is valid:
 		if(length(intersect(c("geometric","poisson","logarithmic","neg.binomial","compoisson"),type)) != 1){
 			throw("The specified field model type is invalid!\n");
 		}
 
 		# Load the compoisson package if the type is Conway-Maxwell-Poisson:
-		if(type == "compoisson" & (!require(compoisson))){
-			throw("The compoisson package cannot be loaded, so cannot use the Conway-Maxwell-Poisson density for sampling deletion lengths!\n");
+		if(type == "compoisson"){
+			if(!require(compoisson)){
+				throw("The compoisson package cannot be loaded, so cannot use the Conway-Maxwell-Poisson density for sampling deletion lengths!\n");
+			}
 		}
 
 		# Extending as FieldDeletor:
