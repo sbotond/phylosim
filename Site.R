@@ -1,16 +1,49 @@
-##
-##	Class: Site
-##	Descriprion: 
-##	
-##	
-##	
-##	
-##	
-##	
 ##	
 ## Copyright 2009 Botond Sipos	
 ## See the file ../COPYING for licensing issues.	
 ##	
+
+##########################################################################/** 
+
+# @RdocClass Site
+# 
+# @title "The Site class"
+# 
+# \description{ 
+#		@classhierarchy
+# 
+#	
+#	
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{state}{}
+# 	\item{alphabet}{}
+# 	\item{ancestral}{}
+# 	\item{processes}{}
+# 	\item{sequence}{}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 
+# }
+# 
+# \examples{ 
+#		site<-Site();
+#		print(site);
+#		summary(site);
+# }
+# 
+# @author
+#
+#
+# \seealso{ 
+# }
+# 
+#*/###########################################################################
+
 setConstructorS3(
 	"Site",
 	function(
