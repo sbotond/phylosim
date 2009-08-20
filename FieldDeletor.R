@@ -102,37 +102,26 @@ setConstructorS3(
 					return( round( eval(express) ) );
 
 			} # /proposeBy
-
 		
 			# Set the function performing the accept/reject step:
-			this$acceptBy<-function(process,sequence,range){
+			this$acceptBy<-function(process=NA,sequence=NA,range=NA){
 
-				# Get the deletion tolerance parameters from the proposed range:
-				deletion.tolerance<-c();
-				
-				for(site in seq$.sites[range]){
+        del.tol<-c();
+        for(site in sequence$.sites[range]){
+            # Reject if the range contains a site which is not attached to 
+            # the process:
+            if(!isAttached(site, process)){
+              return(FALSE);
+            }
+            del.tol<-c(del.tol, getParameterAtSite(process, site, "deletion.tolerance")$value);
+        }
 
-				if(isAttached(site, process)){
-
-									deletion.tolerance<-c(deletion.tolerance, getParameterAtSite(process, site, id="deletion.tolerance")$value);
-
-							} else {
-
-								# Reject the proposed deletion if that contains sites which are not attached to the process.
-								# This will create an edge effect of course! 
-								return(FALSE);
-
-							}
-					} # for site
-
-				# Calculate the acceptance probability:
-				accept.prob<-( prod(deletion.tolerance) / this$.tolerance.max);
+				# Calculate acceptance probability:			
+        accept.prob<-( prod(as.numeric(del.tol)) / this$.d );
 
         # Accept/reject:
-        return ( sample(c(TRUE,FALSE),replace=FALSE,prob=c(accept.prob,(1-accept.prob)),size=1) );
-	
-			} # /acceptBy
-			
+        return( sample(c(TRUE,FALSE),replace=FALSE,prob=c(accept.prob,(1-accept.prob)),size=1) );
+    }
 
     return(this);
 
