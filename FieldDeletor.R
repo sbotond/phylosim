@@ -159,6 +159,33 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##	
+## Method: checkConsistency
+##	
+setMethodS3(
+  "summary",
+  class="FieldDeletor",
+  function(
+    this,
+    ...
+  ){
+
+		.addSummaryNameId(this);
+		this$.summary$"Type"<-this$.type;
+		this$.summary$"Tolerance margin"<-this$.tolerance.margin;
+		this$.summary$"Length parameter 1"<-this$.length.param.1;
+		this$.summary$"Length parameter 2"<-this$.length.param.2;
+		this$.summary$"Scaling factor"<-this$.field.scaling.factor;
+    NextMethod();
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ##  
 ## Method: getEventsAtSite
 ##  
