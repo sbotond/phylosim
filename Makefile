@@ -14,12 +14,17 @@ pack: *.R rd
 	rm pack/R/*.R
 	rm FullSource.R
 	cp *.R pack/R/
+	cp RData/* pack/data/
+	cp PAMLdat/* pack/data/
 	R CMD build pack
 clean:
 	rm *.log; rm phylosim_0.1.tar.gz
-reinst:	pack
+reinst: pack
 	R CMD REMOVE	phylosim
 	R CMD INSTALL	phylosim_0.1.tar.gz
-	
-
+remove:
+	R CMD REMOVE  phylosim
+aareload: 
+	rm RData/*
+	R --vanilla < misc/recreate_aamodels.R
 

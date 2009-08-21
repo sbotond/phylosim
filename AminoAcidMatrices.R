@@ -16,6 +16,12 @@ setMethodS3(
 
 		PAMLDIR<-"PAMLdat";
 		RDATDIR<-"RData";
+
+		# Use the package data directory if loaded:
+		if(length(intersect(search(),c("package:phylosim"))) == 1){
+			RDATDIR<-paste(.path.package("phylosim"),"/data/",sep="");
+			PAMLDIR<-RDATDIR;
+		}
 		
 		rdname<-paste(RDATDIR,"/",name,".Rdgz",sep="");
 
