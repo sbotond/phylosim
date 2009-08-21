@@ -17,5 +17,9 @@ pack: *.R rd
 	R CMD build phylosim.pack
 clean:
 	rm *.log; rm phylosim_0.1.tar.gz
+reinst:	pack
+	R CMD REMOVE	phylosim
+	R CMD INSTALL	phylosim_0.1.tar.gz
+	
 
 
