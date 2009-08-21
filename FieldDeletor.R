@@ -1,12 +1,3 @@
-##
-##	Class: FieldDeletor
-##	Descriprion: 
-##	
-##	
-##	
-##	
-##	
-##	
 ##	
 ## Copyright 2009 Botond Sipos	
 ## See the file ../COPYING for licensing issues.	

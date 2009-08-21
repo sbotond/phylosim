@@ -1,12 +1,3 @@
-##
-##	Class: PhyloSim
-##	Descriprion: logging methods for the PhyloSim class.
-##	
-##	
-##	
-##	
-##	
-##	
 ##	
 ## Copyright 2009 Botond Sipos	
 ## See the file ../COPYING for licensing issues.	
