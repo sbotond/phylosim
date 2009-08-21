@@ -1,15 +1,6 @@
-##
-##	Class: DsiscreteInsertor
-##	Descriprion: 
-##	
-##	
-##	
-##	
-##	
-##	
 ##	
 ## Copyright 2009 Botond Sipos	
-## See the file ../COPYING for licensing issues.	
+## See the package description for licensing information.	
 ##	
 setConstructorS3(
   "ContinousInsertor",

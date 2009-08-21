@@ -8,7 +8,7 @@ Depends: R (>= 2.8.1), R.oo (>= 1.4.6), ape (>= 2.3), compoisson (>= 0.3)
 Suggests:	 
 Imports: ape, R.oo, compoisson
 Description: R packge for simulating biological sequence evolution
-License: GPL-3
+License: GPL-3 http://www.r-project.org/Licenses/LGPL-3
 URL: http://github.com/sbotond/phylosim
 DevelURL: http://github.com/sbotond/phylosim
 LazyLoad: TRUE
