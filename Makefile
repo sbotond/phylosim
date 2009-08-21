@@ -11,10 +11,10 @@ gt:
 rd: *.R
 	( R --vanilla < ./misc/compileman.R)
 pack: *.R rd
-	rm phylosim.pack/R/*.R
+	rm pack/R/*.R
 	rm FullSource.R
-	cp *.R phylosim.pack/R/
-	R CMD build phylosim.pack
+	cp *.R pack/R/
+	R CMD build pack
 clean:
 	rm *.log; rm phylosim_0.1.tar.gz
 reinst:	pack
