@@ -1,14 +1,14 @@
 ##########################################################################/** 
-
+#
 # @RdocClass Classname
 # 
 # @title "The class"
 # 
 # \description{ 
+#
+#
+#
 #		@classhierarchy
-# 
-#	
-#	
 # }
 #	
 # @synopsis
@@ -18,7 +18,7 @@
 #	}
 # 
 # \section{Fields and Methods}{ 
-# 
+# 	@allmethods
 # }
 # 
 # \examples{ 
@@ -27,10 +27,8 @@
 # 
 # @author
 #
-#
 # \seealso{ 
 # 	@seeclass 
 # }
 # 
 #*/###########################################################################
-

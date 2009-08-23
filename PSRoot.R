@@ -2,6 +2,36 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##
+##########################################################################/** 
+#
+# @RdocClass PSRoot
+# 
+# @title "The root class for all phylosim objects"
+# 
+# \description{ 
+#		The root class for all phylosim objects containig utility methods. 
+#		@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#		obj<-PSRoot();
+#		ll(obj);
+# }
+# 
+# @author
+#
+#
+# \seealso{ 
+# 	Object
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "PSRoot",
   function(...){

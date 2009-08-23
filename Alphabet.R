@@ -1,7 +1,55 @@
 ##	
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
-##	
+##
+##########################################################################/** 
+#
+# @RdocClass Alphabet
+# 
+# @title "The Alphabet class"
+# 
+# \description{ 
+#		Class representing an alphabet (a set of symbols).		
+#		@classhierarchy
+#	
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{symbols}{A character vector containing the symbols.}
+# 	\item{type}{An identifier for the Alphabet object.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+#		@allmethods 
+# }
+# 
+# \examples{ 
+#		# create an alphabet object
+#		a<-Alphabet(type="Binary",symbols=c("0","1"));
+#		# print summary
+#		summary(a);
+#		# change the identifier
+#		a$type<-"Nucleotide";
+#		# change the symbol set
+#		a$symbols<-c("A","T","G","C");
+#		# print summary again
+#		summary(a);
+#		# clone the alphabet object
+#		b<-clone(a);
+#		# test the equality of the symbol sets
+#		a == b;
+# }
+# 
+# @author
+#
+#
+# \seealso{ 
+# 	Site, Process, Event
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
 	"Alphabet", 
 	function(
@@ -118,6 +166,41 @@ setMethodS3(
 ##	
 ## Method: checkConsistency
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Checks the consistency of Alphabet objects"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found, throws an error otherwise. 
+# } 
+# 
+# \examples{
+#		# create an alphabet object
+#		a<-Alphabet(symbols=c(0,1));
+#		# check consistency
+#		print(checkConsistency(a));
+#		# mess up with the internals
+#		a$.symbols[1]<-"BAD";
+#		# cosistency check now will throw an error
+#		print(checkConsistency(a));
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="Alphabet", 
@@ -444,7 +527,7 @@ setMethodS3(
 		}
 			
 	},
-	private=FALSE,
+	private=TRUE,
 	protected=FALSE,
 	overwrite=FALSE,
 	conflict="warning",
@@ -459,7 +542,6 @@ setMethodS3(
 	class="Alphabet", 
 	function(
 		this,
-		value,
 		...
 	){
 		
@@ -467,7 +549,7 @@ setMethodS3(
 		else {return(invisible(FALSE))}
 			
 	},
-	private=FALSE,
+	private=TRUE,
 	protected=FALSE,
 	overwrite=FALSE,
 	conflict="warning",
