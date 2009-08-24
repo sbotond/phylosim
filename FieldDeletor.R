@@ -7,9 +7,9 @@ setConstructorS3(
   function( 
 		name="Anonymous",
 		type="geometric",
-		length.param.1=NA,	# "Lambda"
-		length.param.2=NA,
-		tolerance.margin=0,
+		length.param.1=NA,	# mostly "Lambda"
+		length.param.2=NA,	# 
+		tolerance.margin=0,	# minimum tolerance value used for scaling.
 		... 
 		)	{
 
@@ -34,13 +34,13 @@ setConstructorS3(
     this<-extend(
       this,
       "FieldDeletor",
-			.type=type,
-			.tolerance.margin=NA,
-			.tolerance.max=NA,
-			.d=NA,
-			.field.scaling.factor=NA,
-			.length.param.1=NA,
-			.length.param.2=NA
+			.type=type,									# field model flavour
+			.tolerance.margin=NA,				# minimum tolerance used for scaling
+			.tolerance.max=NA,					# maximum tolerance obseved at first call of getEventAtSites
+			.d=NA,											# is max(.tolerance.max, .tolerance.margin)
+			.field.scaling.factor=NA,		# the precalculated scaling factor
+			.length.param.1=NA,					# mostly "Lambda"
+			.length.param.2=NA					# 
     );
 
 		# Set length parameter 1 if not missing:
@@ -60,14 +60,11 @@ setConstructorS3(
 		this$name<-name;
 
 		# Set the function proposing deletion lengths:
-
 	  this$proposeBy<-function(process=NA,seq=NA,pos=NA){
 
 					# Check the length parameters:
-					if(is.na(this$.length.param.1)){
-						throw("Length parameter 1 is NA! Cannot propose length!\n");
-					}
-				
+					.checkLengthParams(this);				
+	
 					# Type specific length sampling expressions:
 
 					# Geometric:	
@@ -121,6 +118,36 @@ setConstructorS3(
 );
 
 ##	
+## Method: .checkLengthParams
+##	
+setMethodS3(
+  ".checkLengthParams",
+  class="FieldDeletor",
+  function(
+    this,
+    ...
+  ){
+
+					# Check length parameter 1:
+					if(is.na(this$.length.param.1)){
+						throw("Length parameter 1 is NA! Cannot generate events or propose lengths!\n");
+					}
+					# Check length parameter 2:
+					if(length(intersect(c("neg.binomial","compoisson"),this$.type)) != 0) {
+						if(is.na(this$.length.param.2)){
+							throw("Length parameter 1 is NA! Cannot generate events or propose lengths!\n");
+						}
+					}
+
+  },
+  private=TRUE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
 ## Method: checkConsistency
 ##	
 setMethodS3(
@@ -151,7 +178,7 @@ setMethodS3(
 );
 
 ##	
-## Method: checkConsistency
+## Method: summary.FieldDeletor
 ##	
 setMethodS3(
   "summary",
@@ -461,6 +488,8 @@ setMethodS3(
     ...
   ){
 
+		# Check if the length parameters needed for rate scaling are present:
+		.checkLengthParams(this);				
 
 		if(is.na(this$.tolerance.max)){
 
