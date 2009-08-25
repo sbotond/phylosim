@@ -358,6 +358,7 @@ setMethodS3(
   class="PhyloSim",
   function(
     this,
+		quiet=FALSE,
     ...
   ){
 
@@ -394,7 +395,7 @@ setMethodS3(
 			edge.counter<-1;
 			n.edges<-this$nedges;
 			for(edge in 1:n.edges){
-				cat("Simulating edge",edge,"of", n.edges,"\n");
+				if(!quiet){ cat("Simulating edge",edge,"of", n.edges,"\n");}
 				Log(this,paste("Starting to simulate edge",edge,"of",n.edges));	
 				simulateEdge(this,number=edge);
 				edge.counter<-edge.counter+1;
