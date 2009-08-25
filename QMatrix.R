@@ -853,7 +853,7 @@ setMethodS3(
 		...
 	){
 		
-		.virtualAssignmentForbidden(this);
+		virtualAssignmentForbidden(this);
 
 	},
 	private=FALSE,
@@ -961,7 +961,7 @@ setMethodS3(
 		...
 	){
 
-		.virtualAssignmentForbidden(this);
+		virtualAssignmentForbidden(this);
 
 	},
 	private=FALSE,
@@ -1004,7 +1004,7 @@ setMethodS3(
 		...
 	){
 
-		.virtualAssignmentForbidden(this);
+		virtualAssignmentForbidden(this);
 
 	},
 	private=FALSE,
