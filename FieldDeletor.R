@@ -13,13 +13,15 @@ setConstructorS3(
 		... 
 		)	{
 
+		ALLOWED.TYPES=c("geometric","poisson","logarithmic","neg.binomial","compoisson");	# supported types
+
 		# Creating a GeneralDeletor Process.
 		this<-GeneralDeletor(
 			...
 		);
 
 		# Check if the specified type is valid:
-		if(length(intersect(c("geometric","poisson","logarithmic","neg.binomial","compoisson"),type)) != 1){
+		if(length(intersect(ALLOWED.TYPES,type)) != 1){
 			throw("The specified field model type is invalid!\n");
 		}
 
@@ -40,7 +42,8 @@ setConstructorS3(
 			.d=NA,											# is max(.tolerance.max, .tolerance.margin)
 			.field.scaling.factor=NA,		# the precalculated scaling factor
 			.length.param.1=NA,					# mostly "Lambda"
-			.length.param.2=NA					# 
+			.length.param.2=NA,					# 
+			.ALLOWED.TYPES=ALLOWED.TYPES# supported types
     );
 
 		# Set length parameter 1 if not missing:
@@ -164,7 +167,33 @@ setMethodS3(
       }
 
       may.fail<-function(this) {
-
+				
+				# Check if the type is valid:
+				if(length(intersect(this$.ALLOWED.TYPES, this$.type)) != 1){
+					throw("The specified field model type is invalid!\n");
+				}
+				if((!is.numeric(this$.tolerance.margin) & !is.na(this$.tolerance.margin))){
+					throw("Tolerance margin is invalid!\n");
+				}
+				if((!is.numeric(this$.tolerance.max) & !is.na(this$.tolerance.max))){
+					throw(".tolerance.max is invalid!\n");
+				}
+				if((!is.numeric(this$.d) & !is.na(this$.d))){
+					throw(".d is invalid!\n");
+				} else if(!is.na(this$.tolerance.margin) & !is.na(this$.tolerance.max)) {
+						if(this$.d != max(this$.tolerance.margin, this$.tolerance.max)){
+							throw(".d is inconsistent!\n");
+						}
+				}
+				if((!is.numeric(this$.field.scaling.factor) & !is.na(this$.field.scaling.factor))){
+					throw(".field.scaling.factor is invalid!\n");
+				}
+				if((!is.numeric(this$.length.param.1) & !is.na(this$.length.param.1))){
+					throw("Length parameter 1 is invalid!\n");
+				}
+				if((!is.numeric(this$.length.param.2) & !is.na(this$.length.param.2))){
+					throw("Length parameter 2 is invalid!\n");
+				}
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
       NextMethod();
