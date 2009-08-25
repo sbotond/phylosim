@@ -421,7 +421,7 @@ setMethodS3(
 		} # /for i				
 	
 	
-		lapply(to.detach, function(process) {detachProcessSloppy(this,process)});
+		lapply(to.detach, function(process) {detachProcess(this,process)});
 		lapply(to.attach, function(process) {.attachProcessSloppy(this,process)});
 	
 		invisible(this);

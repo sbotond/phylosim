@@ -783,10 +783,10 @@ setMethodS3(
 			throw("Cannot get rate as the rate matrix is undefined!\n");
 		}
 		else if(!missing(name) & missing(from) & missing(to)){
-			return(getRate(this$.q.matrix, name=name, value=value));
+			return(getRate(this$.q.matrix, name=name));
 		}
 		else if (missing(name) & !missing(from) & !missing(to)){
-			return(getRate(this$.q.matrix, from=from, to=to, value=value));
+			return(getRate(this$.q.matrix, from=from, to=to));
 		}
 
 
