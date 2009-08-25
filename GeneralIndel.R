@@ -12,8 +12,7 @@ setConstructorS3(
 		... 
 		)	{
 
-		any.alphabet<-Alphabet(type="*ANY*");
-		any.alphabet$.any.flag<-TRUE;
+		any.alphabet<-AnyAlphabet();
 		this<-Process(
 			alphabet=any.alphabet
 		);

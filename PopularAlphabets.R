@@ -4,6 +4,23 @@
 ##	
 
 ##
+## AnyAlphabet
+##
+setConstructorS3(
+  "AnyAlphabet",
+  function(... ){
+
+		this<-Alphabet(type="*ANY*",symbols=c());
+		extend(this,
+			"AnyAlphabet",
+			 .any.flag=TRUE
+			);
+
+  },
+  enforceRCC=TRUE
+);
+
+##
 ## BinaryAlphabet
 ##
 setConstructorS3(
