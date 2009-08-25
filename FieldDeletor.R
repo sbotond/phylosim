@@ -409,6 +409,8 @@ setMethodS3(
 			throw("The new value must be a numeric vector of length 1!\n");
 		}
 		else {
+			# First set the scaling factor to NA to force the recalculation:
+			this$.field.scaling.factor<-NA;
 			this$.length.param.1<-value;
 		}
 
@@ -440,6 +442,8 @@ setMethodS3(
 			throw("The new value must be a numeric vector of length 1!\n");
 		}
 		else {
+			# First set the scaling factor to NA to force the recalculation:
+			this$.field.scaling.factor<-NA;
 			this$.length.param.2<-value;
 		}
 
@@ -492,6 +496,8 @@ setMethodS3(
 			throw("The new value must be a numeric vector of length 1!\n");
 		}
 		else {
+			# First set the scaling factor to NA to force the recalculation:
+			this$.field.scaling.factor<-NA;
 			this$.tolerance.margin<-value;
 		}
 
