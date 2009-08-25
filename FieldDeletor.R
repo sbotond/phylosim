@@ -11,59 +11,59 @@ setConstructorS3(
 		length.param.2=NA,	# 
 		tolerance.margin=0,	# minimum tolerance value used for scaling.
 		... 
-		)	{
+	)	{
 
-		ALLOWED.TYPES=c("geometric","poisson","logarithmic","neg.binomial","compoisson");	# supported types
+			ALLOWED.TYPES=c("geometric","poisson","logarithmic","neg.binomial","compoisson");	# supported types
 
-		# Creating a GeneralDeletor Process.
-		this<-GeneralDeletor(
-			...
-		);
+			# Creating a GeneralDeletor Process.
+			this<-GeneralDeletor(
+				...
+			);
 
-		# Check if the specified type is valid:
-		if(length(intersect(ALLOWED.TYPES,type)) != 1){
-			throw("The specified field model type is invalid!\n");
-		}
-
-		# Load the compoisson package if the type is Conway-Maxwell-Poisson:
-		if(type == "compoisson"){
-			if(!require(compoisson)){
-				throw("The compoisson package cannot be loaded, so cannot use the Conway-Maxwell-Poisson density for sampling deletion lengths!\n");
+			# Check if the specified type is valid:
+			if(length(intersect(ALLOWED.TYPES,type)) != 1){
+				throw("The specified field model type is invalid!\n");
 			}
-		}
 
-		# Extending as FieldDeletor:
-    this<-extend(
-      this,
-      "FieldDeletor",
-			.type=type,									# field model flavour
-			.tolerance.margin=NA,				# minimum tolerance used for scaling
-			.tolerance.max=NA,					# maximum tolerance obseved at first call of getEventAtSites
-			.d=NA,											# is max(.tolerance.max, .tolerance.margin)
-			.field.scaling.factor=NA,		# the precalculated scaling factor
-			.length.param.1=NA,					# mostly "Lambda"
-			.length.param.2=NA,					# 
-			.ALLOWED.TYPES=ALLOWED.TYPES# supported types
-    );
+			# Load the compoisson package if the type is Conway-Maxwell-Poisson:
+			if(type == "compoisson"){
+				if(!require(compoisson)){
+					throw("The compoisson package cannot be loaded, so cannot use the Conway-Maxwell-Poisson density for sampling deletion lengths!\n");
+				}
+			}
 
-		# Set length parameter 1 if not missing:
-		if(!missing(length.param.1)){
-			this$lengthParam1<-length.param.1;
-		}
+			# Extending as FieldDeletor:
+    	this<-extend(
+      	this,
+      	"FieldDeletor",
+				.type=type,									# field model flavour
+				.tolerance.margin=NA,				# minimum tolerance used for scaling
+				.tolerance.max=NA,					# maximum tolerance obseved at first call of getEventAtSites
+				.d=NA,											# is max(.tolerance.max, .tolerance.margin)
+				.field.scaling.factor=NA,		# the precalculated scaling factor
+				.length.param.1=NA,					# mostly "Lambda"
+				.length.param.2=NA,					# 
+				.ALLOWED.TYPES=ALLOWED.TYPES# supported types
+    	);
+
+			# Set length parameter 1 if not missing:
+			if(!missing(length.param.1)){
+				this$lengthParam1<-length.param.1;
+			}
 		
-		# Set length parameter 2 if not missing:
-		if(!missing(length.param.2)){
-			this$lengthParam2<-length.param.2;
-		}
+			# Set length parameter 2 if not missing:
+			if(!missing(length.param.2)){
+				this$lengthParam2<-length.param.2;
+			}
 
-		# Set tolerance margin:
-		setToleranceMargin(this, tolerance.margin);
+			# Set tolerance margin:
+			setToleranceMargin(this, tolerance.margin);
 
-		# Using virtual field to clear Id cache:
-		this$name<-name;
+			# Using virtual field to clear Id cache:
+			this$name<-name;
 
-		# Set the function proposing deletion lengths:
-	  this$proposeBy<-function(process=NA,seq=NA,pos=NA){
+			# Set the function proposing deletion lengths:
+	  	this$proposeBy<-function(process=NA,seq=NA,pos=NA){
 
 					# Check the length parameters:
 					.checkLengthParams(this);				
