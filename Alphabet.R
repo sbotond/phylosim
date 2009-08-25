@@ -189,8 +189,8 @@ setMethodS3(
 #		print(checkConsistency(a));
 #		# mess up with the internals
 #		a$.symbols[1]<-"BAD";
-#		# cosistency check now will throw an error
-#		print(checkConsistency(a));
+#		# NOT run: cosistency check now will throw an error
+#		\dontrun{ print(checkConsistency(a)); }
 #
 # } 
 # 
