@@ -150,8 +150,10 @@ setMethodS3(
 		}
 		else {
 
+			.checkTipLabels(value);
 			this$.phylo<-value;
 			this$.phylo<-reorder(this$.phylo, order="cladewise");
+			# Check if the leaf names doesn't conflict with the internal node names:
 			for (i in this$nodes){
 				this$.sequences[[i]]<-NA;
 			}
@@ -160,6 +162,35 @@ setMethodS3(
 
 	},
 	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setPhylo
+##	
+setMethodS3(
+	".checkTipLabels", 
+	class="phylo", 
+	function(
+		this,
+		...
+	){
+
+		for(label in this$tip.label){
+			if(length(grep("^Node \\d+$",label,perl=TRUE,value=FALSE,extended=TRUE)) > 0){
+					throw("Sorry, but the node labels matching \"Node \\d+\" are reserved for internal nodes! Blaming label: ",label,".\n");	
+			}
+			else if(length(grep("^Root Node \\d+$",label,perl=TRUE,value=FALSE,extended=TRUE)) > 0){
+					throw("Sorry, but the node labels matching \"Root Node \\d+\" are reserved for the root node! Blaming label: ",label,".\n");	
+			}
+			
+		}
+
+	},
+	private=TRUE,
 	protected=FALSE,
 	overwrite=FALSE,
 	conflict="warning",
