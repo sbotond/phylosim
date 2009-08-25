@@ -578,3 +578,29 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##
+## Method: setParameterAtSite.FieldDeletor
+##
+setMethodS3(
+  "setParameterAtSite",
+  class="FieldDeletor",
+  function(
+    this,
+    site,
+    id,
+		value,
+		...
+  ){
+			if(value < 0 | value > 1)	{
+				throw("The field deletion model accepts deletion tolerance only from the [0,1] interval!\n");
+			}
+			NextMethod();
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
