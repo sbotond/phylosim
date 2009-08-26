@@ -2147,7 +2147,7 @@ setMethodS3(
 				index<-seq(along=this$.sites);
 			}
 
-			prop.table(table(as.character(lapply(this$.sites[index],getState(site)))));
+			prop.table(table(as.character(lapply(this$.sites[index],getState))));
 		
 	},
 	private=FALSE,
