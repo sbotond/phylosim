@@ -4478,7 +4478,8 @@ CODON.TABLES<-list(
 	this<-extend(this,
 		"CodonAlphabet",
 		.table.id=table.id,
-		.trans.table=CODON.TABLES[[table.id]]$trans
+		.trans.table=CODON.TABLES[[table.id]]$trans,
+		.is.codon.alphabet=TRUE
 		);
 
 		return(this);
@@ -4843,7 +4844,9 @@ setMethodS3(
   ){
 
     if(!is.PSRoot(this)) {return(FALSE)}
-    if ( inherits(this, "CodonAlphabet")) {
+		else if(!is.null(this$.is.codon.alphabet)){return(TRUE)}
+    else if ( inherits(this, "CodonAlphabet")) {
+			this$.is.codon.alphabet<-TRUE;
       return(TRUE);
     } else {
       return(FALSE)
@@ -4856,5 +4859,4 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
-
 

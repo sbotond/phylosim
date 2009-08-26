@@ -265,7 +265,6 @@ setMethodS3(
 			throw("Alphabet object compared to something else!");
 		}
 		# Check ANY flag:
-		# FIXME - this is not elegant!
 		if(!is.null(this$.any.flag) | !is.null(that$.any.flag)) { return(TRUE) }
 		# then check by value:
 		setequal(this$.symbols,that$.symbols);	
