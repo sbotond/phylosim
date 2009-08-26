@@ -4779,7 +4779,7 @@ setMethodS3(
     ...
   ){
 
-		# FIXME
+		NextMethod();
 
   },
   private=FALSE,
