@@ -2127,3 +2127,33 @@ setMethodS3(
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##	
+## Method: getSymbolFreqs
+##	
+setMethodS3(
+	"getSymbolFreqs", 
+	class="Sequence", 
+	function(
+		this,
+		process,
+		index,
+		...
+	){
+		
+			if(!missing(index)){
+				index<-.checkIndexSanity(this, index);
+			} else {
+				index<-seq(along=this$.sites);
+			}
+
+			prop.table(table(as.character(lapply(this$.sites[index],getState(site)))));
+		
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
