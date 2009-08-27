@@ -472,7 +472,6 @@ setMethodS3(
     ...
   ){
 
-		# FIXME - some safe speedup here!	
 		if(!is.object(this)) {return(FALSE)}
 		inherits(this,"PSRoot");
 		
