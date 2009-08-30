@@ -712,3 +712,104 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+# FIXME - Reference here!
+
+##  
+## Method: omegaVarM0 - one ratio
+##  
+setMethodS3(
+  "omegaVarM0",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+    omega,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+    else if(missing(omega)){
+      throw("No new omega value specified!\n");
+    }
+    else if((!is.numeric(omega))| (length(omega) != 1)){
+      throw("The new value must be a numeric vector of length 1!\n");
+    }
+    else {
+
+      if(missing(index)){
+        index<-seq(along=this$.sites);
+      }
+      else {
+        index<-.checkIndexSanity(this, index);
+      }
+
+      setParameterAtSites(this, process=process, id="omega",value=omega,index=index);
+
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: omegaVarM1 - neutral
+##  
+setMethodS3(
+  "omegaVarM1",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+    p0,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0))| (length(p0) != 1)){
+      throw("The new value must be a numeric vector of length 1!\n");
+    }
+		else if(p0 < 0 | p0 > 1){
+			throw("The p0 parameter must be in the [0,1] interval!\n");
+		}
+    else {
+
+      if(missing(index)){
+        index<-seq(along=this$.sites);
+      }
+      else {
+        index<-.checkIndexSanity(this, index);
+      }
+
+			for(site in this$.sites[index]){
+				setParameterAtSite(this=process,site=site, id="omega", value=sample(c(0,1), size=1, replace=FALSE, prob=c(p0,(1-p0))));	
+			}
+
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
