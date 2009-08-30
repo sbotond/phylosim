@@ -816,3 +816,75 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##  
+## Method: omegaVarM2 - selection
+##  
+setMethodS3(
+  "omegaVarM2",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+    p0,
+		p1,
+		omega,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0))| (length(p0) != 1)){
+      throw("The p0 value must be a numeric vector of length 1!\n");
+    }
+		else if(p0 < 0 | p0 > 1){
+			throw("The p0 parameter must be in the [0,1] interval!\n");
+		}
+    else if(missing(p1)){
+      throw("No p1 value specified!\n");
+    }
+    else if((!is.numeric(p1))| (length(p1) != 1)){
+      throw("The p1 value must be a numeric vector of length 1!\n");
+    }
+		else if(p1 < 0 | p1 > 1){
+			throw("The p1 parameter must be in the [0,1] interval!\n");
+		}
+    else if(missing(omega)){
+      throw("No omega value specified!\n");
+    }
+    else if((!is.numeric(omega))| (length(omega) != 1)){
+      throw("The omega value must be a numeric vector of length 1!\n");
+    }
+		else if(omega < 0){
+			throw("The omega parameter must be greater than zero!\n");
+		}
+    else {
+
+      if(missing(index)){
+        index<-seq(along=this$.sites);
+      }
+      else {
+        index<-.checkIndexSanity(this, index);
+      }
+
+			for(site in this$.sites[index]){
+				setParameterAtSite(this=process,site=site, id="omega", value=sample(c(0,1,omega), size=1, replace=FALSE, prob=c(p0,p1,(1-p0-p1))));	
+			}
+
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
