@@ -741,6 +741,9 @@ setMethodS3(
     else if((!is.numeric(omega))| (length(omega) != 1)){
       throw("The new value must be a numeric vector of length 1!\n");
     }
+		else if(omega < 0){
+			throw("The omega parameter must be greater than zero!\n");
+		}
     else {
 
       if(missing(index)){
