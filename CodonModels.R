@@ -1162,3 +1162,63 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##  
+## Method: omegaVarM7 - beta
+##  
+setMethodS3(
+  "omegaVarM7",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p,
+		q,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+    else if(missing(p)){
+      throw("No p value specified!\n");
+    }
+    else if((!is.numeric(p)) | (length(p) != 1)){
+      throw("The p parameter must be a numeric vector of length 1!\n");
+    }
+		else if(p < 0){
+			throw("The p parameter must be greater than zero!\n");
+		}
+    else if(missing(q)){
+      throw("No q value specified!\n");
+    }
+    else if((!is.numeric(q)) | (length(q) != 1)){
+      throw("The q parameter must be a numeric vector of length 1!\n");
+    }
+		else if(q < 0){
+			throw("The q parameter must be positive!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=rbeta(1,shape1=p,shape2=q));	
+		}
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
