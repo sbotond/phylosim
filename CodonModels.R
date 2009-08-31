@@ -1030,22 +1030,22 @@ setMethodS3(
       throw("The sepcified process is not a NY98 codon substitution process!\n");
     }
     else if(missing(alpha)){
-      throw("No alpha (scale) value specified!\n");
+      throw("No alpha (shape) value specified!\n");
     }
     else if((!is.numeric(alpha)) | (length(alpha) != 1)){
-      throw("The alpha (scale) parameter must be a numeric vector of length 1!\n");
+      throw("The alpha (shape) parameter must be a numeric vector of length 1!\n");
     }
 		else if(alpha < 0){
-			throw("The alpha (scale) must be greater than zero!\n");
+			throw("The alpha (shape) must be greater than zero!\n");
 		}
     else if(missing(beta)){
-      throw("No beta (shape) value specified!\n");
+      throw("No beta (scale) value specified!\n");
     }
     else if((!is.numeric(beta)) | (length(beta) != 1)){
-      throw("The beta (shape) parameter must be a numeric vector of length 1!\n");
+      throw("The beta (scale) parameter must be a numeric vector of length 1!\n");
     }
 		else if(beta <= 0){
-			throw("The beta (shape) must be greater than zero!\n");
+			throw("The beta (scale) must be strictly positive!\n");
 		}
 
     if(missing(index)){
@@ -1057,6 +1057,97 @@ setMethodS3(
 
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=rgamma(1,shape=alpha,scale=beta));	
+		}
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: omegaVarM6 - 2gamma
+##  
+setMethodS3(
+  "omegaVarM6",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		alpha0,
+		beta0,
+		alpha1,
+		beta1,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("p0 must be in the [0,1] interval!\n");
+		}
+    else if(missing(alpha0)){
+      throw("No alpha0 (shape0) value specified!\n");
+    }
+    else if((!is.numeric(alpha0)) | (length(alpha0) != 1)){
+      throw("The alpha0 (shape0) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(alpha0 < 0){
+			throw("The alpha0 (shape0) must be greater than zero!\n");
+		}
+    else if(missing(beta0)){
+      throw("No beta0 (scale0) value specified!\n");
+    }
+    else if((!is.numeric(beta0)) | (length(beta0) != 1)){
+      throw("The beta0 (scale0) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(beta0 <= 0){
+			throw("The beta0 (scale0) must be greater than zero!\n");
+		}
+    else if(missing(alpha1)){
+      throw("No alpha1 (shape1) value specified!\n");
+    }
+    else if((!is.numeric(alpha1)) | (length(alpha1) != 1)){
+      throw("The alpha1 (shape1) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(alpha1 < 0){
+			throw("The alpha1 (shape1) must be greater than zero!\n");
+		}
+    else if(missing(beta1)){
+      throw("No beta1 (scale1) value specified!\n");
+    }
+    else if((!is.numeric(beta1)) | (length(beta1) != 1)){
+      throw("The beta1 (scale1) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(beta1 <= 0){
+			throw("The beta1 (scale1) must be greater than zero!\n");
+		}
+
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rgamma(1,shape=alpha0,scale=beta0),rgamma(1,shape=alpha1,scale=beta1)),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
 		}
 
 
