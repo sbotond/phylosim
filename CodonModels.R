@@ -1302,3 +1302,94 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##  
+## Method: omegaVarM9 - beta&gamma
+##  
+setMethodS3(
+  "omegaVarM9",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		p,
+		q,
+		alpha,
+		beta,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("p0 must be in the [0,1] interval!\n");
+		}
+    else if(missing(p)){
+      throw("No p value specified!\n");
+    }
+    else if((!is.numeric(p)) | (length(p) != 1)){
+      throw("The p parameter must be a numeric vector of length 1!\n");
+    }
+		else if(p < 0){
+			throw("The p must be greater than zero!\n");
+		}
+    else if(missing(q)){
+      throw("No q value specified!\n");
+    }
+    else if((!is.numeric(q)) | (length(q) != 1)){
+      throw("The q parameter must be a numeric vector of length 1!\n");
+    }
+		else if(q < 0){
+			throw("The q must be greater than zero!\n");
+		}
+    else if(missing(alpha)){
+      throw("No alpha (shape) value specified!\n");
+    }
+    else if((!is.numeric(alpha)) | (length(alpha) != 1)){
+      throw("The alpha (shape) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(alpha < 0){
+			throw("The alpha (shape) must be greater than zero!\n");
+		}
+    else if(missing(beta)){
+      throw("No beta (scale) value specified!\n");
+    }
+    else if((!is.numeric(beta)) | (length(beta) != 1)){
+      throw("The beta (scale) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(beta <= 0){
+			throw("The beta (scale) must be strictly positive!\n");
+		}
+
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q),rgamma(1,shape=alpha,scale=beta)),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
+		}
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
