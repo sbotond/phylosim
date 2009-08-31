@@ -1121,7 +1121,7 @@ setMethodS3(
       throw("The beta0 (scale0) parameter must be a numeric vector of length 1!\n");
     }
 		else if(beta0 <= 0){
-			throw("The beta0 (scale0) must be greater than zero!\n");
+			throw("The beta0 (scale0) must be strictly positive!\n");
 		}
     else if(missing(alpha1)){
       throw("No alpha1 (shape1) value specified!\n");
@@ -1139,7 +1139,7 @@ setMethodS3(
       throw("The beta1 (scale1) parameter must be a numeric vector of length 1!\n");
     }
 		else if(beta1 <= 0){
-			throw("The beta1 (scale1) must be greater than zero!\n");
+			throw("The beta1 (scale1) must be strictly positive!\n");
 		}
 
 
