@@ -1007,3 +1007,65 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##  
+## Method: omegaVarM5 - gamma
+##  
+setMethodS3(
+  "omegaVarM5",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		alpha,
+		beta,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+    else if(missing(alpha)){
+      throw("No alpha (scale) value specified!\n");
+    }
+    else if((!is.numeric(alpha)) | (length(alpha) != 1)){
+			print(length(alpha));
+			print(class(alpha));
+      throw("The alpha (scale) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(alpha < 0){
+			throw("The alpha (scale) must be greater than zero!\n");
+		}
+    else if(missing(beta)){
+      throw("No beta (shape) value specified!\n");
+    }
+    else if((!is.numeric(beta)) | (length(beta) != 1)){
+      throw("The beta (shape) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(beta <= 0){
+			throw("The beta (shape) must be greater than zero!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=rgamma(1,shape=alpha,scale=beta));	
+		}
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
