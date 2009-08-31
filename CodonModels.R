@@ -765,6 +765,12 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##
+## The omegaVarMx methods mostly follow: Yang, Z., Nielsen, R., Goldman, N., Pedersen Krabbe, A-M.
+## 2000. Codon-Substitution Models for Heterogeneous Selection Pressure at Amino Acid Sites.
+## Genetics 155:431-449.
+##
+
 ##  
 ## Method: omegaVarM1 - neutral
 ##  
