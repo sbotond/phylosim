@@ -952,3 +952,58 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##  
+## Method: omegaVarM4 - freqs
+##  
+setMethodS3(
+  "omegaVarM4",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		probs,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+		else if(missing(probs)){
+			throw("No probabilities specified!\n");
+		}
+		else if(!is.numeric(probs)){
+			throw("The omegas must be greater than zero!\n");
+		}
+		else if( length(probs) != 5){
+			throw("The length of the \"probs\" vector must be 5!\n");
+		}
+		else if(!PSRoot$all.equal(sum(probs),1.0)){
+			probs<-(probs/sum(probs));
+			warning("The provided probabilities were scaked in order to sum to one!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		omegas<-c(0,(1/3),(2/3),1,3);
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(omegas, size=1, replace=FALSE, prob=probs));	
+		}
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
