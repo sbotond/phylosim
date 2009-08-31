@@ -713,8 +713,6 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-# FIXME - Reference here!
-
 ##  
 ## Method: omegaVarM0 - one ratio
 ##  
