@@ -1033,8 +1033,6 @@ setMethodS3(
       throw("No alpha (scale) value specified!\n");
     }
     else if((!is.numeric(alpha)) | (length(alpha) != 1)){
-			print(length(alpha));
-			print(class(alpha));
       throw("The alpha (scale) parameter must be a numeric vector of length 1!\n");
     }
 		else if(alpha < 0){
