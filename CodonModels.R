@@ -666,6 +666,47 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##  
+## Method: omegaHist
+##  
+setMethodS3(
+  "omegaHist",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		breaks,
+		index,
+    ...
+  ){
+
+		if(missing(process)){
+      throw("No process given!\n");
+    }
+    else if(!is.NY98(process)){
+      throw("The specified process is not a NY98 codon substitution process!\n");
+    }
+
+		if(missing(index)){
+			index<-seq(along=this$.sites);
+		}
+
+		if(missing(breaks)){
+			hist(getOmegas(this,process,index));
+		}
+		else {
+			hist(getOmegas(this,process,index),breaks=breaks);
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ##  
 ## Method: setOmegas
 ##  
