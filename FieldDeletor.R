@@ -25,10 +25,10 @@ setConstructorS3(
 				throw("The specified field model type is invalid!\n");
 			}
 
-			# Load the compoisson package if the type is Conway-Maxwell-Poisson:
+			# Load the compoisson package if the type is Conway-Maxwell Poisson:
 			if(type == "compoisson"){
 				if(!require(compoisson)){
-					throw("The compoisson package cannot be loaded, so cannot use the Conway-Maxwell-Poisson density for sampling deletion lengths!\n");
+					throw("The compoisson package cannot be loaded, so cannot use the Conway-Maxwell Poisson density for sampling deletion lengths!\n");
 				}
 			}
 
@@ -85,7 +85,7 @@ setConstructorS3(
 						express<-expression(1 + rnbinom(1,this$.length.param.2,prob=( 1 - ( this$.length.param.1 * this$.tolerance.max))) );
 					}
 					
-					# Conway-Maxwell-Poisson + 1:
+					# Conway-Maxwell Poisson + 1:
 					else if(this$.type == "compoisson"){
 						express<-expression(1 + rcom(1,lambda=( this$.length.param.1 * this$.tolerance.max), nu = this$.length.param.2));
 					}
@@ -563,7 +563,7 @@ setMethodS3(
 			exp<-expression( d * ( ( (1 - this$.length.param.1) / (1 - (d * this$.length.param.1))) ^ this$.length.param.2) );
 		}
 	
-		# Conway-Maxwell-Poisson	+ 1:
+		# Conway-Maxwell Poisson	+ 1:
 		else if(this$.type=="compoisson"){
 			exp<-expression( d * (com.compute.z(lambda=this$.length.param.1,nu=this$.length.param.2 ) / com.compute.z(lambda=(d * this$.length.param.1),nu=this$.length.param.2 )) );
 		}
