@@ -702,6 +702,7 @@ setMethodS3(
       }
 
       setParameterAtSites(this, process=process, id="omega",value=value,index=index);
+			return(invisible(TRUE));
 
     }
 
@@ -752,6 +753,7 @@ setMethodS3(
       }
 
       setParameterAtSites(this, process=process, id="omega",value=omega,index=index);
+			return(invisible(TRUE));
 
     }
 
@@ -810,6 +812,7 @@ setMethodS3(
 			for(site in this$.sites[index]){
 				setParameterAtSite(this=process,site=site, id="omega", value=sample(c(0,1), size=1, replace=FALSE, prob=c(p0,(1-p0))));	
 			}
+			return(invisible(TRUE));
 
     }
 
@@ -882,6 +885,7 @@ setMethodS3(
 			for(site in this$.sites[index]){
 				setParameterAtSite(this=process,site=site, id="omega", value=sample(c(0,1,omega), size=1, replace=FALSE, prob=c(p0,p1,(1-p0-p1))));	
 			}
+			return(invisible(TRUE));
 
     }
 
@@ -947,6 +951,7 @@ setMethodS3(
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample(omegas, size=1, replace=FALSE, prob=probs));	
 		}
+		return(invisible(TRUE));
 
 
   },
@@ -1002,6 +1007,7 @@ setMethodS3(
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample(omegas, size=1, replace=FALSE, prob=probs));	
 		}
+		return(invisible(TRUE));
 
 
   },
@@ -1062,6 +1068,7 @@ setMethodS3(
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=rgamma(1,shape=alpha,scale=beta));	
 		}
+		return(invisible(TRUE));
 
 
   },
@@ -1153,6 +1160,7 @@ setMethodS3(
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rgamma(1,shape=alpha0,scale=beta0),rgamma(1,shape=alpha1,scale=beta1)),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
 		}
+		return(invisible(TRUE));
 
 
   },
@@ -1213,6 +1221,7 @@ setMethodS3(
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=rbeta(1,shape1=p,shape2=q));	
 		}
+		return(invisible(TRUE));
 
 
   },
@@ -1293,6 +1302,7 @@ setMethodS3(
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q),omega),size=1,replace=FALSE,prob=(c(p0,(1-p0)))));	
 		}
+		return(invisible(TRUE));
 
 
   },
@@ -1384,6 +1394,7 @@ setMethodS3(
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q),rgamma(1,shape=alpha,scale=beta)),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
 		}
+		return(invisible(TRUE));
 
 
   },
@@ -1476,6 +1487,7 @@ setMethodS3(
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q),(1 + rgamma(1,shape=alpha,scale=beta)) ),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
 		}
+		return(invisible(TRUE));
 
 
   },
@@ -1573,6 +1585,7 @@ setMethodS3(
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q), (rnorm.gt.1(mean=mean,sd=sd))),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
 		}
+		return(invisible(TRUE));
 
 
   },
