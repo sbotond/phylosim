@@ -1549,6 +1549,9 @@ setMethodS3(
     else if((!is.numeric(sd)) | (length(sd) != 1)){
       throw("The sd parameter must be a numeric vector of length 1!\n");
     }
+		else if( sd < 0){
+      throw("The sd parameter must be positive!\n");
+		}
 
     if(missing(index)){
     index<-seq(along=this$.sites);
