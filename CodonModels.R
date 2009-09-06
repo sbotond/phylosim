@@ -1582,3 +1582,105 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##  
+## Method: omegaVarM12 - 0&2normal>0
+##  
+setMethodS3(
+  "omegaVarM12",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		p1,
+		sd1,
+		mean2,
+		sd2,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.NY98(process)){
+      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("p0 must be in the [0,1] interval!\n");
+		}
+    else if(missing(p1)){
+      throw("No p1 value specified!\n");
+    }
+    else if((!is.numeric(p1)) | (length(p1) != 1)){
+      throw("The p1 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p1 < 0) | (p1 > 1)){
+			throw("p1 must be in the [0,1] interval!\n");
+		}
+    else if(missing(sd1)){
+      throw("No sd1 value specified!\n");
+    }
+    else if((!is.numeric(sd1)) | (length(sd1) != 1)){
+      throw("The sd1 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( sd1 < 0){
+      throw("The sd1 parameter must be positive!\n");
+		}
+    else if(missing(mean2)){
+      throw("No mean2 specified!\n");
+    }
+    else if((!is.numeric(mean2)) | (length(mean2) != 1)){
+      throw("The mean2 parameter must be a numeric vector of length 1!\n");
+    }
+    else if(missing(sd2)){
+      throw("No sd2 value specified!\n");
+    }
+    else if((!is.numeric(sd2)) | (length(sd2) != 1)){
+      throw("The sd2 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( sd2 < 0){
+      throw("The sd2 parameter must be positive!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		rnorm.gt.0<-function(mean=NA,sd=NA){
+			# FIXME - This is probably the most primitive way to truncate the distribution!
+			tmp<-rnorm(1,mean=mean,sd=sd);
+			while( tmp <= 0){
+				tmp<-rnorm(1,mean=mean,sd=sd);
+			};
+			return(tmp);
+		}
+
+		# It's not too elegant to fork the whole method for just shifting the gamma with 1...
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample( 
+				c(0,rnorm.gt.0(mean=1,sd=sd1),rnorm.gt.0(mean=mean2,sd=sd2)),
+				size=1,
+				replace=FALSE,
+				prob=c(p0,((1-p0)*p1),((1-p0)*(1-p1)))
+			));	
+		}
+		return(invisible(TRUE));
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
