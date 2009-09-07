@@ -1622,7 +1622,6 @@ setMethodS3(
 			return(tmp);
 		}
 
-		# It's not too elegant to fork the whole method for just shifting the gamma with 1...
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q), (rnorm.gt.1(mean=mean,sd=sd))),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
 		}
@@ -1720,7 +1719,6 @@ setMethodS3(
 			return(tmp);
 		}
 
-		# It's not too elegant to fork the whole method for just shifting the gamma with 1...
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample( 
 				c(0,rnorm.gt.0(mean=1,sd=sd1),rnorm.gt.0(mean=mean2,sd=sd2)),
@@ -1832,7 +1830,6 @@ setMethodS3(
 			return(tmp);
 		}
 
-		# It's not too elegant to fork the whole method for just shifting the gamma with 1...
 		for(site in this$.sites[index]){
 			setParameterAtSite(this=process,site=site, id="omega", value=sample( 
 				c(rnorm.gt.0(mean=0,sd=sd0),rnorm.gt.0(mean=1,sd=sd1),rnorm.gt.0(mean=mean2,sd=sd2)),
