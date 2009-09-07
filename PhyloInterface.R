@@ -507,6 +507,40 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##
+## Method: scaleTree
+##
+setMethodS3(
+  "scaleTree",
+  class="PhyloSim",
+  function(
+    this,
+		factor,
+    ...
+  ){
+
+		if(missing(factor)){
+			throw("No branch length scaling factor specified!\n");
+		} else if((!is.numeric(factor)) | (length(factor) != 1)){
+			throw("The scaling factor must be a numeric vector of length 1!\n");	
+		} else if(!is.phylo(this$.phylo)){
+			throw("The phylo object is not set or it is invalid!\n");
+		} else {
+
+			this$.phylo$edge.length<-(this$.phylo$edge.length * factor);
+			return(invisible(this));
+		
+		}
+		
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 
 
 
