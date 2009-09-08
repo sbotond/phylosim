@@ -8,6 +8,8 @@ setConstructorS3(
 		phylo=NA,
 		root.seq=NA,
 		name=NA,
+		log.file=NA,
+		log.level=-1, # no loggin is performed by default
 		... 
 		)	{
 
@@ -23,7 +25,7 @@ setConstructorS3(
 			.alignment=NA,				# the resulting alignment in fasat format.
 			.log.file=NA, 				# the name of the log file.
 			.log.connection=NA,		# connection for the log file.
-			.log.level=-1					# The default log level is -1, so no logging is performed.
+			.log.level=NA					# log level
 		);
 
 		if(!all(is.na(phylo))){
@@ -38,10 +40,17 @@ setConstructorS3(
 			this$name<-name;
 		}
 
-		# Setting default log file:
-		tmp<-this$id;
-		tmp<-gsub(":","_",tmp);
-		this$logFile<-paste(tmp,".log",sep="");
+		if(!missing(log.file)){
+			this$logFile<-log.file;
+		} else {	
+			# Setting default log file:
+			tmp<-this$id;
+			tmp<-gsub(":","_",tmp);
+			this$logFile<-paste(tmp,".log",sep="");
+		}
+
+		# Setting log level:
+		this$logLevel<-log.level;
 
 		return(this);
 
