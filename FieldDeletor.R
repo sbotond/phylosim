@@ -13,7 +13,7 @@ setConstructorS3(
 		... 
 	)	{
 
-			ALLOWED.TYPES=c("geometric","poisson","logarithmic","neg.binomial","compoisson");	# supported types
+			ALLOWED.TYPES=c("geometric","poisson","neg.binomial","compoisson");	# supported types
 
 			# Creating a GeneralDeletor Process.
 			this<-GeneralDeletor(
