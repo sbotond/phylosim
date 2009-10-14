@@ -67,27 +67,33 @@ setConstructorS3(
 
 					# Check the length parameters:
 					.checkLengthParams(this);				
+
+					# Check if this$.d is defined:
+					if(is.na(this$.d)){
+						throw("thid$.d is NA! This shouldn't happen!");;
+					}
+					d<-this$.d;
 	
 					# Type specific length sampling expressions:
 
-					# Geometric:	
+					# Geometric + 1:	
 					if(this$.type == "geometric"){
-						express<-expression(1 + rgeom(1,prob=( 1 - ( this$.length.param.1 * this$.tolerance.max) ) ) );
+						express<-expression(1 + rgeom(1,prob=( 1 - ( this$.length.param.1 * d) ) ) );
 					}
 				
 					# Poisson+1:	
 					else if(this$.type == "poisson"){
-						express<-expression( 1 + rpois(1,lambda=(this$.length.param.1 * this$.tolerance.max) ) );
+						express<-expression( 1 + rpois(1,lambda=(this$.length.param.1 * d) ) );
 					}
 					
 					# Negative Binomial + 1:
 					else if(this$.type == "neg.binomial"){
-						express<-expression(1 + rnbinom(1,this$.length.param.2,prob=( 1 - ( this$.length.param.1 * this$.tolerance.max))) );
+						express<-expression(1 + rnbinom(1,this$.length.param.2,prob=( 1 - ( this$.length.param.1 * d))) );
 					}
 					
 					# Conway-Maxwell Poisson + 1:
 					else if(this$.type == "compoisson"){
-						express<-expression(1 + rcom(1,lambda=( this$.length.param.1 * this$.tolerance.max), nu = this$.length.param.2));
+						express<-expression(1 + rcom(1,lambda=( this$.length.param.1 * d), nu = this$.length.param.2));
 					}
 					
 					return( round( eval(express) ) );
