@@ -72,7 +72,7 @@ setConstructorS3(
 
 					# Geometric:	
 					if(this$.type == "geometric"){
-						express<-expression( rgeom(1,prob=( 1 - ( this$.length.param.1 * this$.tolerance.max) ) ) );
+						express<-expression(1 + rgeom(1,prob=( 1 - ( this$.length.param.1 * this$.tolerance.max) ) ) );
 					}
 				
 					# Poisson+1:	
