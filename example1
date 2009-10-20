@@ -2,6 +2,7 @@
 library(R.oo)
 library(ape)
 source("./FullSource.R");
+# library(phylosim)	# if the package is installed
 ####################################################
 #
 # Example script file showing how to set up a very simple simulation:
