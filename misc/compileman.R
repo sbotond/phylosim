@@ -3,7 +3,7 @@ system("make cat");
 source("FullSource.R");
 
 author<-"Botond Sipos";
-dest.path<-"./pack/man";
+dest.path<-"./pkg/man";
 Rdoc$compile("./FullSource.R", destPath=dest.path,verbose=TRUE);
 
 

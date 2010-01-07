@@ -10,20 +10,20 @@ gt:
 	gitk --all
 rd: *.R
 	( R --vanilla < ./misc/compileman.R)
-pack: *.R rd
-	(rm pack/R/*.R;true)
+pkg: *.R rd
+	(rm pkg/R/*.R;true)
 	(rm FullSource.R;true)
-	cp *.R pack/R/
-	cp RData/* pack/data/
-	cp PAMLdat/* pack/data/
-	R CMD build pack
-checkpack: pack 
+	cp *.R pkg/R/
+	cp RData/* pkg/data/
+	cp PAMLdat/* pkg/data/
+	R CMD build pkg
+checkpkg: pkg 
 	R CMD check phylosim_0.1.tar.gz
 clean:
 	(rm *.log; rm phylosim_0.1.tar.gz;true)
-inst: pack
+inst: pkg
 	R CMD INSTALL	phylosim_0.1.tar.gz
-reinst: pack
+reinst: pkg
 	R CMD REMOVE	phylosim
 	R CMD INSTALL	phylosim_0.1.tar.gz
 remove:
