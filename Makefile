@@ -5,7 +5,7 @@ cat: *.R
 com: *.R
 	git commit -a
 push:
-	git push
+	git push --all
 gt:
 	gitk --all
 rd: *.R
