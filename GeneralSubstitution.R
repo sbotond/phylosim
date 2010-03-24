@@ -160,7 +160,6 @@ setMethodS3(
 	function(
 		this,
 		target.site,
-		sloppy=FALSE,
 		...
 	){
 
@@ -170,21 +169,22 @@ setMethodS3(
 
 	 if(missing(target.site)) {
       throw("No target site provided!\n");
-    } else if (!sloppy) {
+    } 
+			
+			#else if (!sloppy) {
 			# Additional checks. They can be
 			# disabled by sloppy=TRUE			
 
-      if(!is.Site(target.site)) {
-        throw("Target site invalid!\n");
-      }
-	 		else if(!is.QMatrix(this$.q.matrix)){
-				throw("Cannot provide event objects because the rate matrix is not set!\n");	
-			}
-			else if(!is.numeric(this$.equ.dist)){
-				throw("Cannot provide event objects because the equilibrium frequencies are not defined!\n");	
-			} 
-
-		} 
+      #if(!is.Site(target.site)) {
+      #  throw("Target site invalid!\n");
+      #}
+	 		#else if(!is.QMatrix(this$.q.matrix)){
+			#	throw("Cannot provide event objects because the rate matrix is not set!\n");	
+			#}
+			#else if(!is.numeric(this$.equ.dist)){
+			#	throw("Cannot provide event objects because the equilibrium frequencies are not defined!\n");	
+			#} 
+			#} 
 
 			state<-getState(target.site);
 		  # Just return an empty list if the state is NA:
