@@ -720,12 +720,9 @@ setMethodS3(
 			index<-.checkIndexSanity(this, index);	
 		}
 
-    lapply(
-      this$.sites[index],
-      function(site) {
-          attachProcess(site,process);
-      }
-    );	
+		for(i in index){
+				attachProcess(this$.sites[[i]],process);
+		}
 		return(invisible(this));
 
 	},
@@ -1571,8 +1568,6 @@ setMethodS3(
 		# Setting the ancestral sequence:
 		that$.ancestral.obj<-this;
 
-		# Setting the name:
-
 		# Resetting comments:
 		that$.comments<-list();
 
@@ -1587,7 +1582,8 @@ setMethodS3(
 			}
 		}
 
-		that$name<-paste("clone of",this$name);
+		# Setting the name:
+		that$name<-paste("clone of",this$.name);
 	
 		return(that);
 
