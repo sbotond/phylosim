@@ -199,11 +199,16 @@ setMethodS3(
 			
 			# The rate of the event is the product of the general rate and the
      	# site specific rate multiplier:
-     	rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;;
+     	rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
 
 			# Create the event objects:
 			events<-list();
 			for(name in event.names){
+				
+				# Return empty list if the rate multiplier is zero.
+     		if(rate.multiplier == 0 ) {
+      		return(list());
+     		}	
 
 		 		# Clone the event template object:
      		event<-clone(this$.event.template);
@@ -218,11 +223,6 @@ setMethodS3(
      		event$.site<-target.site;
      		# Set the target state object (good for consistency):
      		event$.target.state<-state;
-				
-				# Return empty list if the rate multiplier is zero.
-     		if(rate.multiplier == 0 ) {
-      		return(list());
-     		}	
 			
 				# Set the event rate:	
 				event$.rate<-(rate.multiplier * .getEventRateFast(this$.q.matrix, name ));	
