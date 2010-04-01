@@ -568,8 +568,7 @@ setMethodS3(
 		...
 	){
 
-		# Virtual fields disabled in getField methods!
-		procs<-getProcesses(this);
+		procs<-lapply(names(this$.processes),function(id){this$.processes[[id]][["object"]]});
 
 		tmp<-list();
 		for (p in procs) {
