@@ -100,7 +100,11 @@ setMethodS3(
 			# Identify the target site:
 			site.number<-which(seq$cumulativeRates >= E)[[1]];
 			# Get the events from the target site:
-			events<-getEvents(seq,index=site.number);
+			site<-seq$.sites[[site.number]];
+			site$.position<-site.number;
+			events<-getEvents(site);
+			site$.position<-NULL;
+			
 			# Get the rates:
 			rates<-as.numeric(lapply(
 				events,
@@ -155,7 +159,7 @@ setMethodS3(
 		} #/while
 
 		# FIXME - Calling the garbage collector:
-		gc();	
+	  gc();	
 		return(seq);
 
   },
