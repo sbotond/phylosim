@@ -60,6 +60,27 @@ setMethodS3(
 );
 
 ##
+## Method: .getParameterAtSiteFast
+##
+setMethodS3(
+  ".getParameterAtSiteFast",
+  class="Process",
+  function(
+    this,
+    site,
+    id,
+    ...
+  ){
+				site$.processes[[this$.id]]$site.params[[as.character(id)]]$value;
+  },
+  private=TRUE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
 ## Method: setParameterAtSite
 ##
 setMethodS3(
@@ -302,9 +323,10 @@ setMethodS3(
     this,
     ...
   ){
-			
-		 	lapply(names(this$.processes),function(id){this$.processes[[id]][["object"]]});
-  },
+  
+		lapply(names(this$.processes),function(id){this$.processes[[id]][["object"]]});
+		
+	},
   private=FALSE,
   protected=FALSE,
   overwrite=FALSE,
