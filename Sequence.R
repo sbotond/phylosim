@@ -1482,7 +1482,8 @@ setMethodS3(
 			if(this$.cumulative.rate.flag)	{
 				.recalculateCumulativeRates(this);	
 			}
-			getCumulativeRatesFromRange(this, this$.length);
+			#getCumulativeRatesFromRange(this, this$.length);
+			return(this$.cumulative.rates[this$.length]);
 		} else {
 			return(NA);
 		}
