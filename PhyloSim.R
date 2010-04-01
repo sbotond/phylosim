@@ -825,9 +825,13 @@ setMethodS3(
   class="PhyloSim",
   function(
     this,
-		paranoid=TRUE,
+		paranoid=PhyloSim$DEBUG,
     ...
   ){
+		
+		if(is.null(paranoid)){
+			paranoid<-FALSE;
+		}
 
 		# Refuse to build alignment if at least one of the sequences is NA:
 		for (seq in this$.sequences){
