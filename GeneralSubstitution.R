@@ -186,20 +186,20 @@ setMethodS3(
 			#} 
 			#} 
 
-			state<-getState(target.site);
+			state<-target.site$.state;
 		  # Just return an empty list if the state is NA:
 			if(is.na(state)){
 				return(list());
 			}
 
-			symbols<-this$alphabet$symbols;
+			symbols<-this$.alphabet$.symbols;
 			rest<-symbols[ which(symbols != state) ];
 			# Generate the names of the possible events:
 			event.names<-paste(state,rest,sep="->");
 			
 			# The rate of the event is the product of the general rate and the
      	# site specific rate multiplier:
-     	rate.multiplier<-getParameterAtSite(this,target.site,"rate.multiplier")$value;
+     	rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;;
 
 			# Create the event objects:
 			events<-list();
@@ -208,16 +208,16 @@ setMethodS3(
 		 		# Clone the event template object:
      		event<-clone(this$.event.template);
      		# Set event name:
-     		event$name<-name;
+     		event$.name<-name;
      		# Set the generator process:
-     		event$process<-this;
+     		event$.process<-this;
      		# Set the target position passed in a temporary field,
 				# Event objects are not aware of their posiitions in general!
      		event$.position<-target.site$.position;
      		# Set the target site:
-     		event$site<-target.site;
+     		event$.site<-target.site;
      		# Set the target state object (good for consistency):
-     		event$targetState<-state;
+     		event$.target.state<-state;
 				
 				# Return empty list if the rate multiplier is zero.
      		if(rate.multiplier == 0 ) {
@@ -225,11 +225,11 @@ setMethodS3(
      		}	
 			
 				# Set the event rate:	
-				event$rate<-(rate.multiplier * getEventRate(this$.q.matrix, name ));	
+				event$.rate<-(rate.multiplier * .getEventRateFast(this$.q.matrix, name ));	
 				# Set the handler for the substitution event:
-     		.setHandler(event, this$.handler.template);
+     		event$.handler<-this$.handler.template;
    			 # Write protect the event object:
-    		event$writeProtected<-TRUE;
+    		event$.write.protected<-TRUE;
 				# Add to events list:	
 				events<-c(events, list(event));
 
