@@ -1133,14 +1133,14 @@ setMethodS3(
 	){
 		
  		if (missing(index)) {
-      index<-seq(along=this$.sites);
+      index<-seq(along.with=this$.sites);
     } else {
         index<-.checkIndexSanity(this, index);
     }
 
 		tmp<-list();
     for (i in index){
-					# Setting the .positions filed for then Events.
+					# Setting the .positions field for then Events.
 					this$.sites[[i]]$.position<-i;
           tmp<-c(tmp, getEvents(this$.sites[[i]]));
 					# Deleting the .position field;
@@ -1574,11 +1574,11 @@ setMethodS3(
 		# Cloning sites;
 		if(this$length > 0) {
 					for (i in 1:this$.length) {
-						that$.sites[[i]]<-clone(this$.sites[[i]]);
-
-						# Calling these assignments is actually expensive!
-						that$.sites[[i]]$.ancestral<-this$.sites[[i]];
-						that$.sites[[i]]$.sequence<-that;
+						site<-this$.sites[[i]];
+						clone<-clone(site);
+						clone$.ancestral<-site;
+						clone$.sequence<-that;
+						that$.sites[[i]]<-clone;
 			}
 		}
 
