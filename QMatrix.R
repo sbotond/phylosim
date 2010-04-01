@@ -439,6 +439,31 @@ setMethodS3(
 );
 
 ##	
+## Method: .nameToDimFast
+##	
+setMethodS3(
+	".nameToDimFast", 
+	class="QMatrix", 
+	function(
+		this,
+		name,
+		...
+	){
+
+		substitution<-rbind(strsplit(name,split="->")[[1]]);
+		colnames(substitution)<-c("from","to");
+		rownames(substitution)<-c("Substitution");
+		substitution;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
 ## Method: .dimToName
 ##	
 setMethodS3(
@@ -509,6 +534,30 @@ setMethodS3(
 
 	},
 	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .getEventRateFast
+##	
+setMethodS3(
+	".getEventRateFast", 
+	class="QMatrix", 
+	function(
+		this,
+		name=NA,
+		to=NA,
+		...
+	){
+				# convert to dimnames
+				tmp<-.nameToDimFast(this, name);
+				# Return the rate from the rescaled matrix: 
+				return(this$.rate.matrix[tmp[1],tmp[2]]);
+	},
+	private=TRUE,
 	protected=FALSE,
 	overwrite=FALSE,
 	conflict="warning",
