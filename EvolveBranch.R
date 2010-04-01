@@ -100,7 +100,7 @@ setMethodS3(
 
 			# Generate a random number between zero and the bigRate:
 
-			E<-runif(1,min=0,max=seq$bigRate);
+			E<-runif(1,min=0,max=getBigRate(seq));
 
 			# Identify the target site:
 
