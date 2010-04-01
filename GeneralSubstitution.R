@@ -203,13 +203,14 @@ setMethodS3(
 
 			# Create the event objects:
 			events<-list();
-			for(name in event.names){
+			for(new.state in rest){
 				
 				# Return empty list if the rate multiplier is zero.
      		if(rate.multiplier == 0 ) {
       		return(list());
      		}	
-
+				
+				name<-paste(state,new.state,sep="->");
 		 		# Clone the event template object:
      		event<-clone(this$.event.template);
      		# Set event name:
@@ -225,7 +226,7 @@ setMethodS3(
      		event$.target.state<-state;
 			
 				# Set the event rate:	
-				event$.rate<-(rate.multiplier * .getEventRateFast(this$.q.matrix, name ));	
+				event$.rate<-(rate.multiplier * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));
 				# Set the handler for the substitution event:
      		event$.handler<-this$.handler.template;
    			 # Write protect the event object:
