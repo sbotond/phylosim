@@ -21,6 +21,44 @@ setConstructorS3(
 		# Using virtual field to clear Id cache:
 		this$name<-name;
 
+		# Set insert hook function:
+		this$insertHook<-function(seq=NA,target.seq=NA,target.pos=NA){
+			print(target.seq);
+			print(target.pos);
+			print(seq);
+		}
+	 
+		this$generateBy<-function(process=NA,length=NA,target.seq=NA,target.pos=NA){
+	
+			if(is.na(length) | (length(length) == 0) | length == 0){
+				throw("Invalid insert length!\n");
+			}	
+			else if(is.na(process$.template.seq)){
+				throw("Cannot generate insert without template sequence!\n");
+			}
+
+			times<-( ceiling( length/this$.template.seq$.length) );
+			to.delete<-( ( (this$.template.seq$.length) * times) - length);
+
+			tmp<-clone(this$.template.seq);
+		
+			if( (times-1) > 0){
+				for(i in 1:(times-1)){
+					insertSequence(tmp,process$.template.seq,tmp$length);
+				}
+			}
+
+			if(to.delete > 0){
+				deleteSubSequence(tmp,(tmp$length - to.delete + 1):tmp$length);
+			}
+			return(tmp);
+				
+	 }
+
+	if(!missing(insert.hook)){
+		this$insertHook<-insert.hook;
+	}
+
 		return(this);
   },
   enforceRCC=TRUE

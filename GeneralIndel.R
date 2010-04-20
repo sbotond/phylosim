@@ -469,7 +469,7 @@ setConstructorS3(
 							details$length<-insert$length;
 							# Call the insert hook:
 							if(is.function(this$.insert.hook)){
-								insert<-this$.insert.hook(insert,target.seq=sequence,target.pos=insert.pos);
+								insert<-this$.insert.hook(seq=insert,target.seq=sequence,target.pos=insert.pos);
 							}
 							insertSequence(sequence,insert, insert.pos,process=process);
 					}
