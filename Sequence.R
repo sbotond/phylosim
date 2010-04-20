@@ -2076,6 +2076,40 @@ setMethodS3(
 );
 
 ##	
+## Method: clearStates
+##	
+setMethodS3(
+	"clearStates", 
+	class="Sequence", 
+	function(
+		this,
+		index,
+		...
+	){
+
+		if(!missing(index)){
+			index<-.checkIndexSanity(this, index);
+		}
+		else {
+			index<-seq(along=this$.sites);
+		}
+	
+    for(site in this$.sites[index]){
+			site$.state<-NA;
+    }
+
+		return(invisible(this));
+	
+		
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
 ## Method: setOmegas
 ##	
 setMethodS3(
