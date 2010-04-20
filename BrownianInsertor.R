@@ -9,15 +9,16 @@ setConstructorS3(
 		rate=NA,
 		dist=NA,
 		max.length=NA,
+		insert.hook=NA,
 		... 
 		)	{
 
 		this<-ContinousInsertor(
 			 name=NA,
 			 rate=rate,
-			 propose.by=NA,
-    	 accept.by=NA,
-			...
+			 dist=dist,
+			 max.length=max.length,
+			 ...
 		);
     this<-extend(
       this,
@@ -105,6 +106,8 @@ setMethodS3(
       }
 
       may.fail<-function(this) {
+
+			# FIXME
 
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
