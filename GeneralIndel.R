@@ -396,7 +396,7 @@ setConstructorS3(
 
 	###	
 
-	 this$generateBy<-function(process=NA,length=NA,target.seq=NA){
+	 this$generateBy<-function(process=NA,length=NA,target.seq=NA,target.pos=NA){
 	
 			if(is.na(length) | (length(length) == 0) | length == 0){
 				throw("Invalid insert length!\n");
@@ -469,7 +469,7 @@ setConstructorS3(
 							details$length<-insert$length;
 							# Call the insert hook:
 							if(is.function(this$.insert.hook)){
-								insert<-this$.insert.hook(insert);
+								insert<-this$.insert.hook(insert,target.seq=sequence,target.pos=insert.pos);
 							}
 							insertSequence(sequence,insert, insert.pos,process=process);
 					}
