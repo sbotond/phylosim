@@ -637,13 +637,14 @@ setMethodS3(
 		this,
 		length=NA,
 		target.seq=NA,
+		target.pos=NA,
 		...
 	){
 
 		if(missing(length)){
 			length<-this$.propose.by(process=this);
 		}
-		insert<-this$.generate.by(process=this,length=length,target.seq=target.seq);
+		insert<-this$.generate.by(process=this,length=length,target.seq=target.seq,target.pos=target.pos);
 		sampleStates(insert);	
 		return(insert);	
 
