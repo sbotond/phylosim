@@ -6,18 +6,10 @@ setConstructorS3(
   "BrownianInsertor",
   function( 
 		name="Anonymous",
-		rate=NA,
-		dist=NA,
-		max.length=NA,
-		insert.hook=NA,
 		... 
 		)	{
 
 		this<-ContinousInsertor(
-			 name=NA,
-			 rate=rate,
-			 dist=dist,
-			 max.length=max.length,
 			 ...
 		);
     this<-extend(
@@ -26,17 +18,6 @@ setConstructorS3(
     );
 		# Using virtual field to clear Id cache:
 		this$name<-name;
-
-		STATIC<-TRUE;
-		if(!missing(dist)) {
-			this$dist<-dist;
-			STATIC<-FALSE;
-		}
-		
-		if(!missing(max.length)) {
-			this$.max.length<-max.length;
-			STATIC<-FALSE;
-		}
 
 		this$proposeBy<-function(process=NA,...){
 				if(!is.expression(process$.dist)){
@@ -77,13 +58,9 @@ setConstructorS3(
 				
 	 }
 
-	if(!missing(insert.hook)){
-		this$insertHook<-insert.hook;
-	}
-
 	###	
-
-    return(this);
+   
+		return(this);
   },
   enforceRCC=TRUE
 );
