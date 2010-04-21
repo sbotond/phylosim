@@ -14,44 +14,77 @@ setConstructorS3(
 		);
     
 		this<-extend(
-      this,
-      "BrownianInsertor"
-    );
+      			this,
+      			"BrownianInsertor"
+    		);
 		
 		# Using virtual field to clear Id cache:
 		this$name<-name;
 
-		# Set insert hook function:
-		this$.insert.hook<-function(seq=NA,target.seq=NA,target.pos=NA){
-			print(target.seq);
-			print(target.pos);
-			print(seq);
-			return(seq);
-		}
+		this$generateBy<-function(process=NA,length=NA,target.seq=NA,event.pos=NA,insert.pos=NA){
 	 
-		this$generateBy<-function(process=NA,length=NA,target.seq=NA,target.pos=NA){
-	
 			if(is.na(length) | (length(length) == 0) | length == 0){
 				throw("Invalid insert length!\n");
 			}	
+			
+			if(is.na(target.seq)){
+				return(NA);
+			}
+	
+			# The start and end of the Brownian path:
+			start;
+			end;
+			proc<-list();
+			
+			if( (event.pos == 1) || (event.pos == target.seq$.length) ){
+				start<-clone(target.seq$.sites[[event.pos]]);
+				start$.state=NA;
+				end<-clone(start);
+				proc<-getProcesses(start);
+				
+			} else {
+				start<-clone(target.seq$.sites[[insert.pos]]);
+				start$.state=NA;
+				end<-clone(target.seq$.sites[[insert.pos + 1]]);
+				end$.state=NA;
+			
+				proc.start<-getProcesses(start);
+				proc.end<-getProcesses(end);
 
-			this$.template.seq<-copySubSequence(target.seq,index=c(target.pos));		
-			clearStates(this$.template.seq);
-			tmp<-clone(this$.template.seq);
+				# Calculate the intersection of process list:
+			
+				proc<-PSRoot$intersect.list(proc.start,proc.end);
+				print(proc);
 
-			times<-( ceiling( length/this$.template.seq$.length) );
-			to.delete<-( ( (this$.template.seq$.length) * times) - length);
+				start$processes<-proc;
+				start$processes<-proc;
+				
+				# No common processes:
+				if(length(proc) == 0){
+					start<-sample(c(start,end),1);
+					end<-clone(start);
+					proc<-getProcesses();
+				}
 
-			if( (times-1) > 0){
-				for(i in 1:(times-1)){
-					insertSequence(tmp,process$.template.seq,tmp$length);
+			}
+		
+
+			# Create the insert sequence:			
+			class.seq<-class(target.seq)[[1]];
+			insert<-do.call(class.seq,list(length=length));
+			setProcesses(this=insert,value=list(proc),sloppy=TRUE);
+		
+			# For every process:
+			
+			for (p in proc){
+				for(param in getSiteSpecificParamIds(p)){
+					start.value<-getParameterAtSite(p,site=start,id=param)$value;
+					end.value<-getParameterAtSite(p,site=end,id=param)$value;
 				}
 			}
 
-			if(to.delete > 0){
-				deleteSubSequence(tmp,(tmp$length - to.delete + 1):tmp$length);
-			}
-			return(tmp);
+			return(insert);
+
 				
 	 }
 
