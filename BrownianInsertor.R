@@ -22,10 +22,11 @@ setConstructorS3(
 		this$name<-name;
 
 		# Set insert hook function:
-		this$insertHook<-function(seq=NA,target.seq=NA,target.pos=NA){
+		this$.insert.hook<-function(seq=NA,target.seq=NA,target.pos=NA){
 			print(target.seq);
 			print(target.pos);
 			print(seq);
+			return(seq);
 		}
 	 
 		this$generateBy<-function(process=NA,length=NA,target.seq=NA,target.pos=NA){
@@ -33,15 +34,14 @@ setConstructorS3(
 			if(is.na(length) | (length(length) == 0) | length == 0){
 				throw("Invalid insert length!\n");
 			}	
-			else if(is.na(process$.template.seq)){
-				throw("Cannot generate insert without template sequence!\n");
-			}
+
+			this$.template.seq<-copySubSequence(target.seq,index=c(target.pos));		
+			clearStates(this$.template.seq);
+			tmp<-clone(this$.template.seq);
 
 			times<-( ceiling( length/this$.template.seq$.length) );
 			to.delete<-( ( (this$.template.seq$.length) * times) - length);
 
-			tmp<-clone(this$.template.seq);
-		
 			if( (times-1) > 0){
 				for(i in 1:(times-1)){
 					insertSequence(tmp,process$.template.seq,tmp$length);
@@ -54,10 +54,6 @@ setConstructorS3(
 			return(tmp);
 				
 	 }
-
-	if(!missing(insert.hook)){
-		this$insertHook<-insert.hook;
-	}
 
 		return(this);
   },

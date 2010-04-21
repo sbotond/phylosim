@@ -465,7 +465,7 @@ setConstructorS3(
 					window<-window[ window > 0 & window <= sequence$.length];
 				  if(process$.accept.by(process=process,sequence,window)){
 							details$accepted<-TRUE;
-							insert<-generateInsert(process,target.seq=sequence,target.pos=insert.pos);
+							insert<-generateInsert(process,target.seq=sequence,target.pos=position);
 							details$length<-insert$length;
 							# Call the insert hook:
 							if(is.function(this$.insert.hook)){
