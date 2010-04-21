@@ -553,3 +553,39 @@ setMethodS3(
 	static=TRUE,
   conflict="warning"
 );
+
+##
+## Method: intersect.list.PSRoot
+##
+setMethodS3(
+  "intersect.list",
+  class="PSRoot",
+  function(
+    this,
+    one,
+    two,
+    ...
+  ){
+
+	# FIXME:
+	one<-unique(one);
+	two<-unique(two);
+	intersect<-list();
+	# Calculate the intersection of process list:
+        for (i in one){
+        	for (j in two){
+        		if(i == j) {
+        	   		intersect<-c(intersect,list(i));
+                	}
+              }
+        }
+	return(intersect);
+		
+		
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+	static=TRUE,
+  conflict="warning"
+);
