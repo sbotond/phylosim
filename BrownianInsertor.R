@@ -94,6 +94,47 @@ setMethodS3(
 );
 
 ##
+## Method: BrownianPath.PSRoot
+##
+setMethodS3(
+  "BrownianPath",
+  class="PSRoot",
+  function(
+	this,
+	p=NA,
+	a=NA,
+    	...
+  ){
+
+	generate_brownian<-function(length, a){
+		cumsum(rnorm(length,0,sd=a));
+	}
+
+	generate_bridge <- function (length,a){
+		b <- generate_brownian(length,a)
+		b - (1:length)/(length) * b[length]
+	}
+
+	generate_path <- function (p,a){
+		n <- length(p);
+		b <- generate_bridge (n+1,a);
+		p + b[1:n];
+	}
+
+	generate_path(p,a);
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+        static=TRUE,
+  conflict="warning"
+);
+
+
+
+##
 ## Method: summary
 ##
 setMethodS3(
