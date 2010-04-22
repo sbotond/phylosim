@@ -19,6 +19,7 @@
 # \arguments{
 # 	\item{symbols}{A character vector containing the symbols.}
 # 	\item{type}{An identifier for the Alphabet object.}
+#	\item{...}{Not used.}
 #	}
 # 
 # \section{Fields and Methods}{ 

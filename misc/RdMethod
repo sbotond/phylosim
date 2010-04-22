@@ -12,6 +12,7 @@
 # 
 # \arguments{ 
 # 	\item{}{} 
+# 	\item{...}{Not used.} 
 # } 
 # 
 # \value{ 

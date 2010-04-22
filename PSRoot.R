@@ -14,6 +14,10 @@
 # }
 #	
 # @synopsis
+#
+# \arguments{
+#   \item{...}{Not used.}
+# }
 #	
 # \section{Fields and Methods}{ 
 # 	@allmethods
