@@ -6,17 +6,29 @@ setConstructorS3(
   "BrownianInsertor",
   function( 
 		name="Anonymous",
+		type="discrete",
 		... 
 		)	{
 
-		this<-ContinousInsertor(
+		if(type == "continous"){
+			this<-ContinousInsertor(
 			 ...
-		);
+			);
+		}
+		else if (type == "discrete") {
+			this<-DiscreteInsertor(
+			 ...
+			);
+		}
+		else {
+			throw("Invalid insertor process type!\n");
+		}
     
 		this<-extend(
       			this,
       			"BrownianInsertor",
-			.scale = 0.01
+			.scale = 0.001,
+			.type  = type
     		);
 		
 		# Using virtual field to clear Id cache:
