@@ -226,12 +226,12 @@ setMethodS3(
   "plot",
   class="ContinousInsertor",
   function(
-    this,
-		sample.size=NA,
+    x,
+    sample.size=NA,
     ...
   ){
 
-		
+		this<-x;		
 		if( !is.numeric(this$maxLength) | !is.expression(this$dist) ){
 				warning("Insertion length distribution is not defined properly! Nothing to plot here!\n");
 				return();
@@ -274,11 +274,11 @@ setMethodS3(
   "summary",
   class="ContinousInsertor",
   function(
-    this,
-    value,
+    object,
     ...
   ){
 
+    this<-object;	
     .addSummaryNameId(this);
 
     this$.summary$"Length sampling expression"<-deparse(this$dist);

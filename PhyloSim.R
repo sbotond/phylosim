@@ -290,12 +290,11 @@ setMethodS3(
 	"as.character", 
 	class="PhyloSim", 
 	function(
-		this,
-		value,
+		x,
 		...
 	){
 
-		return(getId(this));
+		return(getId(x));
 
 	},
 	private=FALSE,
@@ -1282,16 +1281,15 @@ setMethodS3(
   "plot",
   class="PhyloSim",
   function(
-    this,
-    value,
+    x,
     ...
   ){
 
-		plot(this$.phylo);
+		plot(x$.phylo);
 		nodelabels();
 		#add.scale.bar();
 
-		return(invisible(this));
+		return(invisible(x));
 
   },
   private=FALSE,
@@ -1308,10 +1306,11 @@ setMethodS3(
   "summary",
   class="PhyloSim",
   function(
-    this,
+    object,
     ...
   ){
 
+     this<-object;
      this$.summary$"Name"<-this$name;
      this$.summary$"Id"<-this$id;
 

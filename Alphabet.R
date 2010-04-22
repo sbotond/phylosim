@@ -253,21 +253,21 @@ setMethodS3(
 	"==", 
 	class="Alphabet", 
 	function(
-		this,	
-		that,
+		e1,	
+		e2,
 		...
 	){
-	
+
 		# First check by reference:
-		if ( equals(this,that) ) {return(TRUE)}
+		if ( equals(e1,e2) ) {return(TRUE)}
 		# Check if both objects inherit from Alphabet:
-		if (!length(intersect(intersect(class(this),class(that)),c("Alphabet")))){
+		if (!length(intersect(intersect(class(e1),class(e2)),c("Alphabet")))){
 			throw("Alphabet object compared to something else!");
 		}
 		# Check ANY flag:
-		if(!is.null(this$.any.flag) | !is.null(that$.any.flag)) { return(TRUE) }
+		if(!is.null(e1$.any.flag) | !is.null(e2$.any.flag)) { return(TRUE) }
 		# then check by value:
-		setequal(this$.symbols,that$.symbols);	
+		setequal(e1$.symbols,e2$.symbols);	
 
 	},
 	private=FALSE,
@@ -284,11 +284,11 @@ setMethodS3(
 	"!=", 
 	class="Alphabet", 
 	function(
-		this,	
-		that,
+		e1,	
+		e2,
 		...
 	){
-		!'=='(this,that);
+		!'=='(e1,e2);
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -584,11 +584,11 @@ setMethodS3(
 	"as.character", 
 	class="Alphabet", 
 	function(
-		this,
+		x,
 		...
 	){
 
-		this$.symbols;				
+		x$.symbols;				
 
 	},
 	private=FALSE,
@@ -605,10 +605,11 @@ setMethodS3(
 	"summary", 
 	class="Alphabet", 
 	function(
-		this,
+		object,
 		...
 	){
-		
+	
+			this<-object;	
 			this$.summary$Type<-this$type;
 			this$.summary$Size<-this$size;
 			this$.summary$Symbols<-paste(this$symbols,collapse=' ');

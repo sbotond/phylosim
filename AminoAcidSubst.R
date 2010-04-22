@@ -385,11 +385,11 @@ setMethodS3(
   "summary",
   class="AminoAcidSubst",
   function(
-    this,
-    value,
+    object,
     ...
   ){
 
+    this<-object;
     .addSummaryNameId(this);
     .addSummaryAlphabet(this);
 

@@ -1715,10 +1715,11 @@ setMethodS3(
 	"summary", 
 	class="Sequence", 
 	function(
-		this,
+		object,
 		...
 	){
 
+		 this<-object;
 		 this$.summary$"Name"<-this$name;
 		 this$.summary$"Id"<-this$id;
 		 this$.summary$"Length"<-this$length;
@@ -1755,11 +1756,11 @@ setMethodS3(
 	"as.character", 
 	class="Sequence", 
 	function(
-		this,
+		x,
 		...
 	){
 
-		getString(this);
+		getString(x);
 
 	},
 	private=FALSE,
@@ -1776,12 +1777,12 @@ setMethodS3(
 	"plot", 
 	class="Sequence", 
 	function(
-		this,
+		x,
 		index=NA,
 		...
 	){
-
-
+  
+    this<-x;
     if(this$length == 0) {
       warning("The sequence leght is zero, nothing to plot here!\n");
       return(invisible(FALSE));

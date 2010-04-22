@@ -1105,11 +1105,11 @@ setMethodS3(
 	"as.character", 
 	class="QMatrix", 
 	function(
-		this,
+		x,
 		...
 	){
 		
-		this$id
+		x$id
 
 	},
 	private=FALSE,
@@ -1126,12 +1126,11 @@ setMethodS3(
 	"print", 
 	class="QMatrix", 
 	function(
-		this,
-		value,
+		x,
 		...
 	){
 
-		print.default(this$.orig.matrix);
+		print.default(x$.orig.matrix);
 
 	},
 	private=FALSE,
@@ -1148,11 +1147,11 @@ setMethodS3(
 	"summary", 
 	class="QMatrix", 
 	function(
-		this,
-		value,
+		object,
 		...
 	){
 
+		this<-object;
 		this$.summary$"Name"<-this$name;
 		this$.summary$"Id"<-this$id;
 		this$.summary$"Attached to process"<-this$process;

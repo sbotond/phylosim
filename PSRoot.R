@@ -336,11 +336,15 @@ setMethodS3(
   "all.equal",
   class="PSRoot",
   function(
-    this,
-		one,
-		two,
+    static,
+    target,
+    current,
     ...
   ){
+
+		static;
+		one<-target;
+		two<-current;
 
 		TOLERANCE<-.Machine$double.eps ^ 0.5;
 		if(missing(one) | missing (two)){
@@ -367,25 +371,15 @@ setMethodS3(
   "summary",
   class="PSRoot",
   function(
-    this,
-		verbose=FALSE,
+    object,
     ...
   ){
-		
+		this<-object;	
 		# Adding the Comments field:
 		if(length(this$.comments) > 0 ) {
 		this$.summary$Comments<-paste(this$.comments, collapse=", ");
 		}
-		# Adding ll() output in verbose mode:
-		if(verbose == TRUE ) {
-
-			tmp<-ll(this,quiet=TRUE);
-			tmp<-strsplit(tmp,split="\n",extended=TRUE)[[1]];
-			tmp<-paste(tmp, collapse="\n  ");
-		  this$.summary$"\nObject information"<-tmp;
-
-		}
-	
+		
 		obj<-PSRootSummary(summary=this$.summary);
 		this$.summary<-list();
 		# Return a summary object:
@@ -421,13 +415,14 @@ setConstructorS3(
 setMethodS3(
   "print",
   class="PSRootSummary",
+  appendVarArgs=FALSE,
   function(
-    this,
+    x,
     ...
   ){
-	
-		cat("\n");
-		for (i in names(this)){
+	this<-x;
+	cat("\n");
+	for (i in names(this)){
         cat(paste(i,": ",this[[i]],"\n",sep=""));
    	}
 		cat("\n");
@@ -447,7 +442,7 @@ setMethodS3(
   "is.na",
   class="PSRoot",
   function(
-    this,
+    x,
     ...
   ){
 		

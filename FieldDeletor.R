@@ -219,10 +219,11 @@ setMethodS3(
   "summary",
   class="FieldDeletor",
   function(
-    this,
+    object,
     ...
   ){
 
+		this<-object;
 		.addSummaryNameId(this);
 		this$.summary$"Type"<-this$.type;
 		this$.summary$"Tolerance margin"<-this$.tolerance.margin;

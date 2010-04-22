@@ -4775,7 +4775,7 @@ setMethodS3(
   "summary",
   class="CodonAlphabet",
   function(
-    this,
+    object,
     ...
   ){
 

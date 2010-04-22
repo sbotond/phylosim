@@ -228,11 +228,10 @@ setMethodS3(
 	"plot", 
 	class="DiscreteInsertor", 
 	function(
-		this,
-		value,
+		x,
 		...
 	){
-
+			this<-x;
 			if( !is.numeric(this$sizes) | !is.numeric(this$probs) ){
 				warning("Insertion length distribution is not defined properly! Nothing to plot here!\n");
 				return();
@@ -266,11 +265,11 @@ setMethodS3(
   "summary",
   class="DiscreteInsertor",
   function(
-    this,
-    value,
+    object,
     ...
   ){
 
+    this<-object;
     .addSummaryNameId(this);
 
     expected.length<-NA;

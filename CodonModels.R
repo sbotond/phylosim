@@ -617,10 +617,11 @@ setMethodS3(
   "summary",
   class="NY98",
   function(
-    this,
+    object,
     ...
   ){
 
+    this<-object;
     .addSummaryNameId(this);
 		this$.summary$"Kappa"<-this$.kappa;
 		this$.summary$"Genetic code table id"<-this$.alphabet$tableId;

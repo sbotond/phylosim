@@ -669,11 +669,11 @@ setMethodS3(
 	"as.character", 
 	class="Event", 
 	function(
-		this,
-		new.rate,
+		x,
 		...
 	){
-
+		
+		this<-x;
 		procid<-NA;
 		if(!is.na(this$.process)){
 			procid<-this$.process$id;
@@ -695,11 +695,11 @@ setMethodS3(
 	"summary", 
 	class="Event", 
 	function(
-		this,
-		new.rate,
+		object,
 		...
 	){
-			
+		
+		this<-object;	
 		this$.summary$"Name"<-this$.name;	
 		this$.summary$"Rate"<-this$.rate;	
 

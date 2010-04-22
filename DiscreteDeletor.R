@@ -226,11 +226,11 @@ setMethodS3(
 	"summary", 
 	class="DiscreteDeletor", 
 	function(
-		this,
-		value,
+		object,
 		...
 	){
 
+		this<-object;
 		.addSummaryNameId(this);
 
 		expected.length<-NA;	
@@ -260,11 +260,10 @@ setMethodS3(
 	"plot", 
 	class="DiscreteDeletor", 
 	function(
-		this,
-		value,
+		x,
 		...
 	){
-
+			this<-x;
 			if( !is.numeric(this$sizes) | !is.numeric(this$probs) ){
 				warning("Deletion length distribution is not defined properly! Nothing to plot here!\n");
 				return();

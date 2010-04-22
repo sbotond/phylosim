@@ -176,11 +176,11 @@ setMethodS3(
 	"as.character", 
 	class="AlphabetsList", 
 	function(
-		this,
+		x,
 		...
 	){
 		
-		this[];	
+		x[];	
 	
 	},
 	private=FALSE,

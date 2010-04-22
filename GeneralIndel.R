@@ -311,13 +311,12 @@ setMethodS3(
 	"summary", 
 	class="GeneralInDel", 
 	function(
-		this,
-		value,
+		object,
 		...
 	){
 	
-		.addSummaryNameId(this);
-		this$.summary$"General rate"<-this$rate;
+		.addSummaryNameId(object);
+		object$.summary$"General rate"<-object$rate;
 		NextMethod();
 
 	},
@@ -844,12 +843,12 @@ setMethodS3(
 	"summary", 
 	class="GeneralInsertor", 
 	function(
-		this,
+		object,
 		...
 	){
 
-		.addSummaryNameId(this);
-		this$.summary$"Accept window size"<-this$.accept.win;
+		.addSummaryNameId(object);
+		object$.summary$"Accept window size"<-object$.accept.win;
 		NextMethod();
 
 	},
@@ -1092,11 +1091,11 @@ setMethodS3(
 	"summary", 
 	class="GeneralDeletor", 
 	function(
-		this,
+		object,
 		...
 	){
 
-		.addSummaryNameId(this);
+		.addSummaryNameId(object);
 		NextMethod();
 
 	},

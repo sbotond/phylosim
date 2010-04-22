@@ -182,12 +182,12 @@ setMethodS3(
   "==",
   class="Process",
   function(
-    this,
-		that,
+    e1,
+    e2,
     ...
   ){
 		
-		equals(this, that);
+		equals(e1, e2);
 
   },
   private=FALSE,
@@ -204,12 +204,12 @@ setMethodS3(
   "!=",
   class="Process",
   function(
-    this,
-		that,
+    e1,
+    e2,
     ...
   ){
 		
-		!equals(this, that);
+		!equals(e1, e2);
 
   },
   private=FALSE,
@@ -643,10 +643,10 @@ setMethodS3(
 	"as.character", 
 	class="Process", 
 	function(
-		this,
+		x,
 		...	
 	){
-			this$id;
+			x$id;
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -716,10 +716,10 @@ setMethodS3(
 	"summary", 
 	class="Process", 
 	function(
-		this,
+		object,
 		...	
 	){
-
+		this<-object;
 		.addSummaryNameId(this);
 
 		# Skip the alphabet for InDel processes
@@ -734,11 +734,11 @@ setMethodS3(
 			for (id in names(param_list)) {
 					param<-param_list[[id]];	
 					tmp<-paste(tmp,
-												"\n  Id: ",id,
-												"\n  Name: ",param$name,
-												"\n  Type: ",param$type,
-												"\n  Default value: ",param$value,
-												sep=""
+						"\n  Id: ",id,
+						"\n  Name: ",param$name,
+						"\n  Type: ",param$type,
+						"\n  Default value: ",param$value,
+						sep=""
 										);
 										counter<-counter+1;
 										if ( counter < length(param_list) ){

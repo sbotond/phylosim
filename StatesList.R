@@ -175,11 +175,11 @@ setMethodS3(
 	"as.character", 
 	class="StatesList", 
 	function(
-		this,
+		x,
 		...
 	){
 		
-		this[];	
+		x[];	
 	
 	},
 	private=FALSE,

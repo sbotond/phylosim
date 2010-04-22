@@ -586,10 +586,11 @@ setMethodS3(
 	"summary", 
 	class="GTR", 
 	function(
-		this,
+		object,
 		...
 	){
 
+		this<-object;
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "GTR") {
@@ -878,10 +879,10 @@ setMethodS3(
 	"summary", 
 	class="TN93", 
 	function(
-		this,
+		object,
 		...
 	){
-
+		this<-object;
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "TN93") {
@@ -1165,10 +1166,11 @@ setMethodS3(
 	"summary", 
 	class="HKY", 
 	function(
-		this,
+		object,
 		...
 	){
-
+		
+		this<-object;
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "HKY") {
@@ -1388,7 +1390,7 @@ setMethodS3(
 	"summary", 
 	class="F81", 
 	function(
-		this,
+		object,
 		...
 	){
 
@@ -1676,10 +1678,11 @@ setMethodS3(
 	"summary", 
 	class="K80", 
 	function(
-		this,
+		object,
 		...
 	){
 
+		this<-object;
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "K80") {
@@ -1971,10 +1974,10 @@ setMethodS3(
 	"summary", 
 	class="K81", 
 	function(
-		this,
+		object,
 		...
 	){
-
+		this<-object;
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "K81") {
@@ -2301,10 +2304,10 @@ setMethodS3(
 	"summary", 
 	class="T92", 
 	function(
-		this,
+		object,
 		...
 	){
-
+		this<-object;
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "T92") {
@@ -2640,10 +2643,10 @@ setMethodS3(
 	"summary", 
 	class="F84", 
 	function(
-		this,
+		object,
 		...
 	){
-
+		this<-object;
 		.addSummaryNameId(this);
     .addSummaryAlphabet(this);
 		if (class(this)[[1]] == "F84") {

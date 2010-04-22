@@ -1016,12 +1016,11 @@ setMethodS3(
 	"as.character",
 	class="GeneralSubstitution", 
 	function(
-		this,
-		value,
+		x,
 		...
 	){
 
-		this$id;
+		x$id;
 
 	},
 	private=FALSE,
@@ -1038,11 +1037,11 @@ setMethodS3(
 	"summary", 
 	class="GeneralSubstitution", 
 	function(
-		this,
-		value,
+		object,
 		...
 	){
-	
+
+		this<-object;	
 		.addSummaryNameId(this);
 		.addSummaryAlphabet(this);
 		

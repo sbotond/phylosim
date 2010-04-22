@@ -657,11 +657,11 @@ setMethodS3(
 	"as.character", 
 	class="Site", 
 	function(
-		this,
+		x,
 		...
 	){
 
-		this$state;		
+		x$state;		
 
 	},
 	private=FALSE,
@@ -678,11 +678,10 @@ setMethodS3(
 	"summary", 
 	class="Site", 
 	function(
-		this,
-		verbose=FALSE,
+		object,
 		...
 	){
-
+			this<-object;
 			this$.summary$"State"=this$state;
 			if(!is.na(this$alphabet)) {
 			alphabet_symbols = paste(this$alphabet$symbols,collapse=" ");

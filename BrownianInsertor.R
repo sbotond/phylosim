@@ -303,11 +303,10 @@ setMethodS3(
   "summary",
   class="BrownianInsertor",
   function(
-    this,
-    value,
+    object,
     ...
   ){
-
+	this<-object;
     	.addSummaryNameId(this);
 	this$.summary$"Type"<-this$.type;
 	this$.summary$"Brownian path scale parameter"<-this$.scale;
