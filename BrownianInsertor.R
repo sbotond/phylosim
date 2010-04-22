@@ -203,6 +203,98 @@ setMethodS3(
 );
 
 
+##	
+## Method: getType
+##	
+setMethodS3(
+	"getType", 
+	class="BrownianInsertor", 
+	function(
+		this,
+		...
+	){
+
+		this$.type;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setType
+##	
+setMethodS3(
+	"setType", 
+	class="BrownianInsertor", 
+	function(
+		this,
+		new_type,
+		...
+	){
+
+		throw("The type of the BrownianInsertor objects can be set only from the constructor!\n");
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getScale
+##	
+setMethodS3(
+	"getScale", 
+	class="BrownianInsertor", 
+	function(
+		this,
+		...
+	){
+
+		this$.scale;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setScale
+##	
+setMethodS3(
+	"setScale", 
+	class="BrownianInsertor", 
+	function(
+		this,
+		value,
+		...
+	){
+
+
+		.checkWriteProtection(this);	
+		if(!is.numeric(value) || (length(value) != 1)){
+			throw("The value of the scale paramter must be a numeric vector of length 1!\n");
+		}
+		this$.scale<-value;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
 
 ##
 ## Method: summary
