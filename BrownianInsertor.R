@@ -308,9 +308,11 @@ setMethodS3(
     ...
   ){
 
-    .addSummaryNameId(this);
-
-    NextMethod();
+    	.addSummaryNameId(this);
+	this$.summary$"Type"<-this$.type;
+	this$.summary$"Brownian path scale parameter"<-this$.scale;
+	
+    	NextMethod();
 
   },
   private=FALSE,
