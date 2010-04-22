@@ -367,14 +367,14 @@ setMethodS3(
 
 				# Single transition:
 				if( all(diff == sort(c(0,0,"TI"))) ){
-					if( !PSRoot$all.equal ( this$.q.matrix$.orig.matrix[from, to], (this$.kappa * this$.equ.dist[1,to]) ) ){
+					if( !PSRoot$my.all.equal ( this$.q.matrix$.orig.matrix[from, to], (this$.kappa * this$.equ.dist[1,to]) ) ){
 							throw("NY98 rate inconsistency. From:",from," To:",to,"!\n");
 
 						}
 				}
 				# Single transversion:
 				else if( all(diff == sort(c(0,0,"TV"))) ){
-					if( !PSRoot$all.equal ( this$.q.matrix$.orig.matrix[from, to], (this$.equ.dist[1,to]) ) ){
+					if( !PSRoot$my.all.equal ( this$.q.matrix$.orig.matrix[from, to], (this$.equ.dist[1,to]) ) ){
 					  throw("NY98 rate inconsistency. From:",from," To:",to,"!\n");
 					}
 				}
@@ -979,7 +979,7 @@ setMethodS3(
 		else if(length(omegas) != length(probs)){
 			throw("The length of the \"omegas\" and \"probs\" vector must be the same!\n");
 		}
-		else if(!PSRoot$all.equal(sum(probs),1.0)){
+		else if(!PSRoot$my.all.equal(sum(probs),1.0)){
 			probs<-(probs/sum(probs));
 			warning("The provided probabilities were scaked in order to sum to one!\n");
 		}
@@ -1034,7 +1034,7 @@ setMethodS3(
 		else if( length(probs) != 5){
 			throw("The length of the \"probs\" vector must be 5!\n");
 		}
-		else if(!PSRoot$all.equal(sum(probs),1.0)){
+		else if(!PSRoot$my.all.equal(sum(probs),1.0)){
 			probs<-(probs/sum(probs));
 			warning("The provided probabilities were scaked in order to sum to one!\n");
 		}

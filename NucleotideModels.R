@@ -247,18 +247,18 @@ setMethodS3(
 				rates<-this$.q.matrix$Matrix;
 		
 						if (	
-                 !PSRoot$all.equal( rates[["T","C"]] , (this$.gtr.params[["a"]] * this$.equ.dist[1,"C"] ) )|
-                 !PSRoot$all.equal( rates[["C","T"]] , (this$.gtr.params[["a"]] * this$.equ.dist[1,"T"] )	)|
-                 !PSRoot$all.equal( rates[["T","A"]] , (this$.gtr.params[["b"]] * this$.equ.dist[1,"A"] )	)|
-                 !PSRoot$all.equal( rates[["A","T"]] , (this$.gtr.params[["b"]] * this$.equ.dist[1,"T"] )	)|
-                 !PSRoot$all.equal( rates[["T","G"]] , (this$.gtr.params[["c"]] * this$.equ.dist[1,"G"] )	)|
-                 !PSRoot$all.equal( rates[["G","T"]] , (this$.gtr.params[["c"]] * this$.equ.dist[1,"T"] )	)|
-								 !PSRoot$all.equal( rates[["C","A"]] , (this$.gtr.params[["d"]] * this$.equ.dist[1,"A"] )	)|
-                 !PSRoot$all.equal( rates[["A","C"]] , (this$.gtr.params[["d"]] * this$.equ.dist[1,"C"] )	)|
-                 !PSRoot$all.equal( rates[["C","G"]] , (this$.gtr.params[["e"]] * this$.equ.dist[1,"G"] )	)|
-                 !PSRoot$all.equal( rates[["G","C"]] , (this$.gtr.params[["e"]] * this$.equ.dist[1,"C"] )	)|
-                 !PSRoot$all.equal( rates[["A","G"]] , (this$.gtr.params[["f"]] * this$.equ.dist[1,"G"] )	)|
-                 !PSRoot$all.equal( rates[["G","A"]] , (this$.gtr.params[["f"]] * this$.equ.dist[1,"A"] )	)
+                 !PSRoot$my.all.equal( rates[["T","C"]] , (this$.gtr.params[["a"]] * this$.equ.dist[1,"C"] ) )|
+                 !PSRoot$my.all.equal( rates[["C","T"]] , (this$.gtr.params[["a"]] * this$.equ.dist[1,"T"] )	)|
+                 !PSRoot$my.all.equal( rates[["T","A"]] , (this$.gtr.params[["b"]] * this$.equ.dist[1,"A"] )	)|
+                 !PSRoot$my.all.equal( rates[["A","T"]] , (this$.gtr.params[["b"]] * this$.equ.dist[1,"T"] )	)|
+                 !PSRoot$my.all.equal( rates[["T","G"]] , (this$.gtr.params[["c"]] * this$.equ.dist[1,"G"] )	)|
+                 !PSRoot$my.all.equal( rates[["G","T"]] , (this$.gtr.params[["c"]] * this$.equ.dist[1,"T"] )	)|
+		 !PSRoot$my.all.equal( rates[["C","A"]] , (this$.gtr.params[["d"]] * this$.equ.dist[1,"A"] )	)|
+                 !PSRoot$my.all.equal( rates[["A","C"]] , (this$.gtr.params[["d"]] * this$.equ.dist[1,"C"] )	)|
+                 !PSRoot$my.all.equal( rates[["C","G"]] , (this$.gtr.params[["e"]] * this$.equ.dist[1,"G"] )	)|
+                 !PSRoot$my.all.equal( rates[["G","C"]] , (this$.gtr.params[["e"]] * this$.equ.dist[1,"C"] )	)|
+                 !PSRoot$my.all.equal( rates[["A","G"]] , (this$.gtr.params[["f"]] * this$.equ.dist[1,"G"] )	)|
+                 !PSRoot$my.all.equal( rates[["G","A"]] , (this$.gtr.params[["f"]] * this$.equ.dist[1,"A"] )	)
 						) {
 						
 								throw("Rate matrix is not consistent with the GTR rate parameters!\n");
@@ -2279,7 +2279,7 @@ setMethodS3(
 							((this$.theta)/2)		  # G
 						);
 					
-						if(any(!PSRoot$all.equal(base.freqs, this$equDist))){
+						if(any(!PSRoot$my.all.equal(base.freqs, this$equDist))){
 								throw("Equlibrium distribution is not consistent with the theta value!\n");
 						}
 
@@ -2618,7 +2618,7 @@ setMethodS3(
           "f"=(1 + (kappa/r) )
         );
 
-				if(any(names(gtr.params) != names(this$.gtr.params)) | any(!PSRoot$all.equal(as.numeric(gtr.params), as.numeric(this$.gtr.params) ) )){
+				if(any(names(gtr.params) != names(this$.gtr.params)) | any(!PSRoot$my.all.equal(as.numeric(gtr.params), as.numeric(this$.gtr.params) ) )){
 						throw("The Kappa value is not consistent with the GTR rate parameters!\n");
 				}
 

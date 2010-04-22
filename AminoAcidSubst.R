@@ -133,7 +133,7 @@ setMethodS3(
 						if(i != j){
 								expected<-this$.s.matrix[i, j] * this$.equ.dist[1,j];
 								actual<-this$.q.matrix$.orig.matrix[i,j];
-								if(!PSRoot$all.equal(expected, actual)){
+								if(!PSRoot$my.all.equal(expected, actual)){
 									throw("The rate matrix is not compatible with the exchangeability matrix and the equilibrium distribution!\n");
 								}
 						}
@@ -347,7 +347,7 @@ setMethodS3(
     else if(length(value) != this$alphabet$size){
       throw("The new value must be a vector of length ",this$alphabet$size,"!\n");
     }
-    else if(!PSRoot$all.equal(sum(value), 1.0)) {
+    else if(!PSRoot$my.all.equal(sum(value), 1.0)) {
         value<-(value/sum(value));
         if (silent == FALSE){
           warning("The provided probabilities were rescaled in order to sum to one!\n");

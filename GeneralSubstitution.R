@@ -272,7 +272,7 @@ setMethodS3(
     else if(length(value) != this$alphabet$size){
       throw("The new value must be a vector of length ",this$alphabet$size,"!\n");
     }
-    else if(!PSRoot$all.equal(sum(value), 1.0)) {
+    else if(!PSRoot$my.all.equal(sum(value), 1.0)) {
 				value<-(value/sum(value));
 				if (silent == FALSE){
 					warning("The provided probabilities were rescaled in order to sum to one!\n");
@@ -357,7 +357,7 @@ setMethodS3(
 			# The following matrix product of the equlibrium distribution
 			# and the rate matrix should give the zero vector:
 			tmp<-(rbind(value) %*% as.matrix(this$.q.matrix$.orig.matrix));
-			if(PSRoot$all.equal(tmp, rep(0.0, times=length(tmp))) ){
+			if(PSRoot$my.all.equal(tmp, rep(0.0, times=length(tmp))) ){
 				return(invisible(TRUE));
 			} else {
 				return(FALSE);

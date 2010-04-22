@@ -160,7 +160,7 @@ setMethodS3(
 
 				# Check the normalization:
 				if(is.matrix(this$.orig.matrix) & is.matrix(this$.rate.matrix) & COMPLETE ){
-						if(!PSRoot$all.equal(this$.rate.matrix, (this$.norm.const * this$.orig.matrix)) ){
+						if(!PSRoot$my.all.equal(this$.rate.matrix, (this$.norm.const * this$.orig.matrix)) ){
 							throw("The scaled matrix is inconsistent with the original matrix and the normalizing constant!\n");
 						}
 				}

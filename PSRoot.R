@@ -330,10 +330,10 @@ setMethodS3(
 );
 
 ##
-## Method: PSRoot$all.equal
+## Method: PSRoot$my.all.equal
 ##
 setMethodS3(
-  "all.equal",
+  "my.all.equal",
   class="PSRoot",
   function(
     static,
