@@ -23,7 +23,7 @@ setMethodS3(
 			PAMLDIR<-RDATDIR;
 		}
 		
-		rdname<-paste(RDATDIR,"/",name,".Rdgz",sep="");
+		rdname<-paste(RDATDIR,"/",name,".RData",sep="");
 
 		if( ( file.access(c(rdname), mode=0) == c(0) ) & (file.access(c(rdname), mode=4) == c(0))){
 			this<-clone(Object$load(rdname));
