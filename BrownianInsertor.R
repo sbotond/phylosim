@@ -15,7 +15,8 @@ setConstructorS3(
     
 		this<-extend(
       			this,
-      			"BrownianInsertor"
+      			"BrownianInsertor",
+			.scale = 0.01
     		);
 		
 		# Using virtual field to clear Id cache:
@@ -32,17 +33,20 @@ setConstructorS3(
 			}
 	
 			# The start and end of the Brownian path:
+
 			start;
 			end;
 			proc<-list();
 			
 			if( (event.pos == 1) || (event.pos == target.seq$.length) ){
+
 				start<-clone(target.seq$.sites[[event.pos]]);
 				start$.state=NA;
 				end<-clone(start);
 				proc<-getProcesses(start);
 				
 			} else {
+
 				start<-clone(target.seq$.sites[[insert.pos]]);
 				start$.state=NA;
 				end<-clone(target.seq$.sites[[insert.pos + 1]]);
@@ -54,12 +58,12 @@ setConstructorS3(
 				# Calculate the intersection of process list:
 			
 				proc<-PSRoot$intersect.list(proc.start,proc.end);
-				print(proc);
 
 				start$processes<-proc;
 				start$processes<-proc;
 				
 				# No common processes:
+
 				if(length(proc) == 0){
 					start<-sample(c(start,end),1);
 					end<-clone(start);
@@ -70,23 +74,44 @@ setConstructorS3(
 		
 
 			# Create the insert sequence:			
+
 			class.seq<-class(target.seq)[[1]];
 			insert<-do.call(class.seq,list(length=length));
 			setProcesses(this=insert,value=list(proc),sloppy=TRUE);
-		
-			# For every process:
+
+			# For every process...
 			
 			for (p in proc){
+				
+				# ... and site specific parameter:	
 				for(param in getSiteSpecificParamIds(p)){
+					
 					start.value<-getParameterAtSite(p,site=start,id=param)$value;
 					end.value<-getParameterAtSite(p,site=end,id=param)$value;
+					
+					path<-seq(from=start.value,to=end.value,length.out=(insert$.length + 2));
+					path<-path[2:(length(path)-1)];
+					brownian.path<-abs(PSRoot$BrownianPath(p=path, a=this$.scale));
+		
+					# Tolerance values are probabilities, do not alow them to wander beyond 1:	
+					if(param == "insertion.tolerance" || param == "deletion.tolerance"){
+						brownian.path[which(brownian.path > 1)]<-1;	
+					}
+
+					setParameterAtSites(
+						insert,
+						process	= p,
+						id	= param,
+						value	= brownian.path 
+					);	
+					
 				}
 			}
 
 			return(insert);
 
 				
-	 }
+	 	}
 
 		return(this);
   },
@@ -154,7 +179,7 @@ setMethodS3(
 		p + b[1:n];
 	}
 
-	generate_path(p,a);
+	return(generate_path(p,a));
 
 
   },
