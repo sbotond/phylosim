@@ -36,14 +36,14 @@ setConstructorS3(
 
 		this$generateBy<-function(process=NA,length=NA,target.seq=NA,event.pos=NA,insert.pos=NA){
 	 
+			if(is.na(target.seq)){
+				return(NA);
+			}
+			
 			if(is.na(length) | (length(length) == 0) | length == 0){
 				throw("Invalid insert length!\n");
 			}	
 			
-			if(is.na(target.seq)){
-				return(NA);
-			}
-	
 			# The start and end of the Brownian path:
 
 			start;
@@ -148,8 +148,11 @@ setMethodS3(
       }
 
       may.fail<-function(this) {
-
-			# FIXME
+		
+	this$scale<-this$scale;
+	if( (this$.type != "discrete") && (this$.type != "continous") ){
+		throw("BrownianInsertor type is invalid!\n");
+	}
 
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
