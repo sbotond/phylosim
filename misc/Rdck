@@ -1,0 +1,27 @@
+##	
+## Method: checkConsistency
+##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Checks the consistency of  objects"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
