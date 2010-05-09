@@ -17,7 +17,8 @@
 # @synopsis
 #	
 # \arguments{
-# 	\item{symbols}{A character vector containing the symbols.}
+# 	\item{symbols}{A character vector containing the symbols. All elements must have the 
+#	same length. No duplicates are allowed. The elements may not contain the dash symbol, which is reserved for gaps.}
 # 	\item{type}{An identifier for the Alphabet object.}
 #	\item{...}{Not used.}
 #	}
@@ -55,7 +56,7 @@ setConstructorS3(
 	"Alphabet", 
 	function(
 		symbols=NA,
-		type="Generic", # just a name
+		type="Generic",
 		...	
 	){
 
@@ -301,6 +302,44 @@ setMethodS3(
 ##	
 ## Method: getSymbols
 ##	
+###########################################################################/**
+#
+# @RdocMethod getSymbols
+# 
+# @title "Get the symbol set from an Alphabet object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#	A character vector containing the symbol set of the Alphabet object.
+# } 
+# 
+# \examples{
+#	
+#	# create a new alphabet object
+#	a<-Alphabet(symbols=c("AC","GT"));
+#	# get the symbols
+#	getSymbols(a)
+#	# get the symbols by using the virtual field
+#	a$symbols
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getSymbols", 
 	class="Alphabet", 
@@ -322,6 +361,50 @@ setMethodS3(
 ##	
 ## Method: setSymbols
 ##	
+###########################################################################/**
+#
+# @RdocMethod setSymbols
+# 
+# @title "Specify a new symbol set for an Alphabet object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+# 	\item{set}{The vector containing the new symbols set, automatically converted 
+#	into a character vector.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new symbol set as a character vector.
+# } 
+# 
+# \examples{
+#
+#	# create a new alphabet object	
+#	a<-Alphabet()
+#	a
+#	# specify a new symbol set
+#	setSymbols(a,c(0,1))
+#	a
+#	# the same, but now use the virtual field
+#	a$symbols<-c("A","T","G","C")
+#	a
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setSymbols", 
 	class="Alphabet", 
