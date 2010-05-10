@@ -59,6 +59,30 @@ setConstructorS3(
 ##	
 ## Method: checkConsistency
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "checkConsistency",
   class="ContinousDeletor",

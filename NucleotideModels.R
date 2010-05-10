@@ -68,6 +68,30 @@ setConstructorS3(
 ##	
 ## Method: checkConsistency
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="UNREST", 
@@ -136,6 +160,30 @@ setConstructorS3(
 ##	
 ## Method: checkConsistency
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="JC69", 
@@ -223,6 +271,30 @@ setConstructorS3(
 ##	
 ## Method: checkConsistency
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="GTR", 
@@ -827,6 +899,30 @@ setMethodS3(
 ##	
 ## Method: checkConsistency.TN93
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="TN93", 
@@ -1114,6 +1210,30 @@ setMethodS3(
 ##	
 ## Method: checkConsistency.HKY
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="HKY", 
@@ -1352,6 +1472,30 @@ setMethodS3(
 ##	
 ## Method: checkConsistency.F81
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="F81", 
@@ -1621,6 +1765,30 @@ setMethodS3(
 ##	
 ## Method: checkConsistency.K80
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="K80", 
@@ -1918,6 +2086,30 @@ setMethodS3(
 ##	
 ## Method: checkConsistency.K81
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="K81", 
@@ -2239,6 +2431,30 @@ setMethodS3(
 ##	
 ## Method: checkConsistency.T92
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="T92", 
@@ -2585,6 +2801,30 @@ setMethodS3(
 ##	
 ## Method: checkConsistency.F84
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="F84", 

@@ -217,7 +217,7 @@ setMethodS3(
 #
 # @RdocMethod	checkConsistency
 # 
-# @title "Checks the consistency of  objects"
+# @title "Check object consistency"
 # 
 # \description{ 
 #		@get "title".
