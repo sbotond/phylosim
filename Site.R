@@ -4,7 +4,6 @@
 ##	
 
 ##########################################################################/** 
-
 # @RdocClass Site
 # 
 # @title "The Site class"
@@ -19,11 +18,11 @@
 # @synopsis
 #	
 # \arguments{
-# 	\item{state}{}
-# 	\item{alphabet}{}
-# 	\item{ancestral}{}
-# 	\item{processes}{}
-# 	\item{sequence}{}
+# 	\item{state}{A symbol belonging to the specified alphabet.}
+# 	\item{alphabet}{An alphabet object.}
+# 	\item{ancestral}{The ancestral Site object.}
+# 	\item{processes}{A list of Process objects.}
+# 	\item{sequence}{The Sequence object to whom the site belongs.}
 #	\item{...}{Not used.}
 #	}
 # 
@@ -32,8 +31,14 @@
 # }
 # 
 # \examples{ 
+#		# create a site object
 #		site<-Site();
+#		# print the character represenattion (state)
 #		print(site);
+#		# get a summary
+#		summary(site);
+#		# create a site with a nucleotide alphabet
+#		site<-Site(state="A",alphabet=NucleotideAlphabet());
 #		summary(site);
 # }
 # 
@@ -45,7 +50,6 @@
 # }
 # 
 #*/###########################################################################
-
 setConstructorS3(
 	"Site",
 	function(
@@ -209,6 +213,30 @@ setMethodS3(
 ##	
 ## Method: checkConsistency
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Checks the consistency of  objects"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="Site", 
@@ -675,6 +703,43 @@ setMethodS3(
 ##	
 ## Method: summary.Site
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       o<-Site()
+#       # get a summary
+#       summary(o)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
+
 setMethodS3(
 	"summary", 
 	class="Site", 
