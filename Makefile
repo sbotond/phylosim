@@ -20,7 +20,7 @@ pkg: *.R rd
 checkpkg: pkg 
 	R CMD check phylosim_0.1.tar.gz
 clean:
-	(rm *.log; rm phylosim_0.1.tar.gz;true)
+	(rm *.log; rm phylosim_0.1.tar.gz;rm -r ./phylosim.Rcheck;true)
 inst: pkg
 	R CMD INSTALL	phylosim_0.1.tar.gz
 reinst: pkg
