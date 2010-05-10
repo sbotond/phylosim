@@ -251,6 +251,49 @@ setMethodS3(
 ##	
 ## Method: ==
 ##	
+###########################################################################/**
+#
+# @RdocMethod ==
+# \alias{!=.Alphabet}
+# @title "Check if two alaphabet objects have the same symbol set" 
+#  
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{e1}{An Alphabet object.} 
+# 	\item{e2}{An Alphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE 
+# } 
+# 
+# \examples{
+#	
+#	# create an alpahabet object
+#	a<-Alphabet(symbols=c(0,1));	
+#	# clone object
+#	b<-clone(a)
+#	# compare the two objects
+#	print(a == b)
+#	# modify symbol set in b
+#	b$symbols<-c("AT","GC");
+#	print(a == b)
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"==", 
 	class="Alphabet", 
@@ -433,6 +476,45 @@ setMethodS3(
 ##	
 ## Method: getSymbolLength
 ##	
+###########################################################################/**
+#
+# @RdocMethod getSymbolLength
+# 
+# @title "Get the length of the symbols in a given alphabet object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#
+#	# create an alphabet object	
+#	a<-Alphabet(symbols=c("AAA","AAC"));
+#	# get symbol length
+#	getSymbolLength(a);
+#	# get symbol length via virtual field
+#	a$symbolLength
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getSymbolLength", 
 	class="Alphabet", 
@@ -454,6 +536,35 @@ setMethodS3(
 ##	
 ## Method: setSymbolLength
 ##	
+###########################################################################/**
+#
+# @RdocMethod setSymbolLength
+# 
+# @title "Forbidden action: setting the symbol length for an Alphabet object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+# 	\item{value}{Not used.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Throws an error.
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setSymbolLength", 
 	class="Alphabet", 
@@ -476,6 +587,43 @@ setMethodS3(
 ##	
 ## Method: getSize
 ##	
+###########################################################################/**
+#
+# @RdocMethod getSize
+# 
+# @title "Get the number of symbols in an Alphabet object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#	An integer vector of length one.
+# } 
+# 
+# \examples{
+#	
+#	# create an alphabet object
+#	a<-Alphabet(symbols=c(0,1,2,3,4,5))
+#	a
+#	# get alphabet size
+#	getSize(a)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getSize", 
 	class="Alphabet", 
@@ -497,6 +645,43 @@ setMethodS3(
 ##	
 ## Method: getType
 ##	
+###########################################################################/**
+#
+# @RdocMethod getType
+# 
+# @title "Get Alphabet obejct type" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	
+#	# create alphabet object
+#	a<-Alphabet(symbols=c(0,1),type="Binary");
+#	# get alphabet type
+#	getType(a)
+#	a$type
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getType", 
 	class="Alphabet", 
@@ -518,6 +703,40 @@ setMethodS3(
 ##	
 ## Method: setType
 ##	
+###########################################################################/**
+#
+# @RdocMethod setType
+# 
+# @title "Set Alphabet object type" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+#	\item{new_type}{A character vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 
+# } 
+# 
+# \examples{
+#
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setType", 
 	class="Alphabet", 
@@ -544,6 +763,50 @@ setMethodS3(
 ##	
 ## Method: hasSymbols
 ##	
+###########################################################################/**
+#
+# @RdocMethod hasSymbols
+# 
+# @title "Check if an Alphabet object has a given set of symbols" 
+# 
+# \description{ 
+#	@get "title".
+#	Returns true if the class of the object is "AnyAlphabet".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+# 	\item{sym}{A character vector.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE
+# } 
+# 
+# \examples{
+#	
+#	# create alphabet object
+#	a<-Alphabet(symbols=c("A","T","G","C"));
+#	# check if it has the symbols "A" and "G"
+#	hasSymbols(a,c("A","G"))
+#	# check if has the symbol "X"
+#	hasSymbols(a,"X")
+#	# any alphabet returns true for every symbol
+#	b<-AnyAlphabet();	
+#	hasSymbols(b,"X")
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"hasSymbols", 
 	class="Alphabet", 
@@ -574,6 +837,48 @@ setMethodS3(
 ##	
 ## Method: getWriteProtected
 ##	
+###########################################################################/**
+#
+# @RdocMethod getWriteProtected
+#  
+# @title "Check if the object is write protected" 
+# 
+# \description{ 
+#	@get "title".
+#	Write protected objects cannot be modified through get/set methods and virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#
+#       # create an object
+#       o<-Alphabet()
+#       # toggle write protection
+#       o$writeProtected<-TRUE
+#       # check if it's write protected
+#       getWriteProtected(o)
+#       # check write protection via virtual field
+#       o$writeProtected
+#	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getWriteProtected", 
 	class="Alphabet", 
@@ -595,6 +900,51 @@ setMethodS3(
 ##	
 ## Method: setWriteProtected
 ##	
+###########################################################################/**
+#
+# @RdocMethod setWriteProtected
+#  
+# @title "Set the write protection field for an object" 
+# 
+# \description{ 
+#	@get "title".
+#	Write protected objects cannot be modified through get/set methods and virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{value}{A logical vector of size one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE or FALSE.
+# } 
+# 
+# \examples{
+#
+#	# create an object
+#	o<-Alphabet()
+#	# toggle write protection
+#	setWriteProtected(o,TRUE)
+#	# check write protection
+#	o$writeProtected
+#	# set write protection via virtual field
+#	o$writeProtected<-FALSE
+#	o$writeProtected
+#	
+#	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setWriteProtected", 
 	class="Alphabet", 
@@ -640,8 +990,37 @@ setMethodS3(
 );
 
 ##	
-## Method: getSymbolLength
+## Method: setSize
 ##	
+###########################################################################/**
+#
+# @RdocMethod setSize
+# 
+# @title "Forbidden action: setting the symbol set size of an Alphabet object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+# 	\item{value}{Not used.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setSize", 
 	class="Alphabet", 
@@ -664,6 +1043,42 @@ setMethodS3(
 ##	
 ## Method: as.character
 ##	
+###########################################################################/**
+#
+# @RdocMethod as.character
+# 
+# @title "Get the character representation of an Alphabet object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Returns the character vector containing the symbol set.
+# } 
+# 
+# \examples{
+#
+#	# create alphabet object
+#	a<-Alphabet(symbols=c("A","T","G","C","N"))
+#	# get charcter representation
+#	as.character(a)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"as.character", 
 	class="Alphabet", 
@@ -683,8 +1098,44 @@ setMethodS3(
 );
 
 ##	
-## Method: summray.Alphabet
+## Method: summary.Alphabet
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+# 
+# @title "Summarize the properties of an object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{object}{An object} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#  Returns a PSRootSummary object.
+# } 
+# 
+# \examples{
+#
+#	# create an object
+#	a<-NucleotideAlphabet()
+#	# get a summary
+#	summary(a)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="Alphabet", 
@@ -715,6 +1166,46 @@ setMethodS3(
 ##	
 ## Method: is.Alphabet
 ##	
+###########################################################################/**
+#
+# @RdocMethod is
+# 
+# @title "Check if an object is an instance of the Alphabet class" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE
+# } 
+# 
+# \examples{
+#
+#	# create an alphabet object
+#	a<-Alphabet()
+#	# create a PSRoot object
+#	o<-PSRoot()
+#	# check if they are alphabet objects
+#	is.Alphabet(a)
+#	is.Alphabet(o)
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"is.Alphabet", 
 	class="default", 
@@ -743,6 +1234,45 @@ setMethodS3(
 ##	
 ## Method: isEmpty
 ##	
+###########################################################################/**
+#
+# @RdocMethod isEmpty
+# 
+# @title "Check if the symbol set is empty" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An Alphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE
+# } 
+# 
+# \examples{
+#
+#	# create an empty alphabet
+#	a<-Alphabet();
+#	# check whether it is empty
+#	isEmpty(a)
+#	# specify a new symbol set
+#	a$symbols<-c(0,1)
+#	isEmpty(a)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"isEmpty", 
 	class="Alphabet", 
