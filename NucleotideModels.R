@@ -654,6 +654,42 @@ setMethodS3(
 ##	
 ## Method: summary.GTR
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="GTR", 
@@ -971,6 +1007,42 @@ setMethodS3(
 ##	
 ## Method: summary.TN93
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="TN93", 
@@ -1282,6 +1354,42 @@ setMethodS3(
 ##	
 ## Method: summary.HKY
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="HKY", 
@@ -1530,6 +1638,42 @@ setMethodS3(
 ##	
 ## Method: summary.F81
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="F81", 
@@ -1842,6 +1986,42 @@ setMethodS3(
 ##	
 ## Method: summary.K80
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="K80", 
@@ -2162,6 +2342,42 @@ setMethodS3(
 ##	
 ## Method: summary.K81
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="K81", 
@@ -2516,6 +2732,42 @@ setMethodS3(
 ##	
 ## Method: summary.T92
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="T92", 
@@ -2879,6 +3131,42 @@ setMethodS3(
 ##	
 ## Method: summary.F84
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="F84", 

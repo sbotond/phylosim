@@ -1167,6 +1167,42 @@ setMethodS3(
 ##	
 ## Method: print
 ##	
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"summary", 
 	class="QMatrix", 

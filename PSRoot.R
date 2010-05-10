@@ -371,6 +371,42 @@ setMethodS3(
 ##
 ## Method: summary.PSRoot
 ##
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       a<-NucleotideAlphabet()
+#       # get a summary
+#       summary(a)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "summary",
   class="PSRoot",
@@ -484,6 +520,30 @@ setMethodS3(
 ##
 ## Method: checkConsistency;
 ##
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "checkConsistency",
   class="PSRoot",
