@@ -1,0 +1,45 @@
+###########################################################################/**
+#
+# @RdocMethod setWriteProtected
+#  
+# @title "Set the write protection field for an object" 
+# 
+# \description{ 
+#	@get "title".
+#	Write protected objects cannot be modified through get/set methods and virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{value}{A logical vector of size one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE or FALSE.
+# } 
+# 
+# \examples{
+#
+#	# create an object
+#	o<-Alphabet()
+#	# toggle write protection
+#	setWriteProtected(o,TRUE)
+#	# check write protection
+#	o$writeProtected
+#	# set write protection via virtual field
+#	o$writeProtected<-FALSE
+#	o$writeProtected
+#	
+#	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
