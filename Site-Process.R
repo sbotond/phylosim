@@ -272,7 +272,7 @@ setMethodS3(
 		invisible(this);
 
   },
-  private=FALSE,
+  private=TRUE,
   protected=FALSE,
   overwrite=FALSE,
   conflict="warning",
