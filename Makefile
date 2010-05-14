@@ -9,7 +9,7 @@ push:
 gt:
 	gitk --all
 rd: *.R
-	( R --vanilla < ./misc/compileman.R)
+	( R --vanilla < ./misc/compileman.R; perl misc/RdClean.pl)
 pkg: *.R rd
 	(rm pkg/R/*.R;true)
 	(rm FullSource.R;true)
