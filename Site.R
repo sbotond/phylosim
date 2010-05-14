@@ -140,6 +140,44 @@ setConstructorS3(
 ##	
 ## Method: is.Site
 ##	
+###########################################################################/**
+#
+# @RdocMethod is
+# 
+# @title "Check if an object is an instance of the Site class" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	
+#	# create an object
+#	s<-Site();
+#	# check whether is a Site object
+#	is.Site(s)
+#	# the same with an Event object
+#	is.Site(Event());
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"is.Site", 
 	class="default", 
@@ -293,6 +331,45 @@ setMethodS3(
 ##	
 ## Method: getState
 ##	
+###########################################################################/**
+#
+# @RdocMethod getState
+# 
+# @title "Get the current state of a Site object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one contaning the state (a symbol belonging to the attached Alphabet object).
+# } 
+# 
+# \examples{
+#	
+#	# create a Site object with an Alphabet object attached
+#	s<-Site(alphabet=Alphabet(symbols=c(0,1)), state=1);
+#	# get current state
+#	getState(s)
+#	# get state via virtual field
+#	s$state
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getState", 
 	class="Site", 
@@ -314,6 +391,49 @@ setMethodS3(
 ##	
 ## Method: setState
 ##	
+###########################################################################/**
+#
+# @RdocMethod setState
+# 
+# @title "Set the state of a Site object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{new.state}{A character vector of length one, containing a symbol belonging to the attached Alphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Returns the new state (invisible).	
+# } 
+# 
+# \examples{
+#
+#       # create a Site object with an Alphabet object attached
+#       s<-Site(alphabet=Alphabet(symbols=c(0,1)), state=1);
+#       # set a new state 
+#       setState(s,"0")
+#       # get state via virtual field
+#       s$state
+#       # set a new state via virtual field
+#       s$state<-1
+#	s$state
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setState", 
 	class="Site", 
@@ -366,6 +486,56 @@ setMethodS3(
 ##	
 ## Method: setAlphabet
 ##	
+###########################################################################/**
+#
+# @RdocMethod setAlphabet
+# 
+# @title "Attach an Alphabet object to a Site object" 
+# 
+# \description{ 
+#	@get "title".
+#	If the ancestral site is not NA, then the symbol set of the ancestral Alphabet object and the new Alphabet 
+#	object must be the same. The current state must be in the symbol set of the new Alphabet object, unless it is NA.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{new.alphabet}{A valid Alphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Returns the new Alphabet object (invisible).
+# } 
+# 
+# \examples{
+#	
+#	# create a site object
+#	s<-Site()
+#	# create an Alphabet object
+#	a<-Alphabet(c("A","T","G"))
+#	# attach alphabet to site object
+#	setAlphabet(s,a)
+#	# set site state
+#	s$state<-"A"
+#	# clone the alphabet object
+#	b<-clone(a)
+#	# modify symbol set in b
+#	b$symbols<-c(b$symbols,"C")
+#	# attach b to s via virtual field
+#	s$alphabet<-b
+#	s$alphabet
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setAlphabet", 
 	class="Site", 
@@ -446,6 +616,35 @@ setMethodS3(
 ##	
 ## Method: setAncestral
 ##	
+###########################################################################/**
+#
+# @RdocMethod setAncestral
+#
+# @title "Forbidden action: setting the ancestral object for a Site object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{A Site object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setAncestral", 
 	class="Site", 
@@ -495,6 +694,48 @@ setMethodS3(
 ##	
 ## Method: getTotalRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod getTotalRate
+# 
+# @title "Get the total active event rate" 
+# 
+# \description{ 
+#	@get "title".
+#	The total rate is the sum of the rates of all active events given the current state of the Site object.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#
+#	# create a nucleotide site with a JC69 substitution process attached
+#       s<-Site(state="A",alphabet=NucleotideAlphabet(),processes=list(JC69()))
+#       # get the total rate
+#	getTotalRate(s)
+#       # add a new process
+#       attachProcess(s,K80(rate.params=list("Alpha"=1,"Beta"=0.5)))
+#       # get the total rate via virtual field
+#       s$totalRate
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getTotalRate", 
 	class="Site", 
@@ -520,12 +761,41 @@ setMethodS3(
 ##	
 ## Method: setTotalRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod setTotalRate
+#
+# @title "Forbidden action: setting the total active event rate for a Site object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setTotalRate", 
 	class="Site", 
 	function(
 		this,
-	  value,	
+	  	value,	
 		...
 	){
 		
@@ -542,6 +812,53 @@ setMethodS3(
 ##	
 ## Method: flagTotalRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod flagTotalRate
+# 
+# @title "Flag the total event rate" 
+# 
+# \description{ 
+#	@get "title".
+#	This method sets the cached total active event rate to NA, which will trigger its
+#	recalculation when next accessed via getTotalRate.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible NA.
+# } 
+# 
+# \examples{
+#	# create a site object:
+#	p<-K80(rate.params=list("Alpha"=2,"Beta"=0.5))
+#	s<-Site(alphabet=NucleotideAlphabet(), state="G", processes=list(p))
+#	# get site rate
+#	s$totalRate
+#	# modifying site object in a dangerous way (do not do this under any circumstances!)
+#	s$.processes = list()	# site object is now inconsistent!
+#	# get cached rate
+#	s$totalRate		# incorrect value 
+#	# flag total rate
+#	flagTotalRate(s)
+#	# get site rate
+#	s$totalRate		# correct value
+#	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"flagTotalRate", 
 	class="Site", 
@@ -589,6 +906,47 @@ setMethodS3(
 ##	
 ## Method: getEvents
 ##	
+###########################################################################/**
+#
+# @RdocMethod getEvents
+# 
+# @title "Get the list of active event objects given the current state of the Site object" 
+# 
+# \description{ 
+#	@get "title".
+#	The list of active event object might change according to the state of the Site object.	
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of event objects.
+# } 
+# 
+# \examples{
+#	# create a site object with a JC69 substitution process attached
+#	s<-Site(alphabet=NucleotideAlphabet(), state="A",processes=list(JC69()))
+#	# get the list of active event objects
+#	getEvents(s)
+#	# modify site state
+#	s$state<-"T"
+#	# get the list of active event objects via virtual field
+#	s$events
+#	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getEvents", 
 	class="Site", 
@@ -616,6 +974,35 @@ setMethodS3(
 ##	
 ## Method: setEvents
 ##	
+###########################################################################/**
+#
+# @RdocMethod setEvents
+#
+# @title "Forbidden action: setting the list of active events for a Site object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setEvents", 
 	class="Site", 
@@ -636,6 +1023,44 @@ setMethodS3(
 ##	
 ## Method: getSequence
 ##	
+###########################################################################/**
+#
+# @RdocMethod getSequence
+# 
+# @title "Get the Sequence object assotiated with a given Site object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A Sequence object or NA.
+# } 
+# 
+# \examples{
+#	# create a site object
+#	s<-Site(sequence=Sequence())
+#	# get the assotiated Sequence object
+#	getSequence(s)
+#	# get the assotiated Sequence object via virtual field	
+#	s$sequence
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getSequence", 
 	class="Site", 
@@ -657,6 +1082,46 @@ setMethodS3(
 ##	
 ## Method: setSequence
 ##	
+###########################################################################/**
+#
+# @RdocMethod setSequence
+# 
+# @title "Assotiate a Sequence object with a Site object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{new.seq}{A valid Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create a site object
+#	s<-Site()
+#	# get assotiated Sequence object
+#	s$sequence
+#	# set assotiated Sequence object
+#	setSequence(s,Sequence())
+#	s$sequence
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setSequence", 
 	class="Site", 
@@ -682,6 +1147,44 @@ setMethodS3(
 ##	
 ## Method: as.character
 ##	
+###########################################################################/**
+#
+# @RdocMethod as.character
+# 
+# @title "Get the character representation of a Site object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one containing the current state.
+# } 
+# 
+# \examples{
+#	# create site object
+#	s<-Site(alphabet=NucleotideAlphabet(),state="A")
+#	# get character represenation
+#	x<-as.character(s)
+#	x
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"as.character", 
 	class="Site", 
@@ -690,7 +1193,7 @@ setMethodS3(
 		...
 	){
 
-		x$state;		
+		x$.state;		
 
 	},
 	private=FALSE,
@@ -739,7 +1242,6 @@ setMethodS3(
 # }
 #
 #*/###########################################################################
-
 setMethodS3(
 	"summary", 
 	class="Site", 
