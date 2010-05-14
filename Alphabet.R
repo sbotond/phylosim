@@ -9,7 +9,8 @@
 # @title "The Alphabet class"
 # 
 # \description{ 
-#		Class representing an alphabet (a set of symbols).		
+#
+#		Class representing an alphabet (a set of symbols).
 #		@classhierarchy
 #	
 # }
@@ -1169,6 +1170,7 @@ setMethodS3(
 ###########################################################################/**
 #
 # @RdocMethod is
+# \alias{is.Alphabet.default}
 # 
 # @title "Check if an object is an instance of the Alphabet class" 
 # 

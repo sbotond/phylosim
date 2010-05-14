@@ -2,6 +2,79 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass Process
+# 
+# @title "The Process class"
+# 
+# \description{ 
+#
+#	This is the class representing a generic process acting on Site and Sequence objects. Process objects can be attached
+#	to Site objects if the assotiated Alphabet objects match.
+#	
+#
+#		@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{The name of the Process object: a character vector of length one.}
+#	\item{alphabet}{The assotiated Alphabet object.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@methods
+# }
+# 
+# \examples{ 
+#	# create a Process object
+#	p<-Process(name="MyProc",alphabet=AminoAcidAlphabet())	
+#	# check if it's a Process object
+#	is.Process(p)
+#	# check object consistency
+#	checkConsistency(p)
+#	# set process name
+#	p$name<-"Ppppproccc"
+#	# get process name
+#	p$name
+#	# get unique process identifier
+#	p$id
+#	# fet the list of site specific paramters and paramter IDs
+#	p$siteSpecificParamList
+#	p$siteSpecificParamIds
+#	# get Process object summary
+#	summary(p)
+#	# clone process object
+#	pp<-clone(p)
+#	# test object identity
+#	p == p
+#	p == pp
+#	# create a site object
+#	s<-Site(alphabet=AminoAcidAlphabet())
+#	# attach process to Site object
+#	attachProcess(s,p)
+#	# get events at specified site
+#	getEventsAtSite(p,s)	# empty list
+#	# detach process via virtual field
+#	s$processes<-list()
+#	# attach processes via virtual field
+#	s$processes<-list(p,pp)
+#	# set the value of the rate multiplier for Site s
+#	setParameterAtSite(p,s,id="rate.multiplier",value=2)
+#	# get the value of the rate multiplier for Site s
+#	getParameterAtSite(p,s,id="rate.multiplier")
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	@seeclass 
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
 	"Process",
 	function( 
@@ -55,6 +128,45 @@ setConstructorS3(
 ##
 ## Method: is.Process
 ##
+###########################################################################/**
+#
+# @RdocMethod is
+# \alias{is.Process.default}
+# 
+# @title "Check if an object is an instance of the Process class" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE
+# } 
+# 
+# \examples{
+#	# create some objects
+#	a<-Site();
+#	p<-Process()
+#	# check if they inherit from Process
+#	is.Process(a)
+#	is.Porcess(p)
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "is.Process",
   class="default",
@@ -202,6 +314,45 @@ setMethodS3(
 ##
 ## Method: ==.Process
 ##
+###########################################################################/**
+#
+# @RdocMethod ==
+# \alias{!=}
+# 
+# @title "Check whether the two supplied Process objects are identical" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{e1}{A Process object.} 
+# 	\item{e2}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#	TRUE or FALSE; 
+# } 
+# 
+# \examples{
+#	# create some Process objects
+#	p1<-Process()
+#	p2<-clone(p1)
+#	# check object equality
+#	p1 == p1
+#	p1 == p2
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "==",
   class="Process",
@@ -283,6 +434,46 @@ setMethodS3(
 ##	
 ## Method: getId
 ##	
+###########################################################################/**
+#
+# @RdocMethod getId
+# 
+# @title "Get the unique identifier of a Process object" 
+# 
+# \description{ 
+#	@get "title".
+#	The unique identifier is the concatenation of the object name as returned by getName() and the object hash 
+#	as returned by hashCode().
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create a Process object
+#	p<-Process()
+#	# get unique id
+#	getId(p)
+#	# get unique id via virtual field
+#	p$id
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getId", 
 	class="Process", 
@@ -302,7 +493,7 @@ setMethodS3(
 );
 
 ##	
-## Method: getId
+## Method: .setId
 ##	
 setMethodS3(
 	".setId", 
@@ -326,12 +517,41 @@ setMethodS3(
 ##	
 ## Method: setId
 ##	
+###########################################################################/**
+#
+# @RdocMethod setId
+#
+# @title "Forbidden action: setting the unique Process object identifier"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setId", 
 	class="Process", 
 	function(
 		this,
-	  value,	
+	  	value,	
 		...
 	){
 
@@ -348,6 +568,43 @@ setMethodS3(
 ##	
 ## Method: getName
 ##	
+###########################################################################/**
+#
+# @RdocMethod getName
+# 
+# @title "Get the name of a Process object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A charcter vector of length one.
+# } 
+# 
+# \examples{
+#	# create a Process object
+#	p<-Process()
+#	# get object name
+#	getName(p)
+#	# get name via virtual field
+#	p$name
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getName", 
 	class="Process", 
@@ -368,6 +625,52 @@ setMethodS3(
 ##	
 ## Method: setName
 ##	
+###########################################################################/**
+#
+# @RdocMethod setName
+# 
+# @title "Set the name of a Process object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method also updates the unique identifier of the Process object.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{new.name}{A character vector of length one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Returns the new name (invisible).
+# } 
+# 
+# \examples{
+#	# create object
+#	p<-Process()
+#	# get name
+#	p$name
+#	# set new name
+#	getName(p)
+#	# get name and id
+#	p$name
+#	p$id
+#	# set new name via virtual field
+#	p$name<-"Procey"
+#	p$name
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setName", 
 	class="Process", 
@@ -380,6 +683,7 @@ setMethodS3(
 		.checkWriteProtection(this);	
 		this$.name<-as.character(new.name);
 		.setId(this);
+		invisible(new.name);
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -391,6 +695,44 @@ setMethodS3(
 ##	
 ## Method: getSiteSpecificParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getSiteSpecificParamList
+# 
+# @title "Get the list of site specific parameters of a Process object"
+# 
+# \description{ 
+#	@get "title".
+#	Every site specific parameter is a list storing the name, the identifier and the type of the given parameter.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of site specific parameters.
+# } 
+# 
+# \examples{
+#	# create a process object
+#	p<-Process()
+#	# get the list of site specific parameters
+#	getSiteSpecificParamList(p)
+#	# get it via virtual field
+#	p$siteSpecificParamList
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getSiteSpecificParamList", 
 	class="Process", 
@@ -410,12 +752,43 @@ setMethodS3(
 ##	
 ## Method: setSiteSpecificParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setSiteSpecificParamList
+#
+# @title "Forbidden action: setting the site specific paramter list for a Process object"
+#
+# \description{
+#       @get "title".
+#	Use .addSiteSpecificParameter to add new site specific paramters when implementing new processes.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
+
 setMethodS3(
 	"setSiteSpecificParamList", 
 	class="Process", 
 	function(
 		this,
-	  value,	
+	  	value,	
 		...	
 	){
 		throw("You should not set the siteSpecificParamList directly!\n");
@@ -430,6 +803,44 @@ setMethodS3(
 ##	
 ## Method: getSiteSpecificParamIds
 ##	
+###########################################################################/**
+#
+# @RdocMethod getSiteSpecificParamIds
+# 
+# @title "Get the site specific paramter identifiers from a Process object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A charcter vector.
+# } 
+# 
+# \examples{
+#	# create process object
+#	p<-Process()
+#	# get site specific parameter identifiers
+#	getSiteSpecificParamIds(p)
+#	# via virtual field
+#	p$siteSpecificParamIds
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getSiteSpecificParamIds", 
 	class="Process", 
@@ -449,6 +860,36 @@ setMethodS3(
 ##	
 ## Method: setSiteSpecificParamIds
 ##	
+###########################################################################/**
+#
+# @RdocMethod setSiteSpecificParamIds
+#
+# @title "Forbidden action: setting the paramter identifiers of the site specific paramters from a Process object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
+
 setMethodS3(
 	"setSiteSpecificParamIds", 
 	class="Process", 
@@ -469,6 +910,43 @@ setMethodS3(
 ##	
 ## Method: getAlphabet
 ##	
+###########################################################################/**
+#
+# @RdocMethod getAlphabet
+# 
+# @title "Get the Alphabet object assotiated with a given Process object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	An Alphabet object.
+# } 
+# 
+# \examples{
+#	# create a process object
+#	p<-Process(alphabet=NucleotideAlphabet())
+#	# get assotiated Alphabet object
+#	getAlphabet(p)
+#	# via virtual field
+#	p$alphabet
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getAlphabet", 
 	class="Process", 
@@ -488,6 +966,47 @@ setMethodS3(
 ##	
 ## Method: setAlphabet
 ##	
+###########################################################################/**
+#
+# @RdocMethod setAlphabet
+# 
+# @title "Assotiate an Alphabet object with a Process object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{new.alphabet}{A valid Alphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Alphabet object (invisible).
+# } 
+# 
+# \examples{
+#	# create objects
+#	a<-AminoAcidAlphabet()
+#	p<-Process()
+#	# assotiate p with Alphabet object a
+#	setAlphabet(p,a)
+#	p$alphabet
+#	# assotiate p with a new NucleotideAlphabet via virtual field
+#	p$alphabet<-NucleotideAlphabet()
+#	p$alphabet
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setAlphabet", 
 	class="Process", 
@@ -513,6 +1032,52 @@ setMethodS3(
 ##	
 ## Method: getEventsAtSite
 ##	
+###########################################################################/**
+#
+# @RdocMethod getEventsAtSite
+# 
+# @title "Generate the list of active Event objects given a Site object" 
+# 
+# \description{ 
+#	@get "title".
+#	The Process object must be attached to the specified Site object.
+#
+#	This method is crucial for the simulations. For the Process class it returns an empty list. 
+#	Descendant classes should implement meaningful getEventsAtSite methods. 
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{site}{A valid Site object.} 
+# 	\item{position}{The position of the site in the enclosing Sequence object (if any).} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	An empty list.
+# } 
+# 
+# \examples{
+#	# create objects
+#	a<-NucleotideAlphabet()
+#	p<-Process(alphabet=a)
+#	s<-Site(alphabet=a)
+#	# attach Process p to Site s
+#	s$processes<-list(p)
+#	# get active Event objects (empty list)
+#	getEventsAtSite(p,s)
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getEventsAtSite", 
 	class="Process", 
@@ -541,6 +1106,48 @@ setMethodS3(
 ##
 ## Method: getWriteProtected
 ##
+###########################################################################/**
+#
+# @RdocMethod getWriteProtected
+#  
+# @title "Check if the object is write protected" 
+# 
+# \description{ 
+#	@get "title".
+#	Write protected objects cannot be modified through get/set methods and virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE
+# } 
+# 
+# \examples{
+#
+#       # create an object
+#       o<-Process()
+#       # toggle write protection
+#       o$writeProtected<-TRUE
+#       # check if it's write protected
+#       getWriteProtected(o)
+#       # check write protection via virtual field
+#       o$writeProtected
+#	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getWriteProtected",
   class="Process",
@@ -562,6 +1169,51 @@ setMethodS3(
 ##
 ## Method: setWriteProtected
 ##
+###########################################################################/**
+#
+# @RdocMethod setWriteProtected
+#  
+# @title "Set the write protection field for an object" 
+# 
+# \description{ 
+#	@get "title".
+#	Write protected objects cannot be modified through get/set methods and virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{value}{A logical vector of size one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE or FALSE.
+# } 
+# 
+# \examples{
+#
+#	# create an object
+#	o<-Process()
+#	# toggle write protection
+#	setWriteProtected(o,TRUE)
+#	# check write protection
+#	o$writeProtected
+#	# set write protection via virtual field
+#	o$writeProtected<-FALSE
+#	o$writeProtected
+#	
+#	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setWriteProtected",
   class="Process",
@@ -587,6 +1239,45 @@ setMethodS3(
 ##
 ## Method: hasUndefinedRate
 ##
+###########################################################################/**
+#
+# @RdocMethod hasUndefinedRate
+# 
+# @title "Check if the Process object has undefined rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	For the instances of the Process class this method always returns FALSE.
+#	Descendant classes should implement more meaningful methods.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	FALSE
+# } 
+# 
+# \examples{
+#	# create object
+#	p<-Process()
+#	# check if has undefined rates
+#	hasUndefinedRate(p)	# return FALSE
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "hasUndefinedRate",
   class="Process",
@@ -629,10 +1320,47 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-
 ##
 ## Method: clone
 ##
+###########################################################################/**
+#
+# @RdocMethod clone
+#
+# @title "Clone a process object"
+#
+# \description{
+#       @get "title".
+#       Write protection is set to FALSE for the new Process object.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{A Process object.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#       A Process object.
+# }
+#
+# \examples{
+#       # create a process object
+#       p<-Process()
+#       # clone process object
+#       pp<-clone(p)
+#       # check identity
+#       p == pp
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "clone",
   class="Process",
@@ -663,6 +1391,44 @@ setMethodS3(
 ##	
 ## Method: as.character.Process
 ##	
+###########################################################################/**
+#
+# @RdocMethod as.character
+#
+# @title "Get the character representation of a Process object"
+#
+# \description{
+#       @get "title".
+#	The string returned is the unique Process object identifier (name + object hash).
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{A Process object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  A character vector of length one.
+# }
+#
+# \examples{
+#
+#       # create a Process object
+#       p<-Process()
+#	# get charatcer representation
+#	x<-as.character(p)
+#	print(x)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"as.character", 
 	class="Process", 

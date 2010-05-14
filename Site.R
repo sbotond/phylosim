@@ -2,17 +2,22 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
-
 ##########################################################################/** 
 # @RdocClass Site
 # 
 # @title "The Site class"
 # 
 # \description{ 
-#		@classhierarchy
+#
+#	This is the class representing a site. Site objects can have one assotiated Alphabet object and one or 
+#	more Process objects potentially acting on their states.
+#	The assotiated Process and Site objects must have assotiated Alphabet objects with the same symbols set, or
+#	at least one of the Alphabet objects should inherit form the class AnyAlphabet.
+#
+#	Site objects have fields for assotiated ancestral Site objects and Sequence objects.
+#
+#  	@classhierarchy
 # 
-#	
-#	
 # }
 #	
 # @synopsis
@@ -22,7 +27,7 @@
 # 	\item{alphabet}{An alphabet object.}
 # 	\item{ancestral}{The ancestral Site object.}
 # 	\item{processes}{A list of Process objects.}
-# 	\item{sequence}{The Sequence object to whom the site belongs.}
+# 	\item{sequence}{The Sequence object to whom the Site object belongs.}
 #	\item{...}{Not used.}
 #	}
 # 
@@ -155,6 +160,7 @@ setConstructorS3(
 ###########################################################################/**
 #
 # @RdocMethod is
+# \alias{is.Site.default}
 # 
 # @title "Check if an object is an instance of the Site class" 
 # 
