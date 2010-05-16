@@ -2,6 +2,56 @@
 ## Copyright 2009 Botond Sipos	
 ## See the file ../COPYING for licensing issues.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass Sequence
+# 
+# @title "The Sequence class"
+# 
+# \description{ 
+#	
+#	This is the class representing a sequence. The backbone of the Sequence objects are
+#	lists aggregating Site objects. The class has fileds for keeping track of cumulative
+#	site rates, the sum of all active event rates and methods for performing actions 
+#	on a collection of sites (positions).
+#
+#	The Sequence objects have a field specifying an ancestral object, which can be a Sequence
+#	object (when the object is obtained through clone() ) or a Process object 
+#	(for newly created objects).
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+#	\item{name}{The name of the Sequence object.}
+# 	\item{string}{A string containing symbols belonging to the assotiated Alphabet object. 
+#	It can be used to set the initial states of the aggregated Site objects. It also specifies th length of the sequence}
+# 	\item{length}{The length of the sequence. It cannot be used when 'string' is specified.}
+# 	\item{alphabets}{A list of Alphabet objects to be assotiated with the Site objects. 
+#	The list is recycled in the case it is shorter than the sequence length.}
+# 	\item{processes}{A list of Process objects to be attached 
+#	(recycled if shorter than sequence length). }
+# 	\item{ancestral.obj}{The ancestral object (Sequence or Process).}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Alphabet Site Process Event
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
 	"Sequence",
 	function(
@@ -143,6 +193,43 @@ setConstructorS3(
 ##	
 ## Method: is.Site
 ##	
+###########################################################################/**
+#
+# @RdocMethod is
+# 
+# @title "Check whether an object inherits from the Sequence class" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE
+# } 
+# 
+# \examples{
+#	# create some objects
+#	seq<-Sequence(length=10)
+#	a<-Alphabet()
+#	# check if they inherit from Sequence
+#	is.Sequence(seq)
+#	is.Sequence(a)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"is.Sequence", 
 	class="default", 
@@ -171,6 +258,30 @@ setMethodS3(
 ##	
 ## Method: checkConsistency
 ##	
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
 	class="Sequence", 
@@ -231,6 +342,45 @@ setMethodS3(
 ##
 ## Method: getId
 ##
+###########################################################################/**
+#
+# @RdocMethod getId
+# 
+# @title "Get the unique identifier of a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	The identifier is the concatenation of the object name and the object hash code as returned
+#	by hashCode().
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A charcter vector of length one.
+# } 
+# 
+# \examples{
+#	# create a Sequence object.
+#	s<-Sequence(length=5)
+#	# get id
+#	getId(s)
+#	# get id via virtual field
+#	s$id
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getId",
   class="Sequence",
@@ -253,12 +403,41 @@ setMethodS3(
 ##	
 ## Method: setId
 ##	
+###########################################################################/**
+#
+# @RdocMethod setId
+#
+# @title "Forbidden action: setting the unique identifier of a Sequence object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setId", 
 	class="Sequence", 
 	function(
 		this,
-	  value,	
+	  	value,	
 		...
 	){
 
@@ -275,6 +454,44 @@ setMethodS3(
 ##	
 ## Method: getName
 ##	
+###########################################################################/**
+#
+# @RdocMethod getName
+# 
+# @title "Get the name of a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create object
+#	s<-Sequence(length=10);
+#	# get object name
+#	getName(s)
+#	# get name via virtual field
+#	s$name
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getName", 
 	class="Sequence", 
@@ -295,6 +512,48 @@ setMethodS3(
 ##	
 ## Method: setName
 ##	
+###########################################################################/**
+#
+# @RdocMethod setName
+# 
+# @title "Set the name of a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{new.name}{A character vector of length one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new object name (invisible).
+# } 
+# 
+# \examples{
+#	# create a Sequence object
+#	s<-Sequence(name="MySeq",length=4)
+#	# get sequence name
+#	s$name
+#	# rename object
+#	setName(s,"SO")
+#	s$name
+#	# rename via virtual field
+#	s$name<-"SeqSeq"
+#	s$name
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setName", 
 	class="Sequence", 
@@ -317,6 +576,45 @@ setMethodS3(
 ##	
 ## Method: getString
 ##	
+###########################################################################/**
+#
+# @RdocMethod getString
+# 
+# @title "Get the string representation of a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	The string representation is the concatenation of the states of the 
+#	aggregated Site object. Undefined states (NA-s) are represented by question marks.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create object
+#	s<-Sequence(length=10)
+#	# get character representation
+#	getString(s)	# a bunch of '?'-s
+#	# get string reperesentation via virtual field
+#	s$string
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getString", 
 	class="Sequence", 
@@ -351,6 +649,35 @@ setMethodS3(
 ##	
 ## Method: setString
 ##	
+###########################################################################/**
+#
+# @RdocMethod setString
+#
+# @title "Forbidden action: setting the string representation of a Sequence object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setString", 
 	class="Sequence", 
@@ -373,6 +700,43 @@ setMethodS3(
 ##	
 ## Method: getLength
 ##	
+###########################################################################/**
+#
+# @RdocMethod getLength
+# 
+# @title "Get the number of Site objects aggregated in a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	An integer vector of length one.
+# } 
+# 
+# \examples{
+#	# create a Sequence object
+#	s<-Sequence(length=5)
+#	# get sequence length
+#	getLength(s)
+#	# get length via virtual field
+#	s$length
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getLength", 
 	class="Sequence", 
@@ -394,6 +758,38 @@ setMethodS3(
 ##	
 ## Method: setLength
 ##	
+###########################################################################/**
+#
+# @RdocMethod setLength
+#
+# @title "Forbidden action: setting the length of a Sequence object"
+#
+# \description{
+#       @get "title".
+#	The length of the Sequence objects can be specified when the object is constructed,
+#	or modified later by the "insertSequence" and "deleteSubSequence" methods. 
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
+
 setMethodS3(
 	"setLength", 
 	class="Sequence", 
@@ -416,6 +812,43 @@ setMethodS3(
 ##	
 ## Method: getSites
 ##	
+###########################################################################/**
+#
+# @RdocMethod getSites
+# 
+# @title "Get the list of the Site object aggregated in a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of Site objects.
+# } 
+# 
+# \examples{
+#	# create a sequence object
+#	s<-Sequence(alphabets=list(NucleotideAlphabet()),string="AATTGCCC")
+#	# get the list of aggregated Site objects
+#	getSites(s)
+#	# get Site objects via virtual field
+#	s$sites
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getSites", 
 	class="Sequence", 
@@ -437,6 +870,46 @@ setMethodS3(
 ##	
 ## Method: getStates
 ##	
+###########################################################################/**
+#
+# @RdocMethod getStates
+# 
+# @title "Get the states of a set of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{index}{A numeric vector specifying a set of positions. 
+#	It is set to 1:seq$length if ommited.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector.
+# } 
+# 
+# \examples{
+#	# create a sequence object
+#	s<-Sequence(alphabets=list(NucleotideAlphabet()),string="AATTGCCCCCTTGG")
+#	# get all Site states
+#	getStates(s)
+#	# get the states for a collection of sites
+#	getStates(s,c(1:3,5,8))
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getStates", 
 	class="Sequence", 
@@ -469,6 +942,50 @@ setMethodS3(
 ##	
 ## Method: setStates
 ##	
+###########################################################################/**
+#
+# @RdocMethod setStates
+# 
+# @title "Set the states for a set of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	The value vector is recycled, which is useful when creating repeated patterns.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{value}{A character vector containg the states (recycled if shorter than the index vector). The states must be compatible with the corresponding Alphabet object.}
+#	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create a sequence object of length 10
+#	s<-Sequence(alphabets=list(NucleotideAlphabet()),length=10)
+#	# set the states in some ranges
+#	setStates(s,c("A","T","A"),index=1:5)
+#	setStates(s,c("G","C"),index=6:10)
+#	# display sequence
+#	s
+#	# set the states for the whole Sequence object
+#	setStates(s,c("A","T","T","A"))
+#	s
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setStates", 
 	class="Sequence", 
@@ -514,6 +1031,44 @@ setMethodS3(
 ##	
 ## Method: getStatesList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getStatesList
+# 
+# @title "Get an object representing the list of the states from a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A StatesList object.
+# } 
+# 
+# \examples{
+#	# create a Sequence object
+#	s<-Sequence(alphabets=list(NucleotideAlphabet()),string="ATGGC")
+#	# get a StatesList object
+#	sl<-getStatesList(s)
+#	print(sl)
+#	# get the StatesList object via virtual field
+#	s$statesList
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	StatesList Sequence 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getStatesList", 
 	class="Sequence", 
@@ -535,6 +1090,46 @@ setMethodS3(
 ##	
 ## Method: getAlphabets
 ##	
+###########################################################################/**
+#
+# @RdocMethod getAlphabets
+# 
+# @title "Get the list of the Alphabet objects attached to the Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{index}{A numeric vector specifying a set of positions.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of Alphabet objects.
+# } 
+# 
+# \examples{
+#	# create a Sequence object with NucleotideAlphabet
+#	#and BinaryAlphabet objects attached
+#	s<-Sequence(alphabets=list(NucleotideAlphabet(),BinaryAlphabet()),length=5)	
+#	setStates(s,c("A","0"))
+#	# get the list of attached Alphabet objects
+#	getAlphabets(s)
+#	# get Alphabets from a range
+#	getAlphabets(s,c(2:3,5))
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getAlphabets", 
 	class="Sequence", 
@@ -1788,6 +2383,43 @@ setMethodS3(
 ##	
 ## Method: as.character.Sequence
 ##	
+###########################################################################/**
+#
+# @RdocMethod as.character
+# 
+# @title "Get the string representation of a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	The string representation is the concatenation of the states of the 
+#	aggregated Site object. Undefined states (NA-s) are represented by question marks.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create object
+#	s<-Sequence(length=10)
+#	# get character representation
+#	as.character(s)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"as.character", 
 	class="Sequence", 
