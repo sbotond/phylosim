@@ -14,6 +14,14 @@
 #	The assotiated Process and Site objects must have assotiated Alphabet objects with the same symbols set, or
 #	at least one of the Alphabet objects should inherit form the class AnyAlphabet.
 #
+#	The Site objects store the site-process specific parameters of the attached Process objects. 
+#	A site-process specific parameter is a list containing the identifier, the name, the value and type of the parameter.
+#	For example the ubiquitous rate multiplier site-process specific parameter looks like 
+#	\code{list(id="rate.multiplier",name="Rate multiplier",value=1,type="numeric")}.
+#
+#	The templates for site-process specific parameters and their default values are stored in the Process objects and 
+#	copied into thr Site object when the process is attached.
+#
 #	Site objects have fields for assotiated ancestral Site objects and Sequence objects.
 #
 #  	@classhierarchy

@@ -12,9 +12,15 @@
 #
 #	This is the class representing a generic process acting on Site and Sequence objects. Process objects can be attached
 #	to Site objects if the assotiated Alphabet objects match.
-#	
 #
-#		@classhierarchy
+#	The processes can have site-process specific parameters.
+#	The templates for site-process specific parameters and their default values are stored in the Process objects and
+#       copied into the Site object when the process is attached. See the documentation of the Site class for more details.
+#
+#	The rate multiplier parameter (id="rate.multiplier") is
+#	present in the Process class and it's inherited by all descendant classes.
+#	
+#	@classhierarchy
 # }
 #	
 # @synopsis
