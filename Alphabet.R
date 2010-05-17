@@ -723,12 +723,17 @@ setMethodS3(
 # } 
 # 
 # \value{ 
-# 
+# 	The new type (invisible).
 # } 
 # 
 # \examples{
-#
-#
+#	# create an alphabet object
+#	a<-Alphabet(symbols=c(1,2,3))
+#	# set a new type
+#	setType(a,"MyAlphabet")
+#	a$type
+#	# set type via virtual field
+#	a$type<-"MorphChars"
 # } 
 # 
 # @author 
@@ -1012,7 +1017,7 @@ setMethodS3(
 # } 
 # 
 # \value{ 
-# 
+# 	Throws an error.
 # } 
 # 
 # @author 

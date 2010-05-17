@@ -156,7 +156,7 @@ setConstructorS3(
 #	p<-Process()
 #	# check if they inherit from Process
 #	is.Process(a)
-#	is.Porcess(p)
+#	is.Process(p)
 #
 # } 
 # 
