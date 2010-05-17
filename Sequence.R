@@ -31,7 +31,7 @@
 # 	\item{length}{The length of the sequence. It cannot be used when 'string' is specified.}
 # 	\item{alphabets}{A list of Alphabet objects to be assotiated with the Site objects. 
 #	The list is recycled in the case it is shorter than the sequence length.}
-# 	\item{processes}{A list of Process objects to be attached 
+# 	\item{processes}{A list of lists of Process objects to be attached 
 #	(recycled if shorter than sequence length). }
 # 	\item{ancestral.obj}{The ancestral object (Sequence or Process).}
 # 	\item{...}{Not used.}
@@ -886,7 +886,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-# 	\item{index}{A numeric vector specifying a set of positions. 
+# 	\item{index}{An integer vector specifying a set of positions. 
 #	It is set to 1:seq$length if ommited.} 
 # 	\item{...}{Not used.} 
 # } 
@@ -961,7 +961,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 #	\item{value}{A character vector containg the states (recycled if shorter than the index vector). The states must be compatible with the corresponding Alphabet object.}
-#	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1110,7 +1110,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1185,7 +1185,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{value}{A list of Alphabet objects, recycled if shorter than the index vector.} 
-# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1471,7 +1471,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.}
-# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1551,7 +1551,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
-# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1629,7 +1629,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1807,26 +1807,43 @@ setMethodS3(
 #
 # @RdocMethod setProcesses
 # 
-# @title "" 
+# @title "Specify a set of Process objects to be attached to a set of Site objects aggregated by a Sequence object" 
 # 
 # \description{ 
 #	@get "title".
+#	The Process objects in a given inner list correspond to a set of processes to be attached to one Site object.
+#	Processes not in the list will be detached, so specifying an empty list will detach all Process objects.	
 # } 
 # 
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{}{} 
+# 	\item{this}{A Sequence object.} 
+# 	\item{value}{A list of list of Process objects, recycled if shorter than the index vector.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+#	\item{sloppy}{If TRUE then processes will be attached in a more careless (and faster) way.}
 # 	\item{...}{Not used.} 
 # } 
 # 
 # \value{ 
-# 
+# 	The Sequence object (invisible).
 # } 
 # 
 # \examples{
-#
-#
+#	# create a sequence of length 5
+#	s<-Sequence(length=5,alphabets=list(NucleotideAlphabet()));
+#	# set a pattern of processes
+#	setProcesses(s,list(list(JC69(),K81())))
+#	# get attached processes
+#	s$processes
+#	# detach all processes from range 1:3
+#	setProcesses(s,list(list()),1:3)
+#	s$processes
+#	# detach all processes via virtual field
+#	s$processes<-list(list())
+#	# create a process pattern in the full sequence via virtual field
+#	s$processes<-list(list(JC69()),list(GTR(),K80()))
+#	s$processes
 # } 
 # 
 # @author 
@@ -1899,6 +1916,52 @@ setMethodS3(
 ##	
 ## Method: setParameterAtSites
 ##	
+###########################################################################/**
+#
+# @RdocMethod setParameterAtSites
+# 
+# @title "Set the values of a site-process specific paramater for a process and a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A valid Process object.} 
+# 	\item{id}{The identifier of the site-process specific parameter.} 
+#	\item{value}{A vector containing the new values of the site-process specific parameter, recycled if shorter than the index vector. It should be consistent with the type of the parameter.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create a sequence, attach a process
+#	p<-K80()
+#	s<-Sequence(length=6,alphabets=list(NucleotideAlphabet()),processes=list(list(p)))
+#	# set a new pattern of rate multipliers in the range 1:3, the default value is 1.0 by the way
+#	setParameterAtSites(s,p,"rate.multiplier",c(2,3),1:3)
+#	# get rate multipliers
+#	getParameterAtSites(s,p,"rate.multiplier")
+#	# set a new value for the whole sequence
+#	setParameterAtSites(s,p,"rate.multiplier",0.5)
+#	# get rate multipliers
+#	getParameterAtSites(s,p,"rate.multiplier")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	Site Process @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setParameterAtSites", 
 	class="Sequence", 
@@ -1969,6 +2032,39 @@ setMethodS3(
 ##	
 ## Method: setRateMultipliers
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateMultipliers
+# 
+# @title "Set the values of the rate multiplier parameters for a given Process object and a collection of Site  object aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method just calls \code{setParameterAtSites(this=this,process=process,id="rate.multiplier",value=value,index=index)} See setParameterAtSites.Sequence for details.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A valid Process object.} 
+#	\item{value}{A numeric vector containing the new values of the site-process specific parameter, recycled if shorter than the index vector.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	setParameterAtSites.Sequence
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateMultipliers", 
 	class="Sequence", 
@@ -2002,6 +2098,38 @@ setMethodS3(
 ##	
 ## Method: getRateMultipliers
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateMultipliers
+# 
+# @title "Get the values of the rate multiplier parameters for a given Process object and a collection of Site  object aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method just calls \code{getParameterAtSites(this=this,process=process,id="rate.multiplier",index=index)} See getParameterAtSites.Sequence for details.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A valid Process object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector with the current values of the rate multiplier in the specified range.
+# } 
+# 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	setParameterAtSites.Sequence
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateMultipliers", 
 	class="Sequence", 
@@ -2029,11 +2157,55 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-
-
 ##	
 ## Method: getParameterAtSites
 ##	
+###########################################################################/**
+#
+# @RdocMethod getParameterAtSites
+# 
+# @title "Get the values of a site-process specific paramater for a process and a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A valid Process object.} 
+# 	\item{id}{The identifier of the site-process specific parameter.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of site specific paramters. A site specific paramter is a list storing the id, the name, the value 
+#	and the type of the parameter.
+# } 
+# 
+# \examples{
+#	# create a sequence, attach a process
+#	p<-K80()
+#	s<-Sequence(length=6,alphabets=list(NucleotideAlphabet()),processes=list(list(p)))
+#	# set a new pattern of rate multipliers in the range 1:3, the default value is 1.0 by the way
+#	setParameterAtSites(s,p,"rate.multiplier",c(2,3),1:3)
+#	# get rate multipliers
+#	getParameterAtSites(s,p,"rate.multiplier")
+#	# set a new value for the whole sequence
+#	setParameterAtSites(s,p,"rate.multiplier",0.5)
+#	# get rate multipliers
+#	getParameterAtSites(s,p,"rate.multiplier")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	Site Process @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getParameterAtSites", 
 	class="Sequence", 
