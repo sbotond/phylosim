@@ -820,6 +820,7 @@ setMethodS3(
 # 
 # \description{ 
 #	@get "title".
+#	Warning: there is no setSites method!
 # } 
 # 
 # @synopsis 
@@ -901,6 +902,8 @@ setMethodS3(
 #	getStates(s)
 #	# get the states for a collection of sites
 #	getStates(s,c(1:3,5,8))
+#	# get states via virtual field
+#	s$states
 # } 
 # 
 # @author 
@@ -976,6 +979,9 @@ setMethodS3(
 #	s
 #	# set the states for the whole Sequence object
 #	setStates(s,c("A","T","T","A"))
+#	s
+#	# set states via virtual field
+#	s$states<-c("A","T")
 #	s
 # } 
 # 
@@ -1104,7 +1110,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-# 	\item{index}{A numeric vector specifying a set of positions.} 
+# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1121,6 +1127,8 @@ setMethodS3(
 #	getAlphabets(s)
 #	# get Alphabets from a range
 #	getAlphabets(s,c(2:3,5))
+#	# get alphabets via virtual field
+#	s$alphabets
 # } 
 # 
 # @author 
@@ -1162,6 +1170,53 @@ setMethodS3(
 ##	
 ## Method: setAlphabets
 ##	
+###########################################################################/**
+#
+# @RdocMethod setAlphabets
+# 
+# @title "Assotiate Alphabet objects to a set of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{value}{A list of Alphabet objects, recycled if shorter than the index vector.} 
+# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create a Sequence object
+#	s<-Sequence(length=10)	
+#	# set the alphabets for range 1:5
+#	setAlphabets(s,list(NucleotideAlphabet(),BinaryAlphabet()),1:5)
+#	# set the alphabets for range 6:10	
+#	setAlphabets(s,list(AminoAcidAlphabet()),6:10)
+#	# get the list of attached Alphabet objects
+#	getAlphabets(s)
+#	# get Alphabets from a range
+#	getAlphabets(s,c(2:3,5))
+#	# set alphabets via virtual field
+#	s$alphabets<-list(BinaryAlphabet(),NucleotideAlphabet())
+#	# get alphabets via virtual field
+#	s$alphabets
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setAlphabets", 
 	class="Sequence", 
@@ -1223,6 +1278,44 @@ setMethodS3(
 ##	
 ## Method: getAlphabetsList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getAlphabetsList
+# 
+# @title "Get an object representing a list of Alphabet objects assotiated to the Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	An AlphabetsList object.
+# } 
+# 
+# \examples{
+#	# create a Sequence object with NucleotideAlphabet
+#	#and BinaryAlphabet objects attached
+#	s<-Sequence(alphabets=list(NucleotideAlphabet(),BinaryAlphabet()),length=5)	
+#	# get an AlphabetsList object
+#	getAlphabetsList(s)
+#	# get alphabets list via virtual field
+#	s$alphabetsList
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	AlphabetsList Alphabet Sequence Site
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getAlphabetsList", 
 	class="Sequence", 
@@ -1245,6 +1338,45 @@ setMethodS3(
 ##	
 ## Method: getUniqueAlphabets
 ##	
+###########################################################################/**
+#
+# @RdocMethod getUniqueAlphabets
+# 
+# @title "Get the list of unique Alphabet objects assotiated to Site objects aggaregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	The returned list contains unique instances of the Alphabet class. The symbol sets are not compared, so
+#	two instances of the same class are considered to be different.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of Alphabet objects.
+# } 
+# 
+# \examples{
+#	# create a Sequence object with some Alphabet objects attached
+#	s<-Sequence(alphabets=list(NucleotideAlphabet(),BinaryAlphabet(),NucleotideAlphabet()),length=10)	
+#	# get the list of attached alphabets
+#	s$alphabets
+#	# get the unique list of attahced Alphabet objects
+#	getUniqueAlphabets(s)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getUniqueAlphabets",
 	class="Sequence", 
@@ -1253,14 +1385,14 @@ setMethodS3(
 		...
 	){
 	
-		tmp<-list();			
-    lapply(
-      this$.sites,
-      function(site) {
-				tmp<<-c(tmp,list(site$.alphabet))
-      }
-		);
-		return(unique(tmp));
+	tmp<-list();			
+    	lapply(
+      	this$.sites,
+      	function(site) {
+		tmp<<-c(tmp,list(site$.alphabet))
+      	}
+	);
+	return(unique(tmp));
 
 	},
 	private=FALSE,
@@ -1273,6 +1405,35 @@ setMethodS3(
 ##	
 ## Method: setUniqueAlphabets
 ##	
+###########################################################################/**
+#
+# @RdocMethod setUniqueAlphabets
+#
+# @title "Forbidden action: setting the list of unique Alphabet objects attached to the Site object aggregated by a Sequence object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setUniqueAlphabets", 
 	class="Sequence", 
@@ -1295,6 +1456,49 @@ setMethodS3(
 ##	
 ## Method: attachProcess
 ##	
+###########################################################################/**
+#
+# @RdocMethod attachProcess
+# 
+# @title "Attach a Process object to a set of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A Process object.}
+# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create a Sequence object of length 6
+#	s<-Sequence(length=10,alphabets=list(NucleotideAlphabet()))
+#	# attach a JC69 substitution process 
+#	attachProcess(s,JC69())
+#	# get the list of attached processes 
+#	s$processes
+#	# attach the GTR substitution process to range 3:6
+#	attachProcess(s,GTR(),3:6)
+#	# get the list of attached processes 
+#	s$processes
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"attachProcess", 
 	class="Sequence", 
@@ -1310,8 +1514,8 @@ setMethodS3(
 			throw("Process object invalid!\n");
 		}
  		if (missing(index)) {
-      index<-seq(along=this$.sites);
-    } else {
+      		index<-seq(along=this$.sites);
+    		} else {
 			index<-.checkIndexSanity(this, index);	
 		}
 
@@ -1332,6 +1536,47 @@ setMethodS3(
 ##	
 ## Method: detachProcess
 ##	
+###########################################################################/**
+#
+# @RdocMethod detachProcess
+# 
+# @title "Detach a Process object from a set of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A Process object.} 
+# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create a sequence object with two processes attached
+#	p<-JC69()
+#	s<-Sequence(length=4,alphabets=list(NucleotideAlphabet()),processes=list(list(p,K80())))
+#	# get the list of attached processes
+#	s$processes
+#	# detach JC69 from range c(1,4)
+#	detachProcess(s,p,c(1,4))
+#	s$processes
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"detachProcess", 
 	class="Sequence", 
@@ -1347,14 +1592,14 @@ setMethodS3(
 			throw("Process object invalid!\n");
 		}
  		if (missing(index)) {
-      index<-seq(along=this$.sites);
-    } else {
+      		index<-seq(along=this$.sites);
+    		} else {
 			index<-.checkIndexSanity(this, index);
 		}
-    lapply(
-      this$.sites[index],
-      function(site) {
-          detachProcess(site,process);
+		lapply(
+      		this$.sites[index],
+      		function(site) {
+        	detachProcess(site,process);
       }
     );	
 		return(invisible(this));
@@ -1370,6 +1615,44 @@ setMethodS3(
 ##	
 ## Method: getProcesses
 ##	
+###########################################################################/**
+#
+# @RdocMethod getProcesses
+# 
+# @title "Get the Process objects attached to the Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{index}{A numeric vector specifying a set of positions. It is set to 1:seq$length if ommited.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of lists of Process objects.
+# } 
+# 
+# \examples{
+#	# create a sequence object with some processes attached
+#	s<-Sequence(length=4,alphabets=list(NucleotideAlphabet()),processes=list(list(JC69(),K80()),list(GTR())))
+#	# get the list of lists of attached processes from positions 1 and 3
+#	getProcesses(s,c(1,3))
+#	# get processes via virtual field
+#	s$processes
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getProcesses", 
 	class="Sequence", 
@@ -1379,16 +1662,16 @@ setMethodS3(
 		...
 	){
 	
- 		if (missing(index)) {
-      index<-seq(along=this$.sites);
-    } else {
+ 	if (missing(index)) {
+      	index<-seq(along=this$.sites);
+    	} else {
 			index<-.checkIndexSanity(this, index);
 		}
 
-    lapply(
-      this$.sites[index],
-      function(site) {
-          site$processes;
+    	lapply(
+      	this$.sites[index],
+      	function(site) {
+        site$processes;
       }
     );	
 
@@ -1403,6 +1686,44 @@ setMethodS3(
 ##	
 ## Method: getUniqueProcesses
 ##	
+###########################################################################/**
+#
+# @RdocMethod getUniqueProcesses
+# 
+# @title "Get the list of unique Process instances attached to the Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of Process objects.
+# } 
+# 
+# \examples{
+#	# create a sequence object and attach processes
+#	p<-JC69()
+#	s<-Sequence(length=4,alphabets=list(NucleotideAlphabet()),processes=list(list(p,K80()),list(p)))
+#	# get the unique list of attached Process instances
+#	getUniqueProcesses(s)
+#	# via virtual field
+#	s$uniqueProcesses
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getUniqueProcesses", 
 	class="Sequence", 
@@ -1412,7 +1733,7 @@ setMethodS3(
 	){
 	
 		tmp<-list();			
-    lapply(
+      lapply(
       this$.sites,
       function(site) {
 				tmp<<-c(tmp,site$processes)
@@ -1431,6 +1752,35 @@ setMethodS3(
 ##	
 ## Method: setUniqueProcesses
 ##	
+###########################################################################/**
+#
+# @RdocMethod setUniqueProcesses
+#
+# @title "Forbidden action: setting the list of unique Process instances attached to the sites of a Sequence object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setUniqueProcesses", 
 	class="Sequence", 
@@ -1453,6 +1803,39 @@ setMethodS3(
 ##	
 ## Method: setProcesses
 ##	
+###########################################################################/**
+#
+# @RdocMethod setProcesses
+# 
+# @title "" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{}{} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 
+# } 
+# 
+# \examples{
+#
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setProcesses", 
 	class="Sequence", 
@@ -1482,28 +1865,28 @@ setMethodS3(
 			);
 		}
 
-	  if (missing(index)) {
-      index<-seq(along=this$.sites);
-    } else {
+	  	if (missing(index)) {
+      		index<-seq(along=this$.sites);
+    		} else {
 			index<-.checkIndexSanity(this, index);	
 		}
 
-    value.counter<-1;
+    		value.counter<-1;
 
 		# Recycling value vector. rep() cannot be used here,
 		# because we loose the object references!
-    for (i in index)  {
-        if(value.counter > length(value)) {
-          value.counter<-1;
-        }
-				if (sloppy == FALSE) {
-						setProcesses(this$.sites[[i]], value[[value.counter]]);
-				} else {
-					.setProcessesSloppy(this$.sites[[i]], value[[value.counter]]);
-				}
-        value.counter<-(value.counter + 1);
-    }
-    invisible(this);
+    		for (i in index)  {
+        	if(value.counter > length(value)) {
+          		value.counter<-1;
+        	}
+		if (sloppy == FALSE) {
+				setProcesses(this$.sites[[i]], value[[value.counter]]);
+		} else {
+			.setProcessesSloppy(this$.sites[[i]], value[[value.counter]]);
+		}
+        	value.counter<-(value.counter + 1);
+    	}
+    	invisible(this);
 	
 	},
 	private=FALSE,
@@ -1819,17 +2202,6 @@ setMethodS3(
 		}
 
 		this$.total.rates[index];
-
- 		#if (missing(index)) {
-    #  index<-seq(along=this$.sites);
-    #}
-		#lapply(
-		#		this$.sites[index],
-		#		function(site){
-		#				getTotalRate(site);
-		#			}
-		#		);
-
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -1881,7 +2253,7 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 ##	
-## Method: getAncestralSequence
+## Method: getAncestral
 ##	
 setMethodS3(
 	"getAncestral", 
@@ -1902,7 +2274,7 @@ setMethodS3(
 );
 
 ##	
-## Method: getCumulativeRates
+## Method: getCumulativeRatesFromRange
 ##	
 setMethodS3(
 	"getCumulativeRatesFromRange", 
@@ -2114,7 +2486,7 @@ setMethodS3(
 );
 
 ##	
-## Method: setAncestralSeq
+## Method: setAncestral
 ##	
 setMethodS3(
 	"setAncestral", 
@@ -2143,7 +2515,6 @@ setMethodS3(
 ##	
 ## Method: clone.Sequence
 ##	
-
 setMethodS3(
 	"clone", 
 	class="Sequence", 
@@ -2195,6 +2566,48 @@ setMethodS3(
 ##
 ## Method: getWriteProtected
 ##
+###########################################################################/**
+#
+# @RdocMethod getWriteProtected
+#  
+# @title "Check if the object is write protected" 
+# 
+# \description{ 
+#	@get "title".
+#	Write protected objects cannot be modified through get/set methods and virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE
+# } 
+# 
+# \examples{
+#
+#       # create an object
+#       o<-Sequence()
+#       # toggle write protection
+#       o$writeProtected<-TRUE
+#       # check if it's write protected
+#       getWriteProtected(o)
+#       # check write protection via virtual field
+#       o$writeProtected
+#	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getWriteProtected",
   class="Sequence",
@@ -2258,6 +2671,51 @@ setMethodS3(
 ##
 ## Method: setWriteProtected
 ##
+###########################################################################/**
+#
+# @RdocMethod setWriteProtected
+#  
+# @title "Set the write protection field for an object" 
+# 
+# \description{ 
+#	@get "title".
+#	Write protected objects cannot be modified through get/set methods and virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{value}{A logical vector of size one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE or FALSE.
+# } 
+# 
+# \examples{
+#
+#	# create an object
+#	o<-Sequence()
+#	# toggle write protection
+#	setWriteProtected(o,TRUE)
+#	# check write protection
+#	o$writeProtected
+#	# set write protection via virtual field
+#	o$writeProtected<-FALSE
+#	o$writeProtected
+#	
+#	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setWriteProtected",
   class="Sequence",
@@ -2330,7 +2788,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-Sequence()
 #       # get a summary
 #       summary(a)
 # }
