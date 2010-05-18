@@ -16,7 +16,7 @@
 #	on a collection of sites (positions).
 #
 #	The Sequence objects have a field specifying an ancestral object, which can be a Sequence
-#	object (when the object is obtained through clone() ) or a Process object 
+#	object (when the object is obtained through clone() ) or the "Root insertion process" object 
 #	(for newly created objects).
 #
 #	@classhierarchy
@@ -2252,6 +2252,43 @@ setMethodS3(
 ##	
 ## Method: getProcessesList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getProcessesList
+# 
+# @title "Get the list of Process objects attached to the sites of a Sequence objects as a ProcessesList object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A ProcessesList object.
+# } 
+# 
+# \examples{
+#	# create a sequence with some processes attached
+#	s<-Sequence(string="AAAAGGCC",alphabets=list(NucleotideAlphabet()),processes=list(list(JC69(),K80()),list(K81i())))
+#	# get a ProcessesList object
+#	getProcessesList(s)
+#	# get it via virtual field
+#	s$processesList
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	ProcessesList
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getProcessesList", 
 	class="Sequence", 
@@ -2273,6 +2310,44 @@ setMethodS3(
 ##	
 ## Method: getEvents
 ##	
+###########################################################################/**
+#
+# @RdocMethod getEvents
+# 
+# @title "Get the list of active Event objects for a set of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of Event objects.
+# } 
+# 
+# \examples{
+#	# create a sequence with a process attached
+#	s<-Sequence(string="ATGC",alphabets=list(NucleotideAlphabet()),processes=list(list(JC69())))
+#	# get the active events from range 1:3
+#	getEvents(s,1:3)
+#	# get all active events via virtual field
+#	s$events
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getEvents", 
 	class="Sequence", 
@@ -2282,21 +2357,21 @@ setMethodS3(
 		...
 	){
 		
- 		if (missing(index)) {
-      index<-seq(along.with=this$.sites);
-    } else {
-        index<-.checkIndexSanity(this, index);
-    }
+ 	if (missing(index)) {
+      		index<-seq(along.with=this$.sites);
+	} else {
+        	index<-.checkIndexSanity(this, index);
+    	}
 
-		tmp<-list();
-    for (i in index){
-					# Setting the .positions field for then Events.
-					this$.sites[[i]]$.position<-i;
-          tmp<-c(tmp, getEvents(this$.sites[[i]]));
-					# Deleting the .position field;
-					this$.sites[[i]]$.position<-NULL;
-    }
-		tmp;
+	tmp<-list();
+    	for (i in index){
+		# Setting the .positions field for then Events.
+		this$.sites[[i]]$.position<-i;
+        	tmp<-c(tmp, getEvents(this$.sites[[i]]));
+		# Deleting the .position field;
+		this$.sites[[i]]$.position<-NULL;
+    	}
+	tmp;
 
 	},
 	private=FALSE,
@@ -2309,6 +2384,43 @@ setMethodS3(
 ##	
 ## Method: getEventsList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getEventsList
+# 
+# @title "Get the list of active Event objects from the Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of Event objects.
+# } 
+# 
+# \examples{
+#	# create a sequence with a process attached
+#	s<-Sequence(string="ATGC",alphabets=list(NucleotideAlphabet()),processes=list(list(JC69())))
+#	# get the active events 
+#	getEventsList(s)
+#	# get active events via virtual field
+#	s$eventsList
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getEventsList", 
 	class="Sequence", 
@@ -2330,6 +2442,35 @@ setMethodS3(
 ##	
 ## Method: setEventsList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setEventsList
+#
+# @title "Forbidden action: setting the list of active Event objects for the Site objects aggregated by a Sequence object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setEventsList", 
 	class="Sequence", 
@@ -2350,8 +2491,46 @@ setMethodS3(
 );
 
 ##	
-## Method: getTotalRates
+## Method: getTotalRatesFromRange
 ##	
+###########################################################################/**
+#
+# @RdocMethod getTotalRatesFromRange
+# 
+# @title "Get the vector of total site rates for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector.
+# } 
+# 
+# \examples{
+#	# create a sequence with some processes attached
+#	s<-Sequence(string="ATGC",alphabets=list(NucleotideAlphabet()),processes=list(list(JC69()),list(JC69(),GTR())))
+#	# get total rates for positions 1 and 3
+#	getTotalRatesFromRange(s,c(1,3))
+#	# get all total rates via virtual field
+#	s$totalRates	# via the "getTotalRates.Sequence" method
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getTotalRatesFromRange", 
 	class="Sequence", 
@@ -2362,11 +2541,11 @@ setMethodS3(
 	){
 
 
- 		if (missing(index)) {
-      index<-seq(along=this$.sites);
-    } else {
-        index<-.checkIndexSanity(this, index);
-    }
+	if (missing(index)) {
+      	index<-seq(along=this$.sites);
+    	} else {
+        	index<-.checkIndexSanity(this, index);
+    	}
 
 	
 		if (this$.cumulative.rate.flag){
@@ -2385,6 +2564,36 @@ setMethodS3(
 ##	
 ## Method: getTotalRates
 ##	
+###########################################################################/**
+#
+# @RdocMethod getTotalRates
+# 
+# @title "Get the total site rates from a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method simply calls \code{getTotalRatesFromRange(this)}.
+#	See \code{getTotalRatesFromRange.Sequence} for more details.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector containing the total site rates.
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	getTotalRatesFromRange.Sequence
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getTotalRates", 
 	class="Sequence", 
@@ -2404,8 +2613,37 @@ setMethodS3(
 );
 
 ##	
-## Method: setTotalRatesList
+## Method: setTotalRates
 ##	
+###########################################################################/**
+#
+# @RdocMethod setTotalRates
+#
+# @title "Forbidden action: setting the list of total site rates for a Sequence object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setTotalRates", 
 	class="Sequence", 
@@ -2427,6 +2665,45 @@ setMethodS3(
 ##	
 ## Method: getAncestral
 ##	
+###########################################################################/**
+#
+# @RdocMethod getAncestral
+# 
+# @title "Get the ancestral object of a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A Sequence object or a Process object.
+# } 
+# 
+# \examples{
+#	# create a sequence object
+#	s<-Sequence(length=4)
+#	# get ancestral object
+#	getAncestral(s)	# newly created sequences have the "Root insertion process" as ancestral
+#	# clone sequence
+#	cs<-clone(s)
+#	# get ancestral object id via virtual field
+#	cs$ancestral$id
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getAncestral", 
 	class="Sequence", 
@@ -2448,6 +2725,44 @@ setMethodS3(
 ##	
 ## Method: getCumulativeRatesFromRange
 ##	
+###########################################################################/**
+#
+# @RdocMethod getCumulativeRatesFromRange
+# 
+# @title "Get the cumulative site rates for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector.
+# } 
+# 
+# \examples{
+#	# create a sequence with some processes attached
+#	s<-Sequence(string="ATGC",alphabets=list(NucleotideAlphabet()),processes=list(list(JC69()),list(JC69(),GTR())))
+#	# get cumulative rates for positions 1 and 3
+#	getCumulativeRatesFromRange(s,c(1,3))
+#	# get all cumulative rates via virtual field
+#	s$cumulativeRates	# via the "getCumulativeRates.Sequence" method
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getCumulativeRatesFromRange", 
 	class="Sequence", 
@@ -2457,13 +2772,13 @@ setMethodS3(
 		...
 	){
 
- 		if (missing(index)) {
-      index<-seq(along=this$.sites);
-    } else {
-        index<-.checkIndexSanity(this, index);
-    }
+		if (missing(index)) {
+      			index<-seq(along=this$.sites);
+    		} else {
+        		index<-.checkIndexSanity(this, index);
+   		}
 
-	
+
 		if (this$.cumulative.rate.flag){
 			.recalculateCumulativeRates(this);
 		}
@@ -2508,9 +2823,9 @@ setMethodS3(
 			if( this$.length > 0 ) {
 
 				# We have some flagged sites, recalculate just their total rates:
-        for(i in this$.flagged.sites) {
-          this$.total.rates[[i]]<-this$.sites[[i]]$totalRate;
-        }
+        			for(i in this$.flagged.sites) {
+          				this$.total.rates[[i]]<-this$.sites[[i]]$totalRate;
+        			}	
 
 				# The site before the first flagged site: 
 				min.index<-(min(this$.flagged.sites) - 1);
@@ -2523,13 +2838,13 @@ setMethodS3(
 					this$.cumulative.rates<-new.cumrates;
 
 				} else {
-        	this$.cumulative.rates<-cumsum(this$.total.rates);
+        				this$.cumulative.rates<-cumsum(this$.total.rates);
 				}
 				
 				# Cleaning out flagged sites.
 				this$.flagged.sites<-integer(0);
 				
-      } #/else
+      		} #/else
 	
 		}
 	
@@ -2566,6 +2881,36 @@ setMethodS3(
 ##	
 ## Method: getCumulativeRates
 ##	
+###########################################################################/**
+#
+# @RdocMethod getCumulativeRates
+# 
+# @title "Get the total site rates from a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method simply calls \code{getCumulativeRatesFromRange(this)}.
+#	See \code{getCumulativeRates.Sequence} for more details.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector containing the total site rates.
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	getCumulativeRatesFromRange.Sequence
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getCumulativeRates", 
 	class="Sequence", 
@@ -2587,6 +2932,35 @@ setMethodS3(
 ##	
 ## Method: setCumulativeRates
 ##	
+###########################################################################/**
+#
+# @RdocMethod setCumulativeRates
+#
+# @title "Forbidden action: setting the cumulative rates for the sites aggregated by a Sequence object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setCumulativeRates", 
 	class="Sequence", 
@@ -2609,6 +2983,48 @@ setMethodS3(
 ##	
 ## Method: getBigRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod getBigRate
+# 
+# @title "Get the sum of all active event rates from a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	The sum of active event rates depends on all Site object states and on the attached Process objects. 
+#	It basically returns the last element of the cumulative site rates vector.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a nucleotide sequence attach a process
+#	s<-NucleotideSequence(length=5);
+#	s$processes<-list(list(JC69()))
+#	# get the sum of active event rates
+#	getBigRate(s)	# returns NA because site states are undefined
+#	# set site states
+#	s$states<-c("A","T")
+#	# get big rate via virtual field
+#	s$bigRate
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getBigRate", 
 	class="Sequence", 
@@ -2638,6 +3054,35 @@ setMethodS3(
 ##	
 ## Method: setBigRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod setBigRate
+#
+# @title "Forbidden action: setting the sum of total active event rates for a Sequence object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setBigRate", 
 	class="Sequence", 
@@ -2660,6 +3105,51 @@ setMethodS3(
 ##	
 ## Method: setAncestral
 ##	
+###########################################################################/**
+#
+# @RdocMethod setAncestral
+# 
+# @title "Set the ancestral object of a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{value}{A Sequence or a Process object.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new ancestral object (invisible).
+# } 
+# 
+# \examples{
+#	# create a nucleotide sequence and a process object
+#	s<-NucleotideSequence(string="AGCT")
+#	p<-Process(name="MyProcess")
+#	# set the p as the ancestral of s
+#	setAncestral(s,p)
+#	s$ancestral
+#	# clone s
+#	cs<-clone(s)
+#	# set cs as ancestral of s via virtual field
+#	s$ancestral<-cs
+#	# get ancestral ids
+#	s$ancestral$id
+#	cs$ancestral$id
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setAncestral", 
 	class="Sequence", 
@@ -2687,6 +3177,52 @@ setMethodS3(
 ##	
 ## Method: clone.Sequence
 ##	
+###########################################################################/**
+#
+# @RdocMethod clone
+# 
+# @title "Clone a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The cloning of Sequence objects involves the cloning of all aggregated Site objects. Because of that the 
+#	cloning of long sequences is quite expensive.
+#	The cloned Site objects have the orginal Site objects as ancestral.
+#	The new Sequence objects has the original object as ancestral.	
+#	
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A Sequence object.
+# } 
+# 
+# \examples{
+#	# cretate a nucleotide sequence
+#	s<-NucleotideSequence(string="ATG")
+#	# clone the sequence
+#	cs<-clone(s)
+#	# get some properties
+#	equals(s,s)
+#	equals(s,cs)
+#	sc$ancestral
+#	cs$sites[[1]]$ancestral
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	Sequence clone.Object
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"clone", 
 	class="Sequence", 
@@ -3071,6 +3607,44 @@ setMethodS3(
 ##	
 ## Method: plot
 ##	
+###########################################################################/**
+#
+# @RdocMethod plot
+# 
+# @title "Plot the total site rates for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{x}{A Sequence object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create a nucleotide sequence with a process attached
+#	s<-NucleotideSequence(string="ATGGCCA",processes=list(list(JC69())))
+#	# plot total rates in range 1:4
+#	plot(s,1:4)
+#	# plot all total rates
+#	plot(s)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"plot", 
 	class="Sequence", 
@@ -3111,8 +3685,10 @@ setMethodS3(
         xlim=c(min(index),max(index)),
 				xaxt="n"
       );
-			axis(side=1, at=index, labels=index);
-    }
+	axis(side=1, at=index, labels=index);
+	
+	return(invisible(TRUE));
+    	}
 
 
 	},
@@ -3126,8 +3702,51 @@ setMethodS3(
 ##	
 ## Method: plotParameterAtSites
 ##	
+###########################################################################/**
+#
+# @RdocMethod plotParametersAtSites
+# 
+# @title "Plot the value of a site-process specifc paramter for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	The type of the paramter must be numeric. The Process object must be attached to all positions specified 
+#	in the index vector. 
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A Process object.} 
+# 	\item{id}{The identifier of the site-process specific parameter.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE or FALSE.	
+# } 
+# 
+# \examples{
+#	# create a nucleotide sequence with a process attached
+#	p<-JC69()
+#	s<-NucleotideSequence(string="ATGGCCA",processes=list(list(p)))
+#	# plot rate multipliers in range 1:4
+#	plotParametersAtSites(s,p,"rate.multiplier",1:4)
+#	# plot rate multiplier for the full sequence
+#	plotParametersAtSites(s,p,"rate.multiplier")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	Site Process Sequence
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
-	"plotParametersAtSite", 
+	"plotParametersAtSites", 
 	class="Sequence", 
 	function(
 		this,
@@ -3138,13 +3757,13 @@ setMethodS3(
 	){
 
 
-    if(this$length == 0) {
-      warning("The sequence leght is zero, nothing to plot here!\n");
-      return(invisible(FALSE));
-    }
-    if(missing(index)) {
-      index<-seq(along=3:this$length,by=1);
-    }
+    	if(this$length == 0) {
+      	warning("The sequence leght is zero, nothing to plot here!\n");
+      	return(invisible(FALSE));
+    	}
+    	if(missing(index)) {
+      		index<-seq(along=3:this$length,by=1);
+    	}
 		what<-apply(as.array(index),1,
 			function(pos){
 				tmp<-getParameterAtSites(this,process,id,pos)[[1]]$value;
@@ -3167,7 +3786,8 @@ setMethodS3(
 				ylim=c(0,max(what)),
 				xaxt="n"
       );
-			axis(side=1, at=index, labels=index);
+	axis(side=1, at=index, labels=index);
+	invisible(TRUE);
 
 	},
 	private=FALSE,
@@ -3180,6 +3800,40 @@ setMethodS3(
 ##	
 ## Method: setDeletionTolerance
 ##	
+###########################################################################/**
+#
+# @RdocMethod setDeletionTolerance
+# 
+# @title "Set the deletion tolerance site-process specific parameter for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method does some error checking and the calls \code{setParameterAtSites(this=this,process=process,id="deletion.tolerance",value=value,index=index)}.
+#	See \code{setParameterAtSites.Sequence} for more details.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A Process object.} 
+# 	\item{value}{A numeric vector, recycled if shorter than the index vector.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	setParameterAtSites.Sequence
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setDeletionTolerance", 
 	class="Sequence", 
@@ -3213,6 +3867,39 @@ setMethodS3(
 ##	
 ## Method: getDeletionTolerance
 ##	
+###########################################################################/**
+#
+# @RdocMethod getDeletionTolerance
+# 
+# @title "Get the deletion tolerance site-process specific parameter for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method does some error checking and the calls \code{getParameterAtSites(this=this,process=process,id="deletion.tolerance",index=index)}.
+#	See \code{getParameterAtSites.Sequence} for more details.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A Process object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector.
+# } 
+# 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	getParameterAtSites.Sequence
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getDeletionTolerance", 
 	class="Sequence", 
@@ -3243,6 +3930,40 @@ setMethodS3(
 ##	
 ## Method: setInsertionTolerance
 ##	
+###########################################################################/**
+#
+# @RdocMethod setDeletionTolerance
+# 
+# @title "Set the insertion tolerance site-process specific parameter for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method does some error checking and the calls \code{setParameterAtSites(this=this,process=process,id="insertion.tolerance",value=value,index=index)}.
+#	See \code{setParameterAtSites.Sequence} for more details.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A Process object.} 
+# 	\item{value}{A numeric vector, recycled if shorter than the index vector.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	setParameterAtSites.Sequence
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setInsertionTolerance", 
 	class="Sequence", 
@@ -3276,6 +3997,39 @@ setMethodS3(
 ##	
 ## Method: getInsertionTolerance
 ##	
+###########################################################################/**
+#
+# @RdocMethod getDeletionTolerance
+# 
+# @title "Get the insertion tolerance site-process specific parameter for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method does some error checking and the calls \code{getParameterAtSites(this=this,process=process,id="insertion.tolerance",index=index)}.
+#	See \code{getParameterAtSites.Sequence} for more details.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A Process object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector.
+# } 
+# 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	getParameterAtSites.Sequence
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getInsertionTolerance", 
 	class="Sequence", 
@@ -3306,6 +4060,62 @@ setMethodS3(
 ##	
 ## Method: sampleStates
 ##	
+###########################################################################/**
+#
+# @RdocMethod sampleStates
+# 
+# @title "Sample the states for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method samples new states from the equlibrium distribution of the attched process(es) for sites
+#	having undefined states (NA). 
+#	If a site has more than one substitution process attached, then the method samples the new state from the 
+#	mixture of equlibrium distributions. The weight of each equlibrium distribution is proportional to the 
+#	site-process specific rate multiplier of the corresponding process at the given site. 
+#
+#	Sites having defined states are not touched. All sites with undefined states must have at least one 
+#	substitution process (object inheriting from GeneralSubstitution) attached.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create a nucleotide sequence
+#	s<-NucleotideSequence(length=80)
+#	# create some processes
+#	jc69<-JC69(); 				# Jukes-Cantor
+#	hky<-HKY(base.freqs=c(0.1,0.4,0.1,0.4)) # "GC-rich" HKY
+#	# attach the processes
+#	s$processes<-list(list(jc69)) # jc is attached to all sites
+#	attachProcess(s,hky,60:80)  # hky is attached to range 60:80
+#	# tweak rate multiplier for hky
+#	setRateMultipliers(s,hky,10,60:80)
+#	# set states in range 1:20
+#	setStates(s,"A",1:20)
+#	# sample remaining states
+#	sampleStates(s)
+#	# print sequence
+#	s
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	sampleState.GeneralSubstitution GeneralSubstitution
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"sampleStates", 
 	class="Sequence", 
@@ -3359,11 +4169,11 @@ setMethodS3(
           # Sample the state from the winner process:
           site$state<-sampleState(subst.proc[[nproc]]);
         }
- 		} # if is.na...
+      } # if is.na...
 
-    }
+    	}
 
-		return(invisible(this));
+	return(invisible(this));
 	
 		
 	},
@@ -3377,6 +4187,47 @@ setMethodS3(
 ##	
 ## Method: clearStates
 ##	
+###########################################################################/**
+#
+# @RdocMethod clearStates
+# 
+# @title "Set the states of a collection of Site objects aggregated by a Sequence object to undefined (NA)" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create a nucleotide sequence
+#	s<-NucleotideSequence(string="ATGC")
+#	s
+#	# set states to NA in the range 2:3	
+#	clearStates(s,2:3)
+#	s
+#	# set all states to NA
+#	clearStates(s)
+#	s
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"clearStates", 
 	class="Sequence", 
@@ -3393,9 +4244,9 @@ setMethodS3(
 			index<-seq(along=this$.sites);
 		}
 	
-    for(site in this$.sites[index]){
+    		for(site in this$.sites[index]){
 			site$.state<-NA;
-    }
+    		}
 
 		return(invisible(this));
 	
@@ -3461,12 +4312,51 @@ setMethodS3(
 ##	
 ## Method: getSymbolFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod getSymbolFreqs
+# 
+# @title "Get a table with the frequencies of the states of a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A table.
+# } 
+# 
+# \examples{
+#	# create a nucleotide sequence
+#	s<-NucleotideSequence(length=30,processes=list(list(JC69())))
+#	# sample states
+#	sampleStates(s)
+#	# get state frequencies from ranges 1:10 and 20:30
+#	getSymbolFreqs(s,c(1:10,20:30))
+#	# get symbol frequencies for the full sequence
+#	getSymbolFreqs(s)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getSymbolFreqs", 
 	class="Sequence", 
 	function(
 		this,
-		process,
 		index,
 		...
 	){

@@ -725,6 +725,7 @@ setMethodS3(
 ##  
 ## Method: getOmegas
 ##  
+## \alias{getOmegas.Sequence} 
 setMethodS3(
   "getOmegas",
   class="CodonSequence",
@@ -795,7 +796,7 @@ setMethodS3(
 
 ##  
 ## Method: setOmegas
-##  
+## \alias{setOmegas.Sequence} 
 setMethodS3(
   "setOmegas",
   class="CodonSequence",
