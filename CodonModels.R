@@ -264,9 +264,9 @@ setMethodS3(
 			# Additional checks. They can be
 			# disabled by sloppy=TRUE			
 
-      #if(!is.Site(target.site)) {
-      #  throw("Target site invalid!\n");
-      #}
+      			#if(!is.Site(target.site)) {
+      			#  throw("Target site invalid!\n");
+      			#}
 			# Commenting this out for performance:
 	 		#else if(!is.QMatrix(this$.q.matrix)){
 			#	throw("Cannot provide event objects because the rate matrix is not set!\n");	
@@ -277,7 +277,7 @@ setMethodS3(
 			#} 
 
 			state<-target.site$.state;
-		  # Just return an empty list if the state is NA:
+		  	# Just return an empty list if the state is NA:
 			if(is.na(state)){
 				return(list());
 			}
@@ -298,23 +298,23 @@ setMethodS3(
 			for(new.state in rest){
 				
 				# Return empty list if the rate multiplier is zero.
-     		if(rate.multiplier == 0 ) {
-      		return(list());
-     		}	
+     				if(rate.multiplier == 0 ) {
+      				return(list());
+     				}	
 
-			  name<-paste(state,new.state,sep="->");
+			  	name<-paste(state,new.state,sep="->");
 		 		# Clone the event template object:
-     		event<-clone(this$.event.template);
-     		# Set event name:
-     		event$.name<-name;
-     		# Set the generator process:
-     		event$.process<-this;
-     		# Set the target position passed in a temporary field,
+     				event<-clone(this$.event.template);
+     				# Set event name:
+     				event$.name<-name;
+     				# Set the generator process:
+     				event$.process<-this;
+     				# Set the target position passed in a temporary field,
 				# Event objects are not aware of their posiitions in general!
-     		event$.position<-target.site$.position;
-     		# Set the target site:
-     		event$.site<-target.site;
-     		# Set the target state object (good for consistency):
+     				event$.position<-target.site$.position;
+     				# Set the target site:
+     				event$.site<-target.site;
+     				# Set the target state object (good for consistency):
 				event$.target.state<-state;
 
 				# Figure out wether the event is a synonymous mutation ...
@@ -333,7 +333,7 @@ setMethodS3(
 
 				# Set the handler for the substitution event:
 				event$.handler<-this$.handler.template;
-   			# Write protect the event object:
+   				# Write protect the event object:
 				event$.write.protected<-TRUE;
 				# Add to events list:	
 				events<-c(events, list(event));
