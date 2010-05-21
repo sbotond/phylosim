@@ -1595,4 +1595,181 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##
+## Method: hasSiteSpecificParameter
+##
+###########################################################################/**
+#
+# @RdocMethod hasSiteSpecificParameter
+# 
+# @title "Check if a Process object has the site-process specific parameter with the given id" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{id}{The identifier of the site-process specific parameter of interest.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create a process object
+#	p<-Process()
+#	# check whether it has the "rate.multiplier" site-process specific paramter
+#	hasSiteSpecificParameter(p,"rate.multiplier");	# TRUE
+#	# check whether it has the "omega" site-process specific paramter
+#	hasSiteSpecificParameter(p,"omega");	# FALSE
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "hasSiteSpecificParameter",
+  class="Process",
+  function(
+    this,
+    id,
+    ...
+  ){
+			if (missing(id)) {throw("Parameter identifier is missing!\n")}
+			else if ( length (intersect((as.vector(this$siteSpecificParamIds) == id),TRUE) ) == 0 ) {
+					return(FALSE);
+			} else {
+				return(TRUE);
+			}
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getParameterAtSite
+##
+setMethodS3(
+  "getParameterAtSite",
+  class="Process",
+  function(
+    this,
+    site,
+    id,
+    ...
+  ){
+			if (missing(id)) {throw("Parameter identifier is missing!\n")}
+			
+			if (.checkTriplett(this,site,id)){
+				id<-as.character(id);
+				list (
+					id=id,
+					name=site$.processes[[getId(this)]]$site.params[[id]]$name,
+					value=site$.processes[[getId(this)]]$site.params[[id]]$value,
+					type=site$.processes[[getId(this)]]$site.params[[id]]$type
+				);
+			}
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: .getParameterAtSiteFast
+##
+setMethodS3(
+  ".getParameterAtSiteFast",
+  class="Process",
+  function(
+    this,
+    site,
+    id,
+    ...
+  ){
+				site$.processes[[this$.id]]$site.params[[as.character(id)]]$value;
+  },
+  private=TRUE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: setParameterAtSite
+##
+setMethodS3(
+  "setParameterAtSite",
+  class="Process",
+  function(
+    this,
+    site,
+    id,
+		value,
+		...
+  ){
+			if (missing(id)) {throw("Parameter identifier is missing!\n")};
+      id<-as.character(id);
+			
+			if (.checkTriplett(this,site,id)){
+
+				type<-site$.processes[[this$id]]$site.params[[id]]$type;
+				if (length(intersect(class(value),type)) == 0 ) {throw("The new value is of wrong type!\n")}
+				site$.processes[[this$id]]$site.params[[id]]$value<-value;
+	
+			}
+			flagTotalRate(site);
+		 .flagSeqCumulativeRates(site);
+			invisible(this);
+				
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: .checkTriplett
+##
+setMethodS3(
+  ".checkTriplett",
+  class="Process",
+  function(
+    this,
+    site,
+		id,
+		...
+  ){
+					
+			if (!is.Site(site)) {throw ("Site object not valid!\n")}
+			else if (!hasSiteSpecificParameter(this,id)) {
+				throw(paste("The process",this$id,"has no site specific paramter with id:",id,"!\n",sep=" "));
+			}
+			else if (!isAttached(site,this)) {throw("Process is not attached to site!\n")} else {
+				return(TRUE);
+			}
+  },
+  private=TRUE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
 
