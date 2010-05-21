@@ -1334,6 +1334,47 @@ setMethodS3(
 ##
 ## Method: isAttached
 ##
+###########################################################################/**
+#
+# @RdocMethod isAttached
+# 
+# @title "Check whether a Process object is attached to a Site object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{process}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create a Site object
+#	s<-Site(alphabet=NucleotideAlphabet())
+#	# create a Process object
+#	p<-JC69()
+#	# check if p is attached to s
+#	isAttached(s,p)
+#	# attach p to s
+#	s$processes<-list(p)
+#	isAttached(s,p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	Site Process attachProcess detachProcess getProcesses setProcesses
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "isAttached",
   class="Site",
@@ -1343,14 +1384,14 @@ setMethodS3(
     ...
   ){
 			
-			if (!is.Process(process)) {throw("Process object invalid!\n")}	
-			attached_processes<-getProcesses(this);
-			if (length(attached_processes) == 0 ){ return(FALSE)}
+		if (!is.Process(process)) {throw("Process object invalid!\n")}	
+		attached_processes<-getProcesses(this);
+		if (length(attached_processes) == 0 ){ return(FALSE)}
 			
-			tmp<-lapply(
-					attached_processes,
-					function(proc) { equals(proc, process)}
-			);	
+		tmp<-lapply(
+			attached_processes,
+			function(proc) { equals(proc, process)}
+		);	
 			tmp<-unique(tmp);
 			
 			if(length(tmp) == 1 ) {
@@ -1360,10 +1401,11 @@ setMethodS3(
 			} else {
 					
 					# Additional check to make sure that the .process entry is here.	
-				#	if (length (intersect(class(this$.processes[[getId(process)]]),"list")) == 0) {
-				#		throw("Something evil is happening! The process is attached, but the .process entry is invalid!\n");
-				#	}
-					# If length(tmp) > 1, than one of its elements must me TRUE,
+					#	if (length (intersect(class(this$.processes[[getId(process)]]),"list")) == 0) {
+					#		throw("Something evil is happening! The process is attached, but the .process entry is invalid!\n");
+					#	}
+
+					# If length(tmp) > 1, than one of its elements must be TRUE,
 					# so returning TRUE.
 					return(TRUE);
 			}
@@ -1379,6 +1421,56 @@ setMethodS3(
 ##
 ## Method: attachProcess
 ##
+###########################################################################/**
+#
+# @RdocMethod attachProcess
+# 
+# @title "Attach a Process object to a Site object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The Alphabet objects assotiated with the Site and Process objects must have the same symbol set, or at least one
+#	of them should inherit from the class AnyAlphabet. 
+#
+#	During the attachment, the site-process specific parameter templates are copied from the Process object and 
+#	stored in the Site object.
+#	The Process objects are marked as write protected if the attachment was succesful. 
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{process}{A Process object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#	The Site object (invisible).
+# } 
+# 
+# \examples{
+#	# create a Site object and the assotiated NucleotideAlphabet object
+#	s<-Site(alphabet=NucleotideAlphabet())
+#	# create a K80 substitution process
+#	p<-K80()
+#	# attach p to s
+#	attachProcess(s,p)
+#	# get the list of attached processes
+#	s$processes
+#	# check write protection for p
+#	p$writeProtected
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	Site Process detachProcess setProcesses getProcesses isAttached
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "attachProcess",
   class="Site",
@@ -1469,6 +1561,51 @@ setMethodS3(
 ##
 ## Method: detachProcess
 ##
+###########################################################################/**
+#
+# @RdocMethod detachProcess
+# 
+# @title "Site" 
+# 
+# \description{ 
+#	@get "title".
+#	The site-process specific parameters stored in the Site object and belonging to the detached Process objects will be destroyed.
+#	
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object} 
+# 	\item{process}{A Process object} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Site object (invisible).
+# } 
+# 
+# \examples{
+#	# create a Site objects and attach some processes
+#	s<-Site()
+#	s$alphabet<-NucleotideAlphabet()
+#	p1<-JC69(); p2<-K80()
+#	attachProcess(s,p1)
+#	attachProcess(s,p2)
+#	# get the list of attached processes
+#	s$processes
+#	# detach p1
+#	detachProcess(s,p1)
+#	s$processes
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "detachProcess",
   class="Site",
@@ -1501,8 +1638,45 @@ setMethodS3(
   );
 
 ##
-## Method: getProcesses
+## Method: setProcesses
 ##
+###########################################################################/**
+#
+# @RdocMethod getProcesses
+# 
+# @title "Get the list of Process objects attached to a Site object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of Process objects.
+# } 
+# 
+# \examples{
+#	# create a Site object with some processes attached
+#	s<-Site(alphabet=NucleotideAlphabet(),processes=list(K80(),JC69()))
+#	# get list of attached Process objects
+#	getProcesses(s)
+#	# get list of attached Process objects via virtual field
+#	s$processes
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getProcesses",
   class="Site",
@@ -1524,12 +1698,63 @@ setMethodS3(
 ##
 ## Method: setProcesses
 ##
+###########################################################################/**
+#
+# @RdocMethod setProcesses
+# 
+# @title "Specify the list of Process objects attached to a Site object" 
+# 
+# \description{ 
+#	@get "title".
+#	The Process objects in the "value" list correspond to the set of processes to be attached to the Site object.
+#       Process objects already attached to a given Site are skipped. Attached processes which are not memebers of the list
+#       are detached, so specifying an empty list will detach all processes.
+#
+#	This method is an alternative to \code{attachProcess.Site} and \code{detachProcess.Site}, working with 
+#	more than one process object.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+#	\item{value}{A list of valid Process objects.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Site object (invisible).
+# } 
+# 
+# \examples{
+#	# create a Site object
+#	s<-Site(alphabet=NucleotideAlphabet())
+#	# create some processes
+#	p1<-JC69(); p2<-K80(); p3<-DiscreteInsertor(rate=1);	
+#	# attach the processes
+#	setProcesses(s,list(p1,p2,p3))
+#	# attach one more process via virtual field
+#	s$processes<-c(s$processes,list(GTR()))
+#	# get the list of attached processes
+#	s$processes
+#	# detach all processes via virtual field
+#	s$processes<-list()
+#	s$processes
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setProcesses",
   class="Site",
   function(
     this,
-		value,
+    value,
     ...
   ){
 

@@ -1692,8 +1692,9 @@ setMethodS3(
 # 
 # \description{ 
 #	@get "title".
-#	The Process objects in a given inner list correspond to a set of processes to be attached to one Site object.
-#	Processes not in the list will be detached, so specifying an empty list will detach all Process objects.	
+#	The Process objects in a given inner list correspond to the set of processes to be attached to one Site object. 
+#	Process objects already attached to a given Site are skipped. Attached processes which are not memebers of the list
+#	are detached, so specifying an empty list will detach all processes.
 # } 
 # 
 # @synopsis 

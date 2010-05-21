@@ -1661,6 +1661,47 @@ setMethodS3(
 ##
 ## Method: getParameterAtSite
 ##
+###########################################################################/**
+#
+# @RdocMethod getParameterAtSite
+# 
+# @title "Get the value of a site-process specific paramter from a Site object attached to a Process object" 
+# 
+# \description{ 
+#	@get "title".
+#	The Process object must be attached to the Site object.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{site}{A Site object.} 
+#	\item{id}{The identifier of the site-process specific parameter.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The site-process specific parameter, which is a list containing the following keys: id, name, value, type.
+# } 
+# 
+# \examples{
+#	# create a Site and a Process object
+#	s<-Site()
+#	p<-Process()
+#	# attach the process
+#	attachProcess(s,p)
+#	# get the value of the rate multiplier
+#	getParameterAtSite(s,p,"rate.multiplier")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getParameterAtSite",
   class="Process",
@@ -1713,6 +1754,49 @@ setMethodS3(
 ##
 ## Method: setParameterAtSite
 ##
+###########################################################################/**
+#
+# @RdocMethod setParameterAtSite
+# 
+# @title "Set the value of a site-process specific paramter in a Site object attached to a Process object" 
+# 
+# \description{ 
+#	@get "title".
+#	The Process object must be attached to the Site object. The new value must be compatible with the type
+#	of the site-process specific parameter.
+#	
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Process object.} 
+# 	\item{site}{A Site object.} 
+#	\item{id}{The identifier of the site-process specific parameter.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The site-process specific parameter, which is a list containing the following keys: id, name, value, type.
+# } 
+# 
+# \examples{
+#	# create a Site and a Process object
+#	s<-Site()
+#	p<-Process()
+#	# attach the process
+#	attachProcess(s,p)
+#	# get the value of the rate multiplier
+#	getParameterAtSite(s,p,"rate.multiplier")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setParameterAtSite",
   class="Process",
@@ -1720,22 +1804,22 @@ setMethodS3(
     this,
     site,
     id,
-		value,
-		...
+    value,
+    ...
   ){
-			if (missing(id)) {throw("Parameter identifier is missing!\n")};
-      id<-as.character(id);
+	if (missing(id)) {throw("Parameter identifier is missing!\n")};
+     	id<-as.character(id);
 			
-			if (.checkTriplett(this,site,id)){
+	if (.checkTriplett(this,site,id)){
 
-				type<-site$.processes[[this$id]]$site.params[[id]]$type;
-				if (length(intersect(class(value),type)) == 0 ) {throw("The new value is of wrong type!\n")}
-				site$.processes[[this$id]]$site.params[[id]]$value<-value;
+		type<-site$.processes[[this$id]]$site.params[[id]]$type;
+		if (length(intersect(class(value),type)) == 0 ) {throw("The new value is of wrong type!\n")}
+		site$.processes[[this$id]]$site.params[[id]]$value<-value;
 	
-			}
-			flagTotalRate(site);
-		 .flagSeqCumulativeRates(site);
-			invisible(this);
+	}
+	flagTotalRate(site);
+	.flagSeqCumulativeRates(site);
+	invisible(this);
 				
   },
   private=FALSE,
