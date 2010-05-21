@@ -2927,7 +2927,7 @@ setMethodS3(
 #	# get some properties
 #	equals(s,s)
 #	equals(s,cs)
-#	sc$ancestral
+#	cs$ancestral
 #	cs$sites[[1]]$ancestral
 # } 
 # 

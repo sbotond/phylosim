@@ -1687,12 +1687,13 @@ setMethodS3(
 # 
 # \examples{
 #	# create a Site and a Process object
-#	s<-Site()
-#	p<-Process()
+#	a<-Alphabet()
+#	s<-Site(alphabet=a)
+#	p<-Process(alphabet=a)
 #	# attach the process
 #	attachProcess(s,p)
 #	# get the value of the rate multiplier
-#	getParameterAtSite(s,p,"rate.multiplier")
+#	getParameterAtSite(p,s,"rate.multiplier")
 # } 
 # 
 # @author 
@@ -1782,12 +1783,13 @@ setMethodS3(
 # 
 # \examples{
 #	# create a Site and a Process object
-#	s<-Site()
-#	p<-Process()
+#	a<-BinaryAlphabet()
+#	s<-Site(alphabet=a)
+#	p<-Process(alphabet=a)
 #	# attach the process
 #	attachProcess(s,p)
 #	# get the value of the rate multiplier
-#	getParameterAtSite(s,p,"rate.multiplier")
+#	getParameterAtSite(p,s,"rate.multiplier")
 # } 
 # 
 # @author 
