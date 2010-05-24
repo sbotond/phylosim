@@ -4095,6 +4095,52 @@ setMethodS3(
 ##	
 ## Method: plusGamma
 ##	
+###########################################################################/**
+#
+# @RdocMethod plusGamma
+# 
+# @title "Sample the rate multiplier parameters of a Process from a continous Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A Process object.} 
+# 	\item{shape}{The shape parameter of the gamma distribution.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible);
+# } 
+# 
+# \examples{
+#	# create a sequence
+#	s<-NucleotideSequence(length=20)
+#	# attach a process
+#	p<-JC69()
+#	attachProcess(s,p)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)	# the default value is 1.0
+#	# sample rate multipliers in range 1:5 from a gamma distribution with
+#	# shape parameter 0.1
+#	plusGamma(s,p,0.1,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)	# the default value is 1.0
+#	# sample rate multipliers in range 1:5 from a gamma distribution with
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"plusGamma", 
 	class="Sequence", 
@@ -4128,6 +4174,7 @@ setMethodS3(
 			}
 
 			setParameterAtSites(this, process=process, id="rate.multiplier",value=rgamma(length(index),shape=shape,rate=shape),index=index);
+			return(invisible(this));
 	
 		}
 		
@@ -4143,6 +4190,52 @@ setMethodS3(
 ##	
 ## Method: plusInvGamma
 ##	
+###########################################################################/**
+#
+# @RdocMethod plusInvGamma
+# 
+# @title "Sample the rate multiplier parameters of a Process from an I+continous Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+# 	\item{process}{A Process object.} 
+# 	\item{pinv}{The proportion of invariant sites.} 
+# 	\item{shape}{The shape parameter of the gamma distribution.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible);
+# } 
+# 
+# \examples{
+#	# create a sequence
+#	s<-NucleotideSequence(length=20)
+#	# attach a process
+#	p<-JC69()
+#	attachProcess(s,p)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)	# the default value is 1.0
+#	# sample rate multipliers in range 1:5
+#	plusInvGamma(s,p,pinv=0.5,shape=05,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)	# the default value is 1.0
+#	# sample rate multipliers in range 1:5 from a gamma distribution with
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"plusInvGamma", 
 	class="Sequence", 
@@ -4203,7 +4296,7 @@ setMethodS3(
 
 	
 		}
-		
+		return(invisible(this));	
 
 	},
 	private=FALSE,
@@ -4216,11 +4309,54 @@ setMethodS3(
 ##
 ## Method: insertSequence
 ##
+###########################################################################/**
+#
+# @RdocMethod insertSequence
+# 
+# @title "Insert a Sequence object into another Sequence object after a specified position" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{The target Sequence object.} 
+# 	\item{insert}{The Sequence object to be inserted.} 
+# 	\item{position}{The position after the Sequence object will be inserted.} 
+# 	\item{process}{The Process object performing the insertion (optional).} 
+# 	\item{sloppy}{Some more expensive error checking is skipped if TRUE.} 
+# 	\item{paranoid}{If TRUE, then the consistency of teh target objects is checked more rigurously after insertion.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Sequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create some sequence objects.
+#	target<-NucleotideSequence(string="AAAAAAAAAAA")
+#	insert<-NucleotideSequence(string="GGGGGGGGGGG")
+#	# insert after position 5
+#	insertSequence(target,insert,5)
+#	# print the target sequence
+#	target
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "insertSequence",
   class="Sequence",
   function(
-    this,
+    		this,
 		insert,
 		position,
 		process=NA,
@@ -4350,14 +4486,54 @@ setMethodS3(
 ##
 ## Method: deleteSubSequence
 ##
+###########################################################################/**
+#
+# @RdocMethod deleteSubSequence
+# 
+# @title "Delete a collection of sites aggregated by a Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{index}{An index vector specifying a collection of sites to be deleted. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE or errror.
+# } 
+# 
+# \examples{
+#	# create a nucleotide sequence
+#	s<-NucleotideSequence(string="ATATATATATATATAT")
+#	# delete sites 2, 4 and 6
+#	deleteSubSequence(s,c(2,4,6))
+#	s
+#	# delete sites in the range 3:6
+#	deleteSubSequence(s,3:6)
+#	s
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "deleteSubSequence",
   class="Sequence",
   function(
-    this,
+    		this,
 		index,
 		sloppy=FALSE,
-    ...
+    		...
   ){
 
 		.checkWriteProtection(this);
@@ -4412,15 +4588,55 @@ setMethodS3(
 ##
 ## Method: copySubSequence
 ##
+###########################################################################/**
+#
+# @RdocMethod copySubSequence
+# 
+# @title "Copy a collection of Site objects aggregated by a Sequence object into a new Sequence object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Sequence object.} 
+#	\item{index}{An index vector specifying a collection of sites to be copied. It is set to 1:seq$length if ommited.}
+# 	\item{process}{The Process object performing the copy (optional).} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A new Sequence object.
+# } 
+# 
+# \examples{
+#	# create a nucleotide sequence
+#	s<-NucleotideSequence(string="ATATATATATATATATA")
+#	# copy sites in the range 3:8 in a new object
+#	s2<-copySubSequence(s,3:8)
+#	s2
+#	# copy sites 1,3 and 5 from s2
+#	s3<-copySubSequence(s2,c(1,3,5))
+#	s3
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "copySubSequence",
   class="Sequence",
   function(
-    this,
+    		this,
 		index,
 		process=NA,
-		sloppy=FALSE,
-    ...
+    		...
   ){
 
 		if(missing(index)) {
