@@ -448,7 +448,7 @@ setMethodS3(
 # 
 # \description{ 
 #	@get "title".
-#	The unique identifier is the concatenation of the object name as returned by getName() and the object hash 
+#	The unique identifier is the concatenation of the class, the object name as returned by getName() and the object hash 
 #	as returned by hashCode().
 # } 
 # 
@@ -1405,7 +1405,7 @@ setMethodS3(
 #
 # \description{
 #       @get "title".
-#	The string returned is the unique Process object identifier (name + object hash).
+#	The string returned is the unique Process object identifier (class name + process name + object hash).
 # }
 #
 # @synopsis

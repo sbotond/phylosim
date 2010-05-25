@@ -507,7 +507,7 @@ setMethodS3(
 
 		# Set the new diagonal element in the original rates matrix:
 		for(codon in symbols){
-        this$.q.matrix$.orig.matrix[codon, codon]<-.calculateDiagonal(this$.q.matrix, symbol=codon);
+        	this$.q.matrix$.orig.matrix[codon, codon]<-.calculateDiagonal(this$.q.matrix, symbol=codon);
 		}
 		
 		# Call rate rescaling, suppress equlibrium distribution guessing:
