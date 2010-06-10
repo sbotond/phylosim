@@ -1,7 +1,156 @@
 ##	
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
+
 ##
+## Constructor: PSRootSummary
+##
+##########################################################################/** 
+#
+# @RdocClass PSRootSummary
+# 
+# @title "The PSRootSummary class"
+# 
+# \description{ 
+#	PSRootSummary objects are blessed lists containing summary entries created by
+#	\code{summary.*} methods.
+#	
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{summary}{A list.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	@seeclass 
+# }
+# 
+#*/###########################################################################
+setConstructorS3(
+  "PSRootSummary",
+  function(summary=list(),...){
+			
+			# Stepping out of the R.oo framework to provide 
+			# the expected behaviour.
+			class(summary)<-c("PSRootSummary");
+			summary;
+  },
+  ###
+  enforceRCC=FALSE
+);
+
+##
+## Method: print.PSRootSummary
+##
+###########################################################################/**
+#
+# @RdocMethod print
+# 
+# @title "Print out a PSRootSummary object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{x}{A PSRootSummary object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The summary object (invisible).
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "print",
+  class="PSRootSummary",
+  appendVarArgs=FALSE,
+  function(
+    x,
+    ...
+  ){
+	this<-x;
+	cat("\n");
+	for (i in names(this)){
+        cat(paste(i,": ",this[[i]],"\n",sep=""));
+   	}
+		cat("\n");
+		invisible(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: checkConsistency;
+##
+###########################################################################/**
+#
+# @RdocMethod	checkConsistency
+# 
+# @title "Check object consistency"
+# 
+# \description{ 
+#		@get "title".
+#		The consisntency check is not implemented for PSRootSummary objects,
+#		the method prints out a warning about that.
+# } 
+# 
+# @synopsis 
+# 
+# \value{ 
+#		Returns an invisible TRUE if no inconsistencies found in the object, throws 
+#		an error otherwise. 
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "checkConsistency",
+  class="PSRootSummary",
+  function(
+		this,
+    ...
+  ){
+		
+		warning("Consistency check is not implemented in class ",class(this)[[1]],"!\n");	
+		return(invisible(TRUE));
+		
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
+	static=TRUE,
+  conflict="warning"
+);
+
 ##########################################################################/** 
 #
 # @RdocClass PSRoot
@@ -9,7 +158,7 @@
 # @title "The root class for all phylosim objects"
 # 
 # \description{ 
-#		The root class for all phylosim objects containig utility methods. 
+#		The root class for all phylosim objects containig some utility methods. 
 #		@classhierarchy
 # }
 #	
@@ -52,6 +201,34 @@ setConstructorS3(
 ##	
 ## Method: virtualAssignmentForbidden
 ##	
+###########################################################################/**
+#
+# @RdocMethod virtualAssignmentForbidden
+# 
+# @title "Throws an error message informing the user about forbidden action on virtual a field" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PSRoot object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Throws an error.
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"virtualAssignmentForbidden", 
 	class="PSRoot", 
@@ -73,6 +250,35 @@ setMethodS3(
 ##	
 ## Method: enableVirtual
 ##	
+###########################################################################/**
+#
+# @RdocMethod enableVirtual
+# 
+# @title "Enable the use of virtual fields for a given object" 
+# 
+# \description{ 
+#	@get "title".
+#	R.oo disables the virtual field feature inside get/set methods. This method can be used to re-enable virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PSRoot object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The PSRoot object.
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"enableVirtual", 
 	class="PSRoot", 
@@ -92,9 +298,46 @@ setMethodS3(
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
 ##	
 ## Method: stringLength
 ##	
+###########################################################################/**
+#
+# @RdocDefault stringLength
+# 
+# 
+# @title "Returns the string length of the character representation of an object" 
+# 
+# \description{ 
+#	@get "title".
+#	More useful as a static method.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	An integer vector of length one.
+# } 
+# 
+# \examples{
+#	x<-"character representaion"
+#	# get the strign length of x
+#	stringLength(x)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"stringLength", 
 	class="default", 
@@ -119,9 +362,45 @@ setMethodS3(
 ##	
 ## Method: stringLengthVector
 ##	
+###########################################################################/**
+#
+# @RdocDefault stringLengthVector
+# 
+# 
+# @title "Returns the string lengths of the character represenations of a collection of objects" 
+# 
+# \description{ 
+#	@get "title".
+#	More useful as a static method.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An array or a list of object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	An integer vector with the corresponding lengths.
+# } 
+# 
+# \examples{
+#	x<-c("character representaion","other string");
+#	# get the strign length of x
+#	stringLengthVector(x)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"stringLengthVector", 
-	class="character", 
+	class="default", 
 	function(
 		this,
 		...
@@ -139,6 +418,43 @@ setMethodS3(
 
 ##
 ## Method: getMethodsList
+###########################################################################/**
+#
+# @RdocMethod getMethodsList
+# 
+# @title "Get the list of applicable methods for an object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PSRoot object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of applicable methods.
+# } 
+# 
+# \examples{
+#	# create an object
+#	o<-PSRoot()
+#	# get the applicable methods
+#	getMethodsList(o)
+#	# get methods via virtual field
+#	o$methodsList
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 ##
 setMethodS3(
   "getMethodsList",
@@ -168,14 +484,43 @@ setMethodS3(
 );
 
 ##
-## Method: listMethods
+## Method: setMethodsList
 ##
+###########################################################################/**
+#
+# @RdocMethod setMethodsList
+#
+# @title "Forbidden action: setting the list of applicable methods for an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setMethodsList",
   class="PSRoot",
   function(
     this,
-		value,
+    value,
     ...
   ){
 
@@ -189,8 +534,48 @@ setMethodS3(
 );
 
 ##
-## Method: listMethods
+## Method: ll
 ##
+###########################################################################/**
+#
+# @RdocMethod ll
+# 
+# @title "Display detailed information about the virtual fields and methods defined for a given object" 
+# 
+# \description{ 
+#	@get "title".
+#	The method prints the class of the object, all the parent classes,
+#	and the virtual fields and methods defined in the immediate class.
+#
+#	This method provides a "quick and minimal" documentation for PhyloSim classes.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PSRoot object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Text.
+# } 
+# 
+# \examples{
+#	# create a Site object
+#	s<-Site()
+#	ll(s)
+#	# get information about the Process class
+#	ll(Process())
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "ll",
   class="PSRoot",
@@ -299,6 +684,48 @@ setMethodS3(
 ##
 ## Method: getComments
 ##
+###########################################################################/**
+#
+# @RdocMethod getComments
+# 
+# @title "Get the comments assotiated with an object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The comment field can contain any type of object.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PSRoot object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The value of the comment field.
+# } 
+# 
+# \examples{
+#	# create an object
+#	o<-PSRoot()
+#	# add some comments
+#	setComments(o,"Random comment")
+#	# get the comment 
+#	getComments(o)
+#	# get/set the comment via virtual fiels
+#	o$comments<-"Second random comment"
+#	o$comments
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getComments",
   class="PSRoot",
@@ -317,12 +744,55 @@ setMethodS3(
 ##
 ## Method: setComments
 ##
+###########################################################################/**
+#
+# @RdocMethod setComments
+# 
+# @title "Set the comments assotiated with an object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The comment field can contain any type of object.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PSRoot object.} 
+#	\item{new_value}{An object.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new value of the comment field (invisible).
+# } 
+# 
+# \examples{
+#	# create an object
+#	o<-PSRoot()
+#	# add some comments
+#	setComments(o,"Random comment")
+#	# get the comment 
+#	getComments(o)
+#	# get/set the comment via virtual fiels
+#	o$comments<-"Second random comment"
+#	o$comments
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setComments",
   class="PSRoot",
   function(
     this,
-		new_value,
+    new_value,
     ...
   ){
 			this$.comments<-new_value;
@@ -336,6 +806,45 @@ setMethodS3(
 ##
 ## Method: PSRoot$my.all.equal
 ##
+###########################################################################/**
+#
+# @RdocMethod my.all.equal
+# 
+# @title "Test if two objects are nearly equal" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	This method simply calls \code{all.equal.default} with the tolerance parameter set to 
+#	\code{.Machine$double.eps ^ 0.5}. More useful as a static method.
+#	
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{static}{A PSRoot object.} 
+#	\item{target}{R object.}
+#	\item{current}{Other R object, to be compared with ‘target’.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#	TRUE or FALSE. 
+# } 
+# 
+# \examples{
+#	PSRoot$my.all.equal(0.0,0.0001)	
+#	PSRoot$my.all.equal(0.0,0.000000001)	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "my.all.equal",
   class="PSRoot",
@@ -389,13 +898,13 @@ setMethodS3(
 # }
 #
 # \value{
-#  Returns a PSRootSummary object.
+#  	Returns a PSRootSummary object.
 # }
 #
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-PSRoot()
 #       # get a summary
 #       summary(a)
 # }
@@ -432,52 +941,42 @@ setMethodS3(
   conflict="warning"
 );
 
-
-##
-## Constructor: summary.PSRoot
-##
-setConstructorS3(
-  "PSRootSummary",
-  function(summary=list(),...){
-			
-			# Stepping out of the R.oo framework to provide 
-			# the expected behaviour.
-			class(summary)<-c("PSRootSummary");
-			summary;
-  },
-  ###
-  enforceRCC=FALSE
-);
-
-##
-## Method: print.summary.PSRoot
-##
-setMethodS3(
-  "print",
-  class="PSRootSummary",
-  appendVarArgs=FALSE,
-  function(
-    x,
-    ...
-  ){
-	this<-x;
-	cat("\n");
-	for (i in names(this)){
-        cat(paste(i,": ",this[[i]],"\n",sep=""));
-   	}
-		cat("\n");
-		invisible(this);
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
 ##
 ## Method: is.na.PSRoot
 ##
+###########################################################################/**
+#
+# @RdocMethod is.na
+# 
+# @title "Check if a PSRoot object is NA" 
+# 
+# \description{ 
+#	@get "title".
+#	PSRoot objects accanot be NA, so this method always returns FALSE.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PSRoot object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	FALSE
+# } 
+# 
+# \examples{
+#	is.na(PSRoot());
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "is.na",
   class="PSRoot",
@@ -497,27 +996,6 @@ setMethodS3(
 );
 
 ##
-## Method: is.PSRoot.default
-##
-setMethodS3(
-  "is.PSRoot",
-  class="default",
-  function(
-    this,
-    ...
-  ){
-
-		if(!is.object(this)) {return(FALSE)}
-		inherits(this,"PSRoot");
-		
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=TRUE,
-  conflict="warning"
-);
-
-##
 ## Method: checkConsistency;
 ##
 ###########################################################################/**
@@ -528,6 +1006,8 @@ setMethodS3(
 # 
 # \description{ 
 #		@get "title".
+#		The consisntency check is not implemented in plain PSRoot objects,
+#		the method prints out a warning about that.
 # } 
 # 
 # @synopsis 
@@ -564,8 +1044,47 @@ setMethodS3(
 );
 
 ##
-## Method: globalConsistencyCheck;
+## Method: globalConsistencyCheck
 ##
+###########################################################################/**
+#
+# @RdocMethod globalConsistencyCheck
+# 
+# @title "Check the consistency of all objects inheriting form PSRoot in the current environment" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method searches for objects which inherit from PSRoot and calls \code{checkConsistency()} for all of them,
+#	which can take a lots of time. Prints the results of the checks as text.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Returns invisible TRUE if all checks are successful.
+# } 
+# 
+# \examples{
+#	# create some objects
+#	a<-NucleotideAlphabet()
+#	s<-Site()
+#	p<-Process()
+#	# ask for a global consistency check
+#	PSRoot$globalConsistencyCheck();
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "globalConsistencyCheck",
   class="PSRoot",
@@ -588,7 +1107,7 @@ setMethodS3(
   private=FALSE,
   protected=FALSE,
   overwrite=TRUE,
-	static=TRUE,
+  static=TRUE,
   conflict="warning"
 );
 
@@ -616,6 +1135,45 @@ setMethodS3(
 ##
 ## Method: intersect.list.PSRoot
 ##
+###########################################################################/**
+#
+# @RdocMethod intersect.list
+# 
+# @title "Utility method returning the intersection of two lists" 
+# 
+# \description{ 
+#	@get "title".
+#	Duplicated elements are not considered.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PSRoot object.} 
+#	\item{one}{A list of objects.}
+#	\item{two}{A list of objects.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list containing the intersection.
+# } 
+# 
+# \examples{
+#	# create some lists
+#	a<-list(1,2,3);
+#	b<-c(a,list("a","b","c"))
+#	# get the intersection of a and b
+#	PSRoot$intersect.list(a,b)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "intersect.list",
   class="PSRoot",
@@ -626,11 +1184,16 @@ setMethodS3(
     ...
   ){
 
-	# FIXME:
+	if(!is.list(one)){
+		throw("The first argument is not a list!\n");
+	}
+	if(!is.list(two)){
+		throw("The second argument is not a list!\n");
+	}
+
 	one<-unique(one);
 	two<-unique(two);
 	intersect<-list();
-	# Calculate the intersection of process list:
         for (i in one){
         	for (j in two){
         		if(i == j) {
@@ -646,5 +1209,65 @@ setMethodS3(
   protected=FALSE,
   overwrite=TRUE,
 	static=TRUE,
+  conflict="warning"
+);
+
+##
+## Method: is.PSRoot.default
+##
+###########################################################################/**
+#
+# @RdocDefault is.PSRoot
+# 
+# @title "Check if an object inherits from PSRoot" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create some objects
+#	o<-PSRoot()
+#	a<-Alphabet()
+#	x<-Object()
+#	# check if they inherit form PSRoot
+#	is.PSRoot(o)
+#	is.PSRoot(a)
+#	is.PSRoot(x)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "is.PSRoot",
+  class="default",
+  function(
+    this,
+    ...
+  ){
+
+		if(!is.object(this)) {return(FALSE)}
+		inherits(this,"PSRoot");
+		
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=TRUE,
   conflict="warning"
 );
