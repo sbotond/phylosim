@@ -6,6 +6,48 @@
 ##
 ## AnyAlphabet
 ##
+##########################################################################/** 
+#
+# @RdocClass AnyAlphabet
+# 
+# @title "The AnyAlphabet class"
+# 
+# \description{ 
+#	This is a special Alphabet class. The '=='.Alphabet method alway returns
+#	TRUE when one of the compared object inherits form AnyAlphabet.
+#	This behaviour is handy when creating processes which have no alphabet preference (like deletion processes).
+#
+#		@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# Create seom alphabet objects
+#	a<-BinaryAlphabet()
+#	b<-NucleotideAlphabet()
+#	any<-AnyAlphabet()
+#	# compare objects
+#	a == b
+#	any == a
+#	any == b
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Alphabet
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "AnyAlphabet",
   function(... ){
@@ -23,6 +65,42 @@ setConstructorS3(
 ##
 ## BinaryAlphabet
 ##
+##########################################################################/** 
+#
+# @RdocClass BinaryAlphabet
+# 
+# @title "The BinaryAlphabet class"
+# 
+# \description{ 
+#	An Alphabet object with the c("0","1") symbol set.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create a binary alphabet
+#	b<-BinaryAlphabet()
+#	# get alphabet summary
+#	summary(b)
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Alphabet
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "BinaryAlphabet",
   function(... ){
@@ -37,11 +115,46 @@ setConstructorS3(
 ##
 ## NucleotideAlphabet
 ##
+##########################################################################/** 
+#
+# @RdocClass NucleotideAlphabet
+# 
+# @title "The NucleotideAlphabet class"
+# 
+# \description{ 
+#	Alphabet objects with the c("T","C","A","G") symbol set.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create a nucleotide alphabet
+#	b<-NucleotideAlphabet()
+#	# get alphabet summary
+#	summary(b)
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Alphabet
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "NucleotideAlphabet",
   function(... ){
 
-		#this<-Alphabet(type="Nucleotide",symbols=c("A","C","G","T"));
 		this<-Alphabet(type="Nucleotide",symbols=c("T","C","A","G"));
 		extend(this,"NucleotideAlphabet");
 
@@ -52,6 +165,64 @@ setConstructorS3(
 ##
 ## AminoAcidAlphabet
 ##
+##########################################################################/** 
+#
+# @RdocClass AminoAcidAlphabet
+# 
+# @title "The AminoAcidAlphabet class"
+# 
+# \description{ 
+#	Alphabet objects having the one-letter IUPAC amino acid codes as symbol set:
+#	\preformatted{
+#	IUPAC code	Amino acid
+#
+#	A		Alanine
+#	C		Cysteine
+#	D		Aspartic Acid
+#	E		Glutamic Acid
+#	F		Phenylalanine
+#	G		Glycine
+#	H		Histidine
+#	I		Isoleucine
+#	K		Lysine
+#	L		Leucine
+#	M		Methionine
+#	N		Asparagine
+#	P		Proline
+#	Q		Glutamine
+#	R		Arginine
+#	S		Serine
+#	T		Threonine
+#	V		Valine
+#	W		Tryptophan
+#	Y		Tyrosine
+#}
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{}{}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Alphabet
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "AminoAcidAlphabet",
   function(... ){
