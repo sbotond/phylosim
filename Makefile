@@ -10,7 +10,7 @@ gt:
 	gitk --all
 rd: *.R
 	( R --vanilla < ./misc/compileman.R; perl misc/RdClean.pl)
-pkg: *.R rd
+pkg: *.R rd cat
 	(rm pkg/R/*.R;true)
 	(rm FullSource.R;true)
 	cp *.R pkg/R/

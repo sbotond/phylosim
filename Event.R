@@ -26,6 +26,7 @@
 # 	\item{rate}{The rate of the event.}
 # 	\item{site}{The assotiated Site object.}
 # 	\item{position}{The position of assotiated Site object in the enclosing Sequence object (if any).}
+#	\item{process}{The generator Process object.}
 #	\item{handler}{The handler function for the Event object. It will be called by the \code{Perform.Event} with the Event object as an argument to make the changes corresponding to the event.}
 #	\item{target.state}{The state of the assotiated Site object in the moment of event generation.}
 # 	\item{...}{Not used.}
