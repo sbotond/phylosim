@@ -103,7 +103,7 @@ setConstructorS3(
 					
 					path<-seq(from=start.value,to=end.value,length.out=(insert$.length + 2));
 					path<-path[2:(length(path)-1)];
-					brownian.path<-abs(PSRoot$BrownianPath(p=path, a=this$.scale));
+					brownian.path<-abs(BrownianInsertor$BrownianPath(p=path, a=this$.scale));
 		
 					# Tolerance values are probabilities, do not alow them to wander beyond 1:	
 					if(param == "insertion.tolerance" || param == "deletion.tolerance"){
@@ -195,7 +195,7 @@ setMethodS3(
 ##
 setMethodS3(
   "BrownianPath",
-  class="PSRoot",
+  class="BrownianInsertor",
   function(
 	this,
 	p=NA,
