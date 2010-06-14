@@ -6,6 +6,52 @@
 ##
 ## BinarySequence
 ##
+##########################################################################/** 
+#
+# @RdocClass BinarySequence
+# 
+# @title "The BinarySequence class"
+# 
+# \description{ 
+#	Sequence objects aggregating Site objects having a BinaryAlphabet attached by default.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Name of the Sequence object.}
+# 	\item{string}{A string specifying the length and the states of the Sequence object.}
+#	\item{length}{The length of the sequence. Mutually exclusive with "string".}
+# 	\item{processes}{A list of list of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
+#	\item{ancestral.obj}{The ancestral object of the Sequence object (a valid Sequence or Process object).}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create an empty BinarySequence object
+#	s<-BinarySequence(length=50)
+#	s
+#	# set states
+#	s$states<-c(0,0,1,0,1,1)
+#	s
+#	# create a sequence object by specifying a string
+#	s<-BinarySequence(string="00000110010001111")
+#	s
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Sequence BinaryAlphabet
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "BinarySequence",
   function(
@@ -50,6 +96,52 @@ setConstructorS3(
 ##
 ## NucleotideSequence
 ##
+##########################################################################/** 
+#
+# @RdocClass NucleotideSequence
+# 
+# @title "The NucleotideSequence class"
+# 
+# \description{ 
+#	Sequence objects aggregating Site objects having a NucleotideAlphabet attached by default.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Name of the Sequence object.}
+# 	\item{string}{A string specifying the length and the states of the Sequence object.}
+#	\item{length}{The length of the sequence. Mutually exclusive with "string".}
+# 	\item{processes}{A list of list of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
+#	\item{ancestral.obj}{The ancestral object of the Sequence object (a valid Sequence or Process object).}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create an empty NucleotideSequence object
+#	s<-NucleotideSequence(length=50)
+#	s
+#	# set states
+#	s$states<-c("A","A","G","T")
+#	s
+#	# create a sequence object by specifying a string
+#	s<-NucleotideSequence(string="ATGCCGATTAGCAAA")
+#	s
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Sequence NucleotideAlphabet
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "NucleotideSequence",
   function(
@@ -93,6 +185,52 @@ setConstructorS3(
 ##
 ## AminoAcidSequence
 ##
+##########################################################################/** 
+#
+# @RdocClass AminoAcidSequence
+# 
+# @title "The AminoAcidSequence class"
+# 
+# \description{ 
+#	Sequence objects aggregating Site objects having an AminoAcidAlphabet attached by default.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Name of the Sequence object.}
+# 	\item{string}{A string specifying the length and the states of the Sequence object.}
+#	\item{length}{The length of the sequence. Mutually exclusive with "string".}
+# 	\item{processes}{A list of list of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
+#	\item{ancestral.obj}{The ancestral object of the Sequence object (a valid Sequence or Process object).}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create an empty AminoAcidSequence object
+#	s<-AminoAcidSequence(length=50)
+#	s
+#	# set states
+#	s$states<-c("C","C","G","Y")
+#	s
+#	# create a sequence object by specifying a string
+#	s<-AminoAcidSequence(string="CNGGYCCNGYYYY")
+#	s
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Sequence AminoAcidAlphabet
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "AminoAcidSequence",
   function(
