@@ -1,4 +1,42 @@
 ##	
+##########################################################################/** 
+#
+# @RdocClass PhyloSim
+# 
+# @title "The PhyloSim class"
+# 
+# \description{ 
+#
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{phylo}{A rooted phylo object, constructed by the APE package.}
+# 	\item{root.seq}{A valid Sequence object with Process objects attached. Used as the starting sequence during simulation.}
+# 	\item{name}{The name of the object (a character vector of length one).}
+# 	\item{log.file}{Name of the file used for logging.}
+# 	\item{log.level}{An integere specifying the verbosity of logging (see \code{\link{setLogLevel}}).}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Sequence Site Process Event
+# }
+# 
+#*/###########################################################################
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
