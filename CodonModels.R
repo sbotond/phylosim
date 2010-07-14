@@ -849,11 +849,11 @@ setMethodS3(
   "omegaVarM0",
   class="CodonSequence",
   function(
-    this,
-		process,
-    omega,
-		index,
-    ...
+    	this,
+	process,
+    	omega,
+	index,
+    	...
   ){
 
   if(missing(process)){
@@ -906,11 +906,11 @@ setMethodS3(
   "omegaVarM1",
   class="CodonSequence",
   function(
-    this,
-		process,
-    p0,
-		index,
-    ...
+    	this,
+    	process,
+   	p0,
+	index,
+    	...
   ){
 
   if(missing(process)){
@@ -959,13 +959,13 @@ setMethodS3(
   "omegaVarM2",
   class="CodonSequence",
   function(
-    this,
+    		this,
 		process,
-    p0,
+    		p0,
 		p1,
 		omega,
 		index,
-    ...
+    		...
   ){
 
   if(missing(process)){
@@ -1032,7 +1032,7 @@ setMethodS3(
   "omegaVarM3",
   class="CodonSequence",
   function(
-    this,
+    		this,
 		process,
 		omegas,
 		probs,
@@ -1097,7 +1097,7 @@ setMethodS3(
   "omegaVarM4",
   class="CodonSequence",
   function(
-    this,
+    		this,
 		process,
 		probs,
 		index,
@@ -1147,10 +1147,10 @@ setMethodS3(
 );
 
 ##  
-## Method: omegaVarM5 - gamma
+## Method: .omegaVarM5Cont - gamma
 ##  
 setMethodS3(
-  "omegaVarM5",
+  ".omegaVarM5Cont",
   class="CodonSequence",
   function(
     this,
@@ -1208,10 +1208,10 @@ setMethodS3(
 );
 
 ##  
-## Method: omegaVarM6 - 2gamma
+## Method: .omegaVarM6Cont - 2gamma
 ##  
 setMethodS3(
-  "omegaVarM6",
+  ".omegaVarM6Cont",
   class="CodonSequence",
   function(
     this,
@@ -1300,10 +1300,10 @@ setMethodS3(
 );
 
 ##  
-## Method: omegaVarM7 - beta
+## Method: .omegaVarM7Cont - beta
 ##  
 setMethodS3(
-  "omegaVarM7",
+  ".omegaVarM7",
   class="CodonSequence",
   function(
     this,
@@ -1361,10 +1361,10 @@ setMethodS3(
 );
 
 ##  
-## Method: omegaVarM8 - beta&omega
+## Method: .omegaVarM8Cont - beta&omega
 ##  
 setMethodS3(
-  "omegaVarM8",
+  ".omegaVarM8Cont",
   class="CodonSequence",
   function(
     this,
@@ -1442,10 +1442,10 @@ setMethodS3(
 );
 
 ##  
-## Method: omegaVarM9 - beta&gamma
+## Method: .omegaVarM9 - beta&gamma
 ##  
 setMethodS3(
-  "omegaVarM9",
+  ".omegaVarM9Cont",
   class="CodonSequence",
   function(
     this,
@@ -1534,10 +1534,10 @@ setMethodS3(
 );
 
 ##  
-## Method: omegaVarM10 - beta&gamma+1
+## Method: .omegaVarM10Cont - beta&gamma+1
 ##  
 setMethodS3(
-  "omegaVarM10",
+  "omegaVarM10Cont",
   class="CodonSequence",
   function(
     this,
@@ -1627,10 +1627,10 @@ setMethodS3(
 );
 
 ##  
-## Method: omegaVarM11 - beta&normal>1
+## Method: .omegaVarM11Cont - beta&normal>1
 ##  
 setMethodS3(
-  "omegaVarM11",
+  ".omegaVarM11Cont",
   class="CodonSequence",
   function(
     this,
@@ -1724,10 +1724,10 @@ setMethodS3(
 );
 
 ##  
-## Method: omegaVarM12 - 0&2normal>0
+## Method: .omegaVarM12Cont - 0&2normal>0
 ##  
 setMethodS3(
-  "omegaVarM12",
+  ".omegaVarM12Cont",
   class="CodonSequence",
   function(
     this,
@@ -1825,10 +1825,10 @@ setMethodS3(
 );
 
 ##  
-## Method: omegaVarM13 - 3normal>0
+## Method: .omegaVarM13Cont - 3normal>0
 ##  
 setMethodS3(
-  "omegaVarM13",
+  ".omegaVarM13Cont",
   class="CodonSequence",
   function(
     this,
