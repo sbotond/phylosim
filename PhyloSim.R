@@ -180,6 +180,47 @@ setMethodS3(
 ##	
 ## Method: is.phylo.default
 ##	
+###########################################################################/**
+#
+# @RdocDefault is.phylo
+# 
+# @title "Check if an object is an instance of the phylo class" 
+# 
+# \description{ 
+#	@get "title".
+#	Phylo objects are created by the \pkg{APE} package. This method just return the value of \code{inherits(this,"phylo")}.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# load APE
+#	library(ape);
+#	# create some objects
+#	o1<-Object();
+#	o2<-rcoal(3);
+#	# check if they are phylo objects
+#	is.phylo(o1);
+#	is.phylo(o2);			
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	The \pkg{ape} package.
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"is.phylo", 
 	class="default", 
@@ -201,6 +242,50 @@ setMethodS3(
 ##	
 ## Method: setPhylo
 ##	
+###########################################################################/**
+#
+# @RdocMethod setPhylo
+# 
+# @title "Set the phylo object for a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The internal structure of the provided phylo object is reordered in a cladeweise fashion.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{value}{A phylo object created by the \pkg{ape} package.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A phylo object or FALSE.
+# } 
+# 
+# \examples{
+#	#create a PhyloSim object
+#	sim<-PhyloSim();
+#	# creat a phylo object
+#	tree<-rcoal(3);
+#	# get/set phylo object
+#	setPhylo(sim,tree);
+#	getPhylo(sim,tree);
+#	# get/set phylo object via virtual field
+#	sim$tree<-rcoal(5);
+#	sim$tree;
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	The PhyloSim class, the \pkg{ape} package.
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setPhylo", 
 	class="PhyloSim", 
@@ -224,12 +309,13 @@ setMethodS3(
 			.checkTipLabels(value);
 			this$.phylo<-value;
 			this$.phylo<-reorder(this$.phylo, order="cladewise");
-			# Check if the leaf names doesn't conflict with the internal node names:
 			for (i in this$nodes){
 				this$.sequences[[i]]<-NA;
 			}
+			return(this$.phylo);
 
 		}
+		return(FALSE);
 
 	},
 	private=FALSE,
@@ -240,7 +326,7 @@ setMethodS3(
 );
 
 ##	
-## Method: setPhylo
+## Method: .checkTipLabels
 ##	
 setMethodS3(
 	".checkTipLabels", 
@@ -251,10 +337,10 @@ setMethodS3(
 	){
 
 		for(label in this$tip.label){
-			if(length(grep("^Node \\d+$",label,perl=TRUE,value=FALSE,extended=TRUE)) > 0){
+			if(length(grep("^Node \\d+$",label,perl=TRUE,value=FALSE)) > 0){
 					throw("Sorry, but the node labels matching \"Node \\d+\" are reserved for internal nodes! Blaming label: ",label,".\n");	
 			}
-			else if(length(grep("^Root Node \\d+$",label,perl=TRUE,value=FALSE,extended=TRUE)) > 0){
+			else if(length(grep("^Root Node \\d+$",label,perl=TRUE,value=FALSE)) > 0){
 					throw("Sorry, but the node labels matching \"Root Node \\d+\" are reserved for the root node! Blaming label: ",label,".\n");	
 			}
 			
@@ -271,6 +357,48 @@ setMethodS3(
 ##	
 ## Method: getPhylo
 ##	
+###########################################################################/**
+#
+# @RdocMethod getPhylo
+# 
+# @title "Get the phylo object aggregated in a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A phylo object or NA.
+# } 
+# 
+# \examples{
+#	#create a PhyloSim object
+#	sim<-PhyloSim();
+#	# creat a phylo object
+#	tree<-rcoal(3);
+#	# get/set phylo object
+#	setPhylo(sim,tree);
+#	getPhylo(sim,tree);
+#	# get/set phylo object via virtual field
+#	sim$tree<-rcoal(5);
+#	sim$tree;
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	The PhyloSim class, the \pkg{ape} package.
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getPhylo", 
 	class="PhyloSim", 
@@ -292,6 +420,50 @@ setMethodS3(
 ##	
 ## Method: setRootSeq
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRootSeq
+# 
+# @title "Set the root sequence for a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The root sequence will be used as a starting point for the simulation.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{value}{A valid Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The root Sequence object if succesfull, FALSE otherwise.
+# } 
+# 
+# \examples{
+#	# create some objects
+#	sim<-PhyloSim(phylo=rcoal(3));
+#	seq<-NucleotideSequence(string="ATGCC");
+#	# set/get root sequence
+#	setRootSeq(sim, seq);
+#	getRootSeq(sim, seq);
+#	# set/get root sequence via virtual field
+#	sim$rootSeq<-BinarySequence(string="111000111000");
+#	sim$rootSeq;
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass Sequence Process
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRootSeq", 
 	class="PhyloSim", 
@@ -311,8 +483,10 @@ setMethodS3(
 
 			this$.root.sequence<-clone(value);
 			this$.root.sequence$name<-paste("Root node",this$rootNode);
+			return(this$.root.sequence);
 
 		}
+		return(FALSE);
 
 
 	},
@@ -326,6 +500,49 @@ setMethodS3(
 ##	
 ## Method: getRootSeq
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRootSeq
+# 
+# @title "Get the root sequence aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{value}{A valid Sequence object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The root Sequence object or NA.
+# } 
+# 
+# \examples{
+#	# create some objects
+#	sim<-PhyloSim(phylo=rcoal(3));
+#	seq<-NucleotideSequence(string="ATGCC");
+#	# set/get root sequence
+#	setRootSeq(sim, seq);
+#	getRootSeq(sim, seq);
+#	# set/get root sequence via virtual field
+#	sim$rootSeq<-BinarySequence(string="111000111000");
+#	sim$rootSeq;
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass Sequence Process
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRootSeq", 
 	class="PhyloSim", 
@@ -348,6 +565,43 @@ setMethodS3(
 ##	
 ## Method: as.character.PhyloSim
 ##	
+###########################################################################/**
+#
+# @RdocMethod as.character
+# 
+# @title "Return the character representation of a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The character representation is the identifier of the PhyloSim object as returned by the \code{getId} method.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	o<-PhyloSim(name="MySim");
+#	# get character representation
+#	as.character(o)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"as.character", 
 	class="PhyloSim", 
@@ -369,6 +623,45 @@ setMethodS3(
 ##
 ## Method: getName
 ##
+###########################################################################/**
+#
+# @RdocMethod getName
+# 
+# @title "Get the name of a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	o<-PhyloSim();
+#	# set/get name
+#	setName(o,"MySim");
+#	getName(o,"MySim");
+#	# set/get name via virtual field
+#	o$name<-"George";
+#	o$name
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getName",
   class="PhyloSim",
@@ -389,6 +682,46 @@ setMethodS3(
 ##
 ## Method: setName
 ##
+###########################################################################/**
+#
+# @RdocMethod setName
+# 
+# @title "Set the name of a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+#	\item{new.name}{A character vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new name.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	o<-PhyloSim();
+#	# set/get name
+#	setName(o,"MySim");
+#	getName(o,"MySim");
+#	# set/get name via virtual field
+#	o$name<-"George";
+#	o$name
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setName",
   class="PhyloSim",
@@ -410,6 +743,45 @@ setMethodS3(
 ##
 ## Method: getId
 ##
+###########################################################################/**
+#
+# @RdocMethod getId
+# 
+# @title "Get the unique identifier of a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#	The unique identifier is the concatenation of the class, the object name as returned by getName() and the object hash 
+#       as returned by hashCode().
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	o<-PhyloSim(name="MySim");
+#	# get id
+#	getId(o);
+#	# get id via virtual field
+#	o$id;
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getId",
   class="PhyloSim",
@@ -418,8 +790,9 @@ setMethodS3(
     ...
   ){
 
-  this.class<-class(this)[1];
-  id<-paste(this.class,this$.name,hashCode(this),sep=":");
+  	this.class<-class(this)[1];
+	id<-paste(this.class,this$.name,hashCode(this),sep=":");
+	return(id);
 
   },
   private=FALSE,
@@ -432,6 +805,35 @@ setMethodS3(
 ##
 ## Method: setId
 ##
+###########################################################################/**
+#
+# @RdocMethod setId
+#
+# @title "Forbidden action: setting the unique identifier of a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setId",
   class="PhyloSim",
@@ -1362,7 +1764,7 @@ setMethodS3(
 );
 
 ##
-## Method: summary.Sequence
+## Method: summary
 ##
 ###########################################################################/**
 #
