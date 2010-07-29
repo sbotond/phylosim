@@ -1030,25 +1030,6 @@ setMethodS3(
 			# Cloning the starting sequence:
 			seq<-clone(start.seq);
 			
-			# Call the node hook if exists:
-			hook<-this$.node.hooks[[as.character(old.node)]];
-			if(!is.null(hook) & is.function(hook)){
-				Log(this,paste("Calling node hook for node",old.node));
-				seq<-hook(seq=seq);	
-				if(!is.Sequence(seq)){
-					throw("Node hook returned an invalid sequence object!\n");
-				}
-				else if(is.na(seq$bigRate)){
-					throw("Node hook returned sequence with NA bigRate!\n");
-				}
-				else if(seq$bigRate == 0.0){
-					throw("Node hook returne sequence with zero bigRate!\n");
-				}
-				else{
-				 checkConsistency(seq, ommit.sites=TRUE);
-				}
-			}
-
 			# Set the name of the sequence object:
 			if(is.tip(this, new.node)){
 				seq$name<-this$tipLabels[[new.node]];
@@ -1057,6 +1038,25 @@ setMethodS3(
 				seq$name<-paste("Node",new.node);
 			}
 			.GillespieDirect(this, seq=seq, branch.length=branch.length, branch.number=branch.number);
+			
+			# Call the node hook if exists:
+			hook<-this$.node.hooks[[as.character(new.node)]];
+			if(!is.null(hook) & is.function(hook)){
+				Log(this,paste("Calling node hook for node",new.node));
+				seq<-hook(seq=seq);	
+				if(!is.Sequence(seq)){
+					throw("Node hook returned an invalid sequence object!\n");
+				}
+				else if(is.na(seq$bigRate)){
+					throw("Node hook returned sequence with NA bigRate!\n");
+				}
+				else if(seq$bigRate == 0.0){
+					throw("Node hook returned sequence with zero bigRate!\n");
+				}
+				else{
+				 checkConsistency(seq, ommit.sites=TRUE);
+				}
+			}
 
 			# Return the resulting sequence object:
 			return(seq);
