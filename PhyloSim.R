@@ -429,7 +429,8 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #
-#	The root sequence will be used as a starting point for the simulation.
+#	The root sequence will be used as a starting point for the simulation. The phylo object must be set before
+#	trying to set the root sequence object.
 # } 
 # 
 # @synopsis 
@@ -813,6 +814,7 @@ setMethodS3(
 #
 # \description{
 #       @get "title".
+#
 # }
 #
 # @synopsis
@@ -856,6 +858,54 @@ setMethodS3(
 ##
 ## Method: Simulate
 ##
+###########################################################################/**
+#
+# @RdocMethod Simulate
+# 
+# @title "Run a simulation according to a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The phylo object and the root sequence must be set before attempting to run a simulation.
+#	Also the bigRate of the root sequence must not be NA or zero, so at least one sane
+#	Process object must be attached to the root sequence object.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{quiet}{TRUE or FALSE (default).} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The PhyloSim object (invisible).
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#	sim<-PhyloSim(
+#		name="TinySim",
+#		phylo=rcoal(3),
+#		root.seq=NucleotideSequence(string="ATGC",processes=list(list(JC69())))
+#	);
+#	# Run the simulation
+#	Simulate(sim);
+#	# Print the resulting sequences
+#	sim$sequences
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "Simulate",
   class="PhyloSim",
@@ -1790,9 +1840,9 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       sim<-PhyloSim()
 #       # get a summary
-#       summary(a)
+#       summary(sim)
 # }
 #
 # @author
