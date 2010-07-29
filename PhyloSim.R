@@ -972,7 +972,6 @@ setMethodS3(
 ##
 ## Method: .simulateEdge
 ##
-###########################################################################/**
 setMethodS3(
   ".simulateEdge",
   class="PhyloSim",
