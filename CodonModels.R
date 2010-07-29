@@ -191,11 +191,11 @@ setConstructorS3(
 
 		# Add the "omega" site-process specific parameter:
 		.addSiteSpecificParameter(
-      this,
-      id="omega",
-      name="Omega",
-      value=as.double(omega.default),
-      type="numeric"
+      			this,
+      			id="omega",
+      			name="Omega",
+      			value=as.double(omega.default),
+      			type="numeric"
     );
 
 		# Set the codon frequencies/equilibrium distribution.
