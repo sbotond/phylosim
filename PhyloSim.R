@@ -950,7 +950,7 @@ setMethodS3(
 			for(edge in 1:n.edges){
 				if(!quiet){ cat("Simulating edge",edge,"of", n.edges,"\n");}
 				Log(this,paste("Starting to simulate edge",edge,"of",n.edges));	
-				simulateEdge(this,number=edge);
+				.simulateEdge(this,number=edge);
 				edge.counter<-edge.counter+1;
 			}
 		}
@@ -970,10 +970,11 @@ setMethodS3(
 );
 
 ##
-## Method: simulateEdge
+## Method: .simulateEdge
 ##
+###########################################################################/**
 setMethodS3(
-  "simulateEdge",
+  ".simulateEdge",
   class="PhyloSim",
   function(
     this,
@@ -986,14 +987,14 @@ setMethodS3(
 		# Get parent node:
 		start.seq<-getSeqFromNode(this, edge[[1,"from"]]);
 		# Evolve sequence:
-		new.seq<-evolveBranch(this, start.seq=start.seq, branch.length=edge[1,"length"], old.node=edge[[1,"from"]],new.node=edge[[1,"to"]], branch.number=number);
+		new.seq<-.evolveBranch(this, start.seq=start.seq, branch.length=edge[1,"length"], old.node=edge[[1,"from"]],new.node=edge[[1,"to"]], branch.number=number);
 		# Write protect the sequence:
 		new.seq$writeProtected<-TRUE;
 		# Attach sequence to children node:
 		attachSeqToNode(this, node=edge[1,"to"], seq=new.seq);
 
   },
-  private=FALSE,
+  private=TRUE,
   protected=FALSE,
   overwrite=FALSE,
   conflict="warning",
@@ -1814,7 +1815,7 @@ setMethodS3(
 );
 
 ##
-## Method: summary
+## Method: summary.PhyloSim
 ##
 ###########################################################################/**
 #

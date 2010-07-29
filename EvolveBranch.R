@@ -4,10 +4,10 @@
 ##	
 
 ##
-## Method: evolveBranch
+## Method: .evolveBranch
 ##
 setMethodS3(
-  "evolveBranch",
+  ".evolveBranch",
   class="PhyloSim",
   function(
     this,
