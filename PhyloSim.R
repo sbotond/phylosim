@@ -1,4 +1,7 @@
 ##	
+## Copyright 2009 Botond Sipos	
+## See the package description for licensing information.	
+##	
 ##########################################################################/** 
 #
 # @RdocClass PhyloSim
@@ -37,9 +40,6 @@
 # }
 # 
 #*/###########################################################################
-## Copyright 2009 Botond Sipos	
-## See the package description for licensing information.	
-##	
 setConstructorS3(
 "PhyloSim",
   function(
@@ -2563,4 +2563,1177 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##### Logging Methods #####
+
+##	
+## Method: getLogFile
+##	
+###########################################################################/**
+#
+# @RdocMethod getLogFile
+# 
+# @title "Get the name of the file used for logging" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object
+#	sim<-PhyloSim();
+#	# get the name of the log file		
+#	getLogFile(sim)	
+#	# modify log file name
+#	setLogFile(sim,"OldLog.txt")
+#	# get/set log file name via virtual field
+#	sim$logFile
+#	sim$logFile<-"NewLog"
+#	sim$logFile
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+	"getLogFile", 
+	class="PhyloSim", 
+	function(
+		this,
+		...
+	){
+
+		this$.log.file;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setLogFile
+##	
+###########################################################################/**
+#
+# @RdocMethod setLogFile
+# 
+# @title "Set the name of the file used for logging" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{value}{The name of the file used for logging.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new logfile.
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object
+#	sim<-PhyloSim();
+#	# get the name of the log file		
+#	getLogFile(sim)	
+#	# modify log file name
+#	setLogFile(sim,"OldLog.txt")
+#	# get/set log file name via virtual field
+#	sim$logFile
+#	sim$logFile<-"NewLog"
+#	sim$logFile
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+	"setLogFile", 
+	class="PhyloSim", 
+	function(
+		this,
+		value,
+		...
+	){
+
+			if(missing(value)){
+				throw("No value provided!\n");
+			}
+			value<-as.character(value);
+			if( length(value) != 1 ){
+				throw("The new value must be a character vector of length 1!\n");
+			}
+			else{ 
+				if( file.access(value,mode=0) == c(0) ){
+					warning("The specified file already exists and it will be overwritten during simulation!\n");
+				}
+				this$.log.file<-value;
+
+			}
+			return(this$.log.file);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getLogLevel
+##	
+###########################################################################/**
+#
+# @RdocMethod getLogLevel
+# 
+# @title "Get the log level from a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The log level as an integer vector of length one.
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object
+#	sim<-PhyloSim();
+#	# get/set log level
+#	getLogLevel(sim)
+#	setLogLevel(sim,0)
+#	# set/get log level via virtual field
+#	sim$logLevel<- -1
+#	sim$logLevel
+#	# clean up
+#	unlink(sim$logFile)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	setLogLevel PhyloSim 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+	"getLogLevel", 
+	class="PhyloSim", 
+	function(
+		this,
+		...
+	){
+
+		this$.log.level;
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setLogLevel
+##	
+###########################################################################/**
+#
+# @RdocMethod setLogLevel
+# 
+# @title "Set the log level for a given PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	No logging is performed if the log level is negative. If the log level is zero, the messages passed to 
+#	the \code{Log} method will be writen in the log file. If the log level is positive, the messages passed to
+#	the \code{Debug} method are saved as well.
+#
+#	The specified file will be truncated in the case it already exists.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+#	\item{this}{The new log level as an integer.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new level as an integer vector of length one.
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object
+#	sim<-PhyloSim();
+#	# get/set log level
+#	getLogLevel(sim)
+#	setLogLevel(sim,0)
+#	# set/get log level via virtual field
+#	sim$logLevel<- -1
+#	sim$logLevel
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	getLogLevel PhyloSim 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+	"setLogLevel", 
+	class="PhyloSim", 
+	function(
+		this,
+		value,
+		...
+	){
+
+			if(missing(value)){
+				throw("No value provided!\n");
+			}
+			if((!is.numeric(value)) | length(value) != 1 ){
+				throw("The new value must be a numeric vector of length 1!\n");
+			}
+			else{ 
+    			# Create/wipe out log file.
+				if(value >= 0 ){
+						if(file.access(this$.log.file,mode=0) == c(0)){
+							warning("The log file already existed and it was wiped out!\n");
+						}
+						# Creating the assotiated connection:
+						this$.log.connection<-file(paste(this$.log.file),"w+");
+				}
+				this$.log.level<-value;
+			}
+			return(this$.log.level);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .getMessageTemplate
+##	
+setMethodS3(
+	".getMessageTemplate", 
+	class="PhyloSim", 
+	function(
+		this,
+		...
+	){
+
+		template<-list(
+			time=paste("[",Sys.time(),"]",sep=""),
+			level="Info",
+			event=""
+		);
+
+		return(template);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .logMessage
+##	
+setMethodS3(
+	".logMessage", 
+	class="PhyloSim", 
+	function(
+		this,
+		message,
+		...
+	){
+
+			if(missing(message)){
+				throw("No message given!\n");
+			}
+			else if (!is.list(message)){
+				throw("The message should be a list");
+			}
+			else if( length(intersect(names(message),c("time","level","event"))) != 3){
+				throw("The \"time\", \"level\" and \"event\" elements are mandatory in the message list!\n");
+			}
+			else {
+				writeLines(paste(message[["time"]]," "),con=this$.log.connection,sep="");
+				message[["time"]]<-NULL;
+				writeLines(paste(message[["level"]]," "),con=this$.log.connection,sep="");
+				message[["level"]]<-NULL;
+				writeLines(paste(message[["event"]]," "),con=this$.log.connection,sep="");
+				message[["event"]]<-NULL;
+				writeLines(paste(message,collapse=", "),con=this$.log.connection,sep="");
+				writeLines("\n",con=this$.log.connection,sep="");
+				return(TRUE);
+			}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: Log
+##	
+setMethodS3(
+	"Log", 
+	class="PhyloSim", 
+	function(
+		this,
+		message,
+		...
+	){
+	
+			if(this$.log.level < 0){
+				return(invisible(FALSE))
+			}
+			if(missing(message)){
+				throw("No message given!\n");
+			} else {
+				template<-.getMessageTemplate(this);
+				template$level<-"Info";
+				message<-c(template,as.list(message));
+				.logMessage(this, message);
+				return(invisible(message));
+			}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: Debug
+##	
+setMethodS3(
+	"Debug", 
+	class="PhyloSim", 
+	function(
+		this,
+		message,
+		...
+	){
+		
+			if(missing(message)){
+				throw("No message given!\n");
+			} 
+			else if( this$.log.level <= 0){
+				return(invisible(FALSE))
+			}
+			else {
+				template<-.getMessageTemplate(this);
+				template$level<-"DEBUG";
+				message<-c(template,as.list(message));
+				.logMessage(this, message);
+				return(invisible(message));
+			}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: UpdateBranchStats
+##	
+setMethodS3(
+	"UpdateBranchStats", 
+	class="PhyloSim", 
+	function(
+		this,
+		event,
+		details,
+		branch.number,
+		...
+	){
+
+		if(details$type == "substitution"){
+			
+			if(is.null(this$.branch.stats[[as.character(branch.number)]]$substitution)){
+				this$.branch.stats[[as.character(branch.number)]]$substitution<-1;
+			} else {
+			this$.branch.stats[[as.character(branch.number)]]$substitution<-(this$.branch.stats[[as.character(branch.number)]]$substitution + 1);
+			}
+			name<-event$name;
+	
+			if(is.null(this$.branch.stats[[as.character(branch.number)]][[name]])){
+				this$.branch.stats[[as.character(branch.number)]][[name]]<-1;
+			}
+			else {
+				this$.branch.stats[[as.character(branch.number)]][[name]]<-(this$.branch.stats[[as.character(branch.number)]][[name]] + 1);
+			}
+		
+			# Special stuff for the NY98 codon model:	
+			if(is.NY98(event$.process)){
+				# Increment synonymous counter:
+				if(event$.type == "synonymous"){
+					if(is.null(this$.branch.stats[[as.character(branch.number)]][["nr.syn.subst"]])){
+						# First event of this type on this branch, initialize the list element to 1.
+						this$.branch.stats[[as.character(branch.number)]][["nr.syn.subst"]]<-1;
+					}
+					else {
+					this$.branch.stats[[as.character(branch.number)]][["nr.syn.subst"]]<-(this$.branch.stats[[as.character(branch.number)]][["nr.syn.subst"]] + 1);
+					}
+				}
+				# Increment non-synonymous counter:
+				else if(event$.type == "non-synonymous"){
+					if(is.null(this$.branch.stats[[as.character(branch.number)]][["nr.nsyn.subst"]])){
+						# First event of this type on this branch, initialize the list element to 1.
+						this$.branch.stats[[as.character(branch.number)]][["nr.nsyn.subst"]]<-1;
+					}
+					else {
+						this$.branch.stats[[as.character(branch.number)]][["nr.nsyn.subst"]]<-(this$.branch.stats[[as.character(branch.number)]][["nr.nsyn.subst"]] + 1);
+					}
+				} else {
+					throw("The event generated by the NY98 has no type!\n");
+				}
+
+			}
+
+		}
+		else if(details$type == "deletion"){
+			if(is.null(this$.branch.stats[[as.character(branch.number)]]$deletion)){
+				this$.branch.stats[[as.character(branch.number)]]$deletion<-1;
+			}
+			else {
+				this$.branch.stats[[as.character(branch.number)]]$deletion<-(this$.branch.stats[[as.character(branch.number)]]$deletion + 1);
+			}
+		}
+		else if(details$type == "insertion"){
+			if(is.null(this$.branch.stats[[as.character(branch.number)]]$insertion)){
+			this$.branch.stats[[as.character(branch.number)]]$insertion<-1;					
+			}
+			else {
+			this$.branch.stats[[as.character(branch.number)]]$insertion<-(this$.branch.stats[[as.character(branch.number)]]$insertion + 1);					
+
+			}
+		}
+		else {
+			throw("Invalid event type!\n");
+		}
+			
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: getBranchEvents
+##	
+setMethodS3(
+	"getBranchEvents", 
+	class="PhyloSim", 
+	function(
+		this,
+		...
+	){
+
+		tmp<-character();
+		for(branch in this$.branch.stats){
+			tmp<-c(tmp,names(branch));
+		}
+		return(unique(sort(tmp)));
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: setBranchEvents
+##	
+setMethodS3(
+	"setBranchEvents", 
+	class="PhyloSim", 
+	function(
+		this,
+		value,
+		...
+	){
+
+			virtualAssignmentForbidden(this);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: exportStatTree
+##	
+setMethodS3(
+	"exportStatTree", 
+	class="PhyloSim", 
+	function(
+		this,
+		event,
+		...
+	){
+
+ 		if(length(this$.branch.stats) != this$nedges){
+      throw("Simulation is not complete, cannot export statistics!\n");
+    }
+		else if(missing(event)){
+			throw("No event name specified!\n");
+		}
+		else if(length(intersect(event, this$branchEvents)) != 1 ){
+			throw("Invalid even name!");
+		}
+		else {
+
+			phylo.copy<-this$phylo;
+			phylo.copy$edge.length<-.getStatBrlen(this, event);
+			return(phylo.copy);		
+		}
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
+## Method: .getStatBrlen
+##	
+setMethodS3(
+	".getStatBrlen", 
+	class="PhyloSim", 
+	function(
+		this,
+		event,
+		...
+	){
+
+		tmp<-numeric();
+		for(i in dimnames(this$edges)[[1]]){
+				if(is.null(this$.branch.stats[[i]][[event]])){
+					tmp[[as.numeric(i)]]<-0;
+				}
+				else {
+					tmp[[as.numeric(i)]]<-this$.branch.stats[[i]][[event]];
+				}
+		}
+		return(tmp);
+
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##### Phylo object interface methods  #####
+
+##
+## Method: getEdges
+##
+setMethodS3(
+  "getEdges",
+  class="PhyloSim",
+  function(
+    this,
+    ...
+  ){
+
+		if(!all(is.na(this$.phylo))){
+			if(is.phylo(this$.phylo)){
+				if(attr(this$.phylo, "order") != "cladewise"){
+					throw("The order of the phylo object is not cladewise! Someone must have been messing with that!\n");
+				}
+				tmp<-cbind(this$.phylo$edge,this$.phylo$edge.length);
+				colnames(tmp)<-c("from","to","length");
+				rownames(tmp)<-1:dim(tmp)[[1]];
+				return(tmp);
+			}
+			else{
+				throw("The phylo object is invalid!\n");
+			}
+		}
+		else{
+			throw("The phylo object is not set!\n");
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: setEdges
+##
+setMethodS3(
+  "setEdges",
+  class="PhyloSim",
+  function(
+    this,
+    value,
+    ...
+  ){
+
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getNtips
+##
+setMethodS3(
+  "getNtips",
+  class="PhyloSim",
+  function(
+    this,
+    ...
+  ){
+
+		if(!all(is.na(this$.phylo))){
+			if(is.phylo(this$.phylo)){
+								return(length(this$.phylo$tip.label));
+			}
+			else{
+				throw("The phylo object is invalid!\n");
+			}
+		}
+		else{
+			throw("The phylo object is not set!\n");
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: setNtips
+##
+setMethodS3(
+  "setNtips",
+  class="PhyloSim",
+  function(
+    this,
+    value,
+    ...
+  ){
+
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getTipLabels
+##
+setMethodS3(
+  "getTipLabels",
+  class="PhyloSim",
+  function(
+    this,
+    ...
+  ){
+
+		if(!all(is.na(this$.phylo))){
+			if(is.phylo(this$.phylo)){
+					tmp<-rbind(this$.phylo$tip.label);
+					rownames(tmp)<-c("Labels:");
+					colnames(tmp)<-c(1:length(tmp));
+					return(tmp);
+			}
+			else{
+				throw("The phylo object is invalid!\n");
+			}
+		}
+		else{
+			throw("The phylo object is not set!\n");
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: setTipLabels
+##
+setMethodS3(
+  "setTipLabels",
+  class="PhyloSim",
+  function(
+    this,
+    value,
+    ...
+  ){
+
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getNodes
+##
+setMethodS3(
+  "getNodes",
+  class="PhyloSim",
+  function(
+    this,
+    ...
+  ){
+
+		if(!all(is.na(this$.phylo))){
+			if(is.phylo(this$.phylo)){
+					# This is dumb but safe:
+					#return(sort(unique(as.vector(this$.phylo$edge))));
+					return(1:( 2*getNtips(this) - 1));
+			}
+			else{
+				throw("The phylo object is invalid!\n");
+			}
+		}
+		else{
+			throw("The phylo object is not set!\n");
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getNedges
+##
+setMethodS3(
+  "getNedges",
+  class="PhyloSim",
+  function(
+    this,
+    ...
+  ){
+
+		if(!all(is.na(this$.phylo))){
+			if(is.phylo(this$.phylo)){
+					return(dim(this$.phylo$edge)[[1]]);
+			}
+			else{
+				throw("The phylo object is invalid!\n");
+			}
+		}
+		else{
+			throw("The phylo object is not set!\n");
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: setNedges
+##
+setMethodS3(
+  "setNedges",
+  class="PhyloSim",
+  function(
+    this,
+    value,
+    ...
+  ){
+
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: setNodes
+##
+setMethodS3(
+  "setNodes",
+  class="PhyloSim",
+  function(
+    this,
+    value,
+    ...
+  ){
+
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getTips
+##
+setMethodS3(
+  "getTips",
+  class="PhyloSim",
+  function(
+    this,
+    ...
+  ){
+
+		if(!all(is.na(this$.phylo))){
+			if(is.phylo(this$.phylo)){
+					# This is dumb but safe:
+					#return(sort(unique(as.vector(this$.phylo$edge))));
+					return(1:(getNtips(this)));
+			}
+			else{
+				throw("The phylo object is invalid!\n");
+			}
+		}
+		else{
+			throw("The phylo object is not set!\n");
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: setTips
+##
+setMethodS3(
+  "setTips",
+  class="PhyloSim",
+  function(
+    this,
+    value,
+    ...
+  ){
+
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getRootNode
+##
+setMethodS3(
+  "getRootNode",
+  class="PhyloSim",
+  function(
+    this,
+    ...
+  ){
+
+		if(!all(is.na(this$.phylo))){
+			if(is.phylo(this$.phylo)){
+					# Relying on cladewise order:
+					return(this$.phylo$edge[1,1]);
+			}
+			else{
+				throw("The phylo object is invalid!\n");
+			}
+		}
+		else{
+			throw("The phylo object is not set!\n");
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: setRootNode
+##
+setMethodS3(
+  "setRootNode",
+  class="PhyloSim",
+  function(
+    this,
+    value,
+    ...
+  ){
+
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+##
+## Method: is.tip
+##
+setMethodS3(
+  "is.tip",
+  class="PhyloSim",
+  function(
+    this,
+		node=NA,
+    ...
+  ){
+
+		if(missing(node)){
+			throw("No node number specified!\n");
+		}
+		else if(!is.numeric(node)){
+			throw("The node number must be numeric!\n");
+		}
+		else {
+			return(round(node) <= this$ntips);
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getEdge
+##
+setMethodS3(
+  "getEdge",
+  class="PhyloSim",
+  function(
+    this,
+    number=NA,
+    ...
+  ){
+
+    if(missing(number)){
+      throw("No object provided!\n");
+    }
+    else if(!is.numeric(number)){
+      throw("The edge number must be numeric!\n");
+    }
+    else {
+				number<-round(number);
+				tmp<-rbind(c(this$.phylo$edge[number,],this$.phylo$edge.length[number]));
+				colnames(tmp)<-c("from","to","length");
+				rownames(tmp)<-c("Edge:");
+				return(tmp);
+
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: getTreeLength
+##
+setMethodS3(
+  "getTreeLength",
+  class="PhyloSim",
+  function(
+    this,
+    ...
+  ){
+		
+		if(!all(is.na(this$.phylo))){
+			if(is.phylo(this$.phylo)){
+				return(sum(this$.phylo$edge.length));
+			}
+			else{
+				throw("The phylo object is invalid!\n");
+			}
+		}
+		else{
+			throw("The phylo object is not set!\n");
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: setTreeLength
+##
+setMethodS3(
+  "setTreeLength",
+  class="PhyloSim",
+  function(
+    this,
+		value,
+    ...
+  ){
+		
+		virtualAssignmentForbidden(this);
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: scaleTree
+##
+setMethodS3(
+  "scaleTree",
+  class="PhyloSim",
+  function(
+    this,
+		factor,
+    ...
+  ){
+
+		if(missing(factor)){
+			throw("No branch length scaling factor specified!\n");
+		} else if((!is.numeric(factor)) | (length(factor) != 1)){
+			throw("The scaling factor must be a numeric vector of length 1!\n");	
+		} else if(!is.phylo(this$.phylo)){
+			throw("The phylo object is not set or it is invalid!\n");
+		} else {
+
+			this$.phylo$edge.length<-(this$.phylo$edge.length * factor);
+			return(invisible(this));
+		
+		}
+		
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+
+
+
+
 
