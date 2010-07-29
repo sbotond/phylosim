@@ -897,6 +897,8 @@ setMethodS3(
 #	Simulate(sim);
 #	# Print the resulting sequences
 #	sim$sequences
+#	# Print the resulting alignment
+#	sim$alignment
 # } 
 # 
 # @author 
@@ -910,7 +912,7 @@ setMethodS3(
   "Simulate",
   class="PhyloSim",
   function(
-    this,
+    		this,
 		quiet=FALSE,
     ...
   ){
@@ -1183,11 +1185,45 @@ setMethodS3(
 ##
 ## Method: attachSeqToNode
 ##
+###########################################################################/**
+#
+# @RdocMethod	attachSeqToNode
+# 
+# @title "Assotiate a Sequence object with a given node of a phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method is mainly used internally.
+#	
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+#	\item{node}{Node identifier.}
+#	\item{seq}{A Sequence object.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The PhyloSim object (invisible).
+# } 
+# 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "attachSeqToNode",
   class="PhyloSim",
   function(
-    this,
+		this,
 		node=NA,
 		seq=NA,
     ...
@@ -1226,11 +1262,78 @@ setMethodS3(
 ##
 ## Method: attachHookToNode
 ##
+###########################################################################/**
+#
+# @RdocMethod attachHookToNode
+# 
+# @title "Attach a callback function to a given node of a phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	A "node hook" is a function which accepts a Sequence object through the named argument "seq" and returns a 
+#	Sequence object. The node hook function must accept any object which inherits from the \code{Sequence} class!
+#
+#	After simulating the branch leading to the node, the resulting Sequence object is passed
+#	to the node hook and the returned object is used to simulate the downstream branches.
+#
+#	By using node hooks the attached processes can be replaced during simulation, hence enabling the simulation of 
+#	non-homogeneous sequence evolution.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{node}{Node identifier.} 
+# 	\item{fun}{A function (see above).} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The PhyloSim object (invisible).
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#	sim<-PhyloSim(
+#		name="TinySim",
+#		phylo=rcoal(3),
+#		root.seq=NucleotideSequence(string="ATGC",processes=list(list(JC69())))
+#	);
+#	# create a node hook function
+#	hook<-function(seq=NA){
+#		# replace the substitution process with F84
+#		if(inherits(seq,"NucleotideSequence")){
+#			cat("Replacing JC69 with F84.\n");
+#			seq$processes<-list(list(F84(rate.params=list("Kappa" = 2)))); 
+#		}
+#		return(seq);
+#	}
+#	# attach hook function to node 5
+#	attachHookToNode(sim,5,hook);
+#	# Run the simulation
+#	Simulate(sim);
+#	# Check if the processes have been truly replaced
+#	lapply(sim$sequences, getUniqueProcesses.Sequence)
+#	# Print the resulting alignment
+#	sim$alignment
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "attachHookToNode",
   class="PhyloSim",
   function(
-    this,
+    		this,
 		node=NA,
 		fun=NA,
     ...
@@ -1331,18 +1434,48 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-
-
 ##
 ## Method: detachSeqFromNode
 ##
+###########################################################################/**
+#
+# @RdocMethod	detachSeqFromNode
+# 
+# @title "Detach a Sequence object from a given node of a phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method is mainly used internally.
+#	
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+#	\item{node}{Node identifier.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The PhyloSim object (invisible).
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "detachSeqFromNode",
   class="PhyloSim",
   function(
-    this,
+    		this,
 		node=NA,
-    ...
+    		...
   ){
 
 		if(missing(node)){
@@ -1365,6 +1498,63 @@ setMethodS3(
 ##
 ## Method: detachHookFromNode
 ##
+###########################################################################/**
+#
+# @RdocMethod	detachHookFromNode
+# 
+# @title "Detach a node hook function from a given node of a phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+#	\item{node}{Node identifier.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The PhyloSim object (invisible).
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#	sim<-PhyloSim(
+#		name="TinySim",
+#		phylo=rcoal(3),
+#		root.seq=NucleotideSequence(string="ATGC",processes=list(list(JC69())))
+#	);
+#	# create a node hook function
+#	hook<-function(seq=NA){
+#		# replace the substitution process with F84
+#		if(inherits(seq,"NucleotideSequence")){
+#			cat("Replacing JC69 with F84.\n");
+#			seq$processes<-list(list(F84(rate.params=list("Kappa" = 2)))); 
+#		}
+#		return(seq);
+#	}
+#	# attach hook function to node 5
+#	attachHookToNode(sim,5,hook);
+#	# detach hook from node 5
+#	detachHookFromNode(sim,5);
+#	# Run the simulation again
+#	Simulate(sim);	# You should not see the message printed out by the "hook" function.
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	attachHookToNode PhyloSim Simulate.PhyloSim
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "detachHookFromNode",
   class="PhyloSim",
@@ -1395,13 +1585,59 @@ setMethodS3(
 ##
 ## Method: getSeqFromNode
 ##
+###########################################################################/**
+#
+# @RdocMethod getSeqFromNode
+# 
+# @title "Get the Sequence object assotiated with a given node of a phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{node}{Node identifier.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A Sequence object.
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#	sim<-PhyloSim(
+#		name="TinySim",
+#		phylo=rcoal(3),
+#		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
+#	);
+#	# get the sequence assotiated with node 5
+#	getSeqFromNode(sim,5)	# Should be NA
+#	# Run the simulation
+#	Simulate(sim)
+#	# try again
+#	getSeqFromNode(sim,5)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getSeqFromNode",
   class="PhyloSim",
   function(
-    this,
+    		this,
 		node=NA,
-    ...
+    		...
   ){
 
 		if(missing(node)){
@@ -1423,6 +1659,54 @@ setMethodS3(
 ##
 ## Method: getSequences
 ##
+###########################################################################/**
+#
+# @RdocMethod getSequences
+# 
+# @title "Gets all the Sequence objects assotiated with the nodes of a phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The order of the Sequence objects in the returned list reflects the identifiers of the assotiated nodes.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{tis}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of sequence objects.
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#	sim<-PhyloSim(
+#		name="TinySim",
+#		phylo=rcoal(3),
+#		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
+#	);
+#	# run the simulation
+#	Simulate(sim)
+#	# get all the assotiated sequence objects
+#	getSequences(sim)
+#	# get the sequence assotiated with node 3
+#	# via virtual field
+#	sim$sequences[[3]]
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getSequences",
   class="PhyloSim",
@@ -1448,13 +1732,42 @@ setMethodS3(
 ##
 ## Method: setSequences
 ##
+###########################################################################/**
+#
+# @RdocMethod setSequences
+#
+# @title "Forbidden action: setting the Sequence objects assotiated with the nodes of a phylo object aggregated by a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setSequences",
   class="PhyloSim",
   function(
-    this,
+    		this,
 		value,
-    ...
+    		...
   ){
 
 		virtualAssignmentForbidden(this);
@@ -1470,6 +1783,51 @@ setMethodS3(
 ##
 ## Method: getAlignment
 ##
+###########################################################################/**
+#
+# @RdocMethod	getAlignment
+# 
+# @title "Get the alignment stored in a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The alignment as a matrix. Gap are represented by strings composed of dashes.
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#	sim<-PhyloSim(
+#		name="TinySim",
+#		phylo=rcoal(3),
+#		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
+#	);
+#	# run the simulation
+#	Simulate(sim)
+#	# get the resulting aligment
+#	getAlignment(sim)
+#	# via virtual fileld:
+#	sim$alignment
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getAlignment",
   class="PhyloSim",
@@ -1491,6 +1849,35 @@ setMethodS3(
 ##
 ## Method: setAlignment
 ##
+###########################################################################/**
+#
+# @RdocMethod setAlignment
+#
+# @title "Forbidden action: setting the alignment stored in a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setAlignment",
   class="PhyloSim",
@@ -1517,11 +1904,11 @@ setMethodS3(
   ".recoverAlignment",
   class="PhyloSim",
   function(
-    this,
+    		this,
 		paranoid=PhyloSim$DEBUG,
-    ...
+    		...
   ){
-		
+		# FIXME: mention this in doc	
 		if(is.null(paranoid)){
 			paranoid<-FALSE;
 		}
@@ -1659,7 +2046,7 @@ setMethodS3(
 		get.from.symlen<-function(pos=NA){
 				len<-stringLength(from.mat[from.name , pos]);
 				if( is.na(len) | (len < 1) ){
-					throw("Trouble in getting to.symlen!");
+					throw("Trouble in getting from.symlen!");
 				} else {
 					return(len);
 				}
@@ -1706,9 +2093,7 @@ setMethodS3(
 			j<<-j+1;
 		}
 
-		# FIXME - extend to work with tupples!
-
-		# Iterate over the reverse of the edege matrix:	
+		# Iterate over the reverse of the edge matrix:	
 		for (edge.number in rev(seq(from=1, to=this$nedges))){
 
 			# Call variable initialization:
@@ -1748,7 +2133,7 @@ setMethodS3(
 					from.pos<-get.seq.pos(mat=from.mat, col=i);
 					to.pos<-get.seq.pos(mat=to.mat, col=j);
 
-					# Now check fot the gaps wich were introduced before:
+					# Now check for the gaps wich have been introduced before:
 
 					if(is.na(from.pos)){
 						# If we have a gap in from.mat,
@@ -1935,18 +2320,66 @@ setMethodS3(
 ##
 ## Method: saveAlignment
 ##
+###########################################################################/**
+#
+# @RdocMethod saveAlignment
+# 
+# @title "Save the alignment stored in a PhyloSim object in a Fasta file" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The PhyloSim object (invisible).
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#	sim<-PhyloSim(
+#		name="TinySim",
+#		phylo=rcoal(3),
+#		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
+#	);
+#	# run the simulation
+#	Simulate(sim)
+#	# save the alignment
+#	file<-paste("PhyloSim_dummy_fasta_",Sys.getpid(),".fas",sep="");
+#	saveAlignment(sim,file=file,paranoid=TRUE);
+#	# print out the Fasta file
+#	cat(paste(scan(file=file,what=character(),sep="\n"),collapse="\n"));cat("\n");
+#	# delete Fasta file
+#	unlink(file);
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "saveAlignment",
   class="PhyloSim",
   function(
-    this,
-    file="phylosim.fas",
+    		this,
+    		file="phylosim.fas",
 		paranoid=FALSE,
-    ...
+    		...
   ){
 
 		if(any(is.na(this$.alignment))){
-			warning("Alignment is undefined, so nothing was saved!\n");
+			warning("Alignment is undefined, nothin to save!\n");
 			return();
 		}
 		else {
@@ -1960,6 +2393,7 @@ setMethodS3(
 			}
 			sink(NULL);
 		}
+		return(invisible(this));
   },
   private=FALSE,
   protected=FALSE,
@@ -1969,8 +2403,52 @@ setMethodS3(
 );
 
 ##
-## Method: plot.Phylosim
+## Method: plot.PhyloSim
 ##
+###########################################################################/**
+#
+# @RdocMethod plot
+# 
+# @title "Plot a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method simply calls the \code{plot.phylo} method on the aggregated phylo object
+#	and adds the nodelabels.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{x}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The PhyloSim object (invisible).
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#	sim<-PhyloSim(
+#		name="TinySim",
+#		phylo=rcoal(3),
+#		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
+#	);
+#       # plot the aggregated phylo object
+#       plot(sim)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "plot",
   class="PhyloSim",
@@ -1981,7 +2459,6 @@ setMethodS3(
 
 		plot(x$.phylo);
 		nodelabels();
-		#add.scale.bar();
 
 		return(invisible(x));
 
@@ -2018,9 +2495,14 @@ setMethodS3(
 # }
 #
 # \examples{
-#
-#       # create an object
-#       sim<-PhyloSim()
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#	sim<-PhyloSim(
+#		name="TinySim",
+#		phylo=rcoal(3),
+#		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
+#	);
 #       # get a summary
 #       summary(sim)
 # }
