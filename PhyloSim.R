@@ -1158,7 +1158,7 @@ setMethodS3(
 
 			# Update branch statistics:
 
-			UpdateBranchStats(this,event,event.details, branch.number);
+			.UpdateBranchStats(this,event,event.details, branch.number);
 
 			# Abort if sequence length shrunk to zero:
 
@@ -2784,7 +2784,7 @@ setMethodS3(
 #	the \code{Log} method will be writen in the log file. If the log level is positive, the messages passed to
 #	the \code{Debug} method are saved as well.
 #
-#	The specified file will be truncated in the case it already exists.
+#	The default log level is -1. The specified file will be truncated in the case it already exists.
 # } 
 # 
 # @synopsis 
@@ -2924,6 +2924,52 @@ setMethodS3(
 ##	
 ## Method: Log
 ##	
+###########################################################################/**
+#
+# @RdocMethod Log
+# 
+# @title "Save a message in the PhyloSim log file" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The message is written to the log file only if the log level is non-negative. You can use this method for logging
+#	in the case you write classes for PhyloSim.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{message}{A character vector of length one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The message (invisible).
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object,
+#	# with logLevel set to zero	
+#	sim<-PhyloSim(log.level=0);
+#	# log a message
+#	Log(sim,"Hiya there!");
+#	# close log connection
+#	close(sim$.log.connection)
+#	# print out the log file
+#	cat(paste(scan(file=sim$LogFile,what=character(),sep="\n"),collapse="\n"));cat("\n");
+#	# clean up
+#	unlink(sim$logFile)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"Log", 
 	class="PhyloSim", 
@@ -2957,6 +3003,52 @@ setMethodS3(
 ##	
 ## Method: Debug
 ##	
+###########################################################################/**
+#
+# @RdocMethod Debug
+# 
+# @title "Save a debug message in the PhyloSim log file" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The debug message is written to the log file only if the log level is non-negative. You can use this method for logging
+#	debug messages in the case you write classes for PhyloSim.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{message}{A character vector of length one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The message (invisible).
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object,
+#	# with logLevel set to zero	
+#	sim<-PhyloSim(log.level=0);
+#	# log a debug message
+#	Debug(sim,"Some useful detail...");
+#	# close log connection
+#	close(sim$.log.connection)
+#	# print out the log file
+#	cat(paste(scan(file=sim$LogFile,what=character(),sep="\n"),collapse="\n"));cat("\n");
+#	# clean up
+#	unlink(sim$logFile)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"Debug", 
 	class="PhyloSim", 
@@ -2989,10 +3081,10 @@ setMethodS3(
 );
 
 ##	
-## Method: UpdateBranchStats
+## Method: .UpdateBranchStats
 ##	
 setMethodS3(
-	"UpdateBranchStats", 
+	".UpdateBranchStats", 
 	class="PhyloSim", 
 	function(
 		this,
@@ -3069,7 +3161,7 @@ setMethodS3(
 			
 
 	},
-	private=FALSE,
+	private=TRUE,
 	protected=FALSE,
 	overwrite=FALSE,
 	conflict="warning",
@@ -3079,6 +3171,70 @@ setMethodS3(
 ##	
 ## Method: getBranchEvents
 ##	
+###########################################################################/**
+#
+# @RdocMethod getBranchEvents
+# 
+# @title "Get the list of events having per-branch statistics recorded" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	During simulation the number of events performed on every branch is recorded. The recorded events can be "basic"
+#	events, like "insertion", "deletion" and "A->T" or events which are sums of basic events, like "substituion". The 
+#	\code{getBranchEvents} method returns a character vector with the names of the events having per-branch 
+#	statistics recorded. The method should be called after the simulation is finished.
+#
+#	The per-branch statistics can be exported as phylo objects by using the \code{exportStatTree} method.
+#	The branch lengths of the exported phylo objects are set to the value of the respective per-branch event count.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector.
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#
+#	# NOTE: this will be a little bit slow
+#	sim<-PhyloSim(
+#		phylo=rcoal(3),
+#		root.seq=CodonSequence(string="ATGATTATT",processes=list(list(NY98(kappa=2,omega.default=0.5))))
+#	);
+#	# make the tree longer to have more events
+#	scaleTree(sim,5)
+#	# plot the tree
+#	plot(sim)
+#	# run simulation
+#	Simulate(sim)
+#	# get the list of recorded per-branch event counts
+#	getBranchEvents(sim)
+#	# export the number of subtitions as a phylo object
+#	subst<-exportStatTree(sim,"substitution")
+#	# plot the exported phylo object
+#	plot(subst)
+#	#export the number of synonymous substitutions as a phylo object
+#	subst<-exportStatTree(sim,"nr.syn.subst")
+#	# plot the exported phylo object
+#	plot(subst)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getBranchEvents", 
 	class="PhyloSim", 
@@ -3104,6 +3260,35 @@ setMethodS3(
 ##	
 ## Method: setBranchEvents
 ##	
+###########################################################################/**
+#
+# @RdocMethod setBranchEvents
+#
+# @title "Forbidden action: setting the list of events having per-branch statistics recorded"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setBranchEvents", 
 	class="PhyloSim", 
@@ -3126,6 +3311,71 @@ setMethodS3(
 ##	
 ## Method: exportStatTree
 ##	
+###########################################################################/**
+#
+# @RdocMethod exportStatTree
+# 
+# @title "Export the per-branch counts of an event as a phylo object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	During simulation the number of events performed on every branch is recorded. The recorded events can be "basic"
+#	events, like "insertion", "deletion" and "A->T" or events which are sums of basic events, like "substituion". The 
+#	\code{getBranchEvents} method returns a character vector with the names of the events having per-branch 
+#	statistics recorded. The method should be called after the simulation is finished.
+#
+#	The per-branch statistics can be exported as phylo objects by using the \code{exportStatTree} method.
+#	The branch lengths of the exported phylo objects are set to the value of the respective per-branch event count.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{event}{The name of the event as returned by the \code{getBranchEvents} method.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A phylo object.
+# } 
+# 
+# \examples{
+#	# Create a PhyloSim object.
+#	# Provide the phylo object 
+#	# and the root sequence.
+#
+#	# NOTE: this will be a little bit slow
+#	sim<-PhyloSim(
+#		phylo=rcoal(3),
+#		root.seq=CodonSequence(string="ATGATTATT",processes=list(list(NY98(kappa=2,omega.default=0.5))))
+#	);
+#	# make the tree longer to have more events
+#	scaleTree(sim,5)
+#	# plot the tree
+#	plot(sim)
+#	# run simulation
+#	Simulate(sim)
+#	# get the list of recorded per-branch event counts
+#	getBranchEvents(sim)
+#	# export the number of subtitions as a phylo object
+#	subst<-exportStatTree(sim,"substitution")
+#	# plot the exported phylo object
+#	plot(subst)
+#	#export the number of synonymous substitutions as a phylo object
+#	subst<-exportStatTree(sim,"nr.syn.subst")
+#	# plot the exported phylo object
+#	plot(subst)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"exportStatTree", 
 	class="PhyloSim", 
@@ -3136,8 +3386,8 @@ setMethodS3(
 	){
 
  		if(length(this$.branch.stats) != this$nedges){
-      throw("Simulation is not complete, cannot export statistics!\n");
-    }
+      			throw("Simulation is not complete, cannot export statistics!\n");
+    		}
 		else if(missing(event)){
 			throw("No event name specified!\n");
 		}
@@ -3704,9 +3954,9 @@ setMethodS3(
   "scaleTree",
   class="PhyloSim",
   function(
-    this,
+    		this,
 		factor,
-    ...
+    		...
   ){
 
 		if(missing(factor)){
