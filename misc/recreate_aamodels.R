@@ -1,6 +1,6 @@
 library(R.oo)
 library(ape)
-source("FullSource.R");
+source("PhyloSimSource.R");
 
 cpREV()
 PAM()

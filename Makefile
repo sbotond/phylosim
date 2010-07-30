@@ -1,7 +1,7 @@
 ct:
 	git log --graph
 cat: *.R
-	(rm FullSource.R;cat *.R > FullSource.R;true)
+	(rm PhyloSimSource.R;cat *.R > PhyloSimSource.R;true)
 com: *.R
 	git commit -a
 push:
@@ -12,7 +12,7 @@ rd: *.R
 	( R --vanilla < ./misc/compileman.R; perl misc/RdClean.pl)
 pkg: *.R rd cat
 	(rm pkg/R/*.R;true)
-	(rm FullSource.R;true)
+	(rm PhyloSimSource.R;true)
 	cp *.R pkg/R/
 	cp RData/* pkg/data/
 	cp PAMLdat/* pkg/data/
