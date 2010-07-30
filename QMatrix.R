@@ -13,17 +13,17 @@ setConstructorS3(
 		)	{
 
 		this<-PSRoot();
-    this<-extend(
-      this,
-      "QMatrix",
+   		this<-extend(
+     			 this,
+      			"QMatrix",
 			.name=NA,
 			.alphabet=NA,
 			.rate.matrix=NA,
 			.orig.matrix=NA,
-		  .norm.const=NA,
+		  	.norm.const=NA,
 			.process=NA,
 			.is.q.matrix=TRUE
-    );
+    		);
 		
 		this$name<-name;
 
