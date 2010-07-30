@@ -1,4 +1,3 @@
 An R package is built by issuing "make pack" on a *nix system if all the needed tools are present.
-More example scripts can be found under the "with-examples" tag.
 
 This software is still under development! Do not use for anything serious! 
