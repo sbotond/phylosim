@@ -23,14 +23,14 @@ setConstructorS3(
 			name=name,
 			alphabet=alphabet
 		);
-    this<-extend(
-      this,
-      "GeneralSubstitution",
+    		this<-extend(
+      			this,
+      			"GeneralSubstitution",
 			.q.matrix=NA,
 			.equ.dist=NA,
 			.handler.template=NA,
 			.is.general.substitution=TRUE
-    );
+    		);
 
 		# Initialize with NA-s equDist:
 		if (missing(equ.dist)){
@@ -77,7 +77,7 @@ setConstructorS3(
 				);	
 		}	
 
-    return(this);
+    		return(this);
   },
   enforceRCC=TRUE
 );
@@ -150,21 +150,21 @@ setMethodS3(
 			checkConsistency(this$.q.matrix,check.process=FALSE);
 
 			if(is.Process(this$.q.matrix$.process)){
-              # Check for alphabet compatibility:
-              if(this$.alphabet != this$.q.matrix$.process$alphabet){
-                throw("Process/QMatrix alphabet mismatch!\n");
-              }
-              # Check if the parent process QMatrix is this object:
-              if(!equals(this$.q.matrix$.process, this) ){
-                throw("QMatrix process is not identical with self!\n");
-              }
+              		# Check for alphabet compatibility:
+              		if(this$.alphabet != this$.q.matrix$.process$alphabet){
+                		throw("Process/QMatrix alphabet mismatch!\n");
+              		}
+              		# Check if the parent process QMatrix is this object:
+              		if(!equals(this$.q.matrix$.process, this) ){
+                		throw("QMatrix process is not identical with self!\n");
+              		}
 			} else if(!is.na(this$.q.matrix$.process)){
 					throw("QMatrix process entry is invalid!\n");
 			}
 	
 
-      }
-      tryCatch(may.fail(this),finally=this$writeProtected<-wp);
+      	 }
+	tryCatch(may.fail(this),finally=this$writeProtected<-wp);
 			NextMethod();		
 
 	},
@@ -187,80 +187,83 @@ setMethodS3(
 		...
 	){
 
-		# The main method of this class,
-		# generating a list of event objects given the 
-		# state of the target site.
+	# The main method of this class,
+	# generating a list of event objects given the 
+	# state of the target site.
 
-	 if(missing(target.site)) {
-      throw("No target site provided!\n");
-    } 
-			
-			#else if (!sloppy) {
-			# Additional checks. They can be
-			# disabled by sloppy=TRUE			
+	if(missing(target.site)) {
+      		throw("No target site provided!\n");
+    	} 
+	
+	# The following code is commented out to
+	# increase speed
+		
+	#else if (!sloppy) {
+	# Additional checks. They can be
+	# disabled by sloppy=TRUE			
 
-      #if(!is.Site(target.site)) {
-      #  throw("Target site invalid!\n");
-      #}
-	 		#else if(!is.QMatrix(this$.q.matrix)){
-			#	throw("Cannot provide event objects because the rate matrix is not set!\n");	
-			#}
-			#else if(!is.numeric(this$.equ.dist)){
-			#	throw("Cannot provide event objects because the equilibrium frequencies are not defined!\n");	
-			#} 
-			#} 
+      	#if(!is.Site(target.site)) {
+      	#  throw("Target site invalid!\n");
+      	#}
+	#else if(!is.QMatrix(this$.q.matrix)){
+	#	throw("Cannot provide event objects because the rate matrix is not set!\n");	
+	#}
+	#else if(!is.numeric(this$.equ.dist)){
+	#	throw("Cannot provide event objects because the equilibrium frequencies are not defined!\n");	
+	#} 
+	#} 
 
-			state<-target.site$.state;
-		  # Just return an empty list if the state is NA:
-			if(is.na(state)){
-				return(list());
-			}
+	state<-target.site$.state;
+	# Just return an empty list if the state is NA:
+	if(is.na(state)){
+		return(list());
+	}
 
-			symbols<-this$.alphabet$.symbols;
-			rest<-symbols[ which(symbols != state) ];
-			# Generate the names of the possible events:
-			event.names<-paste(state,rest,sep="->");
-			
-			# The rate of the event is the product of the general rate and the
+	symbols<-this$.alphabet$.symbols;
+	rest<-symbols[ which(symbols != state) ];
+	# Generate the names of the possible events:
+	event.names<-paste(state,rest,sep="->");
+	
+	# The rate of the event is the product of the general rate and the
      	# site specific rate multiplier:
      	rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
 
-			# Create the event objects:
-			events<-list();
-			for(new.state in rest){
-				
-				# Return empty list if the rate multiplier is zero.
+	# Create the event objects:
+	events<-list();
+	for(new.state in rest){
+		
+		# Return empty list if the rate multiplier is zero.
      		if(rate.multiplier == 0 ) {
-      		return(list());
+      			return(list());
      		}	
 				
-				name<-paste(state,new.state,sep="->");
-		 		# Clone the event template object:
+		name<-paste(state,new.state,sep="->");
+	 	# Clone the event template object:
      		event<-clone(this$.event.template);
      		# Set event name:
      		event$.name<-name;
      		# Set the generator process:
      		event$.process<-this;
      		# Set the target position passed in a temporary field,
-				# Event objects are not aware of their posiitions in general!
+		# Event objects are not aware of their posiitions in general!
      		event$.position<-target.site$.position;
      		# Set the target site:
      		event$.site<-target.site;
      		# Set the target state object (good for consistency):
      		event$.target.state<-state;
 			
-				# Set the event rate:	
-				event$.rate<-(rate.multiplier * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));
-				# Set the handler for the substitution event:
+		# Set the event rate:	
+		event$.rate<-(rate.multiplier * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));
+		# Set the handler for the substitution event:
      		event$.handler<-this$.handler.template;
-   			 # Write protect the event object:
+   		# Write protect the event object:
     		event$.write.protected<-TRUE;
-				# Add to events list:	
-				events<-c(events, list(event));
+		# Add to events list:	
+		events<-c(events, list(event));
 
-			}
+	}
 
-			return(events);
+	return(events);
 
 	},
 	private=FALSE,
@@ -284,9 +287,9 @@ setMethodS3(
     ...
   ){
 
-		.checkWriteProtection(this);
+    .checkWriteProtection(this);
     if(!is.Alphabet(this$alphabet)){
-      throw("Cannot set equilibrium distribution because the alphabet is undefined!");
+      	throw("Cannot set equilibrium distribution because the alphabet is undefined!");
     }
     if(missing(value)) {
       throw("No new value provided!\n");}
@@ -337,19 +340,19 @@ setMethodS3(
     ...
   ){
 			
-			# Try to guess equlibrium distribution:
-			tmp<-.guessEquDist(this);
-			# Take care with the condition here!
-			# We can get in trouble with any()
-			# if the first value is zero!
-			if( length(tmp) == 1 & all(tmp == FALSE) ){
-				warning("The equlibrium distribution of the substitution process could not be determined based on the rate matrix!\n You have to set yourself the proper distribution in order to use the process!");
-				return(FALSE);
-			}
-			else {
-				this$equDist<-tmp;
-				return(TRUE);
-			}
+	# Try to guess equlibrium distribution:
+	tmp<-.guessEquDist(this);
+	# Take care with the condition here!
+	# We can get in trouble with any()
+	# if the first value is zero!
+	if( length(tmp) == 1 & all(tmp == FALSE) ){
+		warning("The equlibrium distribution of the substitution process could not be determined based on the rate matrix!\n You have to set yourself the proper distribution in order to use the process!");
+		return(FALSE);
+	}
+	else {
+		this$equDist<-tmp;
+		return(TRUE);
+	}
 
   },
   private=FALSE,
@@ -763,33 +766,6 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 	
-
-##	
-## Method: [
-##	
-setMethodS3(
-	"[", 
-	class="GeneralSubstitution", 
-	function(
-		this,
-		from,
-		to
-	){
-
-		if( missing(from) | missing(to) ){
-			throw("You must specify two indices!\n");
-		}
-		# Getting unscaled rate:
-		getRate(this$.q.matrix, from=from, to=to);
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
 ##	
 ## Method: getRate
 ##	
@@ -919,33 +895,6 @@ setMethodS3(
 );
 
 ##	
-## Method: [<-
-##	
-setMethodS3(
-	"[<-", 
-	class="GeneralSubstitution", 
-	function(
-		this,
-		from,
-		to,
-		value
-	){
-
-		if( missing(from) | missing(to) ){
-			throw("You must specify two indices!\n");
-		}
-		setRate(this, from=from, to=to,value=value);
-		return(invisible(this));
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
 ## Method: rescaleQMatrix
 ##	
 setMethodS3(
@@ -981,7 +930,7 @@ setMethodS3(
 			
 			# For every symbol:
 			for (i in symbols) {
-		  # Get the equlibrium probability:
+		  	# Get the equlibrium probability:
 				i.equ<-this$.equ.dist[[ which(colnames(this$.equ.dist) == i) ]];
 				for(j in symbols){
 					if(i == j){next}
@@ -990,7 +939,7 @@ setMethodS3(
 				}
 			}
 	
-    Scale(this$.q.matrix,constant=(1/K));
+    		Scale(this$.q.matrix,constant=(1/K));
 		# After rescaling the expected rate of substitutions per site
 		# at equlibrium is 1.
 		return(invisible(TRUE));
@@ -1006,7 +955,7 @@ setMethodS3(
 
 
 ##	
-## Method: summary
+## Method: is.GeneralSubstitution
 ##	
 setMethodS3(
 	"is.GeneralSubstitution", 
@@ -1017,13 +966,13 @@ setMethodS3(
 	){
 
 	if(!is.PSRoot(this)) {return(FALSE)}
-    if(!is.null(this$.is.general.substitution)){return(TRUE)}
-    if ( inherits(this, "GeneralSubstitution")) {
-      this$.is.general.substitution<-TRUE;
-      return(TRUE);
-    } else {
-      return(FALSE)
-    }
+	if(!is.null(this$.is.general.substitution)){return(TRUE)}
+	if ( inherits(this, "GeneralSubstitution")) {
+		this$.is.general.substitution<-TRUE;
+      		return(TRUE);
+	} else {
+      	return(FALSE)
+    	}
 
 },
 	private=FALSE,
@@ -1081,7 +1030,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-GeneralSubstitution()
 #       # get a summary
 #       summary(a)
 # }
@@ -1131,20 +1080,20 @@ setMethodS3(
     ...
   ){
 
-			# Clone the process object:
-      that<-clone.Object(this);
-			# Disable write protection:
-      if(that$writeProtected){
-          that$writeProtected<-FALSE;
-      }
+	# Clone the process object:
+	that<-clone.Object(this);
+	# Disable write protection:
+      	if(that$writeProtected){
+        	that$writeProtected<-FALSE;
+      	}
 
-			# Clone Q matrix object:
-			that$.q.matrix<-clone(this$.q.matrix);
-			that$.q.matrix$.process<-that;
+	# Clone Q matrix object:
+	that$.q.matrix<-clone(this$.q.matrix);
+	that$.q.matrix$.process<-that;
 
-      # Reassingning name to force Id update:
-      that$name<-that$name;
-      return(that);
+	# Reassingning name to force Id update:
+	that$name<-that$name;
+	return(that);
 
   },
   private=FALSE,
