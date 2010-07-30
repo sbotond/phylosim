@@ -3446,6 +3446,45 @@ setMethodS3(
 ##
 ## Method: getEdges
 ##
+###########################################################################/**
+#
+# @RdocMethod	getEdges
+# 
+# @title "Get the edge matrix from a phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rows of the edge matrix contain the nodes connected by the edge and the edge length.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A matrix.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get the edge matrix
+#	getEdges(sim)
+#	# get the edge matrix via virtual field
+#	sim$edges
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getEdges",
   class="PhyloSim",
@@ -3483,6 +3522,35 @@ setMethodS3(
 ##
 ## Method: setEdges
 ##
+###########################################################################/**
+#
+# @RdocMethod setEdges
+#
+# @title "Forbidden action: setting the edge matrix for a phylo object aggregated by a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setEdges",
   class="PhyloSim",
@@ -3505,6 +3573,43 @@ setMethodS3(
 ##
 ## Method: getNtips
 ##
+###########################################################################/**
+#
+# @RdocMethod	getNtips
+# 
+# @title "Get the number of the tips form a phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get the number of tips
+#	getNtips(sim)
+#	# get the number of tips via virtual field
+#	sim$ntips
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getNtips",
   class="PhyloSim",
@@ -3536,6 +3641,35 @@ setMethodS3(
 ##
 ## Method: setNtips
 ##
+###########################################################################/**
+#
+# @RdocMethod setNtips
+#
+# @title "Forbidden action: setting the number of the tips for a phylo object aggregated by a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setNtips",
   class="PhyloSim",
@@ -3558,6 +3692,43 @@ setMethodS3(
 ##
 ## Method: getTipLabels
 ##
+###########################################################################/**
+#
+# @RdocMethod getTipLabels
+# 
+# @title "Get the tip labels from a phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A mtrix containing the tip labels.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get the tip labels
+#	getTipLabels(sim)
+#	# get the tip lables via virtual field
+#	sim$tipLabels
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getTipLabels",
   class="PhyloSim",
@@ -3592,6 +3763,35 @@ setMethodS3(
 ##
 ## Method: setTipLabels
 ##
+###########################################################################/**
+#
+# @RdocMethod setTipLabels
+#
+# @title "Forbidden action: setting the tip labels for a phylo object aggregated by a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setTipLabels",
   class="PhyloSim",
@@ -3614,6 +3814,43 @@ setMethodS3(
 ##
 ## Method: getNodes
 ##
+###########################################################################/**
+#
+# @RdocMethod getNodes
+# 
+# @title "Get the node identifiers from a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get the node IDs
+#	getNodes(sim)
+#	# get the node IDs via virtual field
+#	sim$nodes
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getNodes",
   class="PhyloSim",
@@ -3647,6 +3884,43 @@ setMethodS3(
 ##
 ## Method: getNedges
 ##
+###########################################################################/**
+#
+# @RdocMethod	getNedges
+# 
+# @title "Get the number of edges from phylo object aggregated by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get the number of the edges
+#	getNedges(sim)
+#	# get the number of the edges via virtual field
+#	sim$nedges
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getNedges",
   class="PhyloSim",
@@ -3678,6 +3952,35 @@ setMethodS3(
 ##
 ## Method: setNedges
 ##
+###########################################################################/**
+#
+# @RdocMethod setNedges
+#
+# @title "Forbidden action: setting the number of edges for phylo object aggregated by a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setNedges",
   class="PhyloSim",
@@ -3700,6 +4003,35 @@ setMethodS3(
 ##
 ## Method: setNodes
 ##
+###########################################################################/**
+#
+# @RdocMethod setNodes
+#
+# @title "Forbidden action: setting the node identifiers for a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setNodes",
   class="PhyloSim",
@@ -3722,6 +4054,43 @@ setMethodS3(
 ##
 ## Method: getTips
 ##
+###########################################################################/**
+#
+# @RdocMethod	getTips
+# 
+# @title "Get the node identifiers of the tip nodes from a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get the tip IDs
+#	getTips(sim)
+#	# get the tip IDs via virtual field
+#	sim$tips
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getTips",
   class="PhyloSim",
@@ -3755,6 +4124,35 @@ setMethodS3(
 ##
 ## Method: setTips
 ##
+###########################################################################/**
+#
+# @RdocMethod setTips
+#
+# @title "Forbidden action: setting the node identifiers of the tip nodes for a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setTips",
   class="PhyloSim",
@@ -3777,6 +4175,43 @@ setMethodS3(
 ##
 ## Method: getRootNode
 ##
+###########################################################################/**
+#
+# @RdocMethod getRootNode
+# 
+# @title "Get the identifier of the root node from a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get the root node ID
+#	getRootNode(sim)
+#	# get the root node ID via virtual field
+#	sim$rootNode
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getRootNode",
   class="PhyloSim",
@@ -3809,6 +4244,35 @@ setMethodS3(
 ##
 ## Method: setRootNode
 ##
+###########################################################################/**
+#
+# @RdocMethod setRootNode
+#
+# @title "Forbidden action: setting the identifier of the root node for a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setRootNode",
   class="PhyloSim",
@@ -3832,13 +4296,51 @@ setMethodS3(
 ##
 ## Method: is.tip
 ##
+###########################################################################/**
+#
+# @RdocMethod is.tip
+# 
+# @title "Check if a node is a tip" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{node}{A node identifier (integer vector of length one).} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# check if node 4 is a tip
+#	is.tip(sim,4)
+#	# check if node 6 is a tip
+#	is.tip(sim,6)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "is.tip",
   class="PhyloSim",
   function(
-    this,
+    		this,
 		node=NA,
-    ...
+    		...
   ){
 
 		if(missing(node)){
@@ -3862,6 +4364,42 @@ setMethodS3(
 ##
 ## Method: getEdge
 ##
+###########################################################################/**
+#
+# @RdocMethod getEdge
+# 
+# @title "Get and edge from the edge matrix" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{number}{The edge number.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The edge as a matrix with a single row.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get edge number 3
+#	getEdge(sim,3)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getEdge",
   class="PhyloSim",
@@ -3897,6 +4435,45 @@ setMethodS3(
 ##
 ## Method: getTreeLength
 ##
+###########################################################################/**
+#
+# @RdocMethod getTreeLength
+# 
+# @title "Get the tree length from a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method retruns the sum of the edge lengths stored in the aggregated phylo object.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get the tree length
+#	getTreeLength(sim)
+#	# get tree length via virtual field
+#	sim$treeLength
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getTreeLength",
   class="PhyloSim",
@@ -3928,6 +4505,35 @@ setMethodS3(
 ##
 ## Method: setTreeLength
 ##
+###########################################################################/**
+#
+# @RdocMethod setTreeLength
+#
+# @title "Forbidden action: setting the tree length for a PhyloSim object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setTreeLength",
   class="PhyloSim",
@@ -3950,6 +4556,47 @@ setMethodS3(
 ##
 ## Method: scaleTree
 ##
+###########################################################################/**
+#
+# @RdocMethod scaleTree
+# 
+# @title "Scale the branch lengths of a phylo object aggragted by a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#	This method multiples all the edge lengths by the specified factor.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{factor}{A numeric vector of length one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The PhyloSim object (invisible).
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim(phylo=rcoal(5));
+#	# get the tree length
+#	sim$treeLength
+#	# scale tree
+#	scaleTree(sim,10)
+#	# get the scaled tree length
+#	sim$treeLength
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "scaleTree",
   class="PhyloSim",
@@ -3980,10 +4627,4 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
-
-
-
-
-
-
 
