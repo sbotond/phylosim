@@ -2,6 +2,42 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass GeneralSubstitution
+# 
+# @title "The GeneralSubstitution class"
+# 
+# \description{ 
+#
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{The name of the object.}
+#	\item{alphabet}{The alphabet on which the process acts (Alphabet object).}
+#	\item{rate.list}{A list with the substitution rates. It will be passed to \code{setRateList}.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	@seeclass 
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "GeneralSubstitution",
   function( 
