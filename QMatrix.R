@@ -1196,50 +1196,6 @@ setMethodS3(
 );
 
 ##	
-## Method: getEventRateList
-##	
-setMethodS3(
-	"getEventRateList", 
-	class="QMatrix", 
-	function(
-		this,
-		type=NA,
-		...
-	){
-		
-		.getRateList(this, type="SCALED");
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
-## Method: setEventRateList
-##	
-setMethodS3(
-	"setEventRateList", 
-	class="QMatrix", 
-	function(
-		this,
-		type=NA,
-		...
-	){
-		
-		virtualAssignmentForbidden(this);
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
 ## Method: .calculateDiagonal
 ##	
 setMethodS3(
