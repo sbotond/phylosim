@@ -1216,7 +1216,7 @@ setMethodS3(
 #
 # @RdocMethod getEventRate
 # 
-# @title "Get the base rate of an event from a GeneralSubstitution object" 
+# @title "Get the unscaled rate of an event from a GeneralSubstitution object" 
 # 
 # \description{ 
 #	@get "title".
@@ -1246,9 +1246,9 @@ setMethodS3(
 #	# create a GeneralSubstitution object
 #	# provide an Alphabet object and the rates
 #	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
-#	# get the base rate of "0->1" by name
+#	# get the unscaled rate of "0->1" by name
 #	getEventRate(p,"0->1")	
-#	# get the base rate of "0->1" by states
+#	# get the unscaled rate of "0->1" by states
 #	getEventRate(p,from="0",to="1")
 # } 
 # 
@@ -1512,13 +1512,13 @@ setMethodS3(
 #	# create a GeneralSubstitution object
 #	# provide an Alphabet object and the rates
 #	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
-#	# set the base rate by event name
+#	# set the unscaled rate by event name
 #	setRate(p,"0->1",2)
-#	# get the base rate of "0->1" by name
+#	# get the unscaled rate of "0->1" by name
 #	getRate(p,"0->1")	
-#	# set the base rate by states
+#	# set the unscaled rate by states
 #	setRate(p,"0->1",0.5)
-#	# get the base rate of "0->1" by states
+#	# get the unscaled rate of "0->1" by states
 #	getRate(p,from="0",to="1")
 # } 
 # 
@@ -1569,7 +1569,7 @@ setMethodS3(
 #
 # @RdocMethod	getRateList
 # 
-# @title "Get a list of events and their rates from a GeneralSubstitution object" 
+# @title "Get a list of events and their unscaled rates from a GeneralSubstitution object" 
 # 
 # \description{ 
 #	@get "title".
