@@ -119,7 +119,7 @@ setMethodS3(
 		# Copy to the scaled matrix:
 		this$.rate.matrix<-this$.orig.matrix;
 	},
-	private=FALSE,
+	private=TRUE,
 	protected=FALSE,
 	overwrite=FALSE,
 	conflict="warning",
@@ -298,7 +298,7 @@ setMethodS3(
 		}
 
 	},
-	private=FALSE,
+	private=TRUE,
 	protected=FALSE,
 	overwrite=FALSE,
 	conflict="warning",
@@ -825,6 +825,54 @@ setMethodS3(
 ##	
 ## Method: getEventRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod getEventRate
+# 
+# @title "Get the unscaled rate of an event from a QMatrix object" 
+# 
+# \description{ 
+#       @get "title".
+#       
+#       This method return the element corresponding to a given event from the scaled rate matrix stored in a QMatrix object.
+#       The event can be specified by the inital and target states ("from" and "to" arguments), or by the
+#       event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
+#
+#	This method returns NA if the resacling of the rates was not performed.
+#	The scaling is performed by the \code{rescaleQMatrix.GeneralSubstitution} method.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A QMatrix object.} 
+#       \item{name}{The name of the event.}
+#       \item{from}{The initial state.}
+#       \item{to}{Target state.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       A Numeric vector of length one.
+# } 
+# 
+# \examples{
+#       # create a QMatrix object
+#       # provide an Alphabet object and the rates
+#       m<-QMatrix(alphabet=BinaryAlphabet(), rate.list=list("0->1"=1,"1->0"=1))
+#       # get the unscaled rate of "0->1" by name
+#       getEventRate(m,"0->1")  # retruns NA
+#       # get the unscaled rate of "0->1" by states
+#       getEventRate(m,from="0",to="1")	# returns NA
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getEventRate", 
 	class="QMatrix", 
@@ -895,6 +943,51 @@ setMethodS3(
 ##	
 ## Method: getRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRate
+# 
+# @title "Get an unscaled rate of an event from a QMatrix object" 
+# 
+# \description{ 
+#       @get "title".
+#       
+#       This method gets the element corresponding to a given event form the \emph{unscaled} rate matrix.
+#       a given event. The event can be specified by the inital and target states ("from" and "to" arguments), or by the
+#       event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A QMatrix object.} 
+#       \item{name}{The name of the event.}
+#       \item{from}{The initial state.}
+#       \item{to}{Target state.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       A Numeric vector of length one.
+# } 
+# 
+# \examples{
+#       # create a GeneralSubstitution object
+#       # provide an Alphabet object and the rates
+#       m<-QMatrix(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#       # get the unscaled rate of "0->1" by name
+#       getRate(m,"0->1")       
+#       # get the unscaled rate of "0->1" by states
+#       getRate(m,from="0",to="1")
+# } 
+# 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRate", 
 	class="QMatrix", 
@@ -943,6 +1036,58 @@ setMethodS3(
 ##	
 ## Method: setRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRate
+# 
+# @title "Set an unscaled rate in a QMatrix object" 
+# 
+# \description{ 
+#       @get "title".
+#       
+#       This method sets the element corresponding to a given event in the unscaled rate matrix.
+#       The event can be specified by the inital and target states ("from" and "to" arguments), or by the
+#       event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A QMatrix object.} 
+#       \item{name}{The name of the event.}
+#       \item{from}{The initial state.}
+#       \item{to}{Target state.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       A Numeric vector of length one.
+# } 
+# 
+# \examples{
+#       # create a GeneralSubstitution object
+#       # provide an Alphabet object and the rates
+#       m<-QMatrix(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#       # set the unscaled rate by event name
+#       setRate(m,"0->1",2)
+#       # get the unscaled rate of "0->1" by name
+#       getRate(m,"0->1")       
+#       # set the unscaled rate by states
+#       setRate(m,"0->1",0.5)
+#       # set the unscaled rate of "0->1" by states
+#       setRate(m,"0->1",0.5)
+#       # get the unscaled rate of "0->1" by states
+#       getRate(m,from="0",to="1")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRate", 
 	class="QMatrix", 
@@ -1029,19 +1174,65 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-
 ##	
-## Method: .getRateList
+## Method: getRateList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateList
+# 
+# @title "Get a list of events and their unscaled rates from a QMatrix object" 
+# 
+# \description{ 
+#       @get "title".
+#
+#       This method returns the list of event rates from the \emph{unscaled} rate matrix. 
+#       The returned list contains the rates assotiated with the corresponding event names.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A GeneralSubstitution object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       A list of event rates.
+# } 
+# 
+# \examples{
+#       # create a GeneralSubstitution object
+#       # provide an Alphabet object and the rates
+#       p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
+#	# get the QMatrix object from p
+#	m<-p$QMatrix
+#       # get the event rates from the unscaled Q matrix
+#       getRateList(m)
+#       # get rates from the unscaled rate matrix via virtual field
+#       m$rateList
+#       # set rates in the unscaled rate matrix
+#       setRateList(m, list("0->1"=1,"1->0"=1))
+#       m$rateList
+#       # set rates in the unscaled rate matrix via virtual field
+#       m$rateList<-list("0->1"=3,"1->0"=1);
+#	m$rateList
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
-	".getRateList", 
+	"getRateList", 
 	class="QMatrix", 
 	function(
 		this,
-		type="ORIGINAL",
 		...
 	){
-
 		# Be gentle and return an empty list if the
 		# alphabet is empty:
 		if( isEmpty(this$.alphabet) ){
@@ -1054,14 +1245,7 @@ setMethodS3(
 					for(j in this$.alphabet$symbols){
 						if(i != j){
 							name<-paste(i,j,sep="->");
-							# with the original rates:
-							if(type == "ORIGINAL"){
-							# or with the rescaled ones:
-								rate<-getRate(this, from=i, to=j);
-							} 
-							else {
-								rate<-getEventRate(this, from=i, to=j);
-							}
+							rate<-getRate(this, from=i, to=j);
 							rates[[name]]<-rate;
 						}
 					}
@@ -1078,30 +1262,58 @@ setMethodS3(
 );
 
 ##	
-## Method: getRateList
-##	
-setMethodS3(
-	"getRateList", 
-	class="QMatrix", 
-	function(
-		this,
-		type=NA,
-		...
-	){
-		
-		.getRateList(this, type="ORIGINIAL");
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
 ## Method: setRateList
 ##	
+###########################################################################/**
+#
+# @RdocMethod	setRateList
+# 
+# @title "Setting the unscaled rates stored in a QMatrix object" 
+# 
+# \description{ 
+#       @get "title".
+#       
+#       This method set the rates in the \emph{unscaled} Q  matrix based on the provided list containing even names
+#       and the assotiated rates. The rate must be specified for every event!
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A QMatrix object.} 
+#       \item{value}{A list with the events names and the assotiated rates.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       The QMatrix object (invisible).
+# } 
+# 
+# \examples{
+#       # create a GeneralSubstitution object
+#       # provide an Alphabet object and the rates
+#       p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
+#	# get the QMatrix object from p
+#	m<-p$QMatrix
+#       # get the event rates from the unscaled Q matrix
+#       getRateList(m)
+#       # get rates from the unscaled rate matrix via virtual field
+#       m$rateList
+#       # set rates in the unscaled rate matrix
+#       setRateList(m, list("0->1"=1,"1->0"=1))
+#       m$rateList
+#       # set rates in the unscaled rate matrix via virtual field
+#       m$rateList<-list("0->1"=3,"1->0"=1);
+#	m$rateList
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateList", 
 	class="QMatrix", 
@@ -1188,7 +1400,7 @@ setMethodS3(
 		
 
 	},
-	private=FALSE,
+	private=TRUE,
 	protected=FALSE,
 	overwrite=FALSE,
 	conflict="warning",
@@ -1450,7 +1662,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-QMatrix(alphabet=BinaryAlphabet(), rate.list=("0->1"=1,"1->0"=3))
 #       # get a summary
 #       summary(a)
 # }
