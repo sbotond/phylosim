@@ -9,7 +9,18 @@
 # @title "The GeneralSubstitution class"
 # 
 # \description{ 
+#	This a class representing a contionous-time Markov process acting
+#	on the state space defined by the symbols stored in the Alphabet object
+#	passed to the object constructor. 
 #
+#	The GeneralSubstitution objects generate
+#	Event objects corresponding to substitution events based on the state of the 
+#	attached Site objects.
+#
+#	The GeneralSubstitution objects aggregate QMatrix object, which store the 
+#	unscaled and scaled rate matrices. The scaled rate matrices, along with the
+#	site-process specific rate multiplier parameters define the rates of the generated
+#	Event objects.		
 #
 #	@classhierarchy
 # }
@@ -19,7 +30,7 @@
 # \arguments{
 # 	\item{name}{The name of the object.}
 #	\item{alphabet}{The alphabet on which the process acts (Alphabet object).}
-#	\item{rate.list}{A list with the substitution rates. It will be passed to \code{setRateList}.}
+#	\item{rate.list}{A list with the substitution rates. It will be passed to \code{setRateList} method.}
 # 	\item{...}{Not used.}
 #	}
 # 
@@ -28,13 +39,62 @@
 # }
 # 
 # \examples{ 
-#
+#	# create a GeneralSubstitution object
+#	# also provide an Alphabet objects 
+#	# and the list of unscaled rates
+#	a<-BinaryAlphabet()
+#	gs<-GeneralSubstitution(
+#			name="MyBinarySubst",
+#			alphabet=a,
+#			rate.list=list("0->1"=2,"1->0"=1)
+#		)
+#	# check if inherits from GeneralSubstitution
+#	is.GeneralSubstitution(gs)
+#	# get an object summary
+#	summary(gs)
+#	# get unscaled rate for "0->1" by event name
+#	getRate(gs,"0->1")
+#	# get unscaled rate for "0->1" by states
+#	getRate(gs,from="0", to="1")
+#	# get scaled rate for "0->1" by name
+#	getEventRate(gs,"0->1")
+#	# get the list of \emph{scaled} event rates
+#	gs$rateList
+#	# set the \emph{unscaled} rates
+#	gs$rateList<-list("0->1"=1,"1->0"=1)
+#	# re-set equilibrium distribution
+#	gs$equDist<- 5 * gs$equDist
+#	# get the equilibrium distribution
+#	gs$equDist
+#	# sample a state form the equilibrium distribution
+#	sampleState(gs)
+#	# get the assotiated QMatrix object
+#	gs$qMatrix
+#	# create a site object
+#	s<-Site(alphabet=a, state="0")
+#	# attach gs to s
+#	s$processes<-list(gs)
+#	# set rate multiplier for s and gs
+#	setParameterAtSite(gs,s,id="rate.multiplier",value=2)
+#	# get site specific rate for "0->1"
+#	getEventsAtSite(gs,s,"0->1")
+#	# get the list of active event objects given the state of s
+#	getEventsAtSite(gs,s)
+#	# get the assotiated Alphabet object 
+#	gs$alphabet
+#	# clone the object
+#	gsc<-clone(gs)
+#	# modify the alphabet of gsc
+#	gsc$alphabet<-NucleotideAlphabet()
+#	summary(gsc)
+#	# check if gsc has undefined rates
+#	hasUndefinedRate(gsc)
 # }
 # 
 # @author
 #
 # \seealso{ 
-# 	@seeclass 
+# 	Process QMatrix Event Site GeneralIndel GTR
 # }
 # 
 #*/###########################################################################
@@ -214,6 +274,56 @@ setMethodS3(
 ##	
 ## Method: getEventsAtSite
 ##	
+###########################################################################/**
+#
+# @RdocMethod	getEventsAtSite
+# 
+# @title "Generate the list of active Event objects for a given attached Site object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	This is the single most important method in the \code{GeneralSubstitution} class. It generates a list of the active
+#	Event objects given the transition rate matrix (Q matrix) and the "rate.multiplier" Site-Process specific parameter.
+#	It returns an empty list if the state of the site is "NA".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+# 	\item{this}{A Site object. The GeneralSubstitution object must be attached to the Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of the active Event objects.
+# } 
+# 
+# \examples{
+#	# create an Alphabet object
+#	a<-BinaryAlphabet()
+#	# create a Site object
+#	s<-Site(alphabet=a);
+#	# create a GeneralSubstitution object
+#	p<-GeneralSubstitution(alphabet=a,rate.list=list("0->1"=1,"1->0"=1))
+#	# attach process p to site object s
+#	attachProcess(s,p)	
+#	# get the rate of active events
+#	getEventsAtSite(p,s)	# empty list
+#	# set the state of s
+#	s$state<-1;
+#	# get the rate of active events
+#	getEventsAtSite(p,s)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getEventsAtSite", 
 	class="GeneralSubstitution", 
@@ -312,6 +422,57 @@ setMethodS3(
 ##
 ## Method: setEquDist
 ##
+###########################################################################/**
+#
+# @RdocMethod setEquDist
+# 
+# @title "Set the equilibrium distribution for a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	In the case the equlibrium distribution cannot be guessed from the rate matrix one should provide
+#	a valid equilibrium distribution. The equilibrium distribution must be compatible with the rate matrix.
+#	The provided numeric vector will be resacled in the case the sum of the elemnts is not one.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+#	\item{value}{A numeric vector containing the equlibrium symbol frequencies. The order of the frequencies must be the same as in the symbol vector of the attached Alphabet object.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new equlibrium distribution (invisible).
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	# get equlibrium distribution 
+#	getEquDist(p)
+#	# get equilibrium distribution via virtual field
+#	p$equDist
+#	# re-set the equilibrium distribution
+#	dist<-p$equDist * 3
+#	dist
+#	setEquDist(p,dist)
+#	p$equDist
+#	# re-set equilibrium distribution via virtual field
+#	p$equDist<-p$equDist * 2
+#	p$equDist
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setEquDist",
   class="GeneralSubstitution",
@@ -338,7 +499,7 @@ setMethodS3(
     else if(!PSRoot$my.all.equal(sum(value), 1.0)) {
 				value<-(value/sum(value));
 				if (silent == FALSE){
-					warning("The provided probabilities were rescaled in order to sum to one!\n");
+					warning("The provided probabilities have been rescaled in order to sum to one!\n");
 				}
     }
 
@@ -353,7 +514,7 @@ setMethodS3(
 			# Set dimnames:
       colnames(this$.equ.dist)<-(this$alphabet$symbols);
       rownames(this$.equ.dist)<-c("Prob:");
-			return(invisible(this));
+ 	return(invisible(this$.equ.dist));
 
 
   },
@@ -453,7 +614,7 @@ setMethodS3(
 		
 		# Refuse to guess if the rate matrix has zero entries:
 		if(length(which(this$.q.matrix$.orig.matrix == 0)) != 0 ){
-			warning("Rate matrix has zero entries!\n");
+			warning("Cannot guess equilibrium distribution because the rate matrix has zero entries!\n");
 			return(FALSE);
 		}
 
@@ -520,6 +681,54 @@ setMethodS3(
 ##	
 ## Method: getEquDist
 ##	
+###########################################################################/**
+#
+# @RdocMethod getEquDist
+# 
+# @title "Get the equilibrium distribution from a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+#	\item{dummy}{Not used.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new equlibrium distribution (invisible).
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	# get equlibrium distribution 
+#	getEquDist(p)
+#	# get equilibrium distribution via virtual field
+#	p$equDist
+#	# re-set the equilibrium distribution
+#	dist<-p$equDist * 3
+#	dist
+#	setEquDist(p,dist)
+#	p$equDist
+#	# re-set equilibrium distribution via virtual field
+#	p$equDist<-p$equDist * 2
+#	p$equDist
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getEquDist", 
 	class="GeneralSubstitution", 
@@ -541,8 +750,48 @@ setMethodS3(
 
 
 ##	
-## Method: sampleState;
+## Method: sampleState
 ##	
+###########################################################################/**
+#
+# @RdocMethod	sampleState
+# 
+# @title "Sample a state from the equlibrium distribution of a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	# get equlibrium distribution 
+#	getEquDist(p)
+#	# get equilibrium distribution via virtual field
+#	p$equDist
+#	# sample from equilibrium distribution
+#	sampleState(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"sampleState", 
 	class="GeneralSubstitution", 
@@ -582,6 +831,55 @@ setMethodS3(
 ##	
 ## Method: getQMatrix
 ##	
+###########################################################################/**
+#
+# @RdocMethod getQMatrix
+# 
+# @title "Get the QMatrix object aggregated by a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	This method is mostly used internally.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A QMatrix object.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	# get the QMatrix object
+#	getQMatrix(p)
+#	# get the QMatrix object via virtual field
+#	q<-p$qMatrix
+#	# tweak with the QMatrix
+#	setRate(q,"0->1",2)
+#	# set a new QMatrix for p
+#	setQMatrix(p,q)
+#	summary(p)
+#	# set new QMatrix via virtual field
+#	setRate(q,"1->0",2)
+#	p$qMatrix<-q
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getQMatrix", 
 	class="GeneralSubstitution", 
@@ -603,6 +901,56 @@ setMethodS3(
 ##	
 ## Method: setQMatrix
 ##	
+###########################################################################/**
+#
+# @RdocMethod setQMatrix
+# 
+# @title "Set the QMatrix object aggregated by a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	This method is mostly used internally.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+#	\item{value}{A QMatrix object.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The QMatrix object.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	# get the QMatrix object
+#	getQMatrix(p)
+#	# get the QMatrix object via virtual field
+#	q<-p$qMatrix
+#	# tweak with the QMatrix
+#	setRate(q,"0->1",2)
+#	# set a new QMatrix for p
+#	setQMatrix(p,q)
+#	summary(p)
+#	# set new QMatrix via virtual field
+#	setRate(q,"1->0",2)
+#	p$qMatrix<-q
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setQMatrix", 
 	class="GeneralSubstitution", 
@@ -631,6 +979,7 @@ setMethodS3(
 		else {
 			this$.q.matrix<-value;
 		}
+		return(this$.q.matrix)
 
 	},
 	private=FALSE,
@@ -643,6 +992,55 @@ setMethodS3(
 ##	
 ## Method: setAlphabet
 ##	
+###########################################################################/**
+#
+# @RdocMethod	setAlphabet
+# 
+# @title "Set the Alphabet object aggregated by a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method also sets the alphabet for the assotiated QMatrix object, which will set all rates to NA.
+#	This method will also re-initialize the equlibrium distribution by setting all frequencies to NA.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+#	\item{value}{An Alphabet object.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The Alphabet object.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object with an attached BinaryAlphabet object
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet())
+#	# get object summary
+#	summary(p)
+#	# get alphabet
+#	getAlphabet(p)
+#	# get alphabet via virtual field
+#	p$alphabet
+#	# set a new alphabet
+#	setAlphabet(p,NucleotideAlphabet())
+#	summary(p)
+#	# set alphabet via virtual field
+#	p$alphabet<-BinaryAlphabet()
+#	p$alphabet
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setAlphabet", 
 	class="GeneralSubstitution", 
@@ -659,12 +1057,14 @@ setMethodS3(
 		else if (!is.Alphabet(value)){
 			throw("Alphabet object is invalid!\n");
 		} else {
+			this$.alphabet<-value;
 			# Set the QMatrix alphabet
 			if(is.QMatrix(this$.q.matrix)){
 				setAlphabet(this$.q.matrix, value);
 			}
-			this$.alphabet<-value;
+			.initEquDist(this);
 		}	
+		return(this$.alphabet);
 
 	},
 	private=FALSE,
@@ -677,6 +1077,53 @@ setMethodS3(
 ##	
 ## Method: getAlphabet
 ##	
+###########################################################################/**
+#
+# @RdocMethod	getAlphabet
+# 
+# @title "Get the Alphabet object aggregated by a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method also sets the alphabet for the assotiated QMatrix object, which will set all rates to NA.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	An Alphabet object.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object with an attached BinaryAlphabet object
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet())
+#	# get object summary
+#	summary(p)
+#	# get alphabet
+#	getAlphabet(p)
+#	# get alphabet via virtual field
+#	p$alphabet
+#	# set a new alphabet
+#	setAlphabet(p,NucleotideAlphabet())
+#	summary(p)
+#	# set alphabet via virtual field
+#	p$alphabet<-BinaryAlphabet()
+#	p$alphabet
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getAlphabet", 
 	class="GeneralSubstitution", 
@@ -699,6 +1146,45 @@ setMethodS3(
 ##	
 ## Method: hasUndefinedRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod hasUndefinedRate
+# 
+# @title "Check if a GeneralSubstitution object has undefined rates" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet())
+#	# check if it has undefined rates
+#	hasUndefinedRate(p)	# TRUE
+#	# set the missing rates
+#	p$rateList<-list("0->1"=1,"1->0"=2)
+#	# check for undefined rates again
+#	hasUndefinedRate(p)	# FALSE
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"hasUndefinedRate", 
 	class="GeneralSubstitution", 
@@ -726,6 +1212,53 @@ setMethodS3(
 ##	
 ## Method: getEventRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod getEventRate
+# 
+# @title "Get the base rate of an event from a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	This method return the element from the assotiated QMatrix object corresponding to
+#	a given event. The event can be specified by the inital and target states ("from" and "to" arguments), or by the
+#	event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
+#
+#	This method doesn't take into account the site specific rate multipliers in any way.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+#	\item{name}{The name of the event.}
+#	\item{from}{The initial state.}
+#	\item{to}{Target state.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A Numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	# get the base rate of "0->1" by name
+#	getEventRate(p,"0->1")	
+#	# get the base rate of "0->1" by states
+#	getEventRate(p,from="0",to="1")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getEventRate", 
 	class="GeneralSubstitution", 
@@ -759,6 +1292,60 @@ setMethodS3(
 ##
 ## Method: getEventRateAtSite
 ##
+###########################################################################/**
+#
+# @RdocMethod getEventRateAtSite
+# 
+# @title "Get the site spcific rate of an event from a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	This method return the element from the assotiated QMatrix object corresponding to
+#	a given event multiplied by the "rate.multiplier" site-process specific parameter stored in the specified site object.
+#	The event can be specified by the inital and target states ("from" and "to" arguments), or by the
+#	event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object. It must be attached to the provided Site object.} 
+# 	\item{site}{A Site object.} 
+#	\item{name}{The name of the event.}
+#	\item{from}{The initial state.}
+#	\item{to}{Target state.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A Numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	# create a Site object
+#	s<-Site(alphabet=BinaryAlphabet())
+#	# attach process p to site s
+#	s$processes<-list(p)
+#	# set the rate multiplier for s and p
+#       setParameterAtSite(p,s,id="rate.multiplier",value=2)
+#	# get the site specific rate of "0->1" by name
+#	getEventRateAtSite(p,s,"0->1")	
+#	# get the site specific rate of "0->1" by states
+#	getEventRateAtSite(p,s,from="0",to="1")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getEventRateAtSite",
   class="GeneralSubstitution",
@@ -805,6 +1392,55 @@ setMethodS3(
 ##	
 ## Method: getRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRate
+# 
+# @title "Get the unscaled rate of an event from a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	This method gets the element corresponding to a given event form the unscaled Q matrix.
+#	a given event. The event can be specified by the inital and target states ("from" and "to" arguments), or by the
+#	event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
+#
+#	The rescaled rates (used during simulations) are returned by the \code{getEventRate} method.
+#
+#	This method doesn't take into account the site specific rate multipliers in any way.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+#	\item{name}{The name of the event.}
+#	\item{from}{The initial state.}
+#	\item{to}{Target state.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A Numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	# get the unscaled rate of "0->1" by name
+#	getRate(p,"0->1")	
+#	# get the unscaled rate of "0->1" by states
+#	getRate(p,from="0",to="1")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRate", 
 	class="GeneralSubstitution", 
@@ -839,6 +1475,60 @@ setMethodS3(
 ##	
 ## Method: setRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRate
+# 
+# @title "Set the unscaled rate for an event from a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	This method sets the element corresponding to a given event in the unscaled Q matrix.
+#	The event can be specified by the inital and target states ("from" and "to" arguments), or by the
+#	event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
+#
+#	Modifying any rate in the unscaled Q matrix will trigger the re-scaling of the whole matrix.
+#	The rescaled rates (used during simulations) are returned by the \code{getEventRate} method.
+#
+#	This method doesn't modify the site specific rate multipliers.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+#	\item{name}{The name of the event.}
+#	\item{from}{The initial state.}
+#	\item{to}{Target state.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A Numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	# set the base rate by event name
+#	setRate(p,"0->1",2)
+#	# get the base rate of "0->1" by name
+#	getRate(p,"0->1")	
+#	# set the base rate by states
+#	setRate(p,"0->1",0.5)
+#	# get the base rate of "0->1" by states
+#	getRate(p,from="0",to="1")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRate", 
 	class="GeneralSubstitution", 
@@ -875,6 +1565,54 @@ setMethodS3(
 ##	
 ## Method: getRateList
 ##	
+###########################################################################/**
+#
+# @RdocMethod	getRateList
+# 
+# @title "Get a list of events and their rates from a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method returns the list of event rates from the \emph{scaled} Q matrix (as returbed bvy the \code{getEventRate} method). 
+#	The returned list contains the rates assotiated with the corresponding event names.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of event rates.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
+#	# get the event rates from the scaled Q matrix
+#	getRateList(p)
+#	# get rates from the scaled rate matrix via virtual field
+#	p$rateList
+#	# set rates in the unscaled rate matrix
+#	setRateList(p, list("0->1"=1,"1->0"=1))
+#	p$rateList
+#	# set rates in the unscaled rate matrix via virtual field
+#	p$rateList<-list("0->1"=3,"1->0"=1);
+#	# check the contenst of the assotiated QMatrix object
+#	summary(p$QMatrix)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateList", 
 	class="GeneralSubstitution", 
@@ -902,6 +1640,55 @@ setMethodS3(
 ##	
 ## Method: setRateList
 ##	
+###########################################################################/**
+#
+# @RdocMethod	setRateList
+# 
+# @title "Setting the rates for a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	This method set the rates in the \emph{unscaled} Q  matrix based on the provided list containing even names
+#	and the assotiated rates. Te rate must be specified for every event'
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+#	\item{value}{A list with the events names and the assotiated rates.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The GeneralSubstitution object (invisible).
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
+#	# get the event rates from the scaled Q matrix
+#	getRateList(p)
+#	# get rates from the scaled rate matrix via virtual field
+#	p$rateList
+#	# set rates in the unscaled rate matrix
+#	setRateList(p, list("0->1"=1,"1->0"=1))
+#	p$rateList
+#	# set rates in the unscaled rate matrix via virtual field
+#	p$rateList<-list("0->1"=3,"1->0"=1);
+#	# check the contenst of the assotiated QMatrix object
+#	summary(p$QMatrix)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateList", 
 	class="GeneralSubstitution", 
@@ -933,6 +1720,52 @@ setMethodS3(
 ##	
 ## Method: rescaleQMatrix
 ##	
+###########################################################################/**
+#
+# @RdocMethod rescaleQMatrix
+# 
+# @title "Rescale the scaled rate matrix of a QMatrix object aggregated by a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The QMatrix objects aggregated by the GeneralSubstitution objects store two rate matrices: one containes
+#	the rates provided by the user (unscaled rate matrix), the other matrix (scaled rate matrix) is rescaled to have the 
+#	expected number of subsitutions per unit time equal to one when the process is at equlibrium.
+#	This method performes the re-scaling of the scaled rate matrix in the assotiated QMatrix object based on 
+#	the equlibrium distribution and the unscaled rate matrix.
+#
+#	This method is mainly used internally as the scaled matrix is rescaled every time the unscaled matrix 
+#	is modifed.
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralSubstitution object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	# provide an Alphabet object and the rates
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
+#	# rescale rate matrix
+#	rescaleQMatrix(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"rescaleQMatrix", 
 	class="GeneralSubstitution", 
@@ -993,6 +1826,43 @@ setMethodS3(
 ##	
 ## Method: is.GeneralSubstitution
 ##	
+###########################################################################/**
+#
+# @RdocDefault is.GeneralSubstitution
+# 
+# @title "Check if an object is an instance of the GeneralSubstitution class" 
+# 
+# \description{ 
+#       @get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create some objects
+#	p<-GeneralSubstitution()
+#	pp<-Process()
+#	# chek if they inherit from GeneralSubstitution
+#	is.GeneralSubstitution(p)
+#	is.GeneralSubstitution(pp)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"is.GeneralSubstitution", 
 	class="default", 
@@ -1019,8 +1889,47 @@ setMethodS3(
 );
 
 ##	
-## Method: print
+## Method: as.character
 ##	
+###########################################################################/**
+#
+# @RdocMethod as.character
+# 
+# @title "Return the character representation of a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#	The character representation is the object id as returned by the 
+#	\code{getId.Process} method defined in the parent class.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{x}{A GeneralSubstitution object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	p<-GeneralSubstitution(name="MySubst")
+#	# get character representation
+#	as.character(p)
+#	# the same implicitly
+#	p
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"as.character",
 	class="GeneralSubstitution", 
@@ -1029,7 +1938,7 @@ setMethodS3(
 		...
 	){
 
-		x$id;
+		getId(x);
 
 	},
 	private=FALSE,
@@ -1066,7 +1975,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-GeneralSubstitution()
+#       a<-GeneralSubstitution(alphabet=BinaryAlphabet(),rate.list=list("0->1"=1,"1->0"=2))
 #       # get a summary
 #       summary(a)
 # }
@@ -1107,6 +2016,49 @@ setMethodS3(
 ##
 ## Method: clone
 ##
+###########################################################################/**
+#
+# @RdocMethod clone
+# 
+# @title "Clone a GeneralSubstitution object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method also clones the aggregated QMatrix object, but not the aggregated Alphabet
+#	object, as that is a good target for recycling.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{}{} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A GeneralSubstitution object.
+# } 
+# 
+# \examples{
+#	# create a GeneralSubstitution object
+#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(),rate.list=list("0->1"=1,"1->0"=2),name="MyBinary")
+#	# clone p
+#	pp<-clone(p)
+#	# do some checks
+#	p;pp
+#	p == p
+#	p == pp
+#	equals(p$qMatrix, pp$qMatrix)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "clone",
   class="GeneralSubstitution",
@@ -1138,7 +2090,4 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
-
-
-
 
