@@ -58,7 +58,7 @@
 #	getRate(gs,from="0", to="1")
 #	# get scaled rate for "0->1" by name
 #	getEventRate(gs,"0->1")
-#	# get the list of \emph{scaled} event rates
+#	# get the list of unscaled event rates
 #	gs$rateList
 #	# set the \emph{unscaled} rates
 #	gs$rateList<-list("0->1"=1,"1->0"=1)
@@ -1216,12 +1216,12 @@ setMethodS3(
 #
 # @RdocMethod getEventRate
 # 
-# @title "Get the unscaled rate of an event from a GeneralSubstitution object" 
+# @title "Get the scaled rate of an event from a GeneralSubstitution object" 
 # 
 # \description{ 
 #	@get "title".
 #	
-#	This method return the element from the assotiated QMatrix object corresponding to
+#	This method return the element from the scaled rate matrix stored in the assotiated QMatrix object corresponding to
 #	a given event. The event can be specified by the inital and target states ("from" and "to" arguments), or by the
 #	event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
 #
@@ -1246,9 +1246,9 @@ setMethodS3(
 #	# create a GeneralSubstitution object
 #	# provide an Alphabet object and the rates
 #	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
-#	# get the unscaled rate of "0->1" by name
+#	# get the scaled rate of "0->1" by name
 #	getEventRate(p,"0->1")	
-#	# get the unscaled rate of "0->1" by states
+#	# get the scaled rate of "0->1" by states
 #	getEventRate(p,from="0",to="1")
 # } 
 # 
@@ -1396,7 +1396,7 @@ setMethodS3(
 #
 # @RdocMethod getRate
 # 
-# @title "Get the unscaled rate of an event from a GeneralSubstitution object" 
+# @title "Get an unscaled rate of an event from a GeneralSubstitution object" 
 # 
 # \description{ 
 #	@get "title".
@@ -1479,7 +1479,7 @@ setMethodS3(
 #
 # @RdocMethod setRate
 # 
-# @title "Set the unscaled rate for an event from a GeneralSubstitution object" 
+# @title "Set an unscaled rate for an event from a GeneralSubstitution object" 
 # 
 # \description{ 
 #	@get "title".
@@ -1574,7 +1574,7 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #
-#	This method returns the list of event rates from the \emph{scaled} Q matrix (as returbed bvy the \code{getEventRate} method). 
+#	This method returns the list of event rates from the \emph{unscaled} Q matrix (as returbed bvy the \code{getEventRate} method). 
 #	The returned list contains the rates assotiated with the corresponding event names.
 # } 
 # 
@@ -1593,9 +1593,9 @@ setMethodS3(
 #	# create a GeneralSubstitution object
 #	# provide an Alphabet object and the rates
 #	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
-#	# get the event rates from the scaled Q matrix
+#	# get the event rates from the unscaled Q matrix
 #	getRateList(p)
-#	# get rates from the scaled rate matrix via virtual field
+#	# get rates from the unscaled rate matrix via virtual field
 #	p$rateList
 #	# set rates in the unscaled rate matrix
 #	setRateList(p, list("0->1"=1,"1->0"=1))
@@ -1650,7 +1650,7 @@ setMethodS3(
 #	@get "title".
 #	
 #	This method set the rates in the \emph{unscaled} Q  matrix based on the provided list containing even names
-#	and the assotiated rates. Te rate must be specified for every event'
+#	and the assotiated rates. The rate must be specified for every event!
 # } 
 # 
 # @synopsis 
@@ -1669,9 +1669,9 @@ setMethodS3(
 #	# create a GeneralSubstitution object
 #	# provide an Alphabet object and the rates
 #	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
-#	# get the event rates from the scaled Q matrix
+#	# get the event rates from the unscaled Q matrix
 #	getRateList(p)
-#	# get rates from the scaled rate matrix via virtual field
+#	# get rates from the unscaled rate matrix via virtual field
 #	p$rateList
 #	# set rates in the unscaled rate matrix
 #	setRateList(p, list("0->1"=1,"1->0"=1))
