@@ -94,7 +94,7 @@
 # @author
 #
 # \seealso{ 
-# 	Process QMatrix Event Site GeneralIndel GTR
+# 	Process QMatrix Event Site GeneralIndel GTR WAG
 # }
 # 
 #*/###########################################################################
