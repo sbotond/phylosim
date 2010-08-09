@@ -2,6 +2,43 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass GeneralInDel
+# 
+# @title "The GeneralInDel class"
+# 
+# \description{ 
+#
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{The name of the object.}
+#	\item{rate}{The global rate of the object.}
+#	\item{propose.by}{A function used to propose events.}
+#	\item{accept.by}{A function used to accept/reject events.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	Process GeneralInsertor GeneralDeletor GeneralSubstitution 
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "GeneralInDel",
   function( 
@@ -17,8 +54,8 @@ setConstructorS3(
 			alphabet=any.alphabet
 		);
     this<-extend(
-      this,
-      "GeneralInDel",
+      			this,
+      			"GeneralInDel",
 			.rate=rate,
 			.propose.by=NA,
 			.accept.by=NA,
@@ -389,6 +426,46 @@ setMethodS3(
 
 ###########################################################################
 # Class:GeneralInsertor
+##########################################################################/** 
+#
+# @RdocClass GeneralInsertor
+# 
+# @title "The GeneralInsertor class"
+# 
+# \description{ 
+#
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{The name of the object.}
+#	\item{rate}{The global rate of the object.}
+#	\item{propose.by}{A function used to propose events.}
+#	\item{accept.by}{A function used to accept/reject events.}
+#	\item{template.seq}{A Sequence object used as a template for generating insertions.}
+#	\item{insert.hook}{A function ... }
+#	\item{accept.win}{A window of sites affecting the acceptance of insert events.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GeneralInDel DiscreteInsertor ContinousInsertor BrownianInsertor
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "GeneralInsertor",
   function( 
@@ -982,6 +1059,43 @@ setMethodS3(
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ###########################################################################
 # Class:GeneralDeletor
+##########################################################################/** 
+#
+# @RdocClass GeneralDeletor
+# 
+# @title "The GeneralDeletor class"
+# 
+# \description{ 
+#
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{The name of the object.}
+#	\item{rate}{The global rate of the object.}
+#	\item{propose.by}{A function used to propose events.}
+#	\item{accept.by}{A function used to accept/reject events.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GeneralInDel DiscreteDeletor ContinousDeletor FieldDeletor
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "GeneralDeletor",
   function( 
@@ -1345,7 +1459,4 @@ setMethodS3(
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
-
-
-
 
