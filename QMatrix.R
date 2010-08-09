@@ -40,13 +40,40 @@
 # }
 # 
 # \examples{ 
-#
+#	# create a QMatrix object
+#	# , provide Alphabet object and rates
+#	m<-QMatrix(name="Susie Q", alphabet=BinaryAlphabet(), rate.list=list("1->0"=2,"0->1"=3))
+#	# get object summary
+#	summary(m)
+#       # create a GeneralSubstitution object
+#       # provide an Alphabet object and the rates
+#       p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
+#       # get the QMatrix object from p
+#       m<-p$QMatrix
+#	# get various object properties
+#	m
+#	is.QMatrix(m)
+#	m$name
+#	m$id
+#	m$alphabet
+#	# get the assotiated process
+#	m$process
+#	# get the unscaled rate of "0->1"
+#	getRate(m,"0->1")
+#	# get the scaled rate of "0->1"
+#	getEventRate(m,"0->1")
+#	# get the list of unscaled rates	
+#	m$rateList
+#	# get unscaled rate matrix
+#	m$matrix
+#	# get scaled rate matrix
+#	m$scaledMatrix
 # }
 # 
 # @author
 #
 # \seealso{ 
-# 	@seeclass 
+# 	GeneralSubstitution Alphabet Process
 # }
 # 
 #*/###########################################################################
@@ -973,7 +1000,7 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#       # create a GeneralSubstitution object
+#       # create a QMatrix object
 #       # provide an Alphabet object and the rates
 #       m<-QMatrix(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
 #       # get the unscaled rate of "0->1" by name
@@ -1066,7 +1093,7 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#       # create a GeneralSubstitution object
+#       # create a QMatrix object
 #       # provide an Alphabet object and the rates
 #       m<-QMatrix(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
 #       # set the unscaled rate by event name
@@ -1475,6 +1502,44 @@ setMethodS3(
 ##	
 ## Method: getMatrix
 ##	
+###########################################################################/**
+#
+# @RdocMethod	getMatrix
+# 
+# @title "Get the unscaled rate matrix form a QMatrix object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A QMatrix object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A matrix object.
+# } 
+# 
+# \examples{
+#       # create a GeneralSubstitution object
+#       # provide an Alphabet object and the rates
+#       p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
+#	# get the QMatrix object from p
+#	m<-p$QMatrix
+#	# get the unscaled rate matrix from m
+#	m$matrix
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getMatrix", 
 	class="QMatrix", 
@@ -1496,6 +1561,35 @@ setMethodS3(
 ##	
 ## Method: setMatrix
 ##	
+###########################################################################/**
+#
+# @RdocMethod setMatrix
+#
+# @title "Forbidden action: setting the unscaled rate matrix for a QMatrix object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setMatrix", 
 	class="QMatrix", 
@@ -1518,6 +1612,44 @@ setMethodS3(
 ##	
 ## Method: getScaledMatrix
 ##	
+###########################################################################/**
+#
+# @RdocMethod	getScaledMatrix
+# 
+# @title "Get the scaled rate matrix form a QMatrix object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A QMatrix object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A matrix object.
+# } 
+# 
+# \examples{
+#       # create a GeneralSubstitution object
+#       # provide an Alphabet object and the rates
+#       p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=3))
+#	# get the QMatrix object from p
+#	m<-p$QMatrix
+#	# get the scaled rate matrix from m
+#	m$scaledMatrix
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getScaledMatrix", 
 	class="QMatrix", 
@@ -1537,8 +1669,37 @@ setMethodS3(
 );
 
 ##	
-## Method: setMatrix
+## Method: setScaledMatrix
 ##	
+###########################################################################/**
+#
+# @RdocMethod setScaledMatrix
+#
+# @title "Forbidden action: setting the scaled rate matrix for a QMatrix object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setScaledMatrix", 
 	class="QMatrix", 
@@ -1561,6 +1722,42 @@ setMethodS3(
 ##	
 ## Method: Scale
 ##	
+###########################################################################/**
+#
+# @RdocMethod Scale
+# 
+# @title "Scale the scaled rate matrix stored in a QMatrix object by the provided factor" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This methods sets the scaled rate matrix to \code{unscaled_matrix * constant}.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A QMatrix object.} 
+#	\item{constant}{The scaling factor (a numeric vector of length one).}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The QMatrix object (invisible).
+# } 
+# 
+# \examples{
+#
+#
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"Scale", 
 	class="QMatrix", 
@@ -1596,6 +1793,43 @@ setMethodS3(
 ##	
 ## Method: as.character
 ##	
+###########################################################################/**
+#
+# @RdocMethod as.character
+# 
+# @title "Return the character representation of a QMatrix object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A QMatrix object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create a QMatrix object
+#	m<-QMatrix()
+#	# get the character representation
+#	as.character(m)
+#	# the same, but implicitly
+#	m
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"as.character", 
 	class="QMatrix", 
@@ -1617,6 +1851,43 @@ setMethodS3(
 ##	
 ## Method: print
 ##	
+###########################################################################/**
+#
+# @RdocMethod print
+# 
+# @title "Print the character representation of a QMatrix object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{x}{A QMatrix object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The character representation of the QMatrix object.
+# } 
+# 
+# \examples{
+#	# create a QMatrix object
+#	m<-QMatrix()
+#	# print the character representation
+#	print(m)
+#	# the same, but implicitly
+#	m
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"print", 
 	class="QMatrix", 
@@ -1704,6 +1975,35 @@ setMethodS3(
 ##
 ## setId
 ##
+###########################################################################/**
+#
+# @RdocMethod setId
+#
+# @title "Forbidden action: setting the unique identifier for a QMatrix object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setId",
   class="QMatrix",
@@ -1726,6 +2026,43 @@ setMethodS3(
 ##
 ## Method: getId
 ##
+###########################################################################/**
+#
+# @RdocMethod	getId
+# 
+# @title "Get the unique identifier of a QMatrix object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A QMatrix object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create a QMatrix object
+#	m<-QMatrix()
+#	# get object id
+#	getId(m)
+#	# get object id via virtual field
+#	m$id
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getId",
   class="QMatrix",
@@ -1749,6 +2086,41 @@ setMethodS3(
 ##
 ## Method: getWriteProtected
 ##
+###########################################################################/**
+#
+# @RdocMethod getWriteProtected
+#  
+# @title "Check if the object is write protected" 
+# 
+# \description{ 
+#       @get "title".
+#
+#	QMatrix object do not have a write protection flag of their own, but they use the one from the 
+#	assotiated Process object.
+#       Write protected objects cannot be modified through get/set methods and virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A QMatrix object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       TRUE or FALSE
+# } 
+# 
+# \examples{
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       getWriteProtected.Process
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getWriteProtected",
   class="QMatrix",
@@ -1777,6 +2149,43 @@ setMethodS3(
 ##
 ## Method: is.QMatrix
 ##
+###########################################################################/**
+#
+# @RdocDefault is.QMatrix
+# 
+# @title "Check if an object is an instance of the QMatrix class" 
+# 
+# \description{ 
+#       @get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       TRUE or FALSE.
+# } 
+# 
+# \examples{
+#       # create some objects
+#       m<-QMatrix()
+#       p<-Process()
+#       # chek if they inherit from QMatrix
+#       is.GeneralSubstitution(m)
+#       is.GeneralSubstitution(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "is.QMatrix",
   class="default",
@@ -1806,6 +2215,42 @@ setMethodS3(
 ##
 ## Method: setWriteProtected
 ##
+###########################################################################/**
+#
+# @RdocMethod setWriteProtected
+#  
+# @title "Set the write protection field for a QMatrix object" 
+# 
+# \description{ 
+#       @get "title".
+#
+#	QMatrix object do not have a write protection flag of their own, but they use the one from the 
+#	assotiated Process object.
+#       Write protected objects cannot be modified through get/set methods and virtual fields.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A QMatrix object.} 
+#	\item{value}{A logical vector of size one.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       TRUE or FALSE
+# } 
+# 
+# \examples{
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       setWriteProtected.Process
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setWriteProtected",
   class="QMatrix",
@@ -1846,5 +2291,4 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
-
 
