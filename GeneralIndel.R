@@ -64,8 +64,16 @@ setConstructorS3(
 
 		# Using virtual field to clear Id cache:
 		this$name<-name;
+		# setting propose.by
+		if(!missing(propose.by)){
+			this$proposeBy<-propose.by;
+		}
+		# setting accept.by
+		if(!missing(accept.by)){
+			this$acceptBy<-accept.by;
+		}
 
-    return(this);
+    		return(this);
   },
   enforceRCC=TRUE
 );
