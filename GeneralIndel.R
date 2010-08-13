@@ -10,7 +10,9 @@
 # 
 # \description{ 
 #
-#
+#	This is a class implementing the methods which are needed in both GeneralInsertor and 
+#	GeneralDeletor.
+#	
 #	@classhierarchy
 # }
 #	
@@ -18,7 +20,7 @@
 #	
 # \arguments{
 # 	\item{name}{The name of the object.}
-#	\item{rate}{The global rate of the object.}
+#	\item{rate}{The general rate of the object.}
 #	\item{propose.by}{A function used to propose events.}
 #	\item{accept.by}{A function used to accept/reject events.}
 # 	\item{...}{Not used.}
@@ -29,7 +31,27 @@
 # }
 # 
 # \examples{ 
-#
+#	# create a GeneralInDel object
+#	# rejecting half of the events
+#	# and proposing sizes in the range 1:10
+#	o<-GeneralInDel(rate=1, propose.by=function(){sample(1:10,1)}, accept.by=function(){sample(c(TRUE,FALSE),1)});
+#	# check if inherits from GeneralInDel
+#	is.GeneralInDel(o)
+#	# check if it has undefined rates
+#	hasUndefinedRate(o)
+#	# get object summary
+#	summary(o)
+#	# set/get proposeBy function via virtual field
+#	o$proposeBy<-function(){return(3)}	# fixed event length
+#	o$proposeBy
+#	# set/get acceptBy function via virtual field
+#	o$acceptBy<-function(){return(TRUE)}		# accept all events
+#	o$acceptBy
+#	# get/set general rate
+#	o$rate
+#	o$rate<-2	# double the rate
+#	# propose event length
+#	proposeLength(o)
 # }
 # 
 # @author
@@ -65,11 +87,11 @@ setConstructorS3(
 		# Using virtual field to clear Id cache:
 		this$name<-name;
 		# setting propose.by
-		if(!missing(propose.by) && !is.na(propose.by)){
+		if(!missing(propose.by) && is.function(propose.by)){
 			this$proposeBy<-propose.by;
 		}
 		# setting accept.by
-		if(!missing(accept.by) && !is.na(accept.by)){
+		if(!missing(accept.by) && is.function(accept.by)){
 			this$acceptBy<-accept.by;
 		}
 
@@ -151,6 +173,46 @@ setMethodS3(
 ##	
 ## Method: getRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRate
+# 
+# @title "Get the general rate" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralInDel object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a GeneralInDel object
+#	o<-GeneralInDel(rate=0.5)
+#	# get/set general rate
+#	getRate(o)
+#	setRate(o, 1.5)
+#	# get/set rate via virtual field
+#	o$rate
+#	o$rate<-0.3
+#	o$rate
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRate", 
 	class="GeneralInDel", 
@@ -172,6 +234,45 @@ setMethodS3(
 ##	
 ## Method: hasUndefinedRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod hasUndefinedRate
+# 
+# @title "Check whether the general rate of a GeneralInDel object is undefined" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralInDel object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create a GeneralInDel object
+#	o<-GeneralInDel()
+#	# check if the general rate is undefined
+#	hasUndefinedRate(o)
+#	# set general rate
+#	o$rate<-1
+#	# check rate again
+#	hasUndefinedRate(o)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"hasUndefinedRate", 
 	class="GeneralInDel", 
@@ -193,6 +294,47 @@ setMethodS3(
 ##	
 ## Method: setRate
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRate
+# 
+# @title "Set the general rate" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralInDel object.} 
+#	\item{value}{The new general rate (a numeric vector of length one).}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new general rate.
+# } 
+# 
+# \examples{
+#	# create a GeneralInDel object
+#	o<-GeneralInDel(rate=0.5)
+#	# get/set general rate
+#	getRate(o)
+#	setRate(o, 1.5)
+#	# get/set rate via virtual field
+#	o$rate
+#	o$rate<-0.3
+#	o$rate
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRate", 
 	class="GeneralInDel", 
@@ -210,7 +352,7 @@ setMethodS3(
 		} else {
 			this$.rate<-value;
 		}
-
+		return(this$.rate);
 
 	},
 	private=FALSE,
@@ -223,6 +365,46 @@ setMethodS3(
 ##	
 ## Method: getProposeBy
 ##	
+###########################################################################/**
+#
+# @RdocMethod getProposeBy
+# 
+# @title "Get the function used for proposing indel lengths" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralInDel object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A function object.
+# } 
+# 
+# \examples{
+#	# create a GeneralInDel object
+#	# proposing events with a constant length of 5
+#	o<-GeneralInDel(rate=1, propose.by=function(){return(5)});
+#	# set/get the proposeBy function
+#	setProposeBy(o,value=function(){return(6)})
+#	getProposeBy(o)
+#	# set/get proposeBy function via virtual field
+#	o$proposeBy<-function(){return(3)}
+#	o$proposeBy
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getProposeBy", 
 	class="GeneralInDel", 
@@ -242,8 +424,49 @@ setMethodS3(
 );
 
 ##	
-## Method: setRate
+## Method: setProposeBy
 ##	
+###########################################################################/**
+#
+# @RdocMethod getProposeBy
+# 
+# @title "Set the function used for proposing indel lengths" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralInDel object.} 
+#	\item{value}{A function object returning a numeric vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The function object (invisible).
+# } 
+# 
+# \examples{
+#	# create a GeneralInDel object
+#	# proposing events with a constant length of 5
+#	o<-GeneralInDel(rate=1, propose.by=function(){return(5)});
+#	# set/get the proposeBy function
+#	setProposeBy(o,value=function(){return(6)})
+#	getProposeBy(o)
+#	# set/get proposeBy function via virtual field
+#	o$proposeBy<-function(){return(3)}
+#	o$proposeBy
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setProposeBy", 
 	class="GeneralInDel", 
@@ -262,6 +485,7 @@ setMethodS3(
 		} else {
 			this$.propose.by<-value;
 		}
+		return(invisible(this$.propose.by));
 
 	},
 	private=FALSE,
@@ -274,6 +498,46 @@ setMethodS3(
 ##	
 ## Method: getAcceptBy
 ##	
+###########################################################################/**
+#
+# @RdocMethod getAcceptBy
+# 
+# @title "Get the function used for accepting/rejecting indel events" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralInDel object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A function object.
+# } 
+# 
+# \examples{
+#	# create a GeneralInDel object
+#	# rejecting half of the events
+#	o<-GeneralInDel(rate=1, propose.by=function(){return(5)}, accept.by=function(){sample(c(TRUE,FALSE),1)});
+#	# set/get the acceptBy function
+#	setAcceptBy(o,value=function(){return(FALSE)})	# reject all events
+#	getAcceptBy(o)
+#	# set/get acceptBy function via virtual field
+#	o$acceptBy<-function(){return(TRUE)}		# accept all events
+#	o$acceptBy
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getAcceptBy", 
 	class="GeneralInDel", 
@@ -295,6 +559,47 @@ setMethodS3(
 ##	
 ## Method: setAcceptBy
 ##	
+###########################################################################/**
+#
+# @RdocMethod setAcceptBy
+# 
+# @title "Set the function used for accepting/rejecting indel events" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralInDel object.} 
+#	\item{value}{A function object.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The function object (invisible).
+# } 
+# 
+# \examples{
+#	# create a GeneralInDel object
+#	# rejecting half of the events
+#	o<-GeneralInDel(rate=1, propose.by=function(){return(5)}, accept.by=function(){sample(c(TRUE,FALSE),1)});
+#	# set/get the acceptBy function
+#	setAcceptBy(o,value=function(){return(FALSE)})	# reject all events
+#	getAcceptBy(o)
+#	# set/get acceptBy function via virtual field
+#	o$acceptBy<-function(){return(TRUE)}		# accept all events
+#	o$acceptBy
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setAcceptBy", 
 	class="GeneralInDel", 
@@ -313,6 +618,7 @@ setMethodS3(
 		} else {
 			this$.accept.by<-value;
 		}
+		return(invisible(this$.accept.by));
 
 	},
 	private=FALSE,
@@ -325,6 +631,44 @@ setMethodS3(
 ##	
 ## Method: proposeLength
 ##	
+###########################################################################/**
+#
+# @RdocMethod proposeLength
+# 
+# @title "Propose indel length" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method simply calls the function returned by the \code{getProposeBy} method.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralInDel object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one (the indel length).
+# } 
+# 
+# \examples{
+#	# create a GeneralInDel object
+#	# proposing event lengths in the range 1:10
+#	o<-GeneralInDel(rate=1, propose.by=function(){sample(c(1:10),1)});
+#	# propose indel length
+#	proposeLength(o)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"proposeLength", 
 	class="GeneralInDel", 
@@ -347,6 +691,40 @@ setMethodS3(
 ##	
 ## Method: is.GeneralIndel
 ##	
+###########################################################################/**
+# @RdocDefault is.GeneralInDel
+# 
+# @title "Check if an object inherits from the GeneralInDel class" 
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#		\item{this}{An object.}
+#		\item{...}{Not used.}
+#
+# } 
+# 
+# \value{ 
+#	TRUE or FALSE.
+# } 
+#
+# \examples{
+#	# create some objects
+#	o<-GeneralInDel(rate=1, propose.by=function(){sample(c(1:10),1)});
+#	x<-GTR()
+#	# check if they inherit from GeneralInDel
+#	is.GeneralInDel(o)
+#	is.GeneralInDel(x)
+# } 
+# 
+# 
+# @author 
+# 
+#*/###########################################################################
 setMethodS3(
 	"is.GeneralInDel", 
 	class="default", 
@@ -400,7 +778,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-GeneralInDel(rate=1,propose.by=function(){sample(c(1,2,3),1)})
 #       # get a summary
 #       summary(a)
 # }
@@ -450,7 +828,7 @@ setMethodS3(
 #	
 # \arguments{
 # 	\item{name}{The name of the object.}
-#	\item{rate}{The global rate of the object.}
+#	\item{rate}{The general rate of the object.}
 #	\item{propose.by}{A function used to propose events.}
 #	\item{accept.by}{A function used to accept/reject events.}
 #	\item{template.seq}{A Sequence object used as a template for generating insertions.}
@@ -1083,7 +1461,7 @@ setMethodS3(
 #	
 # \arguments{
 # 	\item{name}{The name of the object.}
-#	\item{rate}{The global rate of the object.}
+#	\item{rate}{The general rate of the object.}
 #	\item{propose.by}{A function used to propose events.}
 #	\item{accept.by}{A function used to accept/reject events.}
 # 	\item{...}{Not used.}
