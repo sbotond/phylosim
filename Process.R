@@ -1774,6 +1774,7 @@ setMethodS3(
 # 	\item{this}{A Process object.} 
 # 	\item{site}{A Site object.} 
 #	\item{id}{The identifier of the site-process specific parameter.}
+#	\item{value}{The new value for the parameter.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1788,6 +1789,8 @@ setMethodS3(
 #	p<-Process(alphabet=a)
 #	# attach the process
 #	attachProcess(s,p)
+#	# set the value of the rate multiplier
+#	setParameterAtSite(p,s,"rate.multiplier",2)
 #	# get the value of the rate multiplier
 #	getParameterAtSite(p,s,"rate.multiplier")
 # } 
