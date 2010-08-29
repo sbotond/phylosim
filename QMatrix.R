@@ -1933,7 +1933,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-QMatrix(alphabet=BinaryAlphabet(), rate.list=("0->1"=1,"1->0"=3))
+#       a<-QMatrix(alphabet=BinaryAlphabet(), rate.list=list("0->1"=1,"1->0"=3))
 #       # get a summary
 #       summary(a)
 # }

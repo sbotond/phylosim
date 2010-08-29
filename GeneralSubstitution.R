@@ -17,7 +17,7 @@
 #	Event objects corresponding to substitution events based on the state of the 
 #	attached Site objects.
 #
-#	The GeneralSubstitution objects aggregate QMatrix object, which store the 
+#	The GeneralSubstitution objects aggregate a QMatrix object, which stores the 
 #	unscaled and scaled rate matrices. The scaled rate matrices, along with the
 #	site-process specific rate multiplier parameters define the rates of the generated
 #	Event objects.		
@@ -31,6 +31,7 @@
 # 	\item{name}{The name of the object.}
 #	\item{alphabet}{The alphabet on which the process acts (Alphabet object).}
 #	\item{rate.list}{A list with the substitution rates. It will be passed to \code{setRateList} method.}
+#	\item{equ.dist}{The equilibrium distribution (see \code{setEquDist.GeneralSubstitution}).}
 # 	\item{...}{Not used.}
 #	}
 # 
@@ -441,6 +442,8 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A GeneralSubstitution object.} 
 #	\item{value}{A numeric vector containing the equlibrium symbol frequencies. The order of the frequencies must be the same as in the symbol vector of the attached Alphabet object.}
+#	\item{force}{Do not check compatibility with thr rate matrix.}
+#	\item{silent}{Do not print out warnings.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -479,8 +482,8 @@ setMethodS3(
   function(
     this,
     value,
-		force=FALSE,
-		silent=FALSE,
+    force=FALSE,
+    silent=FALSE,
     ...
   ){
 
