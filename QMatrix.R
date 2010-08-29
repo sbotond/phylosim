@@ -1747,8 +1747,15 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#
-#
+#	# create a QMatrix object
+#	# , provide Alphabet object and rates
+#	m<-QMatrix(name="Susie Q", alphabet=BinaryAlphabet(), rate.list=list("1->0"=2,"0->1"=3))
+#	# get object summary
+#	summary(m)
+#	# perform scaling
+#	Scale(m, 1/0.666)
+#	# get object summary
+#	summary(m)
 # } 
 # 
 # @author 
@@ -2111,8 +2118,6 @@ setMethodS3(
 #       TRUE or FALSE
 # } 
 # 
-# \examples{
-# } 
 # 
 # @author 
 # 
@@ -2241,8 +2246,6 @@ setMethodS3(
 #       TRUE or FALSE
 # } 
 # 
-# \examples{
-# } 
 # 
 # @author 
 # 

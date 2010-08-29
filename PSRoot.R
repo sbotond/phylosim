@@ -825,7 +825,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{static}{A PSRoot object.} 
 #	\item{target}{R object.}
-#	\item{current}{Other R object, to be compared with ‘target’.}
+#	\item{current}{Other R object, to be compared with target.}
 # 	\item{...}{Not used.} 
 # } 
 # 
