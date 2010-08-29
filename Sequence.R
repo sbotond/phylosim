@@ -1964,9 +1964,9 @@ setMethodS3(
 		else if(missing(value)){
 			throw("No value provided!\n");
 		}
-		else if(!is.GeneralSubstitution(process)){
-			throw("The specified process is not a substitution process!\n");
-		}
+		#else if(!is.GeneralSubstitution(process)){
+		#	throw("The specified process is not a substitution process!\n");
+		#}
 		setParameterAtSites(this=this,process=process,id="rate.multiplier",value=value,index=index);
 		
 	},
