@@ -2,6 +2,77 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass DiscreteDeletor
+# 
+# @title "The DiscreteDeletor class"
+# 
+# \description{ 
+#	This class implements a process which performs deletions with
+#	lengths sampled from a user-specified discrete distribution.
+#	See \code{GeneralDeletor} for the workings of the deletion
+#	processes.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{The name of the object.}
+# 	\item{rate}{The general rate.}
+#	\item{sizes}{The deletion sizes to propose.}
+#	\item{probs}{A vector with the probabilites of the deletion sizes.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create a DiscreteDeletor process
+#	d<-DiscreteDeletor(
+#		name="M.D.",
+#		rate=0.25,
+#		sizes=c(1,2),
+#		probs=c(1/2,1/2)
+# 	)
+#	# get object summary
+#	summary(d)
+#	# set/get deletions sizes
+#	d$sizes<-1:3
+#	# set/get length probabilities
+#	d$probs<-c(3,2,1)/6
+#	# plot length distribution
+#	plot(d)
+#	
+#	# The following code illustrates how to use
+#	# a DiscreteDeletor process in a simulation
+#	
+#	# create a sequence object, attach process d
+#	s<-NucleotideSequence(string="AAAAAAAAAAGGGGAAAAAAAAAA",processes=list(list(d)))
+#	# set the deletion tolerance to zero in range 11:15
+#	# creating a region rejecting all deletions
+#	setDeletionTolerance(s,d,0,11:15)	
+#	# get deletion tolerances
+#	getDeletionTolerance(s,d)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# simulate
+#	Simulate(sim)
+#	# print resulting alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GeneralDeletor ContinousDeletor GeneralInDel
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "DiscreteDeletor",
   function( 
@@ -128,6 +199,46 @@ setMethodS3(
 ##	
 ## Method: getSizes
 ##	
+###########################################################################/**
+#
+# @RdocMethod getSizes
+# 
+# @title "Get the sizes of the proposed deletions" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A DiscreteDeletor object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A vector of integers.
+# } 
+# 
+# \examples{
+#	# create a DiscreteDeletor object
+#	d<-DiscreteDeletor(rate=1)
+#	# set deletion sizes      
+#	setSizes(d,c(1,2,3))
+#	# get deletion sizes
+#	getSizes(d)
+#	# set/get sizes via virtual field
+#	d$sizes<-1:10
+#	d$sizes	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getSizes", 
 	class="DiscreteDeletor", 
@@ -149,6 +260,49 @@ setMethodS3(
 ##	
 ## Method: setSizes
 ##	
+###########################################################################/**
+#
+# @RdocMethod setSizes
+# 
+# @title "Set the sizes of the proposed deletions" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	The provided numeric vector is rounded.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A DiscreteDeletor object.} 
+# 	\item{value}{A numeric vector.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A vector of integers (invisible).
+# } 
+# 
+# \examples{
+#	# create a DiscreteDeletor object
+#	d<-DiscreteDeletor(rate=1)
+#	# set deletion sizes      
+#	setSizes(d,c(1,2,3))
+#	# get deletion sizes
+#	getSizes(d)
+#	# set/get sizes via virtual field
+#	d$sizes<-1:10
+#	d$sizes	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setSizes", 
 	class="DiscreteDeletor", 
@@ -169,6 +323,7 @@ setMethodS3(
 			}
 			this$.sizes<-round(value);	
 		}
+		return(invisible(this$.sizes));
 		
 	},
 	private=FALSE,
@@ -181,6 +336,48 @@ setMethodS3(
 ##	
 ## Method: getProbs
 ##	
+###########################################################################/**
+#
+# @RdocMethod getProbs
+# 
+# @title "Get the deletion length probabilities" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralDeletor object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector with the deletion length probabilities.
+# } 
+# 
+# \examples{
+#	# create a DiscreteDeletor object
+#	d<-DiscreteDeletor(rate=1, sizes=1:3)
+#	# set/get length probabilities
+#	setProbs(d,c(1/3,1/3,1/3)) # equal probabilites
+#	getProbs(d)
+#	# set/get length probabilities via virtual field
+#	x<-c(2,2,1)
+#	# normalize x
+#	x<-x/sum(x)
+#	d$probs<-x
+#	d$probs
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getProbs", 
 	class="DiscreteDeletor", 
@@ -202,6 +399,54 @@ setMethodS3(
 ##	
 ## Method: setProbs
 ##	
+###########################################################################/**
+#
+# @RdocMethod setProbs
+# 
+# @title "Set the deletion length probabilities" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The \code{sizes} virtual field must be set before setting the length probabilities.
+#	The length of the provided numeric vector must match with the length of the vector
+#	stored in the \code{sizes} virtual field. The vector is rescaled if the values do not
+#	sum to one and a warning is issued.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GeneralDeletor object.} 
+#	\item{value}{A numeric vector containg the length probabilities.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The vector of probabilities.
+# } 
+# 
+# \examples{
+#	# create a DiscreteDeletor object
+#	d<-DiscreteDeletor(rate=1, sizes=1:3)
+#	# set/get length probabilities
+#	setProbs(d,c(1/3,1/3,1/3)) # equal probabilites
+#	getProbs(d)
+#	# set/get length probabilities via virtual field
+#	x<-c(2,2,1)
+#	# normalize x
+#	x<-x/sum(x)
+#	d$probs<-x
+#	d$probs
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setProbs", 
 	class="DiscreteDeletor", 
@@ -229,9 +474,9 @@ setMethodS3(
 		}
 		else {
   		if(!isTRUE(all.equal(sum(value),1.0))){
-        value<-value/sum(value);
-        warning("The provided values were rescaled in order to sum to one!\n");
-    	}
+        		value<-value/sum(value);
+        		warning("The provided values were rescaled in order to sum to one!\n");
+    		}
 			this$.probs<-value;
 		}
 		
@@ -316,6 +561,44 @@ setMethodS3(
 ##	
 ## Method: plot
 ##	
+###########################################################################/**
+#
+# @RdocMethod plot
+# 
+# @title "Plot the deletion length distribution" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{x}{A DiscreteDeletor object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The DiscreteDeletor object (invisible).
+# } 
+# 
+# \examples{
+#	d<-DiscreteDeletor(
+#		name="MyDiscDel",
+#		sizes=1:6,
+#		probs=c(0.25000000, 0.16666667, 0.08333333, 0.08333333, 0.16666667, 0.25000000)
+#	)
+#	# plot the deletion length distribution
+#	plot(d)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"plot", 
 	class="DiscreteDeletor", 
@@ -341,6 +624,7 @@ setMethodS3(
 				xaxt="n"
 			);
 			axis(side=1, at=this$sizes, labels=this$sizes);
+			return(invisible(this));
 		
 	},
 	private=FALSE,

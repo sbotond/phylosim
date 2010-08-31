@@ -429,7 +429,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-AminoAcidSubst()
 #       # get a summary
 #       summary(a)
 # }
