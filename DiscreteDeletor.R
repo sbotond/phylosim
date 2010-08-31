@@ -349,7 +349,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A GeneralDeletor object.} 
+# 	\item{this}{A DiscreteDeletor object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -417,7 +417,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A GeneralDeletor object.} 
+# 	\item{this}{A DiscreteDeletor object.} 
 #	\item{value}{A numeric vector containg the length probabilities.}
 # 	\item{...}{Not used.} 
 # } 
