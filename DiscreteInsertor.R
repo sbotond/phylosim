@@ -45,9 +45,10 @@
 #       summary(i)
 #       # set/get insertion sizes
 #       i$sizes<-1:3
+#	i$sizes
 #       # set/get length probabilities
 #       i$probs<-c(3,2,1)/6
-#       i$probs<-c(3,2,1)/6
+#       i$probs
 #       # plot length distribution
 #       plot(i)
 #       
@@ -594,7 +595,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-DiscreteInsertor(rate=1,sizes=c(1,2),probs=c(1/2,1/2))
 #       # get a summary
 #       summary(a)
 # }

@@ -34,7 +34,7 @@
 #	# create a GeneralInDel object
 #	# rejecting half of the events
 #	# and proposing sizes in the range 1:10
-#	o<-GeneralInDel(rate=1, propose.by=function(){sample(1:10,1)}, accept.by=function(){sample(c(TRUE,FALSE),1)});
+#	o<-GeneralInDel(rate=1, propose.by=function(process){sample(1:10,1)}, accept.by=function(){sample(c(TRUE,FALSE),1)});
 #	# check if inherits from GeneralInDel
 #	is.GeneralInDel(o)
 #	# check if it has undefined rates
@@ -42,7 +42,7 @@
 #	# get object summary
 #	summary(o)
 #	# set/get proposeBy function via virtual field
-#	o$proposeBy<-function(){return(3)}	# fixed event length
+#	o$proposeBy<-function(process){return(3)}	# fixed event length
 #	o$proposeBy
 #	# set/get acceptBy function via virtual field
 #	o$acceptBy<-function(){return(TRUE)}		# accept all events
@@ -390,7 +390,7 @@ setMethodS3(
 # \examples{
 #	# create a GeneralInDel object
 #	# proposing events with a constant length of 5
-#	o<-GeneralInDel(rate=1, propose.by=function(){return(5)});
+#	o<-GeneralInDel(rate=1, propose.by=function(process){return(5)});
 #	# set/get the proposeBy function
 #	setProposeBy(o,value=function(process){return(6)})
 #	getProposeBy(o)
@@ -528,7 +528,7 @@ setMethodS3(
 # \examples{
 #	# create a GeneralInDel object
 #	# rejecting half of the events
-#	o<-GeneralInDel(rate=1, propose.by=function(){return(5)}, accept.by=function( ){sample(c(TRUE,FALSE),1)});
+#	o<-GeneralInDel(rate=1, propose.by=function(process){return(5)}, accept.by=function( ){sample(c(TRUE,FALSE),1)});
 #	# set/get the acceptBy function
 #	setAcceptBy(o,value=function(){return(FALSE)})	# reject all events
 #	getAcceptBy(o)
@@ -594,7 +594,7 @@ setMethodS3(
 # \examples{
 #	# create a GeneralInDel object
 #	# rejecting half of the events
-#	o<-GeneralInDel(rate=1, propose.by=function(){return(5)}, accept.by=function( ){sample(c(TRUE,FALSE),1)});
+#	o<-GeneralInDel(rate=1, propose.by=function(process){return(5)}, accept.by=function( ){sample(c(TRUE,FALSE),1)});
 #	# set/get the acceptBy function
 #	setAcceptBy(o,value=function( ){return(FALSE)})	# reject all events
 #	getAcceptBy(o)
@@ -667,7 +667,7 @@ setMethodS3(
 # \examples{
 #	# create a GeneralInDel object
 #	# proposing event lengths in the range 1:10
-#	o<-GeneralInDel(rate=1, propose.by=function(){sample(c(1:10),1)});
+#	o<-GeneralInDel(rate=1, propose.by=function(process){sample(c(1:10),1)});
 #	# propose indel length
 #	proposeLength(o)
 # } 
@@ -688,7 +688,7 @@ setMethodS3(
 		...
 	){
 
-		return( this$.propose.by());
+		return( this$.propose.by(this));
 
 	},
 	private=FALSE,
@@ -724,7 +724,7 @@ setMethodS3(
 #
 # \examples{
 #	# create some objects
-#	o<-GeneralInDel(rate=1, propose.by=function(){sample(c(1:10),1)});
+#	o<-GeneralInDel(rate=1, propose.by=function(process){sample(c(1:10),1)});
 #	x<-GTR()
 #	# check if they inherit from GeneralInDel
 #	is.GeneralInDel(o)
@@ -788,7 +788,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-GeneralInDel(rate=1,propose.by=function(){sample(c(1,2,3),1)})
+#       a<-GeneralInDel(rate=1,propose.by=function(process){sample(c(1,2,3),1)})
 #       # get a summary
 #       summary(a)
 # }

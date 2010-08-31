@@ -43,8 +43,10 @@
 #	summary(d)
 #	# set/get deletions sizes
 #	d$sizes<-1:3
+#	d$sizes
 #	# set/get length probabilities
 #	d$probs<-c(3,2,1)/6
+#	d$probs
 #	# plot length distribution
 #	plot(d)
 #	
@@ -515,7 +517,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-ContinousDeletor(rate=1,sizes=c(1,2),probs=c(1/2,1/2))
 #       # get a summary
 #       summary(a)
 # }
