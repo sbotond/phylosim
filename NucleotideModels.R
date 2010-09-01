@@ -480,7 +480,7 @@ setMethodS3(
 # }
 # \references{
 #	Tavare, S (1986) "Some Probabilistic and Statistical Problems in the Analysis of DNA Sequences". 
-#	American Mathematical Society: Lectures on Mathematics in the Life Sciences 17: 57–86
+#	American Mathematical Society: Lectures on Mathematics in the Life Sciences 17:57-86
 # }
 #	
 # @synopsis
@@ -1993,6 +1993,70 @@ setMethodS3(
 ## Hasegawa, M., H. Kishino, and T. Yano. (1985) Dating of human-ape splitting by a molecular clock
 ## of mitochondrial DNA. Journal of Molecular Evolution, 22, 160-174.
 ##
+##########################################################################/** 
+#
+# @RdocClass HKY
+# 
+# @title "The HKY class"
+# 
+# \description{ 
+#	This class implements the HKY GTR submodel.
+#
+#	The rate parameters are the following: "Alpha", "Beta".
+#	@classhierarchy
+# }
+# \references{
+# Hasegawa, M Kishino, H and Yano, T (1985) Dating of human-ape splitting by a molecular clock
+# of mitochondrial DNA Journal of Molecular Evolution 22:160-174 \url{http://bit.ly/a9AxKm}
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{rate.params}{Rate parameters.}
+#	\item{base.freqs}{Base frequency parameters.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create substitution process object
+#       p<-HKY(rate=1, rate.params=list( "Alpha"=10,"Beta"=2),
+#		base.freqs=c(4,3,2,1)/10
+#	)
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GTR UNREST GeneralSubstitution TN93
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "HKY",
   function( 
@@ -2000,11 +2064,12 @@ setConstructorS3(
 		rate.params=list(
 				"Alpha"   =1,
       				"Beta"    =1
-			),
+			),	
+		base.freqs=c(0.25,0.25,0.25,0.25),
 			... 
 		)	{
 		
-		this<-GTR(...);
+		this<-GTR();
 		
 		this<-extend(
 			this,
@@ -2016,6 +2081,7 @@ setConstructorS3(
 			);
 
 		this$name<-name;
+		this$baseFreqs<-base.freqs;
 		this$rateParamList<-rate.params;
 		return(this);
 	
@@ -2026,6 +2092,55 @@ setConstructorS3(
 ##	
 ## Method: getRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParamList
+# 
+# @title "Get the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An HKY object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters.
+# } 
+# 
+# \examples{
+#	# create HKY object
+#	p<-HKY()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#		"Alpha"=1,
+#		"Beta"=0.5
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#		"Alpha"=1,
+#		"Beta"=3
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParamList", 
 	class="HKY", 
@@ -2047,6 +2162,56 @@ setMethodS3(
 ##	
 ## Method: setRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParamList
+# 
+# @title "Set the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An HKY object.} 
+#	\item{value}{A list containing the rate parameters.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters (invisible).
+# } 
+# 
+# \examples{
+#	# create HKY object
+#	p<-HKY()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#		"Alpha"=1,
+#		"Beta"=0.5
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#		"Alpha"=1,
+#		"Beta"=3
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParamList", 
 	class="HKY", 
@@ -2101,6 +2266,47 @@ setMethodS3(
 ##	
 ## Method: getRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParam
+# 
+# @title "Get the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An HKY object.} 
+#	\item{name}{The name of the rate parameter.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters.
+# } 
+# 
+# \examples{
+#	# construct HKY object
+#	p<-HKY();
+#	# set/get a rate parameter
+#	setRateParam(p,"Alpha",4)
+#	getRateParam(p,"Beta")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParam", 
 	class="HKY", 
@@ -2129,6 +2335,48 @@ setMethodS3(
 ##	
 ## Method: setRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParam
+# 
+# @title "Set the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An HKY object.} 
+#	\item{name}{The name of the rate parameter.}
+#	\item{value}{A numeric vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new value of the rate parameter (invisible).
+# } 
+# 
+# \examples{
+#	# construct HKY object
+#	p<-HKY();
+#	# set/get a rate parameter
+#	setRateParam(p,"Alpha",4)
+#	getRateParam(p,"Beta")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParam", 
 	class="HKY", 
@@ -2157,6 +2405,50 @@ setMethodS3(
 ##	
 ## Method: getBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod getBaseFreqs
+# 
+# @title "Get the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The order of the frequency parameters must match with the order of symbols
+#	in the NucleotideAlphabet objects.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An HKY object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A matrix containing the base frequency parameters.
+# } 
+# 
+# \examples{
+#	# construct object
+#	p<-HKY()
+#	# set/get base frequency parameters
+#	setBaseFreqs(p,c(2,1,2,1)/6)
+#	getBaseFreqs(p)
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs<-c(4,4,1,1)/10
+#	p$baseFreqs
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getBaseFreqs", 
 	class="HKY", 
@@ -2178,6 +2470,51 @@ setMethodS3(
 ##	
 ## Method: setBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod setBaseFreqs
+# 
+# @title "Set the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The order of the frequency parameters must match with the order of symbols
+#	in the NucleotideAlphabet objects.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An HKY object.} 
+#	\item{value}{A vector of base frequencies.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	value (invisible)
+# } 
+# 
+# \examples{
+#	# construct object
+#	p<-HKY()
+#	# set/get base frequency parameters
+#	setBaseFreqs(p,c(2,1,2,1)/6)
+#	getBaseFreqs(p)
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs<-c(4,4,1,1)/10
+#	p$baseFreqs
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setBaseFreqs", 
 	class="HKY", 

@@ -323,7 +323,7 @@ setMethodS3(
 ###########################################################################/**
 #
 # @RdocMethod ==
-# \alias{!=}
+# \alias{!=.Process}
 # 
 # @title "Check whether the two supplied Process objects are identical" 
 # 
