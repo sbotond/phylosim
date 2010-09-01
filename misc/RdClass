@@ -14,7 +14,7 @@
 #	
 # \arguments{
 # 	\item{}{}
-# 	\item{...}{Not used.}
+# 	\item{...}{Additional arguments.}
 #	}
 # 
 # \section{Fields and Methods}{ 
