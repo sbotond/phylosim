@@ -2,6 +2,56 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass BinarySubst
+# 
+# @title "The BinarySubst class"
+# 
+# \description{ 
+#	This is a class implementing a continuous-time Markov process acting on 
+#	the state space defined by the \code{BinaryAlphabet} class.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{The name of the object.}
+# 	\item{rate.list}{A list of substitution rates (see \code{setRateList.GeneralSubstitution}).}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+# 	# The following code demonstrates 
+#       # the use of the BinarySubst process    
+#       # during a simulation.
+#       p<-BinarySubst(rate=0.25,name="Binary",rate.list=list("0->1"=2,"1->0"=1))
+#       # create a sequnce object, attach process p
+#       s<-BinarySequence(string="000000000000000000",processes=list(list(p)));
+#       # set the range 1:5 to invariable
+#       setRateMultipliers(s,p,0,1:5)
+#       # get rate multipliers
+#       getRateMultipliers(s,p)
+#       # simulate
+#       sim<-PhyloSim(root.seq=s,phylo=rcoal(3))
+#       Simulate(sim)
+#       # print alignment
+#       sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	@seeclass 
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "BinarySubst",
   function( 
@@ -99,5 +149,63 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##
+## Method: summary
+##
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#
+#       # create an object
+#       p<-BinarySubst(rate=0.25,name="Binary",rate.list=list("0->1"=2,"1->0"=1))
+#       # get a summary
+#       summary(p)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
+setMethodS3(
+  "summary",
+  class="BinarySubst",
+  function(
+    this,
+    ...
+  ){
+
+      NextMethod();
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 
 

@@ -9,7 +9,7 @@
 # @title "The GeneralSubstitution class"
 # 
 # \description{ 
-#	This a class representing a contionous-time Markov process acting
+#	This a class representing a continuous-time Markov process acting
 #	on the state space defined by the symbols stored in the Alphabet object
 #	passed to the object constructor. 
 #
