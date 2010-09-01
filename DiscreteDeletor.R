@@ -24,7 +24,7 @@
 # 	\item{rate}{The general rate.}
 #	\item{sizes}{The deletion sizes to propose.}
 #	\item{probs}{A vector with the probabilites of the deletion sizes.}
-# 	\item{...}{Not used.}
+# 	\item{...}{Additional arguments.}
 #	}
 # 
 # \section{Fields and Methods}{ 

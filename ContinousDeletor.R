@@ -25,7 +25,7 @@
 # 	\item{rate}{The general rate.}
 # 	\item{dist}{The length sampling expression.}
 # 	\item{max.length}{Maximum event length.}
-# 	\item{...}{Not used.}
+# 	\item{...}{Additional arguments.}
 #	}
 # 
 # \section{Fields and Methods}{ 

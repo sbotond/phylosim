@@ -23,7 +23,7 @@
 #	\item{rate}{The general rate of the object.}
 #	\item{propose.by}{A function used to propose events.}
 #	\item{accept.by}{A function used to accept/reject events.}
-# 	\item{...}{Not used.}
+# 	\item{...}{Additional arguments.}
 #	}
 # 
 # \section{Fields and Methods}{ 
@@ -870,7 +870,7 @@ setMethodS3(
 #	\item{template.seq}{A Sequence object used as a template for generating insertions (no default).}
 #	\item{insert.hook}{A function object, see \code{setInsertHook} (no default).}
 #	\item{accept.win}{A window of sites affecting the acceptance of insert events.}
-# 	\item{...}{Not used.}
+# 	\item{...}{Additional arguments.}
 #	}
 # 
 # \section{Fields and Methods}{ 
@@ -2194,7 +2194,7 @@ setMethodS3(
 #	\item{rate}{The general rate of the object.}
 #	\item{propose.by}{A function used to propose events.}
 #	\item{accept.by}{A function used to accept/reject events.}
-# 	\item{...}{Not used.}
+# 	\item{...}{Additional arguments.}
 #	}
 # 
 # \section{Fields and Methods}{ 

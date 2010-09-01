@@ -24,7 +24,7 @@
 #       \item{rate}{The general rate.}
 #       \item{sizes}{The insertion sizes to propose.}
 #       \item{probs}{A vector with the probabilites of the insertion sizes.}
-#       \item{...}{Not used.}
+#       \item{...}{Additional arguments.}
 #       }
 # 
 # \section{Fields and Methods}{ 
