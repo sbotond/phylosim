@@ -2,6 +2,72 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass UNREST
+# 
+# @title "The UNREST class"
+# 
+# \description{ 
+#	This class implements the unrestricted nucleotide substitution model.
+#	UNREST objects are basically GeneralSubstitution processes acting on a 
+#	nucleotide alphabet.
+#
+#	@classhierarchy
+# }
+# \references{
+#	Yang, Z (1993) Maximum-likelihood estimation of phylogeny from DNA sequences when substitution
+#	rates differ over sites - Mol Biol Evol 10:1396–1401 \url{http://dx.doi.org/10.1007/BF00178256}
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{rate.list}{A list of unscaled rates (see \code{setRateList.GeneralSubstitution}).}
+#	\item{equ.dist}{Equlibrium distribution.}
+# 	\item{...}{Additional arguments.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#       p<-UNREST(rate=1,rate.list=list(
+#		"T->C"=1, "T->A"=2, "T->G"=3, "C->T"=4, "C->A"=1, 
+#		"C->G"=2, "A->T"=3, "A->C"=4, "A->G"=1, "G->T"=2,
+#		"G->C"=3, "G->A"=4	
+#	))
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GeneralSubstitution GTR
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "UNREST",
   function( 
@@ -122,10 +188,128 @@ setMethodS3(
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+##
+## Method: summary
+##
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#       # create an object
+#       p<-UNREST(rate.list=list(
+#		"T->C"=1, "T->A"=2, "T->G"=3, "C->T"=4, "C->A"=1, 
+#		"C->G"=2, "A->T"=3, "A->C"=4, "A->G"=1, "G->T"=2,
+#		"G->C"=3, "G->A"=4	
+#	))
+#       # get a summary
+#       summary(p)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
+setMethodS3(
+	"summary", 
+	class="UNREST", 
+	function(
+		object,
+		...
+	){
+
+		NextMethod();
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
 
 ##	
 ## Constructor: JC69
 ##	
+##########################################################################/** 
+#
+# @RdocClass JC69
+# 
+# @title "The JC69 class"
+# 
+# \description{ 
+#	This class implements Jukes-Cantor unrestricted nucleotide substitution model.
+#
+#	@classhierarchy
+# }
+#
+# \references{
+#	Jukes, TH and Cantor, CR (1969) Evolution of protein molecules. Pp. 21-123 in H. N. Munro, 
+#	ed. Mammalian protein metabolism. Academic Press, New York.
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+# 	\item{...}{Additional arguments.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#       p<-JC69()
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GeneralSubstitution UNREST GTR
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "JC69",
   function( 
@@ -222,10 +406,134 @@ setMethodS3(
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+###########################################################################/**
+#
+# @RdocMethod summary
+#
+# @title "Summarize the properties of an object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{object}{An object}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#  Returns a PSRootSummary object.
+# }
+#
+# \examples{
+#       # create an object
+#       p<-JC69()
+#       # get a summary
+#       summary(p)
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
+setMethodS3(
+	"summary", 
+	class="JC69", 
+	function(
+		object,
+		...
+	){
+
+		NextMethod();
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 
 #
 # Constructor: GTR
 #
+##########################################################################/** 
+#
+# @RdocClass GTR
+# 
+# @title "The GTR class"
+# 
+# \description{ 
+#	This class implements the general time-reversible nucleotide substitution model (GTR, REV).
+#	The rate parameters are named as in PAML (see PAML documentation: \url{http://bit.ly/9SQK2f}).
+#
+#	The default value for the rate parameters is 1 and the default value for the base 
+#	frequencies is 0.25. So the GTR objects are equivalent with the JC69 objects by default.
+#
+#	@classhierarchy
+# }
+# \references{
+#	Tavare, S (1986) "Some Probabilistic and Statistical Problems in the Analysis of DNA Sequences". 
+#	American Mathematical Society: Lectures on Mathematics in the Life Sciences 17: 57–86
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{rate.params}{A list of unscaled rates (see \code{setRateList.GeneralSubstitution}).}
+#	\item{base.freqs}{Equlibrium distribution.}
+# 	\item{...}{Additional arguments.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create substitution process object
+#       p<-GTR(rate=1,
+#		rate.params=list(
+#			"a"=1, "b"=2, "c"=3,
+#			"d"=1, "e"=2, "f"=3
+#		),
+#		base.freqs=c(2,2,1,1)/6
+#	)
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GeneralSubstitution UNREST HKY
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "GTR",
   function( 
@@ -383,6 +691,47 @@ setMethodS3(
 ##	
 ## Method: getRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParam
+# 
+# @title "Get the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are named as in PAML (see PAML documentation: \url{http://bit.ly/9SQK2f}).
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GTR object.} 
+#	\item{name}{The name of the rate parameter.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# construct a GTR object
+#	p<-GTR();
+#	# set/get a rate parameter
+#	setRateParam(p,"a",4)
+#	getRateParam(p,"a")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParam", 
 	class="GTR", 
@@ -455,6 +804,48 @@ setMethodS3(
 ##	
 ## Method: setRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParam
+# 
+# @title "Set the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are named as in PAML (see PAML documentation: \url{http://bit.ly/9SQK2f}).
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GTR object.} 
+#	\item{name}{The name of the rate parameter.}
+#	\item{value}{A numeric vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new value of the rate parameter (invisible).
+# } 
+# 
+# \examples{
+#	# construct a GTR object
+#	p<-GTR();
+#	# set/get a rate parameter
+#	setRateParam(p,"a",4)
+#	getRateParam(p,"a")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParam", 
 	class="GTR", 
@@ -471,6 +862,7 @@ setMethodS3(
 		} else {
 			.setRateParam(this,name,value,this$.gtr.params);
 		}
+		return(invisible(value));
 
 	},
 	private=FALSE,
@@ -483,6 +875,55 @@ setMethodS3(
 ##	
 ## Method: getRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParamList
+# 
+# @title "Get the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are named as in PAML (see PAML documentation: \url{http://bit.ly/9SQK2f}).
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GTR object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of rate parameters.
+# } 
+# 
+# \examples{
+#	# create GTR object
+#	p<-GTR()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#                       "a"=1, "b"=2, "c"=3,
+#                       "d"=1, "e"=2, "f"=3
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#                       "a"=4, "b"=1, "c"=4,
+#                       "d"=1, "e"=4, "f"=1
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParamList", 
 	class="GTR", 
@@ -538,6 +979,56 @@ setMethodS3(
 ##	
 ## Method: setRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParamList
+# 
+# @title "Set the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are named as in PAML (see PAML documentation: \url{http://bit.ly/9SQK2f}).
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GTR object.} 
+#	\item{value}{A list containing the rate parameters.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters (invisible).
+# } 
+# 
+# \examples{
+#	# create GTR object
+#	p<-GTR()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#                       "a"=1, "b"=2, "c"=3,
+#                       "d"=1, "e"=2, "f"=3
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#                       "a"=4, "b"=1, "c"=4,
+#                       "d"=1, "e"=4, "f"=1
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParamList", 
 	class="GTR", 
@@ -578,8 +1069,8 @@ setMethodS3(
                 	"A->T"=(value[["b"]] * this$.equ.dist[1,"T"] ),
                 	"T->G"=(value[["c"]] * this$.equ.dist[1,"G"] ),
                 	"G->T"=(value[["c"]] * this$.equ.dist[1,"T"] ),
-									"C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
-									# Can you spot the pattern here: "A->C" .* "d" .* "c" :)
+			"C->A"=(value[["d"]] * this$.equ.dist[1,"A"] ),
+			# Can you spot the pattern here: "A->C" .* "d" .* "c" :)
                 	"A->C"=(value[["d"]] * this$.equ.dist[1,"C"] ),
                 	"C->G"=(value[["e"]] * this$.equ.dist[1,"G"] ),
                 	"G->C"=(value[["e"]] * this$.equ.dist[1,"C"] ),
@@ -595,6 +1086,7 @@ setMethodS3(
 			}
 
 		}
+		return(invisible(value));
 
 	},
 	private=FALSE,
@@ -607,6 +1099,47 @@ setMethodS3(
 ##	
 ## Method: getBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod getBaseFreqs
+# 
+# @title "Get the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GTR object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A matrix containing the base frequencies.
+# } 
+# 
+# \examples{
+#	# construct a GTR object
+#	p<-GTR()
+#	# set/get base frequency parameters
+#	setBaseFreqs(p,c(2,1,2,1)/6)
+#	getBaseFreqs(p)
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs<-c(4,4,1,1)/10
+#	p$baseFreqs
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getBaseFreqs", 
 	class="GTR", 
@@ -629,6 +1162,51 @@ setMethodS3(
 ##	
 ## Method: setBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod setBaseFreqs
+# 
+# @title "Set the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The order of the frequency parameters must match with the order of symbols
+#	in the NucleotideAlphabet objects.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GTR object.} 
+#	\item{value}{A vector of base frequencies.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	value (invisible)
+# } 
+# 
+# \examples{
+#	# construct a GTR object
+#	p<-GTR()
+#	# set/get base frequency parameters
+#	setBaseFreqs(p,c(2,1,2,1)/6)
+#	getBaseFreqs(p)
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs<-c(4,4,1,1)/10
+#	p$baseFreqs
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setBaseFreqs", 
 	class="GTR", 
@@ -642,7 +1220,7 @@ setMethodS3(
 		# FIXME - explain this + more chekings
 		setEquDist(this,value,force=TRUE);
 		setRateParamList.GTR(this,value=this$.gtr.params);
-
+		return(invisible(value));
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -678,7 +1256,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-GTR()
 #       # get a summary
 #       summary(a)
 # }
@@ -724,6 +1302,71 @@ setMethodS3(
 ## in the control region of mitochondrial DNA in humans and chimpanzees. 
 ## Molecular Biology and Evolution 10:512-526.
 ##
+##########################################################################/** 
+#
+# @RdocClass TN93
+# 
+# @title "The TN93 class"
+# 
+# \description{ 
+#	This class implements the Tamura-Nei 93 GTR submodel.
+#
+#	The rate parameters are the following: "Alpha1", "Alpha2","Beta".
+#	@classhierarchy
+# }
+# \references{
+# Tamura, K, and Nei, M (1993) Estimation of the number of nucleotide substitutions 
+# in the control region of mitochondrial DNA in humans and chimpanzees -
+# Molecular Biology and Evolution 10:512-526 \url{http://bit.ly/bNkCqn}
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{rate.params}{Rate parameters.}
+#	\item{base.freqs}{Base frequency parameters.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create substitution process object
+#       p<-TN93(rate=1, rate.params=list( "Alpha1"=4,"Alpha2"=3,"Beta"=2),
+#		base.freqs=c(2,2,1,3)/9
+#	)
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GTR HKY UNREST GeneralSubstitution
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "TN93",
   function( 
@@ -733,10 +1376,11 @@ setConstructorS3(
       				"Alpha2"  =1,
       				"Beta"    =1
 			),
+		base.freqs=c(0.25,0.25,0.25,0.25),
 		... 
 		)	{
 		
-		this<-GTR(...);
+		this<-GTR();
 		
 		this<-extend(
 			this,
@@ -749,6 +1393,7 @@ setConstructorS3(
 			);
 
 		this$name<-name;
+		this$baseFreqs<-base.freqs;
 		this$rateParamList<-rate.params;
 
 		return(this);
@@ -760,6 +1405,57 @@ setConstructorS3(
 ##	
 ## Method: getRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParamList
+# 
+# @title "Get the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rate parameters are: Alpha1, Alpha2, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A TN93 object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters.
+# } 
+# 
+# \examples{
+#	# create TN93 object
+#	p<-TN93()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#		"Alpha1"=1,
+#		"Alpha2"=2,
+#		"Beta"=0.5
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#		"Alpha1"=1,
+#		"Alpha2"=1,
+#		"Beta"=3
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParamList", 
 	class="TN93", 
@@ -781,6 +1477,58 @@ setMethodS3(
 ##	
 ## Method: setRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParamList
+# 
+# @title "Set the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rate parameters are: Alpha1, Alpha2, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A TN93 object.} 
+#	\item{value}{A list containing the rate parameters.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters (invisible).
+# } 
+# 
+# \examples{
+#	# create TN93 object
+#	p<-TN93()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#		"Alpha1"=1,
+#		"Alpha2"=2,
+#		"Beta"=0.5
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#		"Alpha1"=1,
+#		"Alpha2"=1,
+#		"Beta"=3
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParamList", 
 	class="TN93", 
@@ -835,6 +1583,48 @@ setMethodS3(
 ##	
 ## Method: getRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParam
+# 
+# @title "Get the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are: Alpha1, Alpha2, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A TN93 object.} 
+#	\item{name}{The name of the rate parameter.}
+#	\item{value}{A numeric vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# construct a TN93 object
+#	p<-TN93();
+#	# set/get a rate parameter
+#	setRateParam(p,"Beta",4)
+#	getRateParam(p,"Beta")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParam", 
 	class="TN93", 
@@ -863,6 +1653,48 @@ setMethodS3(
 ##	
 ## Method: setRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParam
+# 
+# @title "Set the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are: Alpha1, Alpha2, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A TN93 object.} 
+#	\item{name}{The name of the rate parameter.}
+#	\item{value}{A numeric vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new value of the rate parameter (invisible).
+# } 
+# 
+# \examples{
+#	# construct a TN93 object
+#	p<-TN93();
+#	# set/get a rate parameter
+#	setRateParam(p,"Beta",4)
+#	getRateParam(p,"Beta")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParam", 
 	class="TN93", 
@@ -891,6 +1723,47 @@ setMethodS3(
 ##	
 ## Method: getBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod getBaseFreqs
+# 
+# @title "Get the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A TN93 object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A matrix containing the base frequencies.
+# } 
+# 
+# \examples{
+#	# construct a TN93 object
+#	p<-TN93()
+#	# set/get base frequency parameters
+#	setBaseFreqs(p,c(2,1,2,1)/6)
+#	getBaseFreqs(p)
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs<-c(4,4,1,1)/10
+#	p$baseFreqs
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getBaseFreqs", 
 	class="TN93", 
@@ -912,6 +1785,51 @@ setMethodS3(
 ##	
 ## Method: setBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod setBaseFreqs
+# 
+# @title "Set the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The order of the frequency parameters must match with the order of symbols
+#	in the NucleotideAlphabet objects.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A TN93 object.} 
+#	\item{value}{A vector of base frequencies.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	value (invisible)
+# } 
+# 
+# \examples{
+#	# construct a TN93 object
+#	p<-TN93()
+#	# set/get base frequency parameters
+#	setBaseFreqs(p,c(2,1,2,1)/6)
+#	getBaseFreqs(p)
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs<-c(4,4,1,1)/10
+#	p$baseFreqs
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setBaseFreqs", 
 	class="TN93", 
@@ -1080,7 +1998,7 @@ setConstructorS3(
   function( 
 		name="Anonymous",
 		rate.params=list(
-							"Alpha"   =1,
+				"Alpha"   =1,
       				"Beta"    =1
 			),
 			... 

@@ -20,7 +20,8 @@
 # \arguments{
 # 	\item{name}{The name of the object.}
 # 	\item{rate.list}{A list of substitution rates (see \code{setRateList.GeneralSubstitution}).}
-# 	\item{...}{Not used.}
+#	\item{equ.dist}{Equilibrium distribution.}
+# 	\item{...}{Additional arguments.}
 #	}
 # 
 # \section{Fields and Methods}{ 
@@ -48,7 +49,7 @@
 # @author
 #
 # \seealso{ 
-# 	@seeclass 
+# 	GeneralSubstitution GTR WAG
 # }
 # 
 #*/###########################################################################
@@ -193,7 +194,7 @@ setMethodS3(
   "summary",
   class="BinarySubst",
   function(
-    this,
+    object,
     ...
   ){
 
