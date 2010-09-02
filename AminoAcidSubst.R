@@ -2,6 +2,55 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass AminoAcidSubst
+# 
+# @title "The AminoAcidSubst class"
+# 
+# \description{ 
+#       This is a class implementing a continuous-time Markov process acting on 
+#       the state space defined by the \code{AminoAcidAlphabet} class. The rate
+#	matrix of this model is completely unrestricted.
+#
+#	The rate matrix can be built from PAML files specified by the \code{paml.file} argument.
+#	Alternatively the rates can be specified in a list through the \code{rate.list} parameter.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{The name of the object.}
+#	\item{paml.file}{The name of the PAML file used to construct the rate matrix.}
+#	\item{rate.list}{A list of unscaled substitution rates (see \code{setRateList.GeneralSubstitution}).}
+#	\item{equ.dist}{Equilibrium distribution.}
+# 	\item{...}{Additional arguments.}
+# }
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create an object
+#	p<-AminoAcidSubst()
+#	# build rate matrix from paml file
+#	# buildFromPAML(p,"path_to_paml_file")	# do not run this
+#	# set a rate
+#	setRate(p,"A->D",2)
+#	# get object summary	
+#	summary(p)
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	@seeclass 
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "AminoAcidSubst",
   function( 
@@ -181,6 +230,44 @@ setMethodS3(
 ##	
 ## Method: buildFromPAML
 ##	
+###########################################################################/**
+#
+# @RdocMethod buildFromPAML
+# 
+# @title "Build rate matrix from PAML file" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{An AminoAcidSubst object.} 
+#	\item{paml.file}{Path to the PAML file.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The AminoAcidSubst object (invisible).
+# } 
+# 
+# \examples{
+#	# create an object
+#	p<-AminoAcidSubst()
+#	# build rate matrix from paml file
+#	# buildFromPAML(p,"path_to_paml_file")	# do not run this
+#	# get object summary	
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"buildFromPAML", 
 	class="AminoAcidSubst", 
@@ -215,6 +302,7 @@ setMethodS3(
 		else{
 			throw("PAML data file not specified");
 		}
+		return(invisible(this));
 
 	},
 	private=FALSE,
