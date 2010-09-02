@@ -561,4 +561,89 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+##
+## Method: newAAMatrix 
+##
+###########################################################################/**
+#
+# @RdocMethod newAAMatrix
+# 
+# @title "newAAMatrix: udocumented method" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{name}{Object name} 
+# 	\item{paml.file}{PAML file.} 
+#	\item{equ.dist}{Equilibrium distribution.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A process object inheriting from AminoAcidSubst.
+# } 
+# 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+	"newAAMatrix", 
+	class="AminoAcidSubst", 
+	function(
+		name=NA,
+		paml.file=NA,
+		equ.dist=NA,
+		...
+	){
+
+
+		PAMLDIR<-"PAMLdat";
+		RDATDIR<-"RData";
+
+		# Use the package data directory if loaded:
+		if(length(intersect(search(),c("package:phylosim"))) == 1){
+			RDATDIR<-paste(.path.package("phylosim"),"/data/",sep="");
+			PAMLDIR<-RDATDIR;
+		}
+		
+		rdname<-paste(RDATDIR,"/",name,".RData",sep="");
+
+		if( ( file.access(c(rdname), mode=0) == c(0) ) & (file.access(c(rdname), mode=4) == c(0))){
+			this<-clone(Object$load(rdname));
+	
+		}
+		else {
+		
+			file<-paste(PAMLDIR,"/",paml.file,sep="");
+			this<-AminoAcidSubst(paml.file=file);
+			this<-extend(this,name);
+			this$name<-this$name;
+			save(this, file=rdname);
+			
+		
+		}
+
+		if(!any(is.na(equ.dist))){
+			setEquDist(this,value=equ.dist,force=TRUE);
+		}
+
+		return(this);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 				
