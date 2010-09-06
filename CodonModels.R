@@ -156,14 +156,14 @@ setMethodS3(
 
 
 ##
-## NY98
+## GY94
 ##
 ##
 ## Nielsen, R., Yang, Z. 1998 Likelihood Models for Detecting Positively Selected Amino Acid Sites
 ## and Applications to the HIV-1 Envelope Gene. Genetics 148:929-936.
 ##
 setConstructorS3(
-  "NY98",
+  "GY94",
   function( 
 		name="Anonymous", # name of the object
 		table.id=1,				# id of the genetic code table to use
@@ -184,7 +184,7 @@ setConstructorS3(
 		# Extend:
 		this<-extend(
 			this,
-			"NY98",
+			"GY94",
 			.kappa=NA,
 			.is.ny98=TRUE
 		);
@@ -212,10 +212,10 @@ setConstructorS3(
 );
 
 ##  
-## Method: is.NY98
+## Method: is.GY94
 ##  
 setMethodS3(
-  "is.NY98",
+  "is.GY94",
   class="default",
   function(
     this,
@@ -224,7 +224,7 @@ setMethodS3(
 
 		if(!is.PSRoot(this)) {return(FALSE)}
     if(!is.null(this$.is.ny98)){return(TRUE)}
-    if ( inherits(this, "NY98")) {
+    if ( inherits(this, "GY94")) {
       this$.is.process<-TRUE;
       return(TRUE);
     } else {
@@ -240,11 +240,11 @@ setMethodS3(
 );
 
 ##	
-## Method: getEventsAtSite.NY98
+## Method: getEventsAtSite.GY94
 ##	
 setMethodS3(
 	"getEventsAtSite", 
-	class="NY98", 
+	class="GY94", 
 	function(
 		this,
 		target.site,
@@ -380,7 +380,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
 	"checkConsistency", 
-	class="NY98", 
+	class="GY94", 
 	function(
 		this,
 		...
@@ -416,20 +416,20 @@ setMethodS3(
 				# Single transition:
 				if( all(diff == sort(c(0,0,"TI"))) ){
 					if( !PSRoot$my.all.equal ( this$.q.matrix$.orig.matrix[from, to], (this$.kappa * this$.equ.dist[1,to]) ) ){
-							throw("NY98 rate inconsistency. From:",from," To:",to,"!\n");
+							throw("GY94 rate inconsistency. From:",from," To:",to,"!\n");
 
 						}
 				}
 				# Single transversion:
 				else if( all(diff == sort(c(0,0,"TV"))) ){
 					if( !PSRoot$my.all.equal ( this$.q.matrix$.orig.matrix[from, to], (this$.equ.dist[1,to]) ) ){
-					  throw("NY98 rate inconsistency. From:",from," To:",to,"!\n");
+					  throw("GY94 rate inconsistency. From:",from," To:",to,"!\n");
 					}
 				}
 				# Multiple nucleotide substitution:
 				else {
 					if( this$.q.matrix$.orig.matrix[from, to] != 0.0 ){
-						throw("NY98 rate inconsistency. From:",from," To:",to,"!\n");
+						throw("GY94 rate inconsistency. From:",from," To:",to,"!\n");
 					}
 				}
 	
@@ -449,11 +449,11 @@ setMethodS3(
 );
 
 ##	
-## Method: .buildNY98Rates
+## Method: .buildGY94Rates
 ##	
 setMethodS3(
-	".buildNY98Rates", 
-	class="NY98", 
+	".buildGY94Rates", 
+	class="GY94", 
 	function(
 		this,
 		...
@@ -526,7 +526,7 @@ setMethodS3(
 ##  
 setMethodS3(
   "setRate",
-  class="NY98",
+  class="GY94",
   function(
     this,
     name=NA,
@@ -563,7 +563,7 @@ setMethodS3(
 ##  
 setMethodS3(
   "getKappa",
-  class="NY98",
+  class="GY94",
   function(
     this,
     ...
@@ -584,7 +584,7 @@ setMethodS3(
 ##  
 setMethodS3(
   "setKappa",
-  class="NY98",
+  class="GY94",
   function(
     this,
     value,
@@ -600,7 +600,7 @@ setMethodS3(
 			}
 			else {
 				this$.kappa<-value;
-				.buildNY98Rates(this);
+				.buildGY94Rates(this);
 				return(value);
 			}
 
@@ -617,7 +617,7 @@ setMethodS3(
 ##  
 setMethodS3(
   "getCodonFreqs",
-  class="NY98",
+  class="GY94",
   function(
     this,
     ...
@@ -638,7 +638,7 @@ setMethodS3(
 ##  
 setMethodS3(
   "setCodonFreqs",
-  class="NY98",
+  class="GY94",
   function(
     this,
     value,
@@ -647,7 +647,7 @@ setMethodS3(
 
 		.checkWriteProtection(this);
 		setEquDist(this,value,force=TRUE);
-		.buildNY98Rates(this);
+		.buildGY94Rates(this);
 		
 
   },
@@ -659,7 +659,7 @@ setMethodS3(
 );
 
 ##  
-## Method: summary.NY98
+## Method: summary.GY94
 ##  
 ###########################################################################/**
 #
@@ -699,7 +699,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "summary",
-  class="NY98",
+  class="GY94",
   function(
     object,
     ...
@@ -739,8 +739,8 @@ setMethodS3(
 		if(missing(process)){
       throw("No process given!\n");
     }
-    else if(!is.NY98(process)){
-      throw("The specified process is not a NY98 codon substitution process!\n");
+    else if(!is.GY94(process)){
+      throw("The specified process is not a GY94 codon substitution process!\n");
     }
     rm<-getParameterAtSites(this=this,process=process,id="omega",index=index);
     return(as.numeric(lapply(rm,function(param){param$value})));
@@ -771,8 +771,8 @@ setMethodS3(
 		if(missing(process)){
       throw("No process given!\n");
     }
-    else if(!is.NY98(process)){
-      throw("The specified process is not a NY98 codon substitution process!\n");
+    else if(!is.GY94(process)){
+      throw("The specified process is not a GY94 codon substitution process!\n");
     }
 
 		if(missing(index)){
@@ -811,8 +811,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(value)){
       throw("No new value specified!\n");
@@ -859,8 +859,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(omega)){
       throw("No new omega value specified!\n");
@@ -916,8 +916,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p0)){
       throw("No p0 value specified!\n");
@@ -971,8 +971,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p0)){
       throw("No p0 value specified!\n");
@@ -1043,8 +1043,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(omegas)){
       throw("No omega values specified!\n");
@@ -1107,8 +1107,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
 		else if(missing(probs)){
 			throw("No probabilities specified!\n");
@@ -1164,8 +1164,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(alpha)){
       throw("No alpha (shape) value specified!\n");
@@ -1228,8 +1228,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p0)){
       throw("No p0 value specified!\n");
@@ -1317,8 +1317,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p)){
       throw("No p value specified!\n");
@@ -1380,8 +1380,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p0)){
       throw("No p0 value specified!\n");
@@ -1462,8 +1462,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p0)){
       throw("No p0 value specified!\n");
@@ -1554,8 +1554,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p0)){
       throw("No p0 value specified!\n");
@@ -1647,8 +1647,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p0)){
       throw("No p0 value specified!\n");
@@ -1744,8 +1744,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p0)){
       throw("No p0 value specified!\n");
@@ -1846,8 +1846,8 @@ setMethodS3(
   if(missing(process)){
       throw("No process specified!\n");
     }
-    if(!is.NY98(process)){
-      throw("The sepcified process is not a NY98 codon substitution process!\n");
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
     }
     else if(missing(p0)){
       throw("No p0 value specified!\n");
