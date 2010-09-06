@@ -1481,7 +1481,7 @@ setMethodS3(
 ###########################################################################/**
 #
 # @RdocMethod setRate
-# 
+#
 # @title "Set an unscaled rate for an event from a GeneralSubstitution object" 
 # 
 # \description{ 

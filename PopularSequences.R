@@ -389,6 +389,1219 @@ setConstructorS3(
   enforceRCC=TRUE
 );
 
+##  
+## Method: getOmegas
+##  
+## \alias{getOmegas.Sequence} 
+setMethodS3(
+  "getOmegas",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		index,
+    ...
+  ){
+
+		if(missing(process)){
+      throw("No process given!\n");
+    }
+    else if(!is.GY94(process)){
+      throw("The specified process is not a GY94 codon substitution process!\n");
+    }
+    rm<-getParameterAtSites(this=this,process=process,id="omega",index=index);
+    return(as.numeric(lapply(rm,function(param){param$value})));
+	
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: omegaHist
+##  
+setMethodS3(
+  "omegaHist",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		breaks,
+		index,
+    ...
+  ){
+
+		if(missing(process)){
+      throw("No process given!\n");
+    }
+    else if(!is.GY94(process)){
+      throw("The specified process is not a GY94 codon substitution process!\n");
+    }
+
+		if(missing(index)){
+			index<-seq(along=this$.sites);
+		}
+
+		if(missing(breaks)){
+			hist(getOmegas(this,process,index));
+		}
+		else {
+			hist(getOmegas(this,process,index),breaks=breaks);
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: setOmegas
+## \alias{setOmegas.Sequence} 
+setMethodS3(
+  "setOmegas",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+    value,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(value)){
+      throw("No new value specified!\n");
+    }
+    else if(!all(is.numeric(value)) ){
+      throw("The new value must be a numeric vector!\n");
+    }
+    else {
+
+      if(missing(index)){
+        index<-seq(along=this$.sites);
+      }
+      else {
+        index<-.checkIndexSanity(this, index);
+      }
+
+      setParameterAtSites(this, process=process, id="omega",value=value,index=index);
+			return(invisible(TRUE));
+
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: omegaVarM0 - one ratio
+##  
+setMethodS3(
+  "omegaVarM0",
+  class="CodonSequence",
+  function(
+    	this,
+	process,
+    	omega,
+	index,
+    	...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(omega)){
+      throw("No new omega value specified!\n");
+    }
+    else if((!is.numeric(omega))| (length(omega) != 1)){
+      throw("The new value must be a numeric vector of length 1!\n");
+    }
+		else if(omega < 0){
+			throw("The omega parameter must be greater than zero!\n");
+		}
+    else {
+
+      if(missing(index)){
+        index<-seq(along=this$.sites);
+      }
+      else {
+        index<-.checkIndexSanity(this, index);
+      }
+
+      setParameterAtSites(this, process=process, id="omega",value=omega,index=index);
+			return(invisible(TRUE));
+
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## The omegaVarMx methods mostly follow: Yang, Z., Nielsen, R., Goldman, N., Pedersen Krabbe, A-M.
+## 2000. Codon-Substitution Models for Heterogeneous Selection Pressure at Amino Acid Sites.
+## Genetics 155:431-449.
+##
+
+##  
+## Method: omegaVarM1 - neutral
+##  
+setMethodS3(
+  "omegaVarM1",
+  class="CodonSequence",
+  function(
+    	this,
+    	process,
+   	p0,
+	index,
+    	...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0))| (length(p0) != 1)){
+      throw("The new value must be a numeric vector of length 1!\n");
+    }
+		else if(p0 < 0 | p0 > 1){
+			throw("The p0 parameter must be in the [0,1] interval!\n");
+		}
+    else {
+
+      if(missing(index)){
+        index<-seq(along=this$.sites);
+      }
+      else {
+        index<-.checkIndexSanity(this, index);
+      }
+
+			for(site in this$.sites[index]){
+				setParameterAtSite(this=process,site=site, id="omega", value=sample(c(0,1), size=1, replace=FALSE, prob=c(p0,(1-p0))));	
+			}
+			return(invisible(TRUE));
+
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: omegaVarM2 - selection
+##  
+setMethodS3(
+  "omegaVarM2",
+  class="CodonSequence",
+  function(
+    		this,
+		process,
+    		p0,
+		p1,
+		omega,
+		index,
+    		...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0))| (length(p0) != 1)){
+      throw("The p0 value must be a numeric vector of length 1!\n");
+    }
+		else if(p0 < 0 | p0 > 1){
+			throw("The p0 parameter must be in the [0,1] interval!\n");
+		}
+    else if(missing(p1)){
+      throw("No p1 value specified!\n");
+    }
+    else if((!is.numeric(p1))| (length(p1) != 1)){
+      throw("The p1 value must be a numeric vector of length 1!\n");
+    }
+		else if(p1 < 0 | p1 > 1){
+			throw("The p1 parameter must be in the [0,1] interval!\n");
+		}
+    else if(missing(omega)){
+      throw("No omega value specified!\n");
+    }
+    else if((!is.numeric(omega))| (length(omega) != 1)){
+      throw("The omega value must be a numeric vector of length 1!\n");
+    }
+		else if(omega < 0){
+			throw("The omega parameter must be greater than zero!\n");
+		}
+    else {
+
+      if(missing(index)){
+        index<-seq(along=this$.sites);
+      }
+      else {
+        index<-.checkIndexSanity(this, index);
+      }
+
+			for(site in this$.sites[index]){
+				setParameterAtSite(this=process,site=site, id="omega", value=sample(c(0,1,omega), size=1, replace=FALSE, prob=c(p0,p1,(1-p0-p1))));	
+			}
+			return(invisible(TRUE));
+
+    }
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: omegaVarM3 - discrete
+##  
+setMethodS3(
+  "omegaVarM3",
+  class="CodonSequence",
+  function(
+    		this,
+		process,
+		omegas,
+		probs,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(omegas)){
+      throw("No omega values specified!\n");
+    }
+    else if((!is.numeric(omegas))){
+      throw("The omegas must be numeric!\n");
+    }
+		else if(any(omegas < 0)){
+			throw("The omegas must be greater than zero!\n");
+		}
+		else if(missing(probs)){
+			throw("No probabilities specified!\n");
+		}
+		else if(!is.numeric(probs)){
+			throw("The omegas must be greater than zero!\n");
+		}
+		else if(length(omegas) != length(probs)){
+			throw("The length of the \"omegas\" and \"probs\" vector must be the same!\n");
+		}
+		else if(!PSRoot$my.all.equal(sum(probs),1.0)){
+			probs<-(probs/sum(probs));
+			warning("The provided probabilities were scaked in order to sum to one!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(omegas, size=1, replace=FALSE, prob=probs));	
+		}
+		return(invisible(TRUE));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: omegaVarM4 - freqs
+##  
+setMethodS3(
+  "omegaVarM4",
+  class="CodonSequence",
+  function(
+    		this,
+		process,
+		probs,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+		else if(missing(probs)){
+			throw("No probabilities specified!\n");
+		}
+		else if(!is.numeric(probs)){
+			throw("The omegas must be greater than zero!\n");
+		}
+		else if( length(probs) != 5){
+			throw("The length of the \"probs\" vector must be 5!\n");
+		}
+		else if(!PSRoot$my.all.equal(sum(probs),1.0)){
+			probs<-(probs/sum(probs));
+			warning("The provided probabilities were scaked in order to sum to one!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		omegas<-c(0,(1/3),(2/3),1,3);
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(omegas, size=1, replace=FALSE, prob=probs));	
+		}
+		return(invisible(TRUE));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: .omegaVarM5Cont - gamma
+##  
+setMethodS3(
+  ".omegaVarM5Cont",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		alpha,
+		beta,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(alpha)){
+      throw("No alpha (shape) value specified!\n");
+    }
+    else if((!is.numeric(alpha)) | (length(alpha) != 1)){
+      throw("The alpha (shape) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(alpha < 0){
+			throw("The alpha (shape) must be greater than zero!\n");
+		}
+    else if(missing(beta)){
+      throw("No beta (scale) value specified!\n");
+    }
+    else if((!is.numeric(beta)) | (length(beta) != 1)){
+      throw("The beta (scale) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(beta <= 0){
+			throw("The beta (scale) must be strictly positive!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=rgamma(1,shape=alpha,scale=beta));	
+		}
+		return(invisible(TRUE));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: .omegaVarM6Cont - 2gamma
+##  
+setMethodS3(
+  ".omegaVarM6Cont",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		alpha0,
+		beta0,
+		alpha1,
+		beta1,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("p0 must be in the [0,1] interval!\n");
+		}
+    else if(missing(alpha0)){
+      throw("No alpha0 (shape0) value specified!\n");
+    }
+    else if((!is.numeric(alpha0)) | (length(alpha0) != 1)){
+      throw("The alpha0 (shape0) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(alpha0 < 0){
+			throw("The alpha0 (shape0) must be greater than zero!\n");
+		}
+    else if(missing(beta0)){
+      throw("No beta0 (scale0) value specified!\n");
+    }
+    else if((!is.numeric(beta0)) | (length(beta0) != 1)){
+      throw("The beta0 (scale0) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(beta0 <= 0){
+			throw("The beta0 (scale0) must be strictly positive!\n");
+		}
+    else if(missing(alpha1)){
+      throw("No alpha1 (shape1) value specified!\n");
+    }
+    else if((!is.numeric(alpha1)) | (length(alpha1) != 1)){
+      throw("The alpha1 (shape1) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(alpha1 < 0){
+			throw("The alpha1 (shape1) must be greater than zero!\n");
+		}
+    else if(missing(beta1)){
+      throw("No beta1 (scale1) value specified!\n");
+    }
+    else if((!is.numeric(beta1)) | (length(beta1) != 1)){
+      throw("The beta1 (scale1) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(beta1 <= 0){
+			throw("The beta1 (scale1) must be strictly positive!\n");
+		}
+
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rgamma(1,shape=alpha0,scale=beta0),rgamma(1,shape=alpha1,scale=beta1)),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
+		}
+		return(invisible(TRUE));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: .omegaVarM7Cont - beta
+##  
+setMethodS3(
+  ".omegaVarM7",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p,
+		q,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p)){
+      throw("No p value specified!\n");
+    }
+    else if((!is.numeric(p)) | (length(p) != 1)){
+      throw("The p parameter must be a numeric vector of length 1!\n");
+    }
+		else if(p < 0){
+			throw("The p parameter must be greater than zero!\n");
+		}
+    else if(missing(q)){
+      throw("No q value specified!\n");
+    }
+    else if((!is.numeric(q)) | (length(q) != 1)){
+      throw("The q parameter must be a numeric vector of length 1!\n");
+    }
+		else if(q < 0){
+			throw("The q parameter must be positive!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=rbeta(1,shape1=p,shape2=q));	
+		}
+		return(invisible(TRUE));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: .omegaVarM8Cont - beta&omega
+##  
+setMethodS3(
+  ".omegaVarM8Cont",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		p,
+		q,
+		omega,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("The p0 parameter must be from the [0,1] interval!\n");
+		}
+    else if(missing(p)){
+      throw("No p value specified!\n");
+    }
+    else if((!is.numeric(p)) | (length(p) != 1)){
+      throw("The p parameter must be a numeric vector of length 1!\n");
+    }
+		else if(p < 0){
+			throw("The p parameter must be greater than zero!\n");
+		}
+    else if(missing(q)){
+      throw("No q value specified!\n");
+    }
+    else if((!is.numeric(q)) | (length(q) != 1)){
+      throw("The q parameter must be a numeric vector of length 1!\n");
+    }
+		else if(q < 0){
+			throw("The q parameter must be positive!\n");
+		}
+    else if(missing(omega)){
+      throw("No omega value specified!\n");
+    }
+    else if((!is.numeric(omega)) | (length(omega) != 1)){
+      throw("The omega parameter must be a numeric vector of length 1!\n");
+    }
+		else if(omega < 0){
+			throw("The omega parameter must be positive!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q),omega),size=1,replace=FALSE,prob=(c(p0,(1-p0)))));	
+		}
+		return(invisible(TRUE));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: .omegaVarM9 - beta&gamma
+##  
+setMethodS3(
+  ".omegaVarM9Cont",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		p,
+		q,
+		alpha,
+		beta,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("p0 must be in the [0,1] interval!\n");
+		}
+    else if(missing(p)){
+      throw("No p value specified!\n");
+    }
+    else if((!is.numeric(p)) | (length(p) != 1)){
+      throw("The p parameter must be a numeric vector of length 1!\n");
+    }
+		else if(p < 0){
+			throw("The p must be greater than zero!\n");
+		}
+    else if(missing(q)){
+      throw("No q value specified!\n");
+    }
+    else if((!is.numeric(q)) | (length(q) != 1)){
+      throw("The q parameter must be a numeric vector of length 1!\n");
+    }
+		else if(q < 0){
+			throw("The q must be greater than zero!\n");
+		}
+    else if(missing(alpha)){
+      throw("No alpha (shape) value specified!\n");
+    }
+    else if((!is.numeric(alpha)) | (length(alpha) != 1)){
+      throw("The alpha (shape) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(alpha < 0){
+			throw("The alpha (shape) must be greater than zero!\n");
+		}
+    else if(missing(beta)){
+      throw("No beta (scale) value specified!\n");
+    }
+    else if((!is.numeric(beta)) | (length(beta) != 1)){
+      throw("The beta (scale) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(beta <= 0){
+			throw("The beta (scale) must be strictly positive!\n");
+		}
+
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q),rgamma(1,shape=alpha,scale=beta)),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
+		}
+		return(invisible(TRUE));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: .omegaVarM10Cont - beta&gamma+1
+##  
+setMethodS3(
+  "omegaVarM10Cont",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		p,
+		q,
+		alpha,
+		beta,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("p0 must be in the [0,1] interval!\n");
+		}
+    else if(missing(p)){
+      throw("No p value specified!\n");
+    }
+    else if((!is.numeric(p)) | (length(p) != 1)){
+      throw("The p parameter must be a numeric vector of length 1!\n");
+    }
+		else if(p < 0){
+			throw("The p must be greater than zero!\n");
+		}
+    else if(missing(q)){
+      throw("No q value specified!\n");
+    }
+    else if((!is.numeric(q)) | (length(q) != 1)){
+      throw("The q parameter must be a numeric vector of length 1!\n");
+    }
+		else if(q < 0){
+			throw("The q must be greater than zero!\n");
+		}
+    else if(missing(alpha)){
+      throw("No alpha (shape) value specified!\n");
+    }
+    else if((!is.numeric(alpha)) | (length(alpha) != 1)){
+      throw("The alpha (shape) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(alpha < 0){
+			throw("The alpha (shape) must be greater than zero!\n");
+		}
+    else if(missing(beta)){
+      throw("No beta (scale) value specified!\n");
+    }
+    else if((!is.numeric(beta)) | (length(beta) != 1)){
+      throw("The beta (scale) parameter must be a numeric vector of length 1!\n");
+    }
+		else if(beta <= 0){
+			throw("The beta (scale) must be strictly positive!\n");
+		}
+
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+	
+		# It's not too elegant to fork the whole method for just shifting the gamma with 1...
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q),(1 + rgamma(1,shape=alpha,scale=beta)) ),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
+		}
+		return(invisible(TRUE));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: .omegaVarM11Cont - beta&normal>1
+##  
+setMethodS3(
+  ".omegaVarM11Cont",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		p,
+		q,
+		mean,
+		sd,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("p0 must be in the [0,1] interval!\n");
+		}
+    else if(missing(p)){
+      throw("No p value specified!\n");
+    }
+    else if((!is.numeric(p)) | (length(p) != 1)){
+      throw("The p parameter must be a numeric vector of length 1!\n");
+    }
+		else if(p < 0){
+			throw("The p must be greater than zero!\n");
+		}
+    else if(missing(q)){
+      throw("No q value specified!\n");
+    }
+    else if((!is.numeric(q)) | (length(q) != 1)){
+      throw("The q parameter must be a numeric vector of length 1!\n");
+    }
+		else if(q < 0){
+			throw("The q must be greater than zero!\n");
+		}
+    else if(missing(mean)){
+      throw("No mean specified!\n");
+    }
+    else if((!is.numeric(mean)) | (length(mean) != 1)){
+      throw("The mean parameter must be a numeric vector of length 1!\n");
+    }
+    else if(missing(sd)){
+      throw("No sd value specified!\n");
+    }
+    else if((!is.numeric(sd)) | (length(sd) != 1)){
+      throw("The sd parameter must be a numeric vector of length 1!\n");
+    }
+		else if( sd < 0){
+      throw("The sd parameter must be positive!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		rnorm.gt.1<-function(mean=NA,sd=NA){
+			# FIXME - This is probably the most primitive way to truncate the distribution!
+			tmp<-rnorm(1,mean=mean,sd=sd);
+			while( tmp <= 1){
+				tmp<-rnorm(1,mean=mean,sd=sd);
+			};
+			return(tmp);
+		}
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample(c(rbeta(1,shape1=p,shape2=q), (rnorm.gt.1(mean=mean,sd=sd))),size=1,replace=FALSE,prob=c(p0,(1-p0)) ));	
+		}
+		return(invisible(TRUE));
+
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: .omegaVarM12Cont - 0&2normal>0
+##  
+setMethodS3(
+  ".omegaVarM12Cont",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		p1,
+		sd1,
+		mean2,
+		sd2,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("p0 must be in the [0,1] interval!\n");
+		}
+    else if(missing(p1)){
+      throw("No p1 value specified!\n");
+    }
+    else if((!is.numeric(p1)) | (length(p1) != 1)){
+      throw("The p1 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p1 < 0) | (p1 > 1)){
+			throw("p1 must be in the [0,1] interval!\n");
+		}
+    else if(missing(sd1)){
+      throw("No sd1 value specified!\n");
+    }
+    else if((!is.numeric(sd1)) | (length(sd1) != 1)){
+      throw("The sd1 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( sd1 < 0){
+      throw("The sd1 parameter must be positive!\n");
+		}
+    else if(missing(mean2)){
+      throw("No mean2 specified!\n");
+    }
+    else if((!is.numeric(mean2)) | (length(mean2) != 1)){
+      throw("The mean2 parameter must be a numeric vector of length 1!\n");
+    }
+    else if(missing(sd2)){
+      throw("No sd2 value specified!\n");
+    }
+    else if((!is.numeric(sd2)) | (length(sd2) != 1)){
+      throw("The sd2 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( sd2 < 0){
+      throw("The sd2 parameter must be positive!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		rnorm.gt.0<-function(mean=NA,sd=NA){
+			# FIXME - This is probably the most primitive way to truncate the distribution!
+			tmp<-rnorm(1,mean=mean,sd=sd);
+			while( tmp <= 0){
+				tmp<-rnorm(1,mean=mean,sd=sd);
+			};
+			return(tmp);
+		}
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample( 
+				c(0,rnorm.gt.0(mean=1,sd=sd1),rnorm.gt.0(mean=mean2,sd=sd2)),
+				size=1,
+				replace=FALSE,
+				prob=c(p0,((1-p0)*p1),((1-p0)*(1-p1)))
+			));	
+		}
+		return(invisible(TRUE));
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: .omegaVarM13Cont - 3normal>0
+##  
+setMethodS3(
+  ".omegaVarM13Cont",
+  class="CodonSequence",
+  function(
+    this,
+		process,
+		p0,
+		p1,
+		sd0,
+		sd1,
+		mean2,
+		sd2,
+		index,
+    ...
+  ){
+
+  if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+    else if(missing(p0)){
+      throw("No p0 value specified!\n");
+    }
+    else if((!is.numeric(p0)) | (length(p0) != 1)){
+      throw("The p0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p0 < 0) | (p0 > 1)){
+			throw("p0 must be in the [0,1] interval!\n");
+		}
+    else if(missing(p1)){
+      throw("No p1 value specified!\n");
+    }
+    else if((!is.numeric(p1)) | (length(p1) != 1)){
+      throw("The p1 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( (p1 < 0) | (p1 > 1)){
+			throw("p1 must be in the [0,1] interval!\n");
+		}
+    else if(missing(sd0)){
+      throw("No sd0 value specified!\n");
+    }
+    else if((!is.numeric(sd0)) | (length(sd0) != 1)){
+      throw("The sd0 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( sd0 < 0){
+      throw("The sd0 parameter must be positive!\n");
+		}
+    else if(missing(sd1)){
+      throw("No sd1 value specified!\n");
+    }
+    else if((!is.numeric(sd1)) | (length(sd1) != 1)){
+      throw("The sd1 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( sd1 < 0){
+      throw("The sd1 parameter must be positive!\n");
+		}
+    else if(missing(mean2)){
+      throw("No mean2 specified!\n");
+    }
+    else if((!is.numeric(mean2)) | (length(mean2) != 1)){
+      throw("The mean2 parameter must be a numeric vector of length 1!\n");
+    }
+    else if(missing(sd2)){
+      throw("No sd2 value specified!\n");
+    }
+    else if((!is.numeric(sd2)) | (length(sd2) != 1)){
+      throw("The sd2 parameter must be a numeric vector of length 1!\n");
+    }
+		else if( sd2 < 0){
+      throw("The sd2 parameter must be positive!\n");
+		}
+
+    if(missing(index)){
+    index<-seq(along=this$.sites);
+    }
+    else {
+      index<-.checkIndexSanity(this, index);
+    }
+
+		rnorm.gt.0<-function(mean=NA,sd=NA){
+			# FIXME - This is probably the most primitive way to truncate the distribution!
+			tmp<-rnorm(1,mean=mean,sd=sd);
+			while( tmp <= 0){
+				tmp<-rnorm(1,mean=mean,sd=sd);
+			};
+			return(tmp);
+		}
+
+		for(site in this$.sites[index]){
+			setParameterAtSite(this=process,site=site, id="omega", value=sample( 
+				c(rnorm.gt.0(mean=0,sd=sd0),rnorm.gt.0(mean=1,sd=sd1),rnorm.gt.0(mean=mean2,sd=sd2)),
+				size=1,
+				replace=FALSE,
+				prob=c(p0,((1-p0)*p1),((1-p0)*(1-p1)))
+			));	
+		}
+		return(invisible(TRUE));
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ##	
 ## Method: checkConsistency
 ##	
