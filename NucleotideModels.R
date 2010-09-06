@@ -16,8 +16,8 @@
 #	@classhierarchy
 # }
 # \references{
-#	Yang, Z (1993) Maximum-likelihood estimation of phylogeny from DNA sequences when substitution
-#	rates differ over sites - Mol Biol Evol 10:1396-1401 \url{http://dx.doi.org/10.1007/BF00178256}
+# Yang, Z (1994) Estimating the pattern of nucleotide substitution - Journal of Molecular Evolution 
+# 39:105-111 \url{http://bit.ly/aFO0cq}
 # }
 #	
 # @synopsis
@@ -3992,6 +3992,57 @@ setConstructorS3(
 ##	
 ## Method: getRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParamList
+# 
+# @title "Get the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rate parameters are: Alpha, Beta, Gamma.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K81 object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters.
+# } 
+# 
+# \examples{
+#	# create K81 object
+#	p<-K81()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#		"Alpha"=1,
+#		"Beta"=0.5,
+#		"Gamma"=2
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#		"Alpha"=1,
+#		"Beta"=3,
+#		"Gamma"=2
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParamList", 
 	class="K81", 
@@ -4013,6 +4064,58 @@ setMethodS3(
 ##	
 ## Method: setRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParamList
+# 
+# @title "Set the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rate parameters are: Alpha, Beta, Gamma.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K81 object.} 
+#	\item{value}{A list containing the rate parameters.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters (invisible).
+# } 
+# 
+# \examples{
+#	# create K81 object
+#	p<-K81()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#		"Alpha"=1,
+#		"Beta"=0.5,
+#		"Gamma"=2
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#		"Alpha"=1,
+#		"Beta"=3,
+#		"Gamma"=2
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParamList", 
 	class="K81", 
@@ -4068,6 +4171,47 @@ setMethodS3(
 ##	
 ## Method: getRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParam
+# 
+# @title "Get the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are: Alpha, Beta, Gamma.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K81 object.} 
+#	\item{name}{The name of the rate parameter.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The value of the rate parameter.
+# } 
+# 
+# \examples{
+#	# construct a K81 object
+#	p<-K81();
+#	# set/get a rate parameter
+#	setRateParam(p,"Alpha",4)
+#	getRateParam(p,"Gamma")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParam", 
 	class="K81", 
@@ -4096,6 +4240,48 @@ setMethodS3(
 ##	
 ## Method: setRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParam
+# 
+# @title "Set the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are: Alpha, Beta, Gamma.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K81 object.} 
+#	\item{name}{The name of the rate parameter.}
+#	\item{value}{A numeric vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new value of the rate parameter (invisible).
+# } 
+# 
+# \examples{
+#	# construct a K80 object
+#	p<-K81();
+#	# set/get a rate parameter
+#	setRateParam(p,"Alpha",4)
+#	getRateParam(p,"Gamma")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParam", 
 	class="K81", 
@@ -4124,6 +4310,46 @@ setMethodS3(
 ##	
 ## Method: getBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod getBaseFreqs
+# 
+# @title "Get the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The order of the frequency parameters must match with the order of symbols
+#	in the NucleotideAlphabet objects. The K81 model has equal base frequencies.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K81 object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A matrix containing the base frequency parameters.
+# } 
+# 
+# \examples{
+#	# construct object
+#	p<-K81()
+#	# get base frequency parameters
+#	getBaseFreqs(p) # uniform
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs # uniform
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getBaseFreqs", 
 	class="K81", 
@@ -4145,6 +4371,35 @@ setMethodS3(
 ##	
 ## Method: setBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod setBaseFreqs
+#
+# @title "Forbidden action: setting the base frequency parameters for a K81 model"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setBaseFreqs", 
 	class="K81", 
@@ -4311,13 +4566,78 @@ setMethodS3(
 ## Tamura, K. 1992. Estimation of the number of nucleotide substitutions when
 ## there are strong transition-transversion and G+C content biases. Molecular Biology and Evolution 9:678-687. 
 ##
+##########################################################################/** 
+#
+# @RdocClass T92
+# 
+# @title "The T92 class"
+# 
+# \description{ 
+#	This class implements the T92 GTR submodel.
+#
+#	The rate parameters are the following: "Alpha", "Beta","Gamma".
+#	The \code{theta} virtual field stores the GC content parameter.
+#
+#	@classhierarchy
+# }
+# \references{
+# Tamura, K. (1992) Estimation of the number of nucleotide substitutions when
+# there are strong transition-transversion and G+C content biases - Molecular Biology and 
+# Evolution 9:678-687 \url{http://bit.ly/c6Pe0q}
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{rate.params}{Rate parameters.}
+#	\item{theta}{GC content (0.5 by default).}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create substitution process object
+#       p<-T92(rate.params=list( "Alpha"=10,"Beta"=2),theta=0.8)
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GTR UNREST GeneralSubstitution HKY
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "T92",
   function( 
 		name="Anonymous",
 		rate.params=list(
 				"Alpha"  	=1,
-      	"Beta"    =1
+      				"Beta"    	=1
 			),
 		theta=0.5, # GC content
 		... 
@@ -4347,6 +4667,55 @@ setConstructorS3(
 ##	
 ## Method: getRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParamList
+# 
+# @title "Get the rate parameters" 
+# 
+# \description{ 
+#       @get "title".
+#
+#       The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A T92 object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       The list of rate parameters.
+# } 
+# 
+# \examples{
+#       # create a T92 object
+#       p<-T92()
+#       # set/get rate parameters
+#       setRateParamList(p,list(
+#               "Alpha"=1,
+#               "Beta"=0.5
+#        ))
+#       getRateParamList(p)
+#       # set/get rate parameters via virtual field
+#       p$rateParamList<-list(
+#               "Alpha"=1,
+#               "Beta"=3
+#        )
+#       p$rateParamList
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParamList", 
 	class="T92", 
@@ -4368,6 +4737,56 @@ setMethodS3(
 ##	
 ## Method: setRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParamList
+# 
+# @title "Set the rate parameters" 
+# 
+# \description{ 
+#       @get "title".
+#
+#       The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A T92 object.} 
+#       \item{value}{A list containing the rate parameters.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       The list of rate parameters (invisible).
+# } 
+# 
+# \examples{
+#       # create a T92 object
+#       p<-T92()
+#       # set/get rate parameters
+#       setRateParamList(p,list(
+#               "Alpha"=1,
+#               "Beta"=0.5
+#        ))
+#       getRateParamList(p)
+#       # set/get rate parameters via virtual field
+#       p$rateParamList<-list(
+#               "Alpha"=1,
+#               "Beta"=3
+#        )
+#       p$rateParamList
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParamList", 
 	class="T92", 
@@ -4426,6 +4845,47 @@ setMethodS3(
 ##	
 ## Method: getRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParam
+# 
+# @title "Get the value of a rate parameter" 
+# 
+# \description{ 
+#       @get "title".
+#
+#        The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A T92 object.} 
+#       \item{name}{The name of the rate parameter.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       A numeric vector of length one.
+# } 
+# 
+# \examples{
+#       # construct a T92 object
+#       p<-T92();
+#       # set/get a rate parameter
+#       setRateParam(p,"Alpha",4)
+#       getRateParam(p,"Beta")
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParam", 
 	class="T92", 
@@ -4454,6 +4914,48 @@ setMethodS3(
 ##	
 ## Method: setRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParam
+# 
+# @title "Set the value of a rate parameter" 
+# 
+# \description{ 
+#       @get "title".
+#
+#        The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A T92 object.} 
+#       \item{name}{The name of the rate parameter.}
+#       \item{value}{A numeric vector of length one.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       The new value of the rate parameter (invisible).
+# } 
+# 
+# \examples{
+#       # construct a T92 object
+#       p<-T92();
+#       # set/get a rate parameter
+#       setRateParam(p,"Alpha",4)
+#       getRateParam(p,"Beta")
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParam", 
 	class="T92", 
@@ -4482,6 +4984,48 @@ setMethodS3(
 ##	
 ## Method: getTheta
 ##	
+###########################################################################/**
+#
+# @RdocMethod getTheta
+# 
+# @title "Get the GC content" 
+# 
+# \description{ 
+#       @get "title".
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A T92 object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       A numeric vector of length one.
+# } 
+# 
+# \examples{
+#       # construct a T92 object
+#       p<-T92()
+#       # set/get GC content
+#	setTheta(p,0.6)
+#	getTheta(p)
+#	# set/get GC content via virtual field
+#	p$theta<-0.3
+#	p$theta
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getTheta", 
 	class="T92", 
@@ -4503,6 +5047,49 @@ setMethodS3(
 ##	
 ## Method: setTheta
 ##	
+###########################################################################/**
+#
+# @RdocMethod setTheta
+# 
+# @title "Set the GC content" 
+# 
+# \description{ 
+#       @get "title".
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A T92 object.} 
+#       \item{value}{A numeric vector of length one.} 
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       The new value of theta (invisible).
+# } 
+# 
+# \examples{
+#       # construct a T92 object
+#       p<-T92()
+#       # set/get GC content
+#	setTheta(p,0.6)
+#	getTheta(p)
+#	# set/get GC content via virtual field
+#	p$theta<-0.3
+#	p$theta
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setTheta", 
 	class="T92", 
@@ -4529,14 +5116,14 @@ setMethodS3(
 			# WARNING - here we rely on the T C G A symbol order in the nucleotide alphabet.
 			base.freqs<-c(
 				((1-this$.theta)/2),	# T
-				(this$.theta/2),			# C
+				(this$.theta/2),	# C
 				((1-this$.theta)/2),	# A
-				((this$.theta)/2)		  # G
+				((this$.theta)/2)	# G
 		);
 	}
 		# Set the GTR base frequencies:
 		setBaseFreqs.GTR(this,base.freqs);	
-
+		return(invisible(value));
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -4657,7 +5244,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-T92(theta=0.8)
 #       # get a summary
 #       summary(a)
 # }
@@ -4703,17 +5290,75 @@ setMethodS3(
 ## Hasegawa, M., H. Kishino, and T. Yano. (1985) Dating of human-ape splitting by a molecular clock
 ## of mitochondrial DNA. Journal of Molecular Evolution, 22, 160-174.
 ##
+##########################################################################/** 
+#
+# @RdocClass F84
+# 
+# @title "The F84 class"
+# 
+# \description{ 
+#	This class implements the F84 GTR submodel.
+#
+#	The rate parameters are the following: Kappa (transition/transversion rate ratio).
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{rate.params}{Rate parameters.}
+#	\item{base.freqs}{Base frequency parameters.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create substitution process object
+#       p<-F84(rate.params=list( "Kappa"=2), base.freqs=c(1,2,3,4))
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GTR UNREST GeneralSubstitution HKY
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "F84",
   function( 
 		name="Anonymous",
 		rate.params=list(
-							"Kappa"   =0
+			"Kappa"   = 1
 			),
-			... 
+		base.freqs=c(0.25,0.25,0.25,0.25)
 		)	{
 		
-		this<-GTR(...);
+		this<-GTR();
 		
 		this<-extend(
 			this,
@@ -4724,6 +5369,7 @@ setConstructorS3(
 			);
 
 		this$name<-name;
+		this$baseFreqs<-base.freqs;
 		this$rateParamList<-rate.params;
 		return(this);
 	
@@ -4734,6 +5380,49 @@ setConstructorS3(
 ##	
 ## Method: getRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParamList
+# 
+# @title "Get the rate parameters" 
+# 
+# \description{ 
+#       @get "title".
+#
+#       The rate parameters are: Kappa.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A F84 object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       The list of rate parameters.
+# } 
+# 
+# \examples{
+#       # create F84 object
+#       p<-F84()
+#       # set/get rate parameters
+#       setRateParamList(p,list("Kappa"=3))
+#       getRateParamList(p)
+#       # set/get rate parameters via virtual field
+#       p$rateParamList<-list("Kappa"=2.5)
+#       p$rateParamList
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParamList", 
 	class="F84", 
@@ -4755,6 +5444,50 @@ setMethodS3(
 ##	
 ## Method: setRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParamList
+# 
+# @title "Set the rate parameters" 
+# 
+# \description{ 
+#       @get "title".
+#
+#       The rate parameters are: Kappa.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A F84 object.} 
+#       \item{value}{A list containing the rate parameters.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       The list of rate parameters (invisible).
+# } 
+# 
+# \examples{
+#       # create F84 object
+#       p<-F84()
+#       # set/get rate parameters
+#       setRateParamList(p,list("Kappa"=3))
+#       getRateParamList(p)
+#       # set/get rate parameters via virtual field
+#       p$rateParamList<-list("Kappa"=2.5)
+#       p$rateParamList
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParamList", 
 	class="F84", 
@@ -4800,6 +5533,7 @@ setMethodS3(
 		}
 
 	}
+		return(invisible(value));
 
 	},
 	private=FALSE,
@@ -4812,6 +5546,50 @@ setMethodS3(
 ##	
 ## Method: getRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParam
+# 
+# @title "Get the value of a rate parameter" 
+# 
+# \description{ 
+#       @get "title".
+#
+#        The rate parameters are: Kappa.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A F84 object.} 
+#       \item{name}{The name of the rate parameter.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       A numeric vector of length one.
+# } 
+# 
+# \examples{
+#       # create F84 object
+#       p<-F84()
+#       # set/get rate parameters
+#       setRateParamList(p,list("Kappa"=3))
+#       getRateParamList(p)
+#       # set/get rate parameters via virtual field
+#       p$rateParamList<-list("Kappa"=2.5)
+#       p$rateParamList
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParam", 
 	class="F84", 
@@ -4840,6 +5618,48 @@ setMethodS3(
 ##	
 ## Method: setRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParam
+# 
+# @title "Set the value of a rate parameter" 
+# 
+# \description{ 
+#       @get "title".
+#
+#        The rate parameters are: Kappa.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A F84 object.} 
+#       \item{name}{The name of the rate parameter.}
+#       \item{value}{A numeric vector of length one.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       The new value of the rate parameter (invisible).
+# } 
+# 
+# \examples{
+#       # construct a F84 object
+#       p<-F84();
+#       # set/get a rate parameter
+#       setRateParam(p,"Kappa",4)
+#       getRateParam(p,"Kappa")
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParam", 
 	class="F84", 
@@ -4856,6 +5676,7 @@ setMethodS3(
 		} else {
 			.setRateParam.GTR(this,name,value,this$.f84.params);
 		}
+		return(invisible(value));
 
 	},
 	private=FALSE,
@@ -4868,6 +5689,47 @@ setMethodS3(
 ##	
 ## Method: getKappa
 ##	
+###########################################################################/**
+#
+# @RdocMethod getKappa
+# 
+# @title "Get the transition transversion rate ratio" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A F84 object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#       # construct a F84 object
+#       p<-F84();
+#	# set/get Kappa
+#	setKappa(p,2)
+#	getKappa(p)
+#	# set/get Kappa via virtual field
+#	p$kappa<-4
+#	p$kappa
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getKappa", 
 	class="F84", 
@@ -4889,6 +5751,48 @@ setMethodS3(
 ##	
 ## Method: setKappa
 ##	
+###########################################################################/**
+#
+# @RdocMethod getKappa
+# 
+# @title "Get the transition transversion rate ratio" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A F84 object.} 
+#	\item{value}{A numeric vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new value of Kappa (invisible).
+# } 
+# 
+# \examples{
+#       # construct a F84 object
+#       p<-F84();
+#	# set/get Kappa
+#	setKappa(p,2)
+#	getKappa(p)
+#	# set/get Kappa via virtual field
+#	p$kappa<-4
+#	p$kappa
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setKappa", 
 	class="F84", 
@@ -4899,6 +5803,7 @@ setMethodS3(
 	){
 
 			setRateParam.F84(this,"Kappa",value);
+			return(invisible(value));
 
 	},
 	private=FALSE,
@@ -4911,6 +5816,50 @@ setMethodS3(
 ##	
 ## Method: getBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod getBaseFreqs
+# 
+# @title "Get the base frequency parameters" 
+# 
+# \description{ 
+#       @get "title".
+#
+#       The order of the frequency parameters must match with the order of symbols
+#       in the NucleotideAlphabet objects.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A F84 object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       A matrix containing the base frequency parameters.
+# } 
+# 
+# \examples{
+#       # construct object
+#       p<-F84()
+#       # set/get base frequency parameters
+#       setBaseFreqs(p,c(2,1,2,1)/6)
+#       getBaseFreqs(p)
+#       # set/get base frequency parameters via virtual field
+#       p$baseFreqs<-c(4,4,1,1)/10
+#       p$baseFreqs
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getBaseFreqs", 
 	class="F84", 
@@ -4932,6 +5881,51 @@ setMethodS3(
 ##	
 ## Method: setBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod setBaseFreqs
+# 
+# @title "Set the base frequency parameters" 
+# 
+# \description{ 
+#       @get "title".
+#
+#       The order of the frequency parameters must match with the order of symbols
+#       in the NucleotideAlphabet objects.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A F84 object.} 
+#       \item{value}{A vector of base frequencies.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#       value (invisible)
+# } 
+# 
+# \examples{
+#       # construct object
+#       p<-F84()
+#       # set/get base frequency parameters
+#       setBaseFreqs(p,c(2,1,2,1)/6)
+#       getBaseFreqs(p)
+#       # set/get base frequency parameters via virtual field
+#       p$baseFreqs<-c(4,4,1,1)/10
+#       p$baseFreqs
+#       # get object summary
+#       summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+#       @seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setBaseFreqs", 
 	class="F84", 
@@ -5056,7 +6050,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-F84(rate.params=list("Kappa"=3))
 #       # get a summary
 #       summary(a)
 # }
