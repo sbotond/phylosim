@@ -6,6 +6,68 @@
 ##
 ## CodonAlphabet
 ##
+##########################################################################/** 
+#
+# @RdocClass CodonAlphabet
+# 
+# @title "The CodonAlphabet class"
+# 
+# \description{ 
+#	This class implements codon alphabets and handles the translation of codons 
+#	to corresponding amino acids. Stop codons are excluded from the symbols set, 
+#	thus the symbol set depends on the genetic code table.
+#	The genetic code table can be specified through the \code{table.id} constructor parameter.
+#
+#	The available genetic code tables:
+#	\preformatted{
+#	1	Standard
+#	2	Vertebrate Mitochondrial
+#	3	Yeast Mitochondrial
+#	4	Mold, Protozoan, and CoelenterateMitochondrial and Mycoplasma/Spiroplasma
+#	5	Invertebrate Mitochondrial
+#	6	Ciliate, Dasycladacean and Hexamita Nuclear	
+#	9	Echinoderm Mitochondrial
+#	10	Euplotid Nuclear
+#	11	Bacterial
+#	12	Alternative Yeast Nuclear
+#	13	Ascidian Mitochondrial
+#	14	Flatworm Mitochondrial
+#	15	Blepharisma Nuclear
+#	16	Chlorophycean Mitochondrial
+#	21	Trematode Mitochondrial
+#	22	Scenedesmus obliquus Mitochondrial
+#	23	Thraustochytrium Mitochondrial
+#	}
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{table.id}{The identifier of the genetic code table.}
+# 	\item{...}{Additional arguments.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create a CodonAlphabet object
+#	a<-CodonAlphabet(table.id=2)
+#	a
+#	# get object summary
+#	summary(a)
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	@seeclass 
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "CodonAlphabet",
   function(table.id=1,...){
@@ -4557,6 +4619,43 @@ setMethodS3(
 ##  
 ## Method: getTableId
 ##  
+###########################################################################/**
+#
+# @RdocMethod getTableId
+# 
+# @title "Get the genetic code id" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonAlphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create CodonAlphabet object
+#	a<-CodonAlphabet()
+#	# get genetic code id
+#	getTableId(a)
+#	# get genetic code id via virtual field
+#	a$tableId
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getTableId",
   class="CodonAlphabet",
@@ -4578,6 +4677,36 @@ setMethodS3(
 ##  
 ## Method: setTableId
 ##  
+###########################################################################/**
+#
+# @RdocMethod setTableId
+#
+# @title "Forbidden action: setting the genetic code id"
+#
+# \description{
+#       @get "title".
+#	Use the \code{table.id} constructor argument to set the genetic code.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setTableId",
   class="CodonAlphabet",
@@ -4600,13 +4729,49 @@ setMethodS3(
 ##  
 ## Method: translateCodon
 ##  
+###########################################################################/**
+#
+# @RdocMethod translateCodon
+# 
+# @title "Translate a codon" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonAlphabet object.}
+# 	\item{codon}{The codon to be translated.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector containing an amino acid IUPAC code.
+# } 
+# 
+# \examples{
+#	# create a CodonAlphabet object
+#	a<-CodonAlphabet()
+#	# translate a codon
+#	translateCodon(a,"AGG")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "translateCodon",
   class="CodonAlphabet",
   function(
-    this,
-		codon,
-    ...
+	this,
+	codon,
+	...
   ){
 
 		if(missing(codon)){
@@ -4634,87 +4799,51 @@ setMethodS3(
 );
 
 ##  
-## Method: isStopCodon
-##  
-setMethodS3(
-  "isStopCodon",
-  class="CodonAlphabet",
-  function(
-    this,
-		codon,
-    ...
-  ){
-
-		if(missing(codon)){
-			throw("No codon given!\n");
-		}
-		else if (!is.character(codon) | (length(codon) != 1)){
-			throw("The codon argument must be a character vector of size 1!\n");
-		}
-		else if (length(intersect(names(this$.trans.table),codon)) != 1){
-			throw("Codon not in translation table!\n");
-		}
-		else if (this$.trans.table[[codon]]$type == "STOP"){
-			return(TRUE);
-		}
-		else {
-				return(FALSE);			
-		}
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=FALSE,
-  conflict="warning",
-  validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##  
-## Method: isStartCodon
-##  
-setMethodS3(
-  "isStartCodon",
-  class="CodonAlphabet",
-  function(
-    this,
-		codon,
-    ...
-  ){
-
-		if(missing(codon)){
-			throw("No codon given!\n");
-		}
-		else if (!is.character(codon) | (length(codon) != 1)){
-			throw("The codon argument must be a character vector of size 1!\n");
-		}
-		else if (length(intersect(names(this$.trans.table),codon)) != 1){
-			throw("Codon not in translation table!\n");
-		}
-		else if (this$.trans.table[[codon]]$type == "START"){
-			return(TRUE);
-		}
-		else {
-				return(FALSE);			
-		}
-
-  },
-  private=FALSE,
-  protected=FALSE,
-  overwrite=FALSE,
-  conflict="warning",
-  validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##  
 ## Method: areSynonymous
 ##  
+###########################################################################/**
+#
+# @RdocMethod areSynonymous
+# 
+# @title "Check whether two codons are synonymous" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonAlphabet object.} 
+#	\item{codons}{A vector containing two codons.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create a CodonAlphabet object
+#	a<-CodonAlphabet()
+#	areSynonymous(a,c("TCC","TCT"))	
+#	areSynonymous(a,c("TCC","CCT"))	
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "areSynonymous",
   class="CodonAlphabet",
   function(
-    this,
-		codons,
-    ...
+	this,
+	codons,
+	...
   ){
 
 		if(missing(codons)){
@@ -4852,6 +4981,43 @@ setMethodS3(
 ##  
 ## Method: getTransTable
 ##  
+###########################################################################/**
+#
+# @RdocMethod getTransTable
+# 
+# @title "Get the list storing the genetic code table" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonAlphabet object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list.
+# } 
+# 
+# \examples{
+#	# create object
+#	a<-CodonAlphabet()
+#	# get genetic code table
+#	getTransTable(a)
+#	# get genetic code table via virtual field
+#	a$transTable
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getTransTable",
   class="CodonAlphabet",
@@ -4873,6 +5039,36 @@ setMethodS3(
 ##  
 ## Method: setTransTable
 ##  
+###########################################################################/**
+#
+# @RdocMethod setTransTable
+#
+# @title "Forbidden action: setting the genetic code table for a CodonAlphabet object"
+#
+# \description{
+#       @get "title".
+#	Use the \code{table.id} constructor argument to set the genetic code.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setTransTable",
   class="CodonAlphabet",
@@ -4895,6 +5091,40 @@ setMethodS3(
 ##  
 ## Method: is.CodonAlphabet
 ##  
+###########################################################################/**
+#
+# @RdocDefault is.CodonAlphabet
+# 
+# @title "Check if an object inherits from CodonAlphabet" 
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#		\item{this}{An object.}
+#		\item{...}{Not used.}
+#
+# } 
+# 
+# \value{ 
+#	TRUE of FALSE.
+# } 
+#
+# \examples{
+#	# create some objects
+#	a<-CodonAlphabet()
+#	p<-Process()
+#	# check if they inherit from CodonAlphabet
+#	is.CodonAlphabet(a)
+#	is.CodonAlphabet(p)
+# }
+# 
+# @author 
+# 
+#*/###########################################################################
 setMethodS3(
   "is.CodonAlphabet",
   class="default",
