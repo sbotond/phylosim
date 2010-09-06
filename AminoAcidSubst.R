@@ -568,7 +568,7 @@ setMethodS3(
 #
 # @RdocMethod newAAMatrix
 # 
-# @title "newAAMatrix: udocumented method" 
+# @title "Undocumented method" 
 # 
 # \description{ 
 #	@get "title".

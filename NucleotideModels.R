@@ -17,7 +17,7 @@
 # }
 # \references{
 #	Yang, Z (1993) Maximum-likelihood estimation of phylogeny from DNA sequences when substitution
-#	rates differ over sites - Mol Biol Evol 10:1396–1401 \url{http://dx.doi.org/10.1007/BF00178256}
+#	rates differ over sites - Mol Biol Evol 10:1396-1401 \url{http://dx.doi.org/10.1007/BF00178256}
 # }
 #	
 # @synopsis
@@ -34,7 +34,7 @@
 # }
 # 
 # \examples{ 
-#       p<-UNREST(rate=1,rate.list=list(
+#       p<-UNREST(rate.list=list(
 #		"T->C"=1, "T->A"=2, "T->G"=3, "C->T"=4, "C->A"=1, 
 #		"C->G"=2, "A->T"=3, "A->C"=4, "A->G"=1, "G->T"=2,
 #		"G->C"=3, "G->A"=4	
@@ -498,7 +498,7 @@ setMethodS3(
 # 
 # \examples{ 
 #	# create substitution process object
-#       p<-GTR(rate=1,
+#       p<-GTR(
 #		rate.params=list(
 #			"a"=1, "b"=2, "c"=3,
 #			"d"=1, "e"=2, "f"=3
@@ -1335,7 +1335,7 @@ setMethodS3(
 # 
 # \examples{ 
 #	# create substitution process object
-#       p<-TN93(rate=1, rate.params=list( "Alpha1"=4,"Alpha2"=3,"Beta"=2),
+#       p<-TN93(rate.params=list( "Alpha1"=4,"Alpha2"=3,"Beta"=2),
 #		base.freqs=c(2,2,1,3)/9
 #	)
 #       # get a summary
@@ -2025,7 +2025,7 @@ setMethodS3(
 # 
 # \examples{ 
 #	# create substitution process object
-#       p<-HKY(rate=1, rate.params=list( "Alpha"=10,"Beta"=2),
+#       p<-HKY(rate.params=list( "Alpha"=10,"Beta"=2),
 #		base.freqs=c(4,3,2,1)/10
 #	)
 #       # get a summary
@@ -2679,10 +2679,71 @@ setMethodS3(
 ## Felsenstein, J. (1981) Evolutionary trees from DNA sequences: a maximum likelihood approach.
 ## Journal of Molecular Evolution, 17, 368-376.
 ##
+##########################################################################/** 
+#
+# @RdocClass F81
+# 
+# @title "The F81 class"
+# 
+# \description{ 
+#	This class implements the F81 GTR submodel.
+#
+#	@classhierarchy
+# }
+# \references{
+# Felsenstein, J (1981) Evolutionary trees from DNA sequences: a maximum likelihood approach -
+# Journal of Molecular Evolution 17:368-376 \url{http://dx.doi.org/10.1007/BF01734359}
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{base.freqs}{Base frequency parameters.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create substitution process object
+#       p<-F81(base.freqs=c(1,2,3,4)/10)
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GTR UNREST GeneralSubstitution HKY
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "F81",
   function( 
 		name="Anonymous",
+		base.freqs=c(0.25,0.25,0.25,0.25),
 		...
 		)	{
 		
@@ -2694,6 +2755,7 @@ setConstructorS3(
 			);
 
 		this$name<-name;
+		this$baseFreqs<-base.freqs;
 		return(this);
 	
   },
@@ -2703,6 +2765,36 @@ setConstructorS3(
 ##	
 ## Method: getRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParamList
+#
+# @title "Forbidden action: getting the list of rate parameters"
+#
+# \description{
+#       @get "title".
+#	
+#	This model has no rate parameters.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	The object.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"getRateParamList", 
 	class="F81", 
@@ -2724,6 +2816,37 @@ setMethodS3(
 ##	
 ## Method: setRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParamList
+#
+# @title "Forbidden action: getting the list of rate parameters"
+#
+# \description{
+#       @get "title".
+#	
+#	This model has no rate parameters.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	The object.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setRateParamList", 
 	class="F81", 
@@ -2746,6 +2869,36 @@ setMethodS3(
 ##	
 ## Method: getRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParam
+#
+# @title "Forbidden action: the value of a rate parameters"
+#
+# \description{
+#       @get "title".
+#	
+#	This model has no rate parameters.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	The object.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"getRateParam", 
 	class="F81", 
@@ -2768,6 +2921,37 @@ setMethodS3(
 ##	
 ## Method: setRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParam
+#
+# @title "Forbidden action: getting the list of rate parameters"
+#
+# \description{
+#       @get "title".
+#	
+#	This model has no rate parameters.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	The object.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setRateParam", 
 	class="F81", 
@@ -2791,6 +2975,48 @@ setMethodS3(
 ##	
 ## Method: getBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod getBaseFreqs
+# 
+# @title "Get the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A F81 object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A matrix containing the base frequency parameters.
+# } 
+# 
+# \examples{
+#	# construct a F81 object
+#	p<-F81()
+#	# set/get base frequency parameters
+#	setBaseFreqs(p,c(2,1,2,1)/6)
+#	getBaseFreqs(p)
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs<-c(4,4,1,1)/10
+#	p$baseFreqs
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getBaseFreqs", 
 	class="F81", 
@@ -2812,6 +3038,51 @@ setMethodS3(
 ##	
 ## Method: setBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod setBaseFreqs
+# 
+# @title "Set the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The order of the frequency parameters must match with the order of symbols
+#	in the NucleotideAlphabet objects.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A F81 object.} 
+#	\item{value}{A vector of base frequencies.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	value (invisible)
+# } 
+# 
+# \examples{
+#	# construct a F81 object
+#	p<-F81()
+#	# set/get base frequency parameters
+#	setBaseFreqs(p,c(2,1,2,1)/6)
+#	getBaseFreqs(p)
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs<-c(4,4,1,1)/10
+#	p$baseFreqs
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setBaseFreqs", 
 	class="F81", 
@@ -2830,7 +3101,6 @@ setMethodS3(
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
-
 
 ##	
 ## Method: checkConsistency.F81
@@ -2956,13 +3226,77 @@ setMethodS3(
 ## Kimura, M. (1980) A simple method for estimating evolutionary rates of base substitutions 
 ## through comparative studies of nucleotide sequences. Journal of Molecular Evolution, 16, 111-120.
 ##
+##########################################################################/** 
+#
+# @RdocClass K80
+# 
+# @title "The K80 class"
+# 
+# \description{ 
+#	This class implements the K80 (Kimura 2-parameter) GTR submodel.
+#
+#	The rate parameters are the following: "Alpha", "Beta".
+#	@classhierarchy
+# }
+# \references{
+#	Kimura, M. (1980) A simple method for estimating evolutionary rates of base substitutions 
+#	through comparative studies of nucleotide sequences. Journal of Molecular Evolution 16:111-120
+#	\url{http://dx.doi.org/10.1007/BF01731581}
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{rate.params}{Rate parameters.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create substitution process object
+#       p<-K80(rate.params=list( "Alpha"=6,"Beta"=2),
+#		base.freqs=c(4,3,2,1)/10
+#	)
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GTR UNREST GeneralSubstitution TN93
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "K80",
   function( 
 		name="Anonymous",
 		rate.params=list(
-				"Alpha"  	=1,
-      	"Beta"    =1
+				"Alpha"   =1,
+      				"Beta"    =1
 			),
 			... 
 		)	{
@@ -2989,6 +3323,55 @@ setConstructorS3(
 ##	
 ## Method: getRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParamList
+# 
+# @title "Get the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K80 object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters.
+# } 
+# 
+# \examples{
+#	# create K80 object
+#	p<-K80()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#		"Alpha"=1,
+#		"Beta"=0.5
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#		"Alpha"=1,
+#		"Beta"=3
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParamList", 
 	class="K80", 
@@ -3010,6 +3393,56 @@ setMethodS3(
 ##	
 ## Method: setRateParamList
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParamList
+# 
+# @title "Set the rate parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K80 object.} 
+#	\item{value}{A list containing the rate parameters.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The list of rate parameters (invisible).
+# } 
+# 
+# \examples{
+#	# create K80 object
+#	p<-K80()
+#	# set/get rate parameters
+#	setRateParamList(p,list(
+#		"Alpha"=1,
+#		"Beta"=0.5
+#        ))
+#	getRateParamList(p)
+#	# set/get rate parameters via virtual field
+#	p$rateParamList<-list(
+#		"Alpha"=1,
+#		"Beta"=3
+#        )
+#	p$rateParamList
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParamList", 
 	class="K80", 
@@ -3064,6 +3497,47 @@ setMethodS3(
 ##	
 ## Method: getRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod getRateParam
+# 
+# @title "Get the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K80 object.} 
+#	\item{name}{The name of the rate parameter.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# construct a K80 object
+#	p<-K80();
+#	# set/get a rate parameter
+#	setRateParam(p,"Alpha",4)
+#	getRateParam(p,"Beta")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getRateParam", 
 	class="K80", 
@@ -3092,6 +3566,48 @@ setMethodS3(
 ##	
 ## Method: setRateParam
 ##	
+###########################################################################/**
+#
+# @RdocMethod setRateParam
+# 
+# @title "Set the value of a rate parameter" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	 The rate parameters are: Alpha, Beta.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K80 object.} 
+#	\item{name}{The name of the rate parameter.}
+#	\item{value}{A numeric vector of length one.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The new value of the rate parameter (invisible).
+# } 
+# 
+# \examples{
+#	# construct a K80 object
+#	p<-K80();
+#	# set/get a rate parameter
+#	setRateParam(p,"Alpha",4)
+#	getRateParam(p,"Beta")
+#	# get object summary
+#	summary(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setRateParam", 
 	class="K80", 
@@ -3120,6 +3636,46 @@ setMethodS3(
 ##	
 ## Method: getBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod getBaseFreqs
+# 
+# @title "Get the base frequency parameters" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The order of the frequency parameters must match with the order of symbols
+#	in the NucleotideAlphabet objects. The K80 model has equal base frequencies.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A K80 object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A matrix containing the base frequency parameters.
+# } 
+# 
+# \examples{
+#	# construct object
+#	p<-K80()
+#	# get base frequency parameters
+#	getBaseFreqs(p) # uniform
+#	# set/get base frequency parameters via virtual field
+#	p$baseFreqs # uniform
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getBaseFreqs", 
 	class="K80", 
@@ -3141,6 +3697,35 @@ setMethodS3(
 ##	
 ## Method: setBaseFreqs
 ##	
+###########################################################################/**
+#
+# @RdocMethod setBaseFreqs
+#
+# @title "Forbidden action: setting the base frequency parameters for a K80 object"
+#
+# \description{
+#       @get "title".
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setBaseFreqs", 
 	class="K80", 
@@ -3210,13 +3795,13 @@ setMethodS3(
 				else {
 
 					if(
-				  	this$.gtr.params[["a"]]!=this$.k80.params[["Alpha"]]|
-          	this$.gtr.params[["b"]]!=this$.k80.params[["Beta"]]|
-          	this$.gtr.params[["c"]]!=this$.k80.params[["Beta"]]|
-          	this$.gtr.params[["d"]]!=this$.k80.params[["Beta"]]|
-          	this$.gtr.params[["e"]]!=this$.k80.params[["Beta"]]|
-          	this$.gtr.params[["f"]]!=this$.k80.params[["Alpha"]]
-						) {
+				  		this$.gtr.params[["a"]]!=this$.k80.params[["Alpha"]]|
+          					this$.gtr.params[["b"]]!=this$.k80.params[["Beta"]]|
+          					this$.gtr.params[["c"]]!=this$.k80.params[["Beta"]]|
+          					this$.gtr.params[["d"]]!=this$.k80.params[["Beta"]]|
+          					this$.gtr.params[["e"]]!=this$.k80.params[["Beta"]]|
+          					this$.gtr.params[["f"]]!=this$.k80.params[["Alpha"]]
+					 ) {
 							throw("The K80 parameters are not consistent with the GTR parameters!\n");
 						}
 						else if ( !all.equal(as.numeric(this$.equ.dist), as.numeric(rep(0.25,times=4)) ) ){
@@ -3311,13 +3896,74 @@ setMethodS3(
 ## M. Kimura, Estimation of evolutionary sequences between homologous nucleotide sequences,
 ## Proc. Natl. Acad. Sci. USA 78 (1981), pp. 454–458.
 ##
+##########################################################################/** 
+#
+# @RdocClass K81
+# 
+# @title "The K81 class"
+# 
+# \description{ 
+#	This class implements the K81 (Kimura 3-parameter) GTR submodel.
+#
+#	The rate parameters are the following: "Alpha", "Beta","Gamma".
+#	@classhierarchy
+# }
+# \references{
+# Kimura, M (1981) Estimation of evolutionary sequences between homologous nucleotide sequences -
+# Proc. Natl. Acad. Sci. USA 78:454-458 \url{http://dx.doi.org/10.1073/pnas.78.1.454}
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{rate.params}{Rate parameters.}
+# 	\item{...}{Not used.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create substitution process object
+#       p<-K81(rate.params=list( "Alpha"=10,"Beta"=2,"Gamma"=5))
+#       # get a summary
+#       summary(p)
+#
+#	# The following code demostrates how to use 
+#	# the process in a simulation.
+#
+#	# create a sequence, attach process p
+#	s<-NucleotideSequence(length=20,processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# make the range 1:5 invariable
+#	setRateMultipliers(s,p,0,1:5)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+#	# create a simulation object
+#	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
+#	# run simulation
+#	Simulate(sim)
+#	# print alignment
+#	sim$alignment
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GTR UNREST GeneralSubstitution HKY
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "K81",
   function( 
 		name="Anonymous",
 		rate.params=list(
 				"Alpha"  	=1,
-      	"Beta"    =1,
+      				"Beta"    =1,
 				"Gamma"		=1
 			),
 			... 
