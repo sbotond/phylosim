@@ -6,12 +6,55 @@
 ##
 ## CodonUNREST
 ##
+##########################################################################/** 
+#
+# @RdocClass CodonUNREST
+# 
+# @title "The CodonUNREST class"
+# 
+# \description{ 
+#	This class implements a time-continuous Markov process acting on a state
+#	space defined by the symbol set of a CodonAlphabet object. The rate matrix of this model
+#	is unrestricted, so it can be used to implement empircal codon models or more
+#	restricted mechanistic models.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{The name of the object.}
+# 	\item{table.id}{The identifier of the genetic code table (see \code{CodonAlphabet}).}
+# 	\item{rate.list}{A list of unscaled substitution rates (see \code{setRateList.GeneralSubstitution}).}
+# 	\item{equ.dist}{Equilibrium distribution.}
+# 	\item{...}{Additional arguments.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create a CodonUNREST object
+#	p<-CodonUNREST(table.id=2)
+#	# get object summary
+#	summary(p)
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	GeneralSubstitution GY94
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "CodonUNREST",
   function( 
 		name="Anonymous", # name of the object
-		table.id=1,				# the id of the genetic code table to use
-		rate.list=NA,	    # list of unscaled rates
+		table.id=1,	  # the id of the genetic code table to use
+		rate.list=NA,	  # list of unscaled rates
 		equ.dist=NA,      # equlibrium distribution
 		... 
 		)	{
@@ -131,6 +174,40 @@ setMethodS3(
 ##  
 # Method: is.CodonUNREST
 ##  
+###########################################################################/**
+#
+# @RdocDefault is.CodonUNREST
+# 
+# @title "Check whether an object inherits from CodonUNREST" 
+# 
+# \description{ 
+#		@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#		\item{this}{An object.}
+#		\item{...}{Not used.}
+#
+# } 
+# 
+# \value{ 
+#	TRUE of FALSE.
+# } 
+#
+# \examples{
+#	# create some objects
+#	p<-CodonUNREST()
+#	pp<-GTR()
+#	# check if they inherit from CodonUNREST
+#	is.CodonUNREST(p)
+#	is.CodonUNREST(pp)
+# }
+# 
+# @author 
+# 
+#*/###########################################################################
 setMethodS3(
   "is.CodonUNREST",
   class="default",
