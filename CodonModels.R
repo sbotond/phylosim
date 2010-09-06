@@ -411,7 +411,7 @@ setMethodS3(
 				if(from == to) {next()};
 				
 				# Figure out codon differences:
-				diff<-sort(codonDiff(alphabet, c(from,to)));					
+				diff<-sort(.codonDiff(alphabet, c(from,to)));					
 
 				# Single transition:
 				if( all(diff == sort(c(0,0,"TI"))) ){

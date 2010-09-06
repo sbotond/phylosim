@@ -4739,10 +4739,10 @@ setMethodS3(
 );
 
 ##  
-## Method: codonDiff
+## Method: .codonDiff
 ##  
 setMethodS3(
-  "codonDiff",
+  ".codonDiff",
   class="CodonAlphabet",
   function(
     this,
@@ -4819,7 +4819,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-CodonAlphabet()
 #       # get a summary
 #       summary(a)
 # }
