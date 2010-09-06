@@ -3963,7 +3963,7 @@ setConstructorS3(
 		name="Anonymous",
 		rate.params=list(
 				"Alpha"  	=1,
-      				"Beta"    =1,
+      				"Beta"    	=1,
 				"Gamma"		=1
 			),
 			... 
