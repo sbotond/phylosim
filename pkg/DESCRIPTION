@@ -4,7 +4,7 @@ Date: 2009-08-20
 Title: R packge for simulating biological sequence evolution
 Author: Botond Sipos <sbotond@gmail.com>
 Maintainer: Botond Sipos <sbotond@gmail.com>
-Depends: R (>= 2.8.0), R.oo (>= 1.4.6), ape (>= 2.3), compoisson (>= 0.3)
+Depends: R (>= 2.8.0), R.oo (>= 1.4.6), ape (>= 2.3), compoisson (>= 0.3), ggplot2 (>= 0.8.8)
 Suggests:	 
 Imports: ape, R.oo, compoisson
 Description: R packge for simulating biological sequence evolution
