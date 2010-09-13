@@ -270,8 +270,8 @@ setMethodS3(
 #	\item{table.id}{The identifier of the genetic code table to use (1 by default).}
 #	\item{kappa}{The transition/transversion rate ratio (1 by default).}
 #	\item{omega.default}{The default value of the omega site-process specific parameter (1 by default).}
-#	\item{codon.freq}{A vector of codon frequencies.}
-# 	\item{...}{Not used.}
+#	\item{codon.freqs}{A vector of codon frequencies.}
+# 	\item{...}{Additional arguments.}
 #	}
 # 
 # \section{Fields and Methods}{ 

@@ -3349,7 +3349,7 @@ setMethodS3(
 #	# NOTE: this will be a little bit slow
 #	sim<-PhyloSim(
 #		phylo=rcoal(3),
-#		root.seq=CodonSequence(string="ATGATTATT",processes=list(list(GY98(kappa=2,omega.default=0.5))))
+#		root.seq=CodonSequence(string="ATGATTATT",processes=list(list(GY94(kappa=2,omega.default=0.5))))
 #	);
 #	# make the tree longer to have more events
 #	scaleTree(sim,5)

@@ -4799,6 +4799,78 @@ setMethodS3(
 );
 
 ##  
+## Method: isStopCodon
+##  
+setMethodS3(
+  "isStopCodon",
+  class="CodonAlphabet",
+  function(
+    this,
+		codon,
+    ...
+  ){
+
+		if(missing(codon)){
+			throw("No codon given!\n");
+		}
+		else if (!is.character(codon) | (length(codon) != 1)){
+			throw("The codon argument must be a character vector of size 1!\n");
+		}
+		else if (length(intersect(names(this$.trans.table),codon)) != 1){
+			throw("Codon not in translation table!\n");
+		}
+		else if (this$.trans.table[[codon]]$type == "STOP"){
+			return(TRUE);
+		}
+		else {
+				return(FALSE);			
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
+## Method: isStartCodon
+##  
+setMethodS3(
+  "isStartCodon",
+  class="CodonAlphabet",
+  function(
+    this,
+		codon,
+    ...
+  ){
+
+		if(missing(codon)){
+			throw("No codon given!\n");
+		}
+		else if (!is.character(codon) | (length(codon) != 1)){
+			throw("The codon argument must be a character vector of size 1!\n");
+		}
+		else if (length(intersect(names(this$.trans.table),codon)) != 1){
+			throw("Codon not in translation table!\n");
+		}
+		else if (this$.trans.table[[codon]]$type == "START"){
+			return(TRUE);
+		}
+		else {
+				return(FALSE);			
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##  
 ## Method: areSynonymous
 ##  
 ###########################################################################/**
