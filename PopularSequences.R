@@ -392,7 +392,49 @@ setConstructorS3(
 ##  
 ## Method: getOmegas
 ##  
-## \alias{getOmegas.Sequence} 
+###########################################################################/**
+#
+# @RdocMethod getOmegas
+# \alias{getOmegas.Sequence} 
+# 
+# @title "Get the omegas from a collection of sites" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonSequence object.} 
+#	\item{process}{A process object inheriting from GY94.}
+#	\item{index}{A vector of positions.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector.
+# } 
+# 
+# \examples{
+#	# create a GY94 process
+#	p<-GY94()
+#	# create a CodonSequence object,
+#	# attach a process p
+#	s<-CodonSequence(length=20,processes=list(list(p)))
+#	# set omega values in range 1:5
+#	setOmegas(s,p,c(0.5,1,1.5),1:5)
+#	# get omega values from siutes 1,2,3,10, and 20
+#	getOmegas(s,p,c(1:3,10,20))
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getOmegas",
   class="CodonSequence",
@@ -424,6 +466,49 @@ setMethodS3(
 ##  
 ## Method: omegaHist
 ##  
+###########################################################################/**
+#
+# @RdocMethod omegaHist
+# 
+# @title "Plot a histogram of omega values from a range" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonSequence object.} 
+#	\item{process}{A process object inheriting from GY94.}
+#	\item{breaks}{\code{breaks} parameter for \code{hist()}.}
+#	\item{index}{A vector of positions.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The CodonSequence object (invisible).
+# } 
+# 
+# \examples{
+#	# create a GY94 process
+#	p<-GY94()
+#	# create a CodonSequence object,
+#	# attach a process p
+#	s<-CodonSequence(length=20,processes=list(list(p)))
+#       # set omega values through omegaVarM2.CodonSequence
+#       omegaVarM2(s,p,p0=0.5,p1=0.2,omega=1.5)
+#       # get a histogram of omega values from the range 1:15
+#       omegaHist(s,p,breaks=10,1:15)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "omegaHist",
   class="CodonSequence",
@@ -450,8 +535,10 @@ setMethodS3(
 			hist(getOmegas(this,process,index));
 		}
 		else {
-			hist(getOmegas(this,process,index),breaks=breaks);
+			omegas<-getOmegas(this,process,index);
+			hist(omegas,breaks=breaks,main="Histogram of omega values",xlab="Omega",freq=FALSE);
 		}
+		return(invisible(this));
 
   },
   private=FALSE,
@@ -463,16 +550,59 @@ setMethodS3(
 
 ##  
 ## Method: setOmegas
-## \alias{setOmegas.Sequence} 
+###########################################################################/**
+#
+# @RdocMethod setOmegas
+# \alias{setOmegas.Sequence} 
+# 
+# @title "Set the omegas for a collection of sites" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonSequence object.} 
+#	\item{process}{A process object inheriting from GY94.}
+#	\item{value}{A vector containing the new values of the site-process specific parameter, recycled if shorter than the index vector.}
+#	\item{index}{A vector of positions. It is set to 1:seq$length if ommited.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector.
+# } 
+# 
+# \examples{
+#	# create a GY94 process
+#	p<-GY94()
+#	# create a CodonSequence object,
+#	# attach a process p
+#	s<-CodonSequence(length=20,processes=list(list(p)))
+#	# set omega values in range 1:5
+#	setOmegas(s,p,c(0.5,1,1.5),1:5)
+#	# get omega values from siutes 1,2,3,10, and 20
+#	getOmegas(s,p,c(1:3,10,20))
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setOmegas",
   class="CodonSequence",
   function(
-    this,
-		process,
-    value,
-		index,
-    ...
+	this,
+	process,
+	value,
+	index,
+    	...
   ){
 
   if(missing(process)){
@@ -512,6 +642,69 @@ setMethodS3(
 ##  
 ## Method: omegaVarM0 - one ratio
 ##  
+###########################################################################/**
+#
+# @RdocMethod omegaVarM0
+# 
+# @title "The M0 (one-ratio) model of variable omega ratios among sites" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method sets the \code{omega} site-process specific parameter
+#	in the specified range to values sampled from the M0 (one-ratio) model of
+#	variable omega ratios among sites.
+#
+#       Distribution of omega values:
+#       \preformatted{
+#	CATEGORY	PROBABILITY
+#
+#	omega		1
+#       }
+# } 
+#
+# \references{
+# Yang, Z., Nielsen, R., Goldman, N., Pedersen Krabbe, A-M. (2000) Codon-Substitution Models for Heterogeneous Selection Pressure at Amino Acid Sites - Genetics 155:431-449 \url{http://bit.ly/bvjucn}
+#
+# Goldman, N., Yang, Z. (1994) A codon-based model of nucleotide substitution for protein-coding DNA sequences - Mol Biol Evol 11(5):725-36 \url{http://bit.ly/aSVEoa}
+# }
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonSequence object.} 
+# 	\item{process}{A process object inheriting from GY94.} 
+#	\item{omega}{The fixed omega value.}
+#	\item{index}{A vector of positions.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE.
+# } 
+# 
+# \examples{
+#	# create a GY94 object
+#	p<-GY94(kappa=2)
+#	# create a CodonSequence object, attach process p
+#	s<-CodonSequence(length=20, processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# sample omegas in range 1:5 from model M0
+#	omegaVarM0(s,p,omega=2,1:5)
+#	# get omega values	
+#	getOmegas(s,p)
+#	# get a histogram of omega values in range 1:5
+#	omegaHist(s,p,breaks=50,1:5)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "omegaVarM0",
   class="CodonSequence",
@@ -548,7 +741,7 @@ setMethodS3(
       }
 
       setParameterAtSites(this, process=process, id="omega",value=omega,index=index);
-			return(invisible(TRUE));
+      return(invisible(TRUE));
 
     }
 
@@ -560,15 +753,73 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
-##
-## The omegaVarMx methods mostly follow: Yang, Z., Nielsen, R., Goldman, N., Pedersen Krabbe, A-M.
-## 2000. Codon-Substitution Models for Heterogeneous Selection Pressure at Amino Acid Sites.
-## Genetics 155:431-449.
-##
-
 ##  
 ## Method: omegaVarM1 - neutral
 ##  
+###########################################################################/**
+#
+# @RdocMethod omegaVarM1
+# 
+# @title "The M1 (neutral) model of variable omega ratios among sites" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method sets the \code{omega} site-process specific parameter
+#	in the specified range to values sampled from the M1 (neutral) model of
+#	variable omega ratios among sites.
+#
+#       Distribution of omega values:
+#       \preformatted{
+#	CATEGORY	PROBABILITY
+#
+#	omega_0 = 0	p0
+#	omega_1 = 1	1-p0
+#       }
+# } 
+#
+# \references{
+# Yang, Z., Nielsen, R., Goldman, N., Pedersen Krabbe, A-M. (2000) Codon-Substitution Models for Heterogeneous Selection Pressure at Amino Acid Sites - Genetics 155:431-449 \url{http://bit.ly/bvjucn}
+#
+# Goldman, N., Yang, Z. (1994) A codon-based model of nucleotide substitution for protein-coding DNA sequences - Mol Biol Evol 11(5):725-36 \url{http://bit.ly/aSVEoa}
+# }
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonSequence object.} 
+# 	\item{process}{A process object inheriting from GY94.} 
+#	\item{p0}{See above.}
+#	\item{index}{A vector of positions.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE.
+# } 
+# 
+# \examples{
+#	# create a GY94 object
+#	p<-GY94(kappa=2)
+#	# create a CodonSequence object, attach process p
+#	s<-CodonSequence(length=25, processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# sample omegas in range 1:20 from model M1
+#	omegaVarM1(s,p,p0=0.5,1:20)
+#	# get omega values	
+#	getOmegas(s,p)
+#	# get a histogram of omega values in range 1:20
+#	omegaHist(s,p,breaks=50,1:20)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "omegaVarM1",
   class="CodonSequence",
@@ -622,6 +873,73 @@ setMethodS3(
 ##  
 ## Method: omegaVarM2 - selection
 ##  
+###########################################################################/**
+#
+# @RdocMethod omegaVarM2
+# 
+# @title "The M2 (selection) model of variable omega ratios among sites" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method sets the \code{omega} site-process specific parameter
+#	in the specified range to values sampled from the M2 (selection) model of
+#	variable omega ratios among sites.
+#
+#       Distribution of omega values:
+#       \preformatted{
+#	CATEGORY	PROBABILITY
+#
+#	omega_0 = 0	p0
+#	omega_1 = 1	p1
+#	omega_2 	1-p0-p1
+#       }
+# } 
+#
+# \references{
+# Yang, Z., Nielsen, R., Goldman, N., Pedersen Krabbe, A-M. (2000) Codon-Substitution Models for Heterogeneous Selection Pressure at Amino Acid Sites - Genetics 155:431-449 \url{http://bit.ly/bvjucn}
+#
+# Goldman, N., Yang, Z. (1994) A codon-based model of nucleotide substitution for protein-coding DNA sequences - Mol Biol Evol 11(5):725-36 \url{http://bit.ly/aSVEoa}
+# }
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonSequence object.} 
+# 	\item{process}{A process object inheriting from GY94.} 
+#	\item{p0}{See above.}
+#	\item{p1}{See above.}
+#	\item{omega_2}{See above.}
+#	\item{index}{A vector of positions.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE.
+# } 
+# 
+# \examples{
+#	# create a GY94 object
+#	p<-GY94(kappa=2)
+#	# create a CodonSequence object, attach process p
+#	s<-CodonSequence(length=25, processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# sample omegas in range 1:20 from model M2
+#	omegaVarM2(s,p,p0=0.2,p1=0.3,omega_2=4,1:20)
+#	# get omega values	
+#	getOmegas(s,p)
+#	# get a histogram of omega values in range 1:20
+#	omegaHist(s,p,breaks=50,1:20)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "omegaVarM2",
   class="CodonSequence",
@@ -630,7 +948,7 @@ setMethodS3(
 		process,
     		p0,
 		p1,
-		omega,
+		omega_2,
 		index,
     		...
   ){
@@ -659,13 +977,13 @@ setMethodS3(
 		else if(p1 < 0 | p1 > 1){
 			throw("The p1 parameter must be in the [0,1] interval!\n");
 		}
-    else if(missing(omega)){
+    else if(missing(omega_2)){
       throw("No omega value specified!\n");
     }
-    else if((!is.numeric(omega))| (length(omega) != 1)){
+    else if((!is.numeric(omega_2))| (length(omega_2) != 1)){
       throw("The omega value must be a numeric vector of length 1!\n");
     }
-		else if(omega < 0){
+		else if(omega_2 < 0){
 			throw("The omega parameter must be greater than zero!\n");
 		}
     else {
@@ -678,7 +996,7 @@ setMethodS3(
       }
 
 			for(site in this$.sites[index]){
-				setParameterAtSite(this=process,site=site, id="omega", value=sample(c(0,1,omega), size=1, replace=FALSE, prob=c(p0,p1,(1-p0-p1))));	
+				setParameterAtSite(this=process,site=site, id="omega", value=sample(c(0,1,omega_2), size=1, replace=FALSE, prob=c(p0,p1,(1-p0-p1))));	
 			}
 			return(invisible(TRUE));
 
@@ -695,6 +1013,74 @@ setMethodS3(
 ##  
 ## Method: omegaVarM3 - discrete
 ##  
+###########################################################################/**
+#
+# @RdocMethod omegaVarM3
+# 
+# @title "The M3 (discrete) model of variable omega ratios among sites" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method sets the \code{omega} site-process specific parameter
+#	in the specified range to values sampled from the M3 (discrete) model of
+#	variable omega ratios among sites.
+#
+#       Distribution of omega values:
+#       \preformatted{
+#	CATEGORY	PROBABILITY
+#
+#	omega_0		p0
+#	omega_1		p1
+#	omega_2 	p2
+#	...		...
+#	omega_k		pk
+#       }
+# } 
+#
+# \references{
+# Yang, Z., Nielsen, R., Goldman, N., Pedersen Krabbe, A-M. (2000) Codon-Substitution Models for Heterogeneous Selection Pressure at Amino Acid Sites - Genetics 155:431-449 \url{http://bit.ly/bvjucn}
+#
+# Goldman, N., Yang, Z. (1994) A codon-based model of nucleotide substitution for protein-coding DNA sequences - Mol Biol Evol 11(5):725-36 \url{http://bit.ly/aSVEoa}
+# }
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonSequence object.} 
+# 	\item{process}{A process object inheriting from GY94.} 
+#	\item{omegas}{A vector of omega values (omega_0 ... omega_k).}
+#	\item{probs}{A vector of probabilities (p0 ... pk).}
+#	\item{index}{A vector of positions.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE.
+# } 
+# 
+# \examples{
+#	# create a GY94 object
+#	p<-GY94(kappa=2)
+#	# create a CodonSequence object, attach process p
+#	s<-CodonSequence(length=25, processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# sample omegas in range 1:20 from model M3
+#	omegaVarM3(s,p,omegas=c(0,2,4),probs=c(1/3,1/3,1/3),1:20)
+#	# get omega values	
+#	getOmegas(s,p)
+#	# get a histogram of omega values in range 1:20
+#	omegaHist(s,p,breaks=50,1:20)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "omegaVarM3",
   class="CodonSequence",
@@ -704,7 +1090,7 @@ setMethodS3(
 		omegas,
 		probs,
 		index,
-    ...
+    		...
   ){
 
   if(missing(process)){
@@ -760,6 +1146,73 @@ setMethodS3(
 ##  
 ## Method: omegaVarM4 - freqs
 ##  
+###########################################################################/**
+#
+# @RdocMethod omegaVarM4
+# 
+# @title "The M4 (freqs) model of variable omega ratios among sites" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method sets the \code{omega} site-process specific parameter
+#	in the specified range to values sampled from the M4 (freqs) model of
+#	variable omega ratios among sites.
+#
+#       Distribution of omega values:
+#       \preformatted{
+#	CATEGORY	PROBABILITY
+#
+#	omega_0 = 0	p0
+#	omega_1 = 1/3	p1
+#	omega_2 = 2/3	p2
+#	omega_3	= 1	p3
+#	omega_4 = 3	p4
+#       }
+# } 
+#
+# \references{
+# Yang, Z., Nielsen, R., Goldman, N., Pedersen Krabbe, A-M. (2000) Codon-Substitution Models for Heterogeneous Selection Pressure at Amino Acid Sites - Genetics 155:431-449 \url{http://bit.ly/bvjucn}
+#
+# Goldman, N., Yang, Z. (1994) A codon-based model of nucleotide substitution for protein-coding DNA sequences - Mol Biol Evol 11(5):725-36 \url{http://bit.ly/aSVEoa}
+# }
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonSequence object.} 
+# 	\item{process}{A process object inheriting from GY94.} 
+#	\item{probs}{A vector of probabilities (p0 ... p4).}
+#	\item{index}{A vector of positions.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE.
+# } 
+# 
+# \examples{
+#	# create a GY94 object
+#	p<-GY94(kappa=2)
+#	# create a CodonSequence object, attach process p
+#	s<-CodonSequence(length=25, processes=list(list(p)))
+#	# sample states
+#	sampleStates(s)
+#	# sample omegas in range 1:20 from model M4
+#	omegaVarM4(s,p,probs=c(2/5,1/5,1/5,1/10,1/10),1:20)
+#	# get omega values	
+#	getOmegas(s,p)
+#	# get a histogram of omega values in range 1:20
+#	omegaHist(s,p,breaks=50,1:20)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "omegaVarM4",
   class="CodonSequence",
@@ -768,7 +1221,7 @@ setMethodS3(
 		process,
 		probs,
 		index,
-    ...
+    		...
   ){
 
   if(missing(process)){

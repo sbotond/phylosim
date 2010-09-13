@@ -242,13 +242,25 @@ setMethodS3(
 # @title "The GY94 class"
 # 
 # \description{ 
+#	This class implements the codon substitution model of Goldman and Yang (1994). 
+#	The transition/transversion rate ratio is stored in the \code{kappa}. The nonsynonymous/synonymous
+#	substitution rate ratio (omega) is a site-process specific parameter with a default value of one.
+#	Hence, after the attachment of the process the variation of omega ratios among sites follows 
+#	the M0 model (see Yang et al. 2000).
 #
+#	The M1-M4 models are implemented in the \code{omegaVarM[1-4].CodonSeqeunce} methods.
+#	Simulations under more complex models (M5-M13) can be achieved by first discretizing them 
+#	using the \code{M5-13} tool from the INDELible software 
+#	package (\url{http://abacus.gene.ucl.ac.uk/software/indelible/}). 
+#	After discretization, the M5-M13 models can be simulated through the M3 (discrete) model.
 #
 #	@classhierarchy
 # }
 #
 # \references{
+# Goldman, N., Yang, Z. (1994) A codon-based model of nucleotide substitution for protein-coding DNA sequences - Mol Biol Evol 11(5):725-36 \url{http://bit.ly/aSVEoa}
 #
+# Yang, Z., Nielsen, R., Goldman, N., Pedersen Krabbe, A-M. (2000) Codon-Substitution Models for Heterogeneous Selection Pressure at Amino Acid Sites - Genetics 155:431-449 \url{http://bit.ly/bvjucn}
 # }
 #	
 # @synopsis
@@ -259,7 +271,7 @@ setMethodS3(
 #	\item{kappa}{The transition/transversion rate ratio (1 by default).}
 #	\item{omega.default}{The default value of the omega site-process specific parameter (1 by default).}
 #	\item{codon.freq}{A vector of codon frequencies.}
-# 	\item{...}{Additional arguments.}
+# 	\item{...}{Not used.}
 #	}
 # 
 # \section{Fields and Methods}{ 
@@ -279,10 +291,10 @@ setMethodS3(
 #	sampleStates(s)
 #	# set range 1:3 invariable
 #	setRateMultipliers(s,p,0,1:3)
-#	# set omega values through omegaVarM2.CodonSequence
-#	omegaVarM2(s,p,p0=0.5,p1=0.2,omega=1.5)
+#	# sample omega values from the M3 (discrete) model.
+#	omegaVarM3(s,p,omegas=c(0,1,2,3),probs=c(2/5,1/5,1/5,1/5))
 #	# get a histogram of omega values in s
-#	omegaHist(s,p)
+#	omegaHist(s,p,breaks=50)
 #       sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
 #       # run simulation
 #       Simulate(sim)
@@ -293,7 +305,7 @@ setMethodS3(
 # @author
 #
 # \seealso{ 
-# 	@seeclass 
+# 	CodonUNREST GeneralSubstitution CodonSequence GTR WAG
 # }
 # 
 #*/###########################################################################
