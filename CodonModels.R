@@ -747,7 +747,7 @@ setMethodS3(
 # \description{ 
 #       @get "title".
 #       
-#	See \code{\link{setRate.GeneralSubstituion}}.
+#	See \code{\link{setRate.GeneralSubstitution}}.
 # } 
 # 
 # @synopsis 

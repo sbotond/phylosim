@@ -4801,6 +4801,43 @@ setMethodS3(
 ##  
 ## Method: isStopCodon
 ##  
+###########################################################################/**
+#
+# @RdocMethod isStopCodon
+# 
+# @title "Check if a codon is a stop codon" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonAlphabet object.}
+# 	\item{codon}{The codon to be checked.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create a CodonAlphabet object
+#	a<-CodonAlphabet()
+#	# check some codons
+#	isStopCodon(a,"ATG")
+#	isStopCodon(a,"TGA")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "isStopCodon",
   class="CodonAlphabet",
@@ -4837,6 +4874,43 @@ setMethodS3(
 ##  
 ## Method: isStartCodon
 ##  
+###########################################################################/**
+#
+# @RdocMethod isStartCodon
+# 
+# @title "Check if a codon is a start codon" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonAlphabet object.}
+# 	\item{codon}{The codon to be checked.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	TRUE or FALSE.
+# } 
+# 
+# \examples{
+#	# create a CodonAlphabet object
+#	a<-CodonAlphabet()
+#	# check some codons
+#	isStartCodon(a,"ATG")
+#	isStartCodon(a,"TGA")
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "isStartCodon",
   class="CodonAlphabet",
