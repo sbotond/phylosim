@@ -6,7 +6,7 @@ Author: Botond Sipos <sbotond@gmail.com>
 Maintainer: Botond Sipos <sbotond@gmail.com>
 Depends: R (>= 2.8.0), R.oo (>= 1.4.6), ape (>= 2.3), compoisson (>= 0.3), ggplot2 (>= 0.8.8)
 Suggests:	 
-Imports: ape, R.oo, compoisson
+Imports: ape, R.oo, compoisson, ggplot2
 Description: R packge for simulating biological sequence evolution
 License: GPL (>= 3)
 URL: http://github.com/sbotond/phylosim
