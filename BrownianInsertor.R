@@ -607,9 +607,9 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#	p<-BrownianInsertor(type="discrete",scale=0.05, sizes=1:4,probs=c(3/6,1/6,1/6,1/6),rate=0.05)
 #       # get a summary
-#       summary(a)
+#       summary(p)
 # }
 #
 # @author

@@ -21,7 +21,7 @@
 # 	\item{root.seq}{A valid Sequence object with Process objects attached. Used as the starting sequence during simulation.}
 # 	\item{name}{The name of the object (a character vector of length one).}
 # 	\item{log.file}{Name of the file used for logging.}
-# 	\item{log.level}{An integere specifying the verbosity of logging (see \code{\link{setLogLevel}}).}
+# 	\item{log.level}{An integere specifying the verbosity of logging (see \code{\link{setLogLevel.PhyloSim}}).}
 # 	\item{...}{Not used.}
 #	}
 # 

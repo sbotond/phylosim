@@ -2,6 +2,43 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass FieldDeletor
+# 
+# @title "The FieldDeletor class"
+# 
+# \description{ 
+#
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+# 	\item{length.param.1}{Object name.}
+# 	\item{length.param.2}{Object name.}
+# 	\item{tolerance.margin}{Object name.}
+# 	\item{...}{Additional arguments.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	@seeclass 
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "FieldDeletor",
   function( 
@@ -13,7 +50,8 @@ setConstructorS3(
 		... 
 	)	{
 
-			ALLOWED.TYPES=c("geometric","poisson","neg.binomial","compoisson");	# supported types
+			# supported types
+			ALLOWED.TYPES=c("geometric","poisson","neg.binomial","compoisson");
 
 			# Creating a GeneralDeletor Process.
 			this<-GeneralDeletor(
@@ -263,7 +301,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-NucleotideAlphabet()
+#       a<-FieldDeletor()
 #       # get a summary
 #       summary(a)
 # }
@@ -303,6 +341,37 @@ setMethodS3(
 ##  
 ## Method: getEventsAtSite
 ##  
+###########################################################################/**
+#
+# @RdocMethod getEventsAtSite
+# 
+# @title "Generate a deletion event object given the state of the target site" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+#       \item{this}{A FieldDeletor object.} 
+#       \item{target.site}{A Site object.} 
+#       \item{sloppy}{Ommiting safety checks if TRUE.}
+#       \item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A list of Event objects.
+# } 
+# 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	GeneralDeletor getEventsAtSite.GeneralDeletor
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getEventsAtSite",
   class="FieldDeletor",
@@ -335,7 +404,7 @@ setMethodS3(
      # Clone the event template object:
      deletion.event<-clone(this$.event.template);
      # Set the target position passed in a temporary field:
- deletion.event$.position<-target.site$.position;
+     deletion.event$.position<-target.site$.position;
      # Set the target site:
      deletion.event$site<-target.site;
      # Set the target state (good for consistency):
@@ -374,6 +443,44 @@ setMethodS3(
 ##	
 ## Method: getType
 ##	
+###########################################################################/**
+#
+# @RdocMethod getType
+# 
+# @title "Get the type of a FieldDeletor object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A FieldDeletor object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	# create a FieldDeletor, default type (geometric)
+#	p<-FieldDeletor()
+#	# get type
+#	getType(p)
+#	# create a FieldDeletor, poisson type
+#	p<-FieldDeletor(type="poisson")
+#	p$type
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getType",
   class="FieldDeletor",
@@ -395,6 +502,37 @@ setMethodS3(
 ##	
 ## Method: setType
 ##	
+###########################################################################/**
+#
+# @RdocMethod setType
+#
+# @title "Forbidden action: setting the type of a FieldDeletor object"
+#
+# \description{
+#       @get "title".
+#	
+#	The type can be set only through the \code{type} constructor argument.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
   "setType",
   class="FieldDeletor",
@@ -416,6 +554,45 @@ setMethodS3(
 ##	
 ## Method: getLengthParam1
 ##	
+###########################################################################/**
+#
+# @RdocMethod getLengthParam1
+# 
+# @title "Get the first length parameter" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A FieldDeletor object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a geometric FieldDeletor
+#	p<-FieldDeletor()
+#	# set/get the first length parameter
+#	setLengthParam1(p,0.5)
+#	getLengthParam1(p)
+#	# set/get the first length parameter via virtual field
+#	p$lengthParam1<-0.2
+#	p$lengthParam1
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getLengthParam1",
   class="FieldDeletor",
@@ -438,6 +615,45 @@ setMethodS3(
 ##	
 ## Method: getLengthParam2
 ##	
+###########################################################################/**
+#
+# @RdocMethod getLengthParam2
+# 
+# @title "Get the second length parameter" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A FieldDeletor object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a geometric FieldDeletor
+#	p<-FieldDeletor()
+#	# set/get the second length parameter
+#	setLengthParam2(p,0.5)
+#	getLengthParam2(p)
+#	# set/get the second length parameter via virtual field
+#	p$lengthParam2<-0.2
+#	p$lengthParam2
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getLengthParam2",
   class="FieldDeletor",
@@ -460,6 +676,46 @@ setMethodS3(
 ##	
 ## Method: setLengthParam1
 ##	
+###########################################################################/**
+#
+# @RdocMethod setLengthParam1
+# 
+# @title "Set the first length parameter" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A FieldDeletor object.} 
+# 	\item{value}{A numeric vector of length one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	value (invisible).
+# } 
+# 
+# \examples{
+#	# create a geometric FieldDeletor
+#	p<-FieldDeletor()
+#	# set/get the first length parameter
+#	setLengthParam1(p,0.5)
+#	getLengthParam1(p)
+#	# set/get the first length parameter via virtual field
+#	p$lengthParam1<-0.2
+#	p$lengthParam1
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setLengthParam1",
   class="FieldDeletor",
@@ -480,6 +736,7 @@ setMethodS3(
 			this$.field.scaling.factor<-NA;
 			this$.length.param.1<-value;
 		}
+		return(invisible(value));
 
 
   },
@@ -493,12 +750,52 @@ setMethodS3(
 ##	
 ## Method: setLengthParam2
 ##	
+###########################################################################/**
+#
+# @RdocMethod setLengthParam2
+# 
+# @title "Set the second length parameter" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A FieldDeletor object.} 
+# 	\item{value}{A numeric vector of length one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	value (invisible).
+# } 
+# 
+# \examples{
+#	# create a geometric FieldDeletor
+#	p<-FieldDeletor()
+#	# set/get the second length parameter
+#	setLengthParam2(p,0.5)
+#	getLengthParam2(p)
+#	# set/get the second length parameter via virtual field
+#	p$lengthParam2<-0.2
+#	p$lengthParam2
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setLengthParam2",
   class="FieldDeletor",
   function(
     this,
-		value,
+    value,
     ...
   ){
 
@@ -513,6 +810,7 @@ setMethodS3(
 			this$.field.scaling.factor<-NA;
 			this$.length.param.2<-value;
 		}
+		return(invisible(value));
 
 
   },
@@ -526,6 +824,45 @@ setMethodS3(
 ##	
 ## Method: getToleranceMargin
 ##	
+###########################################################################/**
+#
+# @RdocMethod getToleranceMargin
+# 
+# @title "Get the tolerance margin" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A FieldDeletor object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a geometric FieldDeletor
+#	p<-FieldDeletor()
+#	# set/get tolerance margin
+#	setToleranceMargin(p,0.8)
+#	getToleranceMargin(p)
+#	# set/get tolerance margin via virtual field
+#	p$toleranceMargin<-0.75
+#	p$toleranceMargin
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "getToleranceMargin",
   class="FieldDeletor",
@@ -547,6 +884,46 @@ setMethodS3(
 ##	
 ## Method: setToleranceMargin
 ##	
+###########################################################################/**
+#
+# @RdocMethod setToleranceMargin
+# 
+# @title "Set the tolerance margin" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A FieldDeletor object.} 
+# 	\item{value}{A numeric vector of length one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#	value (invisible).
+# } 
+# 
+# \examples{
+#	# create a geometric FieldDeletor
+#	p<-FieldDeletor()
+#	# set/get tolerance margin
+#	setToleranceMargin(p,0.8)
+#	getToleranceMargin(p)
+#	# set/get tolerance margin via virtual field
+#	p$toleranceMargin<-0.75
+#	p$toleranceMargin
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "setToleranceMargin",
   class="FieldDeletor",
@@ -567,7 +944,7 @@ setMethodS3(
 			this$.field.scaling.factor<-NA;
 			this$.tolerance.margin<-value;
 		}
-
+		return(invisible(value));
 
   },
   private=FALSE,
