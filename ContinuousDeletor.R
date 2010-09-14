@@ -4,65 +4,63 @@
 ##	
 ##########################################################################/** 
 #
-# @RdocClass ContinousInsertor
+# @RdocClass ContinuousDeletor
 # 
-# @title "The ContinousInsertor class"
+# @title "The ContinuousDeletor class"
 # 
 # \description{ 
-#       This class implements a process which performs insertions with
+#	This class implements a process which performs deletions with
 #       lengths sampled from a user-specified R expression returning a 
-#       numeric value.
-#       See \code{GeneralInsertor} for the workings of the insertion
+#	numeric value.
+#       See \code{GeneralDeletor} for the workings of the deletion
 #       processes.
 #
-#       @classhierarchy
+#	@classhierarchy
 # }
-#       
+#	
 # @synopsis
-#       
+#	
 # \arguments{
-#       \item{name}{The name of the object.}
-#       \item{rate}{The general rate.}
-#       \item{dist}{The length sampling expression.}
-#       \item{max.length}{Maximum event length.}
-#       \item{...}{Additional arguments.}
-#       }
+# 	\item{name}{The name of the object.}
+# 	\item{rate}{The general rate.}
+# 	\item{dist}{The length sampling expression.}
+# 	\item{max.length}{Maximum event length.}
+# 	\item{...}{Additional arguments.}
+#	}
 # 
 # \section{Fields and Methods}{ 
-#       @allmethods
+# 	@allmethods
 # }
 # 
 # \examples{ 
-#       # create a ContinousInsertor process
-#       o<-ContinousInsertor(
+# 	# create a ContinuousDeletor process
+#       o<-ContinuousDeletor(
 #               name="Conty",
-#               rate=0.1,
-#               dist=expression(1),
-#               max.length=2
+#               rate=0.25,
+#		dist=expression(1),
+#		max.length=2
 #       )
-#	# set template sequence
-#	o$templateSeq<-NucleotideSequence(string="CAC")
 #       # get object summary
 #       summary(o)
 #       # set/get length sampling expression
 #       o$dist<-expression(rnorm(1,mean=3,sd=3))
-#       o$dist
+#	o$dist
 #       # set/get maximum event length
-#       o$maxLength<-4
-#       o$maxLength
+#	o$maxLength<-4
+#	o$maxLength
 #       # plot length density
 #       plot(o)
 #       
 #       # The following code illustrates how to use
-#       # a ContinousInsertor process in a simulation
+#       # a ContinuousDeletor process in a simulation
 #       
 #       # create a sequence object, attach process o
 #       s<-NucleotideSequence(string="AAAAAAAAAAGGGGAAAAAAAAAA",processes=list(list(o)))
-#       # set the insertion tolerance to zero in range 11:15
-#       # creating a region rejecting all insertions
-#       setInsertionTolerance(s,o,0,11:15)       
-#       # get insertion tolerances
-#       getInsertionTolerance(s,o)
+#       # set the deletion tolerance to zero in range 11:15
+#       # creating a region rejecting all deletions
+#       setDeletionTolerance(s,o,0,11:15)       
+#       # get deletion tolerances
+#       getDeletionTolerance(s,o)
 #       # create a simulation object
 #       sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
 #       # simulate
@@ -74,12 +72,12 @@
 # @author
 #
 # \seealso{ 
-#       GeneralInsertor DiscreteInsertor GeneralInDel
+# 	GeneralDeletor DiscreteDeletor GeneralInDel
 # }
 # 
 #*/###########################################################################
 setConstructorS3(
-  "ContinousInsertor",
+  "ContinuousDeletor",
   function( 
 		name="Anonymous",
 		rate=NA,
@@ -88,7 +86,7 @@ setConstructorS3(
 		... 
 		)	{
 
-		this<-GeneralInsertor(
+		this<-GeneralDeletor(
 			 name=NA,
 			 rate=rate,
 			 propose.by=NA,
@@ -97,7 +95,7 @@ setConstructorS3(
 		);
     this<-extend(
       this,
-      "ContinousInsertor",
+      "ContinuousDeletor",
 			.dist=NA,
 			.max.length=NA
     );
@@ -117,10 +115,10 @@ setConstructorS3(
 
 		this$proposeBy<-function(process=NA,...){
 				if(!is.expression(process$.dist)){
-					throw("\"dist\" is undefined, so cannot propose insertion length!\n");
+					throw("\"dist\" is undefined, so cannot propose deletion length!\n");
 				}
 				else if(is.na(process$.max.length)){
-					throw("\"maxLength\" is undefined, so cannot propose insertion length!\n");
+					throw("\"maxLength\" is undefined, so cannot propose deletion length!\n");
 				}
 				tmp<-round(eval(process$.dist));
 				while( tmp > process$.max.length | tmp < 1){  tmp<-round(eval(process$.dist)) };	
@@ -132,9 +130,9 @@ setConstructorS3(
   enforceRCC=TRUE
 );
 
-##
+##	
 ## Method: checkConsistency
-##
+##	
 ###########################################################################/**
 #
 # @RdocMethod	checkConsistency
@@ -161,7 +159,7 @@ setConstructorS3(
 #*/###########################################################################
 setMethodS3(
   "checkConsistency",
-  class="ContinousInsertor",
+  class="ContinuousDeletor",
   function(
     this,
     length,
@@ -183,7 +181,7 @@ setMethodS3(
           this$dist<-this$dist;
         }
         else if (!is.na(this$dist)){
-          throw("Insertion length sampler expression is invalid!\n");
+          throw("Deletion length sampler expression is invalid!\n");
         }
 
       }
@@ -197,6 +195,7 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
 
 ##	
 ## Method: getDist
@@ -218,7 +217,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A ContinousInsertor object.} 
+# 	\item{this}{A ContinuousDeletor object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -228,7 +227,7 @@ setMethodS3(
 # 
 # \examples{
 #	# create object
-#	o<-ContinousInsertor(rate=1)
+#	o<-ContinuousDeletor(rate=1)
 #	# set/get length sampling expression
 #	setDist(o, expression(rnorm(1,mean=3, sd=2)))
 #	getDist(o)
@@ -250,7 +249,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
 	"getDist", 
-	class="ContinousInsertor", 
+	class="ContinuousDeletor", 
 	function(
 		this,
 		...
@@ -286,7 +285,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A ContinousInsertor object.} 
+# 	\item{this}{A ContinuousDeletor object.} 
 # 	\item{value}{An R expression.} 
 # 	\item{...}{Not used.} 
 # } 
@@ -297,7 +296,7 @@ setMethodS3(
 # 
 # \examples{
 #	# create object
-#	o<-ContinousInsertor(rate=1)
+#	o<-ContinuousDeletor(rate=1)
 #	# set/get length sampling expression
 #	setDist(o, expression(rnorm(1,mean=3, sd=2)))
 #	getDist(o)
@@ -319,7 +318,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
 	"setDist", 
-	class="ContinousInsertor", 
+	class="ContinuousDeletor", 
 	function(
 		this,
 		value,
@@ -373,7 +372,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A ContinousInsertor object.} 
+# 	\item{this}{A ContinuousDeletor object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -383,7 +382,7 @@ setMethodS3(
 # 
 # \examples{
 #	# create object
-#	o<-ContinousInsertor(rate=1)
+#	o<-ContinuousDeletor(rate=1)
 #	# set length sampling expression via virtual field
 #	o$dist<-expression(rnorm(1,mean=6,sd=3))
 #	# set/get maxLength
@@ -405,7 +404,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
 	"getMaxLength", 
-	class="ContinousInsertor", 
+	class="ContinuousDeletor", 
 	function(
 		this,
 		...
@@ -437,7 +436,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A ContinousInsertor object.} 
+# 	\item{this}{A ContinuousDeletor object.} 
 #	\item{value}{A numeric (integer) vector of length one.}
 # 	\item{...}{Not used.} 
 # } 
@@ -448,7 +447,7 @@ setMethodS3(
 # 
 # \examples{
 #	# create object
-#	o<-ContinousInsertor(rate=1)
+#	o<-ContinuousDeletor(rate=1)
 #	# set length sampling expression via virtual field
 #	o$dist<-expression(rnorm(1,mean=6,sd=3))
 #	# set/get maxLength
@@ -470,7 +469,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
 	"setMaxLength", 
-	class="ContinousInsertor", 
+	class="ContinuousDeletor", 
 	function(
 		this,
 		value,
@@ -492,6 +491,7 @@ setMethodS3(
 		} else {
 			this$.max.length<-value;
 		}
+		return(invisible(this$.max.length));
 		
 	},
 	private=FALSE,
@@ -517,7 +517,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{x}{A ContinousInsertor object.} 
+# 	\item{x}{A ContinuousDeletor object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -527,7 +527,7 @@ setMethodS3(
 # 
 # \examples{
 #	# create object
-#	o<-ContinousInsertor(rate=1)
+#	o<-ContinuousDeletor(rate=1)
 #	# set length sampling expression via virtual field
 #	o$dist<-expression(rnorm(1,mean=10,sd=4))
 #	# set maxLength
@@ -545,7 +545,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "plot",
-  class="ContinousInsertor",
+  class="ContinuousDeletor",
   function(
     x,
     sample.size=NA,
@@ -554,7 +554,7 @@ setMethodS3(
 
 		this<-x;		
 		if( !is.numeric(this$maxLength) | !is.expression(this$dist) ){
-				warning("Insertion length distribution is not defined properly! Nothing to plot here!\n");
+				warning("Deletion length distribution is not defined properly! Nothing to plot here!\n");
 				return();
 		}
 		size<-(this$maxLength * 10);
@@ -569,16 +569,18 @@ setMethodS3(
 			sample<-apply(as.array(0:size),1,function(...){this$.propose.by(this)});
       plot.default(
 				density(sample,from=0,to=this$maxLength),
-        main=paste("Estimated insertion size density for:",this$id),
+        			main=paste("Estimated deletion size density for:",this$id),
 				sub=paste("Sample size:", size),
 				type='l',
-        xlab="Size",
-        ylab="Density",
-				col="red",
+        			xlab="Size",
+        			ylab="Density",
+				xlim=c(1,this$maxLength),
+				col="blue",
 				lwd=1.5,
 				xaxt="n"
       );
-			axis(side=1, at=(0:this$maxLength), labels=(0:this$maxLength));
+			 axis(side=1, at=c(0:this$maxLength), labels=c(0:this$maxLength));
+			 return(invisible(this));
 
   },
   private=FALSE,
@@ -615,7 +617,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-ContinousInsertor(rate=1,dist=expression(rnorm(1,mean=5,sd=2)),max.length=7)
+#       a<-ContinuousDeletor(rate=1,dist=expression(rnorm(1,mean=5,sd=3)), max.length=10)
 #       # get a summary
 #       summary(a)
 # }
@@ -629,17 +631,17 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "summary",
-  class="ContinousInsertor",
+  class="ContinuousDeletor",
   function(
     object,
     ...
   ){
-
-    this<-object;	
+    
+    this<-object;
     .addSummaryNameId(this);
 
     this$.summary$"Length sampling expression"<-deparse(this$dist);
-    this$.summary$"Maximum insertion length"<-this$maxLength;
+    this$.summary$"Maximum deletion length"<-this$maxLength;
     NextMethod();
 
   },

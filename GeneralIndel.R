@@ -940,7 +940,7 @@ setMethodS3(
 # @author
 #
 # \seealso{ 
-# 	GeneralInDel DiscreteInsertor ContinousInsertor BrownianInsertor
+# 	GeneralInDel DiscreteInsertor ContinuousInsertor BrownianInsertor
 # }
 # 
 #*/###########################################################################
@@ -2249,7 +2249,7 @@ setMethodS3(
 # @author
 #
 # \seealso{ 
-# 	GeneralInDel DiscreteDeletor ContinousDeletor FieldDeletor
+# 	GeneralInDel DiscreteDeletor ContinuousDeletor FieldDeletor
 # }
 # 
 #*/###########################################################################

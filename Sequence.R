@@ -4193,7 +4193,7 @@ setMethodS3(
 #
 # @RdocMethod plusGamma
 # 
-# @title "Sample the rate multiplier parameters of a Process from a continous Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
+# @title "Sample the rate multiplier parameters of a Process from a continuous Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
 # 
 # \description{ 
 #	@get "title".
@@ -4288,7 +4288,7 @@ setMethodS3(
 #
 # @RdocMethod plusInvGamma
 # 
-# @title "Sample the rate multiplier parameters of a Process from an I+continous Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
+# @title "Sample the rate multiplier parameters of a Process from an I+continuous Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
 # 
 # \description{ 
 #	@get "title".

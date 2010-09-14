@@ -71,7 +71,7 @@
 # @author
 #
 # \seealso{ 
-# 	GeneralDeletor ContinousDeletor GeneralInDel
+# 	GeneralDeletor ContinuousDeletor GeneralInDel
 # }
 # 
 #*/###########################################################################
@@ -515,9 +515,8 @@ setMethodS3(
 # }
 #
 # \examples{
-#
 #       # create an object
-#       a<-ContinousDeletor(rate=1,sizes=c(1,2),probs=c(1/2,1/2))
+#       a<-DiscreteDeletor(rate=1,sizes=c(1,2),probs=c(1/2,1/2))
 #       # get a summary
 #       summary(a)
 # }

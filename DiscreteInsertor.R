@@ -73,7 +73,7 @@
 # @author
 #
 # \seealso{ 
-#       GeneralInsertor ContinousInsertor GeneralInDel
+#       GeneralInsertor ContinuousInsertor GeneralInDel
 # }
 # 
 #*/###########################################################################
