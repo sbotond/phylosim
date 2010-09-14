@@ -2035,7 +2035,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{}{} 
+# 	\item{this}{A GeneralSubstitution object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2067,7 +2067,6 @@ setMethodS3(
   class="GeneralSubstitution",
   function(
     this,
-    value,
     ...
   ){
 
@@ -2086,6 +2085,144 @@ setMethodS3(
 	that$name<-that$name;
 	return(that);
 
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: plot
+##
+###########################################################################/**
+#
+# @RdocMethod plot
+# 
+# @title "Create a bubble plot of the substitution process" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	Bubble plots (\url{http://biowiki.org/BubblePlots}) visualize the characteristics of the 
+#	substitution process. The area of the circles is proportional to the rates/probabilities.
+#	The plot is not produced if the rate matrix or the equlibrium 
+#	distribution has undefined elements.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{x}{An object inheriting from GeneralSubstitution.} 
+#	\item{scale}{A scale factor affecting the area of the circles.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The process object (invisible).
+# } 
+# 
+# \examples{
+#	plot(BinarySubst(rate.list=list("0->1"=1,"1->0"=1.5)))
+#	plot(JC69())
+#	# get smaller circles
+#	plot(JC69(),scale=0.5)
+#	plot(F84(base.freqs=c(3/6,1/6,1/6,1/6)))
+#	plot(WAG())
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "plot",
+  class="GeneralSubstitution",
+  function(
+    x,
+    scale=1,
+    ...
+  ){
+
+	if(!is.numeric(scale)){
+		throw("Scale parameter must be numeric!");
+	}
+	
+	if(scale <= 0){
+		throw("Scale parameter must be positive!");
+	}
+
+	if(hasUndefinedRate(x))	{
+		throw("Cannot plot process: the rate matrix has undefined elements!");
+	}
+
+	if(any(is.na(x$equDist)))	{
+		throw("Cannot plot process: the equilibrium distribution has undefined elements!");
+	}
+
+	qmat<-x$.q.matrix$scaledMatrix;
+	# setting up viewports
+	point_scale<-40.0;
+	
+	grid.newpage();
+
+	size<-dim(qmat)[1];
+	dsize<-(max(c(1/size,( (0.2 * size - 0.65)/size ) )));
+
+	layout<-grid.layout(nrow=2,ncol=1,heights=c((1 - dsize), dsize),respect=TRUE);
+
+	vp1<-viewport(layout=layout,layout.pos.row=1,layout.pos.col=1);
+	vp2<-viewport(layout=layout,layout.pos.row=2,layout.pos.col=1);
+	
+	pushViewport(vp1);
+	# tabulate rates	
+	xx<-c();
+	yy<-c();
+	zz<-c();	
+
+	for(cl in (colnames(qmat))){
+		for(rw in rownames(qmat)){
+			if(rw != cl){
+				xx<-c(xx,cl)
+				yy<-c(yy,rw)
+				zz<-c(zz,qmat[as.character(rw), as.character(cl)]);
+			}
+		}
+	}
+
+	# visual aspect tuned by "magic" formulas :)
+	my.plot<-(qplot(x=xx,y=yy,size=zz,xlab="To:",ylab="From:",main="Rate matrix") + geom_point(colour="blue") +
+	scale_area(limits=c(0,max(zz)),to=c(0,(scale * 5 * log(128/size))), name="Size:")
+	);
+	print(my.plot, vp=vp1);
+	popViewport(1);
+
+	# equlibrium distribution	
+	dist<-x$equDist;
+	xx<-c();
+	yy<-c();
+	zz<-c();
+	
+	for(cl in colnames(dist)){
+		xx<-c(xx, cl);
+		yy<-c(yy, 1);
+		zz<-c(zz,dist[1,as.character(cl)]);
+	}
+
+	pushViewport(vp2);
+	fr<-max(zz) - min(zz);	
+	# visual aspect tuned by "magic" formulas :)
+	my.plot<-(qplot(x=xx,y=yy,size=zz,xlab="Symbol",ylab="Prob:",main="Equlibrium distribution") + geom_point(colour="green") + 
+	scale_area(limits=c(0,max(zz)),to=c(0.5,(scale * 4 * log(128/size))), name="Size:",breaks=c(min(zz),min(zz) + fr*(1/3),min(zz) + fr*(2/3),max(zz)))
+	);
+	print(my.plot,vp=vp2);
+	popViewport(1);
+
+	return(invisible(x));
   },
   private=FALSE,
   protected=FALSE,
