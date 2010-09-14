@@ -4185,6 +4185,32 @@ setMethodS3(
 );
 
 ##	
+## Method: .discretizeGamma
+##	
+setMethodS3(
+	".discretizeGamma", 
+	class="Sequence", 
+	function(
+		this,
+		shape,
+		ncat,
+		...
+	){
+		# figure out cutting points	
+		cut<-apply(rbind(1:(ncat-1)/ncat),1, function(x){qgamma(x,rate=shape,shape=shape)})	
+		cm<-function(a,b,shape){
+			pgamma(b*shape, rate=shape+1, shape=shape+1) - pgamma(a*shape, rate=shape+1, shape=shape+1)
+		}
+
+	},
+	private=TRUE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##	
 ## Method: plusGamma
 ##	
 ###########################################################################/**
