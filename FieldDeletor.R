@@ -8,7 +8,7 @@ setConstructorS3(
 		name="Anonymous",
 		type="geometric",
 		length.param.1=NA,	# mostly "Lambda"
-		length.param.2=NA,	# 
+		length.param.2=NA,	
 		tolerance.margin=0,	# minimum tolerance value used for scaling.
 		... 
 	)	{
@@ -36,14 +36,14 @@ setConstructorS3(
     	this<-extend(
       	this,
       	"FieldDeletor",
-				.type=type,									# field model flavour
-				.tolerance.margin=NA,				# minimum tolerance used for scaling
-				.tolerance.max=NA,					# maximum tolerance obseved at first call of getEventAtSites
-				.d=NA,											# is max(.tolerance.max, .tolerance.margin)
-				.field.scaling.factor=NA,		# the precalculated scaling factor
-				.length.param.1=NA,					# mostly "Lambda"
-				.length.param.2=NA,					# 
-				.ALLOWED.TYPES=ALLOWED.TYPES# supported types
+				.type=type, 		# field model flavour
+				.tolerance.margin=NA,	# minimum tolerance used for scaling
+				.tolerance.max=NA,	# maximum tolerance obseved at first call of getEventAtSites
+				.d=NA,			 # is max(.tolerance.max, .tolerance.margin)
+				.field.scaling.factor=NA,# the precalculated scaling factor
+				.length.param.1=NA,	 # mostly "Lambda"
+				.length.param.2=NA,	 
+				.ALLOWED.TYPES=ALLOWED.TYPES # supported types
     	);
 
 			# Set length parameter 1 if not missing:
@@ -342,7 +342,7 @@ setMethodS3(
      deletion.event$targetState<-getState(target.site);
      # Set event name:
      deletion.event$name<-"Deletion";
-     # Set the genrator process:
+     # Set the generator process:
      deletion.event$process<-this;
 
 		 # Calculate the field model specific scaling factor if it is not yet calculated:
