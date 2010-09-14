@@ -2,16 +2,81 @@
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
+##########################################################################/** 
+#
+# @RdocClass BrownianInsertor
+# 
+# @title "The BrownianInsertor class"
+# 
+# \description{ 
+#	The \code{BrownianInsertor} class inherits from the \code{DiscreteInsertor}
+#	or \code{ContinuousInsertor} class depending on the \code{type} constructor argument 
+#	("discrete" or "continuous").
+#
+#	This process generates the insert sequence based on the sites flanking the insertions as follows:
+#	\itemize{
+#		\item An insert length is sampled by calling the function stored in the \code{proposeBy} virtual field.
+#		\item A sequence object is constructed.
+#		\item The processes attached to both flanking sites are attached to the insert sequence. If there are no common processes, the processes from a randomly chosen site will be attached to the insert.
+#		\item The site-process specific parameters are sampled from Brownian paths with linear trends having the values from the flanking sites as endpoints.
+# 	}
+#
+#	The "noisiness" of the Brownian path can be controlled through the \code{scale} virtual field/constructor parameter.
+#
+#	@classhierarchy
+# }
+#	
+# @synopsis
+#	
+# \arguments{
+# 	\item{name}{Object name.}
+#	\item{type}{Process type (see above).}
+#	\item{scale}{Brownian path scale parameter.}
+# 	\item{...}{Additional arguments.}
+#	}
+# 
+# \section{Fields and Methods}{ 
+# 	@allmethods
+# }
+# 
+# \examples{ 
+#	# create a BrownianInsertor process, discrete type
+#	p<-BrownianInsertor(type="discrete",scale=0.05, sizes=1:4,probs=c(3/6,1/6,1/6,1/6),rate=0.05)
+#	# get object summary
+#	summary(p)
+#	# plot insert length distribution
+#	plot(p)
+#	# create a nucleotide sequence, attach processes
+#	s<-NucleotideSequence(string="AAAAAAAAAAA",processes=list(list(p,JC69())))
+#	# create simulation object
+#	sim<-PhyloSim(root.seq=s, phylo=rcoal(2))
+#	# simulate and show alignment
+#	Simulate(sim)
+#	sim$alignment
+#	# check the rate multipliers and insertion tolerances in one of the sequences
+#	res<-sim$sequences[[2]]
+#	getRateMultipliers(res,p)
+#	getInsertionTolerance(res,p)
+# }
+# 
+# @author
+#
+# \seealso{ 
+# 	DiscreteInsertor ContinuousInsertor GeneralInsertor GeneralInDel
+# }
+# 
+#*/###########################################################################
 setConstructorS3(
   "BrownianInsertor",
   function( 
 		name="Anonymous",
 		type="discrete",
+		scale=0.001,
 		... 
 		)	{
 
-		if(type == "continous"){
-			this<-ContinousInsertor(
+		if(type == "continuous"){
+			this<-ContinuousInsertor(
 			 ...
 			);
 		}
@@ -27,12 +92,14 @@ setConstructorS3(
 		this<-extend(
       			this,
       			"BrownianInsertor",
-			.scale = 0.001,
+			.scale = NA,
 			.type  = type
     		);
 		
 		# Using virtual field to clear Id cache:
 		this$name<-name;
+		# setting scale
+		this$scale<-scale;
 
 		this$generateBy<-function(process=NA,length=NA,target.seq=NA,event.pos=NA,insert.pos=NA){
 	 
@@ -174,7 +241,7 @@ setMethodS3(
       may.fail<-function(this) {
 		
 	this$scale<-this$scale;
-	if( (this$.type != "discrete") && (this$.type != "continous") ){
+	if( (this$.type != "discrete") && (this$.type != "continuous") ){
 		throw("BrownianInsertor type is invalid!\n");
 	}
 
@@ -191,8 +258,46 @@ setMethodS3(
 );
 
 ##
-## Method: BrownianPath.PSRoot
+## Method: BrownianPath
 ##
+###########################################################################/**
+#
+# @RdocMethod BrownianPath 
+# 
+# @title "Generate a Brownian path" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method generates a Brownian path given the scale parameter a (determining "noisiness") 
+#	and the vector p describing the trends. More useful as a static method.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{p}{Path parameter (a numeric vector).} 
+# 	\item{a}{Scale paramater (a numeric vector of length one).} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector.
+# } 
+# 
+# \examples{
+#	path<-BrownianInsertor$BrownianPath(a=2,p=1:10);
+#	path
+#	plot(path)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
   "BrownianPath",
   class="BrownianInsertor",
@@ -225,7 +330,7 @@ setMethodS3(
   private=FALSE,
   protected=FALSE,
   overwrite=TRUE,
-        static=TRUE,
+  static=TRUE,
   conflict="warning"
 );
 
@@ -233,6 +338,50 @@ setMethodS3(
 ##	
 ## Method: getType
 ##	
+###########################################################################/**
+#
+# @RdocMethod getType
+# 
+# @title "Get the type of the BrownianInsertor process" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	If type is \code{discrete}, than the process inherits from \code{DiscreteInsertor}.
+#	If the type is \code{continuous}, then the object inherits from \code{ContinuousInsertor}.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A BrownianInsertor object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A character vector of length one.
+# } 
+# 
+# \examples{
+#	p<-BrownianInsertor(type="discrete")
+#	# get type
+#	getType(p)
+#	# get upstream classes
+#	class(p)
+#	p<-BrownianInsertor(type="continuous")
+#	# get type via virtual field
+#	p$type
+#	# get upstream classes
+#	class(p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getType", 
 	class="BrownianInsertor", 
@@ -254,12 +403,43 @@ setMethodS3(
 ##	
 ## Method: setType
 ##	
+###########################################################################/**
+#
+# @RdocMethod setType
+#
+# @title "Forbidden action: setting the type of a BrownianInsertor object"
+#
+# \description{
+#       @get "title".
+#
+#	The type can be set only from the \code{type} constructor argument and cannot be changed later.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#       \item{this}{An object.}
+#       \item{value}{Not used.}
+#       \item{...}{Not used.}
+# }
+#
+# \value{
+#	Throws an error.
+# }
+#
+# @author
+#
+# \seealso{
+#       @seeclass
+# }
+#
+#*/###########################################################################
 setMethodS3(
 	"setType", 
 	class="BrownianInsertor", 
 	function(
 		this,
-		new_type,
+		value,
 		...
 	){
 
@@ -276,6 +456,45 @@ setMethodS3(
 ##	
 ## Method: getScale
 ##	
+###########################################################################/**
+#
+# @RdocMethod getScale
+# 
+# @title "Get scale parameter" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A BrownianInsertor object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a BrownianInsertor object
+#	p<-BrownianInsertor(scale=0.002)
+#	# set/get scale parameter
+#	setScale(p,0.1)
+#	getScale(p)
+#	# set/get scale parameter via virtual field
+#	p$scale<-0.1
+#	p$scale
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getScale", 
 	class="BrownianInsertor", 
@@ -297,6 +516,46 @@ setMethodS3(
 ##	
 ## Method: setScale
 ##	
+###########################################################################/**
+#
+# @RdocMethod setScale
+# 
+# @title "Set scale parameter" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A BrownianInsertor object.} 
+# 	\item{value}{A numeric vector of length one.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	value (invisible).
+# } 
+# 
+# \examples{
+#	# create a BrownianInsertor object
+#	p<-BrownianInsertor(scale=0.002)
+#	# set/get scale parameter
+#	setScale(p,0.1)
+#	getScale(p)
+#	# set/get scale parameter via virtual field
+#	p$scale<-0.1
+#	p$scale
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"setScale", 
 	class="BrownianInsertor", 
@@ -312,7 +571,7 @@ setMethodS3(
 			throw("The value of the scale paramter must be a numeric vector of length 1!\n");
 		}
 		this$.scale<-value;
-
+		return(invisible(this$.scale));
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -320,8 +579,6 @@ setMethodS3(
 	conflict="warning",
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
-
-
 
 ##
 ## Method: summary

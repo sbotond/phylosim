@@ -2119,9 +2119,7 @@ setMethodS3(
 		if(missing(process)){
 			throw("No process given!\n");
 		}
-		else if(!is.GeneralSubstitution(process)){
-			throw("The specified process is not a substitution process!\n");
-		}
+		
 		rm<-getParameterAtSites(this=this,process=process,id="rate.multiplier",index=index);
 		return(as.numeric(lapply(rm,function(param){param$value})));
 		
