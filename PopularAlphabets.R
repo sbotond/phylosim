@@ -204,7 +204,6 @@ setConstructorS3(
 # @synopsis
 #	
 # \arguments{
-# 	\item{}{}
 # 	\item{...}{Not used.}
 #	}
 # 
@@ -213,7 +212,10 @@ setConstructorS3(
 # }
 # 
 # \examples{ 
-#
+#	a<-AminoAcidAlphabet();
+#	a
+#	# get object summary
+#	summary(a)
 # }
 # 
 # @author

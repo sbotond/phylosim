@@ -46,7 +46,7 @@
 #	
 # \arguments{
 # 	\item{table.id}{The identifier of the genetic code table.}
-# 	\item{...}{Additional arguments.}
+# 	\item{...}{Not used.}
 #	}
 # 
 # \section{Fields and Methods}{ 
