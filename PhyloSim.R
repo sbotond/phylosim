@@ -2499,7 +2499,7 @@ setMethodS3(
 		
 		# this method has no meaningful return value
   },
-  private=FALSE,
+  private=TRUE,
   protected=FALSE,
   overwrite=FALSE,
   conflict="warning",
