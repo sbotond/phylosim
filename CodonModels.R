@@ -285,6 +285,8 @@ setMethodS3(
 #	is.GY94(p)
 #	# get object summary
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #	# create a codon sequence, attach process
 #	s<-CodonSequence(length=10, processes=list(list(p)))
 #	# sample states

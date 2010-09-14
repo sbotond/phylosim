@@ -53,6 +53,8 @@
 #	is.GeneralSubstitution(gs)
 #	# get an object summary
 #	summary(gs)
+#	# get a bubble plot
+#	plot(gs)
 #	# get unscaled rate for "0->1" by event name
 #	getRate(gs,"0->1")
 #	# get unscaled rate for "0->1" by states

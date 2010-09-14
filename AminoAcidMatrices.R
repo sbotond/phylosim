@@ -39,6 +39,8 @@
 #	p<-cpREV()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -122,6 +124,8 @@ setConstructorS3(
 #	p<-PAM()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -204,6 +208,8 @@ setConstructorS3(
 #	p<-PAM.dcmut()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -286,6 +292,8 @@ setConstructorS3(
 #	p<-JTT()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -371,6 +379,8 @@ setConstructorS3(
 #	p<-JTT.dcmut()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -453,6 +463,8 @@ setConstructorS3(
 #	p<-LG()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -536,6 +548,8 @@ setConstructorS3(
 #	p<-mtArt()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -619,6 +633,8 @@ setConstructorS3(
 #	p<-mtMam()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -702,6 +718,8 @@ setConstructorS3(
 #	p<-mtREV24()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -784,6 +802,8 @@ setConstructorS3(
 #	p<-MtZoa()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.
@@ -867,6 +887,8 @@ setConstructorS3(
 #	p<-WAG()
 #	# get object summary	
 #	summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #       # The following code demostrates how to use 
 #       # the process in a simulation.

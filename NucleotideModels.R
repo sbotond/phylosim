@@ -41,6 +41,8 @@
 #	))
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
@@ -283,6 +285,8 @@ setMethodS3(
 #       p<-JC69()
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
@@ -507,6 +511,8 @@ setMethodS3(
 #	)
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
@@ -1340,6 +1346,8 @@ setMethodS3(
 #	)
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
@@ -2030,6 +2038,8 @@ setMethodS3(
 #	)
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
@@ -2712,6 +2722,8 @@ setMethodS3(
 #       p<-F81(base.freqs=c(1,2,3,4)/10)
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
@@ -3263,6 +3275,8 @@ setMethodS3(
 #	)
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
@@ -3930,6 +3944,8 @@ setMethodS3(
 #       p<-K81(rate.params=list( "Alpha"=10,"Beta"=2,"Gamma"=5))
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
@@ -4604,6 +4620,8 @@ setMethodS3(
 #       p<-T92(rate.params=list( "Alpha"=10,"Beta"=2),theta=0.8)
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
@@ -5321,6 +5339,8 @@ setMethodS3(
 #       p<-F84(rate.params=list( "Kappa"=2), base.freqs=c(1,2,3,4))
 #       # get a summary
 #       summary(p)
+#	# get a bubble plot
+#	plot(p)
 #
 #	# The following code demostrates how to use 
 #	# the process in a simulation.
