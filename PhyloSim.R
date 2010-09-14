@@ -2456,12 +2456,48 @@ setMethodS3(
     x,
     ...
   ){
+	
+		if(!is.na(x$.alignment) & is.matrix(x$.alignment)){
+			.plotWithAlignment(x);
+			return(invisible(x));
+		}
 
 		plot(x$.phylo);
 		nodelabels();
 
 		return(invisible(x));
 
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
+## Method: .plotWithAlignment
+##
+setMethodS3(
+  ".plotWithAlignment",
+  class="PhyloSim",
+  function(
+    x,
+    ...
+  ){
+		# Hi Greg!
+		# This method will be called only if the alignment matrix is not empty,
+		# which is normally set after the simulation is finished.
+
+		x$.alignment # the alignment matrix	
+		x$.phylo     # the ape object
+		
+		# In the original method I use the following snipet to 
+		# plot the tree:
+		plot(x$.phylo);
+		nodelabels();
+		
+		# this method has no meaningful return value
   },
   private=FALSE,
   protected=FALSE,
