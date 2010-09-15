@@ -4229,6 +4229,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
 # 	\item{shape}{The shape parameter of the gamma distribution.} 
+# 	\item{ncat}{Numer of categories in the discretized gamma distribution (4 by default).} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4266,6 +4267,7 @@ setMethodS3(
 		this,
 		process,
 		shape,	
+		ncat=4,
 		index,
 		...
 	){
@@ -4325,6 +4327,7 @@ setMethodS3(
 # 	\item{process}{A Process object.} 
 # 	\item{pinv}{The proportion of invariant sites.} 
 # 	\item{shape}{The shape parameter of the gamma distribution.} 
+# 	\item{ncat}{Numer of categories in the discretized gamma distribution (4 by default).} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4362,6 +4365,7 @@ setMethodS3(
 		process,
 		pinv,
 		shape,	
+		ncat=4,
 		index,
 		...
 	){
