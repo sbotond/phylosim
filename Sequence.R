@@ -285,11 +285,11 @@ setConstructorS3(
 );
 
 ##	
-## Method: is.Site
+## Method: is.Sequence
 ##	
 ###########################################################################/**
 #
-# @RdocMethod is
+# @RdocDefault is.Sequence
 # 
 # @title "Check whether an object inherits from the Sequence class" 
 # 
@@ -3739,7 +3739,7 @@ setMethodS3(
 ##	
 ###########################################################################/**
 #
-# @RdocMethod setDeletionTolerance
+# @RdocMethod setInsertionTolerance
 # 
 # @title "Set the insertion tolerance site-process specific parameter for a collection of Site objects aggregated by a Sequence object" 
 # 
@@ -3806,7 +3806,7 @@ setMethodS3(
 ##	
 ###########################################################################/**
 #
-# @RdocMethod getDeletionTolerance
+# @RdocMethod getInsertionTolerance
 # 
 # @title "Get the insertion tolerance site-process specific parameter for a collection of Site objects aggregated by a Sequence object" 
 # 

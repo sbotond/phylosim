@@ -5773,7 +5773,7 @@ setMethodS3(
 ##	
 ###########################################################################/**
 #
-# @RdocMethod getKappa
+# @RdocMethod setKappa
 # 
 # @title "Get the transition transversion rate ratio" 
 # 

@@ -428,7 +428,8 @@ setMethodS3(
 ###########################################################################/**
 #
 # @RdocMethod setEquDist
-# 
+# \alias{setEquDist.AminoAcidSubst}
+#
 # @title "Set the equilibrium distribution for a GeneralSubstitution object" 
 # 
 # \description{ 

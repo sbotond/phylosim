@@ -136,8 +136,7 @@ setConstructorS3(
 ##
 ###########################################################################/**
 #
-# @RdocMethod is
-# \alias{is.Process.default}
+# @RdocDefault is.Process
 # 
 # @title "Check if an object is an instance of the Process class" 
 # 

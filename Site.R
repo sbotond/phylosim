@@ -167,8 +167,7 @@ setConstructorS3(
 ##	
 ###########################################################################/**
 #
-# @RdocMethod is
-# \alias{is.Site.default}
+# @RdocDefault is.Site
 # 
 # @title "Check if an object is an instance of the Site class" 
 # 
@@ -491,6 +490,49 @@ setMethodS3(
 ##	
 ## Method: getAlphabet
 ##	
+###########################################################################/**
+#
+# @RdocMethod getAlphabet
+# 
+# @title "Get the Alphabet object attached to a Site object" 
+# 
+# \description{ 
+#	@get "title".
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	An Alphabet object.
+# } 
+# 
+# \examples{
+#	
+#	# create a site object
+#	s<-Site()
+#	# create an Alphabet object
+#	a<-Alphabet(c("A","T","G"))
+#	# attach alphabet to site object
+#	setAlphabet(s,a)
+#	# get attached alphabet
+#	getAlphabet(s)
+#	# get attached alphabet via virtual field
+#	s$alphabet
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getAlphabet", 
 	class="Site", 
@@ -621,6 +663,44 @@ setMethodS3(
 ##	
 ## Method: getAncestral
 ##	
+###########################################################################/**
+#
+# @RdocMethod getAncestral
+# 
+# @title "Get the ancestral object of a Site object" 
+# 
+# \description{ 
+#	@get "title".
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A Site object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A Site object, a Process object or NA.
+# } 
+# 
+# \examples{
+#	a<-Alphabet();
+#	# create some site object
+#	s1<-Site(alphabet=a)
+#	s2<-Site(ancestral=s1, alphabet=a)
+#	# get ancestral objects
+#	getAncestral(s1)
+#	s2$ancestral
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
 setMethodS3(
 	"getAncestral", 
 	class="Site", 

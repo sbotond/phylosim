@@ -1174,8 +1174,7 @@ setMethodS3(
 ##	
 ###########################################################################/**
 #
-# @RdocMethod is
-# \alias{is.Alphabet.default}
+# @RdocDefault is.Alphabet
 # 
 # @title "Check if an object is an instance of the Alphabet class" 
 # 

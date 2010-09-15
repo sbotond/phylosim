@@ -150,8 +150,7 @@ setConstructorS3(
 ##
 ###########################################################################/**
 #
-# @RdocMethod is
-#\alias{is.Event.default}
+# @RdocDefault is.Event
 # 
 # @title "Check whether an object inherits from the class Event" 
 # 

@@ -4987,7 +4987,6 @@ setMethodS3(
 # \alias{isAttached}
 # \alias{isEmpty}
 # \alias{is}
-# \alias{Sequence}
 # \alias{default}
 # \alias{isStartCodon}
 # \alias{isStopCodon}
@@ -5107,11 +5106,17 @@ setMethodS3(
 # \alias{Translate}
 # \alias{translateCodon}
 # \alias{virtualAssignmentForbidden}
+# \alias{intersect.list}
+# \alias{is.tip}
+# \alias{my.all.equal}
+# \alias{plot.PSRoot}
 # 
 # @title "Undocumented generic method (PhyloSim package)" 
 #
 # \description{ 
 #	@get "title".
+#
+#	See the corresponding specific methods.
 # } 
 # 
 # @synopsis 

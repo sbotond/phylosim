@@ -1006,7 +1006,7 @@ setMethodS3(
 ##  
 ###########################################################################/**
 #
-# @RdocMethod getCodonFreqs
+# @RdocMethod setCodonFreqs
 # 
 # @title "Get codon frequencies" 
 # 

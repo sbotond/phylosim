@@ -1657,7 +1657,7 @@ setMethodS3(
 ## Method: .omegaVarM10Cont - beta&gamma+1
 ##  
 setMethodS3(
-  "omegaVarM10Cont",
+  ".omegaVarM10Cont",
   class="CodonSequence",
   function(
     this,
