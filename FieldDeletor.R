@@ -40,6 +40,7 @@
 #	
 # \arguments{
 # 	\item{name}{Object name.}
+# 	\item{type}{Type of the process (see above).}
 # 	\item{length.param.1}{Object name.}
 # 	\item{length.param.2}{Object name.}
 # 	\item{tolerance.margin}{Object name.}
