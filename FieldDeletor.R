@@ -9,7 +9,29 @@
 # @title "The FieldDeletor class"
 # 
 # \description{ 
+#	The \code{\link{DiscreteDeletor}} and \code{\link{ContinuousDeletor}} processes
+#	generate deletion event objects with rates determined by the general rate of the 
+#	process and the "rate.multiplier" parameter. The probability of rejecting an event
+#	is determined by the product of the "deletion.tolerance" parameters from the affected sites.
+#	If the majority of the sites have low deletion tolerance most of the events are rejected, which
+#	slows down the simulation without performing much events. 
 #
+#	The \code{FieldDeletor} processes scale down the rate and length distribution of the proposed 
+#	events based on the highest insertion tolerance value observed in the root sequence 
+#	(see the package vignette for details), thus making the simulation more efficient.
+#
+#	The available length distributions are (see also the package vignette):
+#	\itemize{
+#		\item Geometric (default) - \code{lengthParam1} is \emph{Lambda}.
+#		\item Poisson+1 - \code{lengthParam1} is \emph{Lambda}.
+#		\item Conway-Maxwell Poisson+1 - \code{lengthParam1} is \emph{Lambda}, \code{lengthParam2} is \emph{nu}
+#		\item Negative Binomial+1 - \code{lengthParam1} is \emph{Lambda}, \code{lengthParam2} is \emph{r}
+# 	}
+#	
+#	Insertion proceses can insert sites with deletion tolerance higher than the largest
+#	deletion tolerance observed in the root sequence. The user can specify the largest expected 
+#	tolerance value through the \code{toleranceMargin} virtual field. The process is then scaled by
+#	max(initial_highest_tolerance, \code{toleranceMargin}).
 #
 #	@classhierarchy
 # }
@@ -29,7 +51,32 @@
 # }
 # 
 # \examples{ 
-#
+#	# create a FieldDeletor object, default (geometric) type
+#	# length.param.1 is "lambda"
+#	p<-FieldDeletor(rate=1,length.param.1=0.9, tolerance.margin=0.8)
+#	# get type
+#	p$type
+#	# get object summary
+#	summary(p)
+#	# set/get lambda	
+#	p$lengthParam1<-0.8
+#	p$lengthParam1
+#	# set/get tolerance margin
+#	p$toleranceMargin<-0.5
+#	p$toleranceMargin
+#	# create a nucleotide sequence, attach process
+#	s<-NucleotideSequence(length=30,processes=list(list(p)))
+#	# set state pattern
+#	s$states<-c("A","A","T","T","G","G","C","C")
+#	# sample deletion tolerances
+#	setDeletionTolerance(s,p,sample(seq(from=0,to=0.8,by=0.01),30,replace=TRUE))
+#	# plot deletion tolerance
+#	plotParametersAtSites(s,p,"deletion.tolerance")
+#	# simulate
+#	sim<-PhyloSim(root.seq=s, phylo=rcoal(2))
+#	Simulate(sim)
+#	# show alignment
+#	sim$alignment
 # }
 # 
 # @author
@@ -76,7 +123,8 @@ setConstructorS3(
       	"FieldDeletor",
 				.type=type, 		# field model flavour
 				.tolerance.margin=NA,	# minimum tolerance used for scaling
-				.tolerance.max=NA,	# maximum tolerance obseved at first call of getEventAtSites
+				.tolerance.max=NA,	# maximum tolerance obseved at first call of 
+							# getEventAtSites
 				.d=NA,			 # is max(.tolerance.max, .tolerance.margin)
 				.field.scaling.factor=NA,# the precalculated scaling factor
 				.length.param.1=NA,	 # mostly "Lambda"
@@ -961,10 +1009,10 @@ setMethodS3(
   ".getScalingFactor",
   class="FieldDeletor",
   function(
-    this,
+    		this,
 		process,
 		seq,
-    ...
+    		...
   ){
 
 		# Check if the length parameters needed for rate scaling are present:
