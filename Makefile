@@ -1,3 +1,6 @@
+
+.PHONY: ct cat com push gt checkpkg clean remove aareload
+
 ct:
 	git log --graph
 cat: *.R
