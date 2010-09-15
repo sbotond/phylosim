@@ -10,7 +10,13 @@
 # 
 # \description{ 
 #
+#	
 #
+#	The examples below demonstrate only some more common simulation settings,
+#	the framework offers much more flexibility. See the package vignette and the
+#	examples directory (\url{http://github.com/sbotond/phylosim/tree/master/examples/}) 
+#	for additional examples.
+#	
 #	@classhierarchy
 # }
 #	
@@ -21,7 +27,7 @@
 # 	\item{root.seq}{A valid Sequence object with Process objects attached. Used as the starting sequence during simulation.}
 # 	\item{name}{The name of the object (a character vector of length one).}
 # 	\item{log.file}{Name of the file used for logging.}
-# 	\item{log.level}{An integere specifying the verbosity of logging (see \code{\link{setLogLevel.PhyloSim}}).}
+# 	\item{log.level}{An integer specifying the verbosity of logging (see \code{\link{setLogLevel.PhyloSim}}).}
 # 	\item{...}{Not used.}
 #	}
 # 
@@ -30,13 +36,208 @@
 # }
 # 
 # \examples{ 
+#	## The following examples demonstrate
+#	## the typical use of the framework.
+#	## See the package vignette and
+#	## \url{http://github.com/sbotond/phylosim/tree/master/examples/}
 #
+#	## The ll() method gives information about the methods defined
+#	## in the immediate class of and object.
+#	## Useful when exploring the framework.
+#
+#	s<-Sequence()
+#	ll(s)
+#	ll(PhyloSim())
+#	ll(GTR())
+#
+#	## Example 1 - The shortest simulation ever:
+#	## simulate nucleotide seqeunces and display 
+#	## the resulting alignment matrix.
+#
+#	Simulate(
+#		PhyloSim(phy=rcoal(3),root=NucleotideSequence(string="ATGC", proc=list(list(JC69())) ) )
+#	)$alignment
+#
+#	# Create a phylo object for the next
+#	# simulations, scale total tree length to 2:
+#
+#	tmp<-PhyloSim(phylo=rcoal(3))
+#	scaleTree(tmp,2/tmp$treeLength)
+#	tmp$treeLength
+#	t<-tmp$phylo
+#
+#	## Example 2 - An "unrolled" example:
+#	## simulate sequences of binary characters.
+#
+#	# generate a random tree
+#	t<-rcoal(3)
+#	# construct root sequence object
+#	s<-BinarySequence(string="00000000")
+#	# construct substitution process object
+#	p<-BinarySubst(rate.list=list("0->1"=1,"1->0"=0.5))
+#	# get a bubble plot
+#	plot(p)
+#	# attach process to sequence
+#	attachProcess(s,p)
+#	# construct simulation object
+#	sim<-PhyloSim(root.seq=s, phylo=t)
+#	# run simulation
+#	Simulate(sim)
+#	# display alignment matrix
+#	sim$alignment
+#
+#	## Example 3 - simulating rate variation,
+#	## insertions and deletions.
+#	## See the examples/example_3_clean.R file
+#	## in the phylosim GitHub repository.
+#
+#	# construct a GTR process object
+#       gtr<-GTR(
+#		name="MyGTR",
+#               rate.params=list(
+#                       "a"=1, "b"=2, "c"=3,
+#                       "d"=1, "e"=2, "f"=3
+#               ),
+#               base.freqs=c(2,2,1,1)/6
+#       )
+#	# set kappa
+#	# get object summary
+#	summary(gtr)
+#	# get a bubble plot
+#	plot(gtr)
+#
+#	# construct root sequence object
+#	s<-NucleotideSequence(length=30)
+#	# attach process via virtual field
+#	s$processes<-list(list(gtr))
+#	# sample states from the equilibrium
+#	# distribution of the attached processes
+#	sampleStates(s)
+#	# create among-sites rate variation by sampling
+#	# the "rate.multiplier" site-process specific parameter
+#	# from a discrete gamma distribution (F84+G).
+#	plusGamma(s,gtr,shape=0.5)
+#	# make the range 11:20 invariable
+#	setRateMultipliers(s,gtr,0,11:20)
+#	# get the rate multipliers for s and gtr
+#	getRateMultipliers(s,gtr)
+#
+#	# construct deletion process object
+#	# proposing length in range 1:3
+#	d<-DiscreteDeletor(
+#		rate=1,
+#		name="MyDel",
+#		sizes=c(1:3),
+#		probs=c(3/6,2/6,1/6)
+#	)
+#	# get object 
+#	summary(d)
+#	# plot deletion length distribution
+#	plot(d)
+#	# attach d to s
+#	attachProcess(s,d)
+# 	# create a region rejecting all deletions
+#       setDeletionTolerance(s,d,0,11:20)
+#
+#	# construct insertion process object
+#	# proposing length in range 1:3
+#	i<-DiscreteInsertor(
+#		rate=1,
+#		name="MyDel",
+#		sizes=c(1:2),
+#		probs=c(1/2,1/2),
+#		template.seq=NucleotideSequence(length=1,processes=list(list(JC69())))
+#	) 
+# 	# states will be sampled from the JC69 equilibrium distribution
+#	# get object 
+#	summary(i)
+#	# plot insertion length distribution
+#	plot(i)
+#	# attach i to s
+#	attachProcess(s,i)
+# 	# create a region rejecting all insertions
+#       setInsertionTolerance(s,i,0,11:20)
+#
+#	# plot total site rates
+#	plot(s)
+#	# construct simulation object
+#	sim<-PhyloSim(root.seq=s, phylo=t)
+#	# get object summary
+#	summary(sim)
+#	# plot tree
+#	plot(sim)
+#	# run simulation
+#	Simulate(sim)
+#	# plot tree and alignment
+#	plot(sim)
+#	# save and display alingment
+#	file<-paste("PhyloSim_dummy_fasta_",Sys.getpid(),".fas",sep="");
+#	saveAlignment(sim,file=file,paranoid=TRUE);
+#	# print out the Fasta file
+#	cat(paste(scan(file=file,what=character(),sep="\n"),collapse="\n"));cat("\n");
+#	# delete Fasta file
+#	unlink(file);
+#
+#	## Example 4 - simulating amino acid sequences,
+#	## and exploring more facilities.
+#	
+#	# construct substitution model objects
+#	wag<-WAG()
+#	lg<-LG()
+#	# get a bubble plot of wag
+#	plot(wag)
+#	# construct root sequence
+#	s<-AminoAcidSequence(length=20)
+#	# attach process wag to range 1:10
+#	attachProcess(s,wag,1:10)
+#	# create a pattern of processes in range 11:20
+#	setProcesses(s,list(list(wag),list(lg),list(wag,lg)),11:20)
+#	# set rate multipliers to reduce 
+#	# the rate to half at every third site
+#	setRateMultipliers(s,wag,0.5,seq(from=13,to=20,by=3))
+#	setRateMultipliers(s,lg,0.5,seq(from=13,to=20,by=3))
+#	# Now every third site in range 11:20 evolves
+#	# according to a mixture of amino acid substitution models!
+#
+#	# sample states
+#	sampleStates(s)
+#	# construct simulation object
+#	sim<-PhyloSim(root.seq=s, phylo=t)
+#	# set a log file
+#	sim$logFile<-paste("PhyloSim_dummy_log_",Sys.getpid(),sep="")
+#	# set log level to debug
+#	sim$logLevel<-1
+#	# run simulation
+#	Simulate(sim)
+#	# get a sequence object 
+#	rs<-sim$sequences[[4]]
+#	# print sequence string
+#	rs$string
+#	# show alignment matrix
+#	sim$alignment
+#	# plot tree and alignment
+#	plot(sim)
+#	# display the head of the log file
+#	cat(paste(scan(nmax=20,file=sim$logFile,what=character(),sep="\n"),collapse="\n"));cat("\n");
+#	# delete log file
+#	unlink(sim$logFile);
+#
+#	## See the package vignette and 
+#	## the GitHub repository for more examples.
 # }
 # 
 # @author
 #
 # \seealso{ 
-# 	Sequence Site Process Event
+#	PSRoot Alphabet AminoAcidAlphabet AminoAcidSequence AminoAcidSubst
+#	AnyAlphabet BinaryAlphabet BinarySequence BinarySubst
+#	BrownianInsertor CodonAlphabet CodonSequence CodonUNREST
+#	ContinuousDeletor ContinuousInsertor cpREV DiscreteDeletor
+#	DiscreteInsertor Event F81 F84 FieldDeletor GeneralDeletor
+#	GeneralInDel GeneralInsertor GeneralSubstitution GTR GY94
+#	HKY JC69 JTT JTT.dcmut K80 K81 LG mtArt mtMam mtREV24
+#	MtZoa NucleotideAlphabet NucleotideSequence PAM PAM.dcmut
+#	PhyloSim Process QMatrix Sequence Site T92 TN93 UNREST WAG
 # }
 # 
 #*/###########################################################################
@@ -119,7 +320,7 @@ setConstructorS3(
 # @author 
 # 
 # \seealso{ 
-# 	@seeclass 
+#	@seeclass
 # } 
 # 
 #*/###########################################################################
@@ -2457,7 +2658,7 @@ setMethodS3(
     ...
   ){
 	
-		if(!is.na(x$.alignment) & is.matrix(x$.alignment)){
+		if(all(!is.na(x$.alignment), is.matrix(x$.alignment))){
 			.plotWithAlignment(x);
 			return(invisible(x));
 		}
