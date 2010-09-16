@@ -4234,11 +4234,20 @@ setMethodS3(
 #
 # @RdocMethod plusGamma
 # 
-# @title "Sample the rate multiplier parameters of a Process from a continuous Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
+# @title "Sample the rate multiplier parameters of a Process from a Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
 # 
 # \description{ 
 #	@get "title".
+#
+#	The gamma distribution is discretized by calculating the means of the portions corresponding 
+#	to the categories having equal probabilities. If the \code{ncat} argument is not numeric, the 
+#	rates are sampled from the continuous gamma distribution.
 # } 
+#
+# \references{
+#	Yang, Z. (1994) Maximum likelihood phylogenetic estimation from DNA sequences with variable 
+#	rates over sites: approximate methods - Journal of Molecular Evolution 39:306-314 \url{http://dx.doi.org/10.1007/BF00160154}
+# }
 # 
 # @synopsis 
 # 
@@ -4246,6 +4255,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
 # 	\item{shape}{The shape parameter of the gamma distribution.} 
+# 	\item{index}{A vector of positions.} 
 # 	\item{ncat}{Numer of categories in the discretized gamma distribution (4 by default).} 
 # 	\item{...}{Not used.} 
 # } 
@@ -4262,12 +4272,16 @@ setMethodS3(
 #	attachProcess(s,p)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)	# the default value is 1.0
-#	# sample rate multipliers in range 1:5 from a gamma distribution with
-#	# shape parameter 0.1
-#	plusGamma(s,p,0.1,1:5)
+#	# sample rate multipliers in range 1:5 from a discrete 
+#	#gamma distribution with shape parameter 0.5
+#	plusGamma(s,p,0.5,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)	# the default value is 1.0
-#	# sample rate multipliers in range 1:5 from a gamma distribution with
+#	# sample rates from a continuous gamma distribution 
+#	# with shape parameter 0.5
+#	plusGamma(s,p,0.5,ncat="cont")
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
 # } 
 # 
 # @author 
@@ -4284,8 +4298,8 @@ setMethodS3(
 		this,
 		process,
 		shape,	
-		ncat=4,
 		index,
+		ncat=4,
 		...
 	){
 
@@ -4337,11 +4351,23 @@ setMethodS3(
 #
 # @RdocMethod plusInvGamma
 # 
-# @title "Sample the rate multiplier parameters of a Process from an I+continuous Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
+# @title "Sample the rate multiplier parameters of a Process from an I+Gamma distribution for a collection of Site objects aggregated by a Sequence object" 
 # 
 # \description{ 
 #	@get "title".
+#
+#	The gamma distribution is discretized by calculating the means of the portions corresponding 
+#	to the categories having equal probabilities. If the \code{ncat} argument is not numeric, the 
+#	rates are sampled from the continuous gamma distribution.
 # } 
+#
+# \references{
+#	Gu X, Fu, YX, Li, WH (1995) Maximum likelihood estimation of the heterogeneity of substitution 
+#	rate among nucleotide sites - Mol. Biol. Evol. 12(4):546-57 \url{http://bit.ly/aE6xF0}
+#
+#	Yang, Z (1994) Maximum likelihood phylogenetic estimation from DNA sequences with variable 
+#	rates over sites: approximate methods - Journal of Molecular Evolution 39:306-314 \url{http://dx.doi.org/10.1007/BF00160154}
+# }
 # 
 # @synopsis 
 # 
@@ -4350,6 +4376,7 @@ setMethodS3(
 # 	\item{process}{A Process object.} 
 # 	\item{pinv}{The proportion of invariant sites.} 
 # 	\item{shape}{The shape parameter of the gamma distribution.} 
+# 	\item{index}{A vector of positions.} 
 # 	\item{ncat}{Numer of categories in the discretized gamma distribution (4 by default).} 
 # 	\item{...}{Not used.} 
 # } 
@@ -4366,11 +4393,14 @@ setMethodS3(
 #	attachProcess(s,p)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)	# the default value is 1.0
-#	# sample rate multipliers in range 1:5
-#	plusInvGamma(s,p,pinv=0.5,shape=05,1:5)
+#	# sample rate multipliers in range 1:5 from I+discrete Gamma
+#	plusInvGamma(s,p,pinv=0.5,shape=0.5,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)	# the default value is 1.0
-#	# sample rate multipliers in range 1:5 from a gamma distribution with
+#	# sample rates from an I+continuos Gamma model
+#	plusInvGamma(s,p,pinv=0.5,shape=0.5,1:5,ncat="cont")
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
 # } 
 # 
 # @author 
