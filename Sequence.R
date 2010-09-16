@@ -4197,10 +4197,27 @@ setMethodS3(
 		...
 	){
 		# figure out cutting points	
-		cut<-apply(rbind(1:(ncat-1)/ncat),1, function(x){qgamma(x,rate=shape,shape=shape)})	
-		cm<-function(a,b,shape){
-			pgamma(b*shape, rate=shape+1, shape=shape+1) - pgamma(a*shape, rate=shape+1, shape=shape+1)
+		cut<-apply(rbind(1:(ncat-1)/ncat),1, function(x){qgamma(x,shape=shape,rate=shape)})	
+		cut<-c(0,cut,Inf);
+
+		# incomplete gamma function
+		Igamma<-function(x,a){
+			pgamma(x,shape=a, scale=1)
 		}
+
+		# function to calculate a category mean
+		cm<-function(a,b,shape,ncat){
+			( Igamma(b * shape, shape+1) - Igamma(a * shape,shape+1)) * ncat;
+		}
+		
+		# calculate category means
+		means<-c();
+		for (i in 1:(length(cut)-1)){
+			means<-c(means,cm(cut[i], cut[i+1], shape, ncat));
+		}
+		
+		# return a vector with the means
+		return(means);
 
 	},
 	private=TRUE,
@@ -4292,8 +4309,14 @@ setMethodS3(
 			else {
 				index<-.checkIndexSanity(this, index);
 			}
-
-			setParameterAtSites(this, process=process, id="rate.multiplier",value=rgamma(length(index),shape=shape,rate=shape),index=index);
+		
+			if(!is.numeric(ncat)){
+				# continuous gamma	
+				setParameterAtSites(this, process=process, id="rate.multiplier",value=rgamma(length(index),shape=shape,rate=shape),index=index);
+			}
+			else{
+				setParameterAtSites(this, process=process, id="rate.multiplier",sample(.discretizeGamma(this,shape,ncat),size=length(index),replace=TRUE),index=index);
+			}
 			return(invisible(this));
 	
 		}
@@ -4400,6 +4423,12 @@ setMethodS3(
 				index<-.checkIndexSanity(this, index);
 			}
 
+			# discretize gamma distribution
+			dg<-c()
+			if(is.numeric(ncat)){
+				dg<-.discretizeGamma(this,shape,ncat);
+			}
+
 			# Iterating over the sites specified by the index vector:
 			
 			for(site in index){
@@ -4411,7 +4440,13 @@ setMethodS3(
 					setParameterAtSites(this, process=process, id="rate.multiplier",value=0,index=c(site));
 				}
 				else {
-					setParameterAtSites(this, process=process, id="rate.multiplier",value=rgamma(1,shape=shape,rate=shape),index=c(site));
+					if(!is.numeric(ncat)){
+						# continuous gamma	
+						setParameterAtSites(this, process=process, id="rate.multiplier",value=rgamma(1,shape=shape,rate=shape),index=c(site));
+					}
+					else{
+						setParameterAtSites(this, process=process, id="rate.multiplier",sample(dg,size=1),index=c(site));
+					}
 				}
 		
 			}
