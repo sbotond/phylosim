@@ -2185,7 +2185,7 @@ setMethodS3(
 					# Create a row of the states:
 					tmp<-rbind(as.character(lapply(from.seq$.sites, getState)));
 					# Label the columns by the site position:
-					colnames(tmp)<-seq(along=from.seq$.sites);
+					colnames(tmp)<-seq(along.with=from.seq$.sites);
 					# Label the row with the sequence name:
 					rownames(tmp)<-from.name;
 					# Set the corresponding list element in aln.mat:
@@ -2201,7 +2201,7 @@ setMethodS3(
 					# Create a vector of states:
 					tmp<-rbind(as.character(lapply(to.seq$.sites, getState)));
 					# Label columns by position:
-					colnames(tmp)<-seq(along=to.seq$.sites);
+					colnames(tmp)<-seq(along.with=to.seq$.sites);
 					# Label row by sequence name:
 					rownames(tmp)<-to.name;
 					aln.mat[[ to.name ]]<-tmp;

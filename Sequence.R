@@ -221,9 +221,9 @@ setConstructorS3(
 
 		# Site template object:
 			 site.template<-Site(
-            ancestral=root.ins,
-            sequence=this
-          );	
+            			ancestral=root.ins,
+            			sequence=this
+          	);	
 	
 
 		# Clone and store the site objects:
@@ -1017,7 +1017,7 @@ setMethodS3(
 	){
 
 		 if (missing(index)) {
-      index<-seq(along=this$.sites);
+      index<-seq(along.with=this$.sites);
     } else {
 			index<-.checkIndexSanity(this, index);
 		}
@@ -1101,7 +1101,7 @@ setMethodS3(
 			throw("No new values specified!\n");
 		}
 	  else if (missing(index)) {
-      index<-seq(along=this$.sites);
+      index<-seq(along.with=this$.sites);
     } else {
 			index<-.checkIndexSanity(this, index);
 		}
@@ -1183,7 +1183,7 @@ setMethodS3(
 	){
 	
  		if (missing(index)) {
-      index<-seq(along=this$.sites);
+      index<-seq(along.with=this$.sites);
     } else {
 			index<-.checkIndexSanity(this, index);
 		}
@@ -1278,7 +1278,7 @@ setMethodS3(
 		}
 
 	  if (missing(index)) {
-      index<-seq(along=this$.sites);
+      index<-seq(along.with=this$.sites);
     } else {
 			index<-.checkIndexSanity(this, index);	
 		}
@@ -1489,7 +1489,7 @@ setMethodS3(
 			throw("Process object invalid!\n");
 		}
  		if (missing(index)) {
-      		index<-seq(along=this$.sites);
+      		index<-seq(along.with=this$.sites);
     		} else {
 			index<-.checkIndexSanity(this, index);	
 		}
@@ -1567,7 +1567,7 @@ setMethodS3(
 			throw("Process object invalid!\n");
 		}
  		if (missing(index)) {
-      		index<-seq(along=this$.sites);
+      		index<-seq(along.with=this$.sites);
     		} else {
 			index<-.checkIndexSanity(this, index);
 		}
@@ -1638,7 +1638,7 @@ setMethodS3(
 	){
 	
  	if (missing(index)) {
-      	index<-seq(along=this$.sites);
+      	index<-seq(along.with=this$.sites);
     	} else {
 			index<-.checkIndexSanity(this, index);
 		}
@@ -1859,7 +1859,7 @@ setMethodS3(
 		}
 
 	  	if (missing(index)) {
-      		index<-seq(along=this$.sites);
+      		index<-seq(along.with=this$.sites);
     		} else {
 			index<-.checkIndexSanity(this, index);	
 		}
@@ -1965,7 +1965,7 @@ setMethodS3(
 		}
 
 		if (missing(index)) {
-			index<-seq(along=this$.sites);
+			index<-seq(along.with=this$.sites);
 		} else {
 			index<-.checkIndexSanity(this, index);
 		}
@@ -2203,7 +2203,7 @@ setMethodS3(
 		}
 
 		if (missing(index)) {
-			index<-seq(along=this$.sites);
+			index<-seq(along.with=this$.sites);
 		} else {
 				index<-.checkIndexSanity(this, index);
 		}	
@@ -2349,7 +2349,7 @@ setMethodS3(
 
 
 	if (missing(index)) {
-      	index<-seq(along=this$.sites);
+      	index<-seq(along.with=this$.sites);
     	} else {
         	index<-.checkIndexSanity(this, index);
     	}
@@ -2580,7 +2580,7 @@ setMethodS3(
 	){
 
 		if (missing(index)) {
-      			index<-seq(along=this$.sites);
+      			index<-seq(along.with=this$.sites);
     		} else {
         		index<-.checkIndexSanity(this, index);
    		}
@@ -3054,7 +3054,7 @@ setMethodS3(
 		that$.comments<-list();
 
 		# Cloning sites;
-		if(this$length > 0) {
+		if(this$.length > 0) {
 					for (i in 1:this$.length) {
 						site<-this$.sites[[i]];
 						clone<-clone(site);
@@ -3472,7 +3472,7 @@ setMethodS3(
 		}
     else {
       if(missing(index)) {
-        index<-seq(along=1:this$length,by=1);
+        index<-seq(along.with=1:this$length,by=1);
       }
       if(this$.cumulative.rate.flag){
         .recalculateCumulativeRates(this);
@@ -3569,7 +3569,7 @@ setMethodS3(
       	return(invisible(FALSE));
     	}
     	if(missing(index)) {
-      		index<-seq(along=3:this$length,by=1);
+      		index<-seq(along.with=3:this$length,by=1);
     	}
 		what<-apply(as.array(index),1,
 			function(pos){
@@ -3936,7 +3936,7 @@ setMethodS3(
 			index<-.checkIndexSanity(this, index);
 		}
 		else {
-			index<-seq(along=this$.sites);
+			index<-seq(along.with=this$.sites);
 		}
 	
     for(site in this$.sites[index]){
@@ -4048,7 +4048,7 @@ setMethodS3(
 			index<-.checkIndexSanity(this, index);
 		}
 		else {
-			index<-seq(along=this$.sites);
+			index<-seq(along.with=this$.sites);
 		}
 	
     		for(site in this$.sites[index]){
@@ -4171,7 +4171,7 @@ setMethodS3(
 			if(!missing(index)){
 				index<-.checkIndexSanity(this, index);
 			} else {
-				index<-seq(along=this$.sites);
+				index<-seq(along.with=this$.sites);
 			}
 
 			prop.table(table(as.character(lapply(this$.sites[index],getState))));
@@ -4318,7 +4318,7 @@ setMethodS3(
 		else {
 		
 			if(missing(index)){
-				index<-seq(along=this$.sites);
+				index<-seq(along.with=this$.sites);
 			}
 			else {
 				index<-.checkIndexSanity(this, index);
@@ -4447,7 +4447,7 @@ setMethodS3(
 		else {
 		
 			if(missing(index)){
-				index<-seq(along=this$.sites);
+				index<-seq(along.with=this$.sites);
 			}
 			else {
 				index<-.checkIndexSanity(this, index);
@@ -4827,7 +4827,7 @@ setMethodS3(
   ){
 
 		if(missing(index)) {
-				index<-seq(along=this$.sites);
+				index<-seq(along.with=this$.sites);
 		}
 		else {
 			index<-.checkIndexSanity(this, index);

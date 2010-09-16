@@ -528,7 +528,7 @@ setMethodS3(
     }
 
 		if(missing(index)){
-			index<-seq(along=this$.sites);
+			index<-seq(along.with=this$.sites);
 		}
 
 		if(missing(breaks)){
@@ -620,7 +620,7 @@ setMethodS3(
     else {
 
       if(missing(index)){
-        index<-seq(along=this$.sites);
+        index<-seq(along.with=this$.sites);
       }
       else {
         index<-.checkIndexSanity(this, index);
@@ -734,7 +734,7 @@ setMethodS3(
     else {
 
       if(missing(index)){
-        index<-seq(along=this$.sites);
+        index<-seq(along.with=this$.sites);
       }
       else {
         index<-.checkIndexSanity(this, index);
@@ -849,7 +849,7 @@ setMethodS3(
     else {
 
       if(missing(index)){
-        index<-seq(along=this$.sites);
+        index<-seq(along.with=this$.sites);
       }
       else {
         index<-.checkIndexSanity(this, index);
@@ -989,7 +989,7 @@ setMethodS3(
     else {
 
       if(missing(index)){
-        index<-seq(along=this$.sites);
+        index<-seq(along.with=this$.sites);
       }
       else {
         index<-.checkIndexSanity(this, index);
@@ -1123,7 +1123,7 @@ setMethodS3(
 		}
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -1245,7 +1245,7 @@ setMethodS3(
 		}
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -1307,7 +1307,7 @@ setMethodS3(
 		}
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -1399,7 +1399,7 @@ setMethodS3(
 
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -1460,7 +1460,7 @@ setMethodS3(
 		}
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -1541,7 +1541,7 @@ setMethodS3(
 		}
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -1633,7 +1633,7 @@ setMethodS3(
 
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -1725,7 +1725,7 @@ setMethodS3(
 
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -1814,7 +1814,7 @@ setMethodS3(
 		}
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -1911,7 +1911,7 @@ setMethodS3(
 		}
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -2022,7 +2022,7 @@ setMethodS3(
 		}
 
     if(missing(index)){
-    index<-seq(along=this$.sites);
+    index<-seq(along.with=this$.sites);
     }
     else {
       index<-.checkIndexSanity(this, index);
@@ -2097,7 +2097,7 @@ setMethodS3(
 			
 		  may.fail<-function(this) {
 	
-				for(pos in seq(along=this$.sites)){
+				for(pos in seq(along.with=this$.sites)){
 					if(!is.CodonAlphabet(this$.sites[[pos]]$.alphabet)){
 						throw("The alphabet attached to site ",pos," is not a codon alphabet!\n");
 					}
@@ -2169,7 +2169,7 @@ setMethodS3(
 			);
 
 			# Setting the states, using the site alphabet to translate codons for greater flexibility.
-			for (pos in seq(along=this$.sites)){
+			for (pos in seq(along.with=this$.sites)){
 				setState(that$.sites[[pos]], translateCodon(this$.sites[[pos]]$alphabet, this$.sites[[pos]]$state) );
 			}
 
