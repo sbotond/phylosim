@@ -10,7 +10,22 @@
 # 
 # \description{ 
 #
-#	
+#	PhyloSim is an extensible object-oriented framework for the Monte Carlo simulation 
+#	of sequence evolution.
+#	It is built on the top of the \code{\link{R.oo}} and \code{\link{ape}} packages and uses 
+#	Gillespie's direct method to simulate substitutions, insertions and deletions.
+#
+#	Key features offered by the framework:	
+#	\itemize{
+#	\item Explicit implementations of the most popular substitution models.
+# 	\item Simulation under the popular models of among-sites rate variation, like the gamma (+G) and invariants plus gamma (+I+G) models.
+#	\item The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any \code{R} expression.
+#	\item Simulation of one or more separate insertion and/or deletion processes acting on the sequences and which sample the insertion/deletion length from an arbitrary discrete distribution or an \code{R} expression (so all the probability distributions implemented in \code{R} are readily available for this purpose).
+#	\item Simulation of the effects of variable functional constraints over the sites by site-process specific insertion and deletion tolerance parameters which determine the rejection probability of a proposed insertion/deletion.
+#	\item The possibility of having a different set of processes and site-process specific parameters for every site, which allows for an arbitrary number of partitions in the simulated data.
+#	\item The possibility to evolve sites by a mixture of substitution processes along a single branch.
+#	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes.
+#	}
 #
 #	The examples below demonstrate only some more common simulation settings,
 #	the framework offers much more flexibility. See the package vignette and the
@@ -18,6 +33,11 @@
 #	for additional examples.
 #	
 #	@classhierarchy
+# }
+#
+# \references{
+#	Gillespie, DT (1977) Exact stochastic simulation of coupled chemical reactions - 
+#	J. Phys. Chem. 81 (25):2340-2361 \url{http://dx.doi.org/10.1021/j100540a008}
 # }
 #	
 # @synopsis
