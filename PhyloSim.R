@@ -78,7 +78,7 @@
 #		PhyloSim(phy=rcoal(3),root=NucleotideSequence(string="ATGC", proc=list(list(JC69())) ) )
 #	)$alignment
 #
-#	# Create a phylo object for the next
+#	# Construct a phylo object for the next
 #	# simulations, scale total tree length to 2:
 #
 #	tmp<-PhyloSim(phylo=rcoal(3))
@@ -120,7 +120,6 @@
 #               ),
 #               base.freqs=c(2,2,1,1)/6
 #       )
-#	# set kappa
 #	# get object summary
 #	summary(gtr)
 #	# get a bubble plot
@@ -142,7 +141,7 @@
 #	# get the rate multipliers for s and gtr
 #	getRateMultipliers(s,gtr)
 #
-#	# construct deletion process object
+	# construct deletion process object
 #	# proposing length in range 1:3
 #	d<-DiscreteDeletor(
 #		rate=1,
