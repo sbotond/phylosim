@@ -37,32 +37,20 @@ summary(gtr)
 plot(gtr)
 
 # construct root sequence object
-Rprof(filename="1_construct.prof");
 s<-NucleotideSequence(length=1000)
-Rprof(NULL);
-system("R CMD Rprof 1_construct.prof > 1_construct.txt")
 
 # attach process via virtual field
-Rprof(filename="2_attach.prof");
 s$processes<-list(list(gtr))
-Rprof(NULL);
-system("R CMD Rprof 2_attach.prof > 2_attach.txt")
 
 # sample states from the equilibrium
 # distribution of the attached processes
 
-Rprof(filename="3_sample_states.prof");
 sampleStates(s)
-Rprof(NULL);
-system("R CMD Rprof 3_sample_states.prof > 3_sample_states.txt")
 
 # create among-sites rate variation by sampling
 # the "rate.multiplier" site-process specific parameter
 # from a discrete gamma distribution (F84+G).
-Rprof(filename="4_plus_gamma.prof");
 plusGamma(s,gtr,shape=0.5)
-Rprof(NULL);
-system("R CMD Rprof 4_plus_gamma.prof > 4_plus_gamma.txt")
 
 # make the range 11:20 invariable
 setRateMultipliers(s,gtr,0,11:20)
@@ -113,19 +101,13 @@ attachProcess(s,i)
 # create a region rejecting all insertions
 setInsertionTolerance(s,i,0,11:20)
 
-Rprof(filename="5_calc_rate.prof");
 s$bigRate
-Rprof(NULL)
-system("R CMD Rprof 5_calc_rate.prof > 5_calc_rate.txt")
 
 # plot total site rates
 plot(s)
 
 # construct simulation object
-Rprof(filename="6_construct_sim.prof");
 sim<-PhyloSim(root.seq=s, phylo=t)
-Rprof(NULL)
-system("R CMD Rprof 6_construct_sim.prof > 6_construct_sim.txt")
 
 # get object summary
 summary(sim)
@@ -134,10 +116,7 @@ summary(sim)
 plot(sim)
 
 # run simulation
-Rprof(filename="7_simulate.prof");
 Simulate(sim)
-Rprof(NULL)
-system("R CMD Rprof 7_simulate.prof > 7_simulate.txt")
 
 # plot tree and alignment
 plot(sim)
