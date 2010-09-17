@@ -501,6 +501,8 @@ setMethodS3(
 # }
 # 
 # \examples{ 
+#	# enable fast & careless mode
+#	PSIM_FAST<-TRUE
 #	# create substitution process object
 #       p<-GTR(
 #		rate.params=list(
@@ -527,10 +529,12 @@ setMethodS3(
 #	getRateMultipliers(s,p)
 #	# create a simulation object
 #	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
-#	# run simulation
+#	# enable fast & careless mode
 #	Simulate(sim)
 #	# print alignment
 #	sim$alignment
+#	# disable fast & careless mode
+#	rm(PSIM_FAST)
 # }
 # 
 # @author

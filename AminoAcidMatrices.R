@@ -883,6 +883,8 @@ setConstructorS3(
 # }
 # 
 # \examples{ 
+#       # enable fast & careless mode
+#       PSIM_FAST<-TRUE
 #	# create substitution model object 
 #	p<-WAG()
 #	# get object summary	
@@ -907,6 +909,8 @@ setConstructorS3(
 #       Simulate(sim)
 #       # print alignment
 #       sim$alignment
+#       # enable fast & careless mode
+#       PSIM_FAST<-TRUE
 # }
 # 
 # @author

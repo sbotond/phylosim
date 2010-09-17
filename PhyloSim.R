@@ -1182,6 +1182,14 @@ setMethodS3(
 			if(this$.root.sequence$bigRate == 0){
 				warning("The bigRate of the root sequence is zero! You are running a pointless simulation!\n");
 			}
+
+			if(exists(x="PSIM_FAST")){
+cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+cat("!! WARNING: fast & careless mode is on, most of the error checking is omitted!  !!\n");
+cat("!!    Please note that this also disables the saving of branch statistics.      !!\n");
+cat("!!       You can go back to normal mode by deleting the PSIM_FAST object.       !!\n");
+cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+			}
 		
 			# Attach root sequence to root node:
 			Log(this,paste("Attaching root sequence ",this$.root.sequence$id,sep=""));
