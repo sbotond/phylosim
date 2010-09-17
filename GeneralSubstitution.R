@@ -339,10 +339,13 @@ setMethodS3(
 	# The main method of this class,
 	# generating a list of event objects given the 
 	# state of the target site.
-
+	if(!exists(x="PSIM_FAST")){
+	
 	if(missing(target.site)) {
       		throw("No target site provided!\n");
     	} 
+	
+	}
 	
 	# The following code is commented out to
 	# increase speed
@@ -491,6 +494,8 @@ setMethodS3(
   ){
 
     .checkWriteProtection(this);
+if(!exists(x="PSIM_FAST")){
+
     if(!is.Alphabet(this$alphabet)){
       	throw("Cannot set equilibrium distribution because the alphabet is undefined!");
     }
@@ -499,23 +504,25 @@ setMethodS3(
     else if(!is.numeric(value)) {
       throw("The new value must be numeric!\n");
     }
-    else if(length(value) != this$alphabet$size){
+}
+    if(length(value) != this$alphabet$size){
       throw("The new value must be a vector of length ",this$alphabet$size,"!\n");
     }
-    else if(!PSRoot$my.all.equal(sum(value), 1.0)) {
+    if(!PSRoot$my.all.equal(sum(value), 1.0)) {
 				value<-(value/sum(value));
 				if (silent == FALSE){
 					warning("The provided probabilities have been rescaled in order to sum to one!\n");
 				}
     }
 
-		# Check if the provided equlibrium distribution is
-		# compatible with the rate matrix:
-		 if( !.checkEquMatCompat(this, rbind(value)) & force==FALSE){
+if(!exists(x="PSIM_FAST")){
+	# Check if the provided equlibrium distribution is
+	# compatible with the rate matrix:
+	if( !.checkEquMatCompat(this, rbind(value)) & force==FALSE){
 				throw("The provided equlibrium distribution: ",paste(value,collapse=" ")," is not compatible with the rate matrix! Use force=TRUE to set it anyway!\n");
-			}
-			
-			# Set the value:
+	}
+}
+	# Set the value:
       this$.equ.dist<-rbind(value);
 			# Set dimnames:
       colnames(this$.equ.dist)<-(this$alphabet$symbols);
@@ -806,25 +813,26 @@ setMethodS3(
 		...
 	){
 
+	if(!exists(x="PSIM_FAST")){
 		if(any(is.na(this$.equ.dist))){
 			throw("Cannot sample state because the equlibrium distribution is not defined!\n");
 		}
 		else if (!is.Alphabet(this$.alphabet)){
 			throw("Cannot sample state because the alphabet is not valid! That is strange as equlibrium distribution is defined!\n");	
 		}
-		else {
-				if(this$.alphabet$size == 0){
-					throw("The process alphabet is empty, nothing to sample here!\n");
-				}
-				if(this$.alphabet$size == 1){
-					# Special case: single letter in the alphabet:
-					return(this$.alphabet$symbols[[1]]);
-				}
-				else {
-					# Sample from the equlibrium distribution:
-					sample(x=this$.alphabet$.symbols, size=1, replace=FALSE, prob=this$.equ.dist);
-				}
-		}
+	}
+	
+	if(this$.alphabet$size == 0){
+		throw("The process alphabet is empty, nothing to sample here!\n");
+	}
+	if(this$.alphabet$size == 1){
+	# Special case: single letter in the alphabet:
+		return(this$.alphabet$symbols[[1]]);
+	}
+	else {
+	# Sample from the equlibrium distribution:
+		sample(x=this$.alphabet$.symbols, size=1, replace=FALSE, prob=this$.equ.dist);
+	}
 
 	},
 	private=FALSE,
@@ -967,6 +975,7 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
 		if(missing(value)){
 			throw("No new value provided!\n");
 		}
@@ -982,9 +991,8 @@ setMethodS3(
 		else if(getAlphabet(this) != value$alphabet){
 			throw("Alphabet mismatch! Cannot set QMatrix!\n");	
 		}
-		else {
-			this$.q.matrix<-value;
-		}
+	}
+		this$.q.matrix<-value;
 		return(this$.q.matrix)
 
 	},
@@ -1057,19 +1065,20 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
 		if(missing(value)){
 			throw("No new value provided!\n");
 		}
 		else if (!is.Alphabet(value)){
 			throw("Alphabet object is invalid!\n");
 		} else {
-			this$.alphabet<-value;
-			# Set the QMatrix alphabet
-			if(is.QMatrix(this$.q.matrix)){
-				setAlphabet(this$.q.matrix, value);
-			}
-			.initEquDist(this);
-		}	
+	}
+		this$.alphabet<-value;
+		# Set the QMatrix alphabet
+		if(is.QMatrix(this$.q.matrix)){
+			setAlphabet(this$.q.matrix, value);
+		}
+		.initEquDist(this);
 		return(this$.alphabet);
 
 	},
@@ -1277,9 +1286,11 @@ setMethodS3(
 	){
 
 		# For getting the scaled event rate:
+	if(!exists(x="PSIM_FAST")){
 		if(!is.QMatrix(this$.q.matrix)){
 			throw("Cannot get rate as the rate matrix is undefined!\n");
 		}
+	}
 		else if(!missing(name) & missing(from) & missing(to)){
 			return(getEventRate(this$.q.matrix, name=name));
 		}
@@ -1364,14 +1375,17 @@ setMethodS3(
     ...
   ){
 
+if(!exists(x="PSIM_FAST")){
+
       if(missing(site)){
         throw("No site provided");
       }
       else if (!isAttached(site, process=this)){
         throw("The process is not attached to the specified site!\n");
       }
+}
 
-      glbal.rate<-numeric();
+      global.rate<-numeric();
 			
 			# Event specified by name:
       if(!missing(name) & missing(from) & missing(to)){
@@ -1385,7 +1399,7 @@ setMethodS3(
         throw("The substitution should be specified by name or by the \"from\" and \"to\" arguments!\n");
       }
 
-      return(global.rate * getParameterAtSite(this, site, "rate.multiplier")$value );
+      return(global.rate * site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value );
 
   },
   private=FALSE,
@@ -1457,11 +1471,14 @@ setMethodS3(
 		to=NA,
 		...
 	){
-		
+
+	if(!exists(x="PSIM_FAST")){
+	
 		if(!is.QMatrix(this$.q.matrix)){
 			throw("Cannot get rate as the rate matrix is undefined!\n");
 		}
-		else if(!missing(name) & missing(from) & missing(to)){
+	}
+		if(!missing(name) & missing(from) & missing(to)){
 			return(getRate(this$.q.matrix, name=name));
 		}
 		else if (missing(name) & !missing(from) & !missing(to)){
@@ -1549,10 +1566,12 @@ setMethodS3(
 		
 		.checkWriteProtection(this);
 		# Setting unscaled rate:
+	if(!exists(x="PSIM_FAST")){
 		if(!is.QMatrix(this$.q.matrix)){
 			throw("Cannot set rate as the rate matrix is undefined!\n");
 		}
-		else if(!missing(name) & missing(from) & missing(to)){
+	}
+		if(!missing(name) & missing(from) & missing(to)){
 			return(setRate(this$.q.matrix, name=name, value=value));
 		}
 		else if (missing(name) & !missing(from) & !missing(to)){
@@ -1626,13 +1645,14 @@ setMethodS3(
 		this,
 		...
 	){
+
+	if(!exists(x="PSIM_FAST")){
 		
 		if(!is.QMatrix(this$.q.matrix)){
 			throw("Cannot get rate list as the rate matrix is undefined!\n");
 		} 
-		else {
-			return(getRateList(this$.q.matrix));
-		}
+	}
+		return(getRateList(this$.q.matrix));
 
 
 	},
@@ -1705,15 +1725,16 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
+
 		if(!is.QMatrix(this$.q.matrix)){
 			throw("Cannot get rate list as the rate matrix is undefined!\n");
 		} 
 		else if(missing(value)){
 			throw("No new rate list specified!\n");
 		}
-		else {
-			return(setRateList(this$.q.matrix, value) );
-		}
+	}
+		return(setRateList(this$.q.matrix, value) );
 
 	},
 	private=FALSE,
@@ -1780,6 +1801,8 @@ setMethodS3(
 		...
 	){
 
+	if(!exists(x="PSIM_FAST")){
+
 		if(is.na(this$.q.matrix)){
 			return(invisible(FALSE));
 		}
@@ -1792,34 +1815,32 @@ setMethodS3(
 		else if(any(is.na(this$.equ.dist))){
 			throw("Cannot rescale rate matrix because the equlibrium distribution is not defined properly!\n");
 		}
-		else {
+		# Check for alphabet mismatch:
+		if(this$alphabet != this$.q.matrix$.alphabet){
+			throw("The process alphabet and the QMatrix alphabet is not the same! Refusing to rescale!\n");
+		}
+	}
+		# Set rescaling constant to zero:
+		K <- 0; 
+		# get the symbols:
+		symbols<-this$alphabet$symbols;
 			
-			# Set rescaling constant to zero:
-			K <- 0; 
-			# Check for alphabet mismatch:
-			if(this$alphabet != this$.q.matrix$.alphabet){
-				throw("The process alphabet and the QMatrix alphabet is not the same! Refusing to rescale!\n");
+		# For every symbol:
+		for (i in symbols) {
+		# Get the equlibrium probability:
+		i.equ<-this$.equ.dist[[ which(colnames(this$.equ.dist) == i) ]];
+		for(j in symbols){
+			if(i == j){next}
+			# For every other symbol - update the constant:
+			K <- K + (i.equ * getRate(this$.q.matrix, from=i, to=j ) );
 			}
-			# get the symbols:
-			symbols<-this$alphabet$symbols;
-			
-			# For every symbol:
-			for (i in symbols) {
-		  	# Get the equlibrium probability:
-				i.equ<-this$.equ.dist[[ which(colnames(this$.equ.dist) == i) ]];
-				for(j in symbols){
-					if(i == j){next}
-					# For every other symbol - update the constant:
-					K <- K + (i.equ * getRate(this$.q.matrix, from=i, to=j ) );
-				}
-			}
+		}
 	
     		Scale(this$.q.matrix,constant=(1/K));
 		# After rescaling the expected rate of substitutions per site
 		# at equlibrium is 1.
 		return(invisible(TRUE));
 
-		}
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -1944,7 +1965,7 @@ setMethodS3(
 		...
 	){
 
-		getId(x);
+		x$.id;
 
 	},
 	private=FALSE,
