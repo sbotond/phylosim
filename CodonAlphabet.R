@@ -4774,7 +4774,7 @@ setMethodS3(
 	...
   ){
 
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 		if(missing(codon)){
 			throw("No codon given!\n");
 		}
@@ -4851,7 +4851,7 @@ setMethodS3(
     codon,
     ...
   ){
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 		if(missing(codon)){
 			throw("No codon given!\n");
 		}
@@ -4925,7 +4925,7 @@ setMethodS3(
 		codon,
     ...
   ){
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 		if(missing(codon)){
 			throw("No codon given!\n");
 		}
@@ -5000,7 +5000,7 @@ setMethodS3(
 	...
   ){
 
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 		if(missing(codons)){
 			throw("No codons given!\n");
 		}
@@ -5036,7 +5036,7 @@ setMethodS3(
     ...
   ){
 
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 
 		if(missing(codons)){
 			throw("No codons given!\n");

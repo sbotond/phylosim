@@ -320,7 +320,7 @@ setMethodS3(
 		...
 	){
 		.checkWriteProtection(this);	
-		if(!PSIM_FAST){
+		if(!exists(x="PSIM_FAST")){
 		
 		if(missing(new.name)){throw("No new name provided!\n")}
 		new.name<-as.character(new.name);	
@@ -448,7 +448,7 @@ setMethodS3(
 	){
 	
 		.checkWriteProtection(this);	
-		if(!PSIM_FAST){
+		if(!exists(x="PSIM_FAST")){
 		
 		if(missing(new.rate)){throw("No new rate provided!\n")}
 		else if (!is.numeric(new.rate)){throw("The rate must be numeric!\n")}
@@ -576,7 +576,7 @@ setMethodS3(
 	){
 		
 		.checkWriteProtection(this);	
-		if(!PSIM_FAST){
+		if(!exists(x="PSIM_FAST")){
 		
 		if(missing(new.proc)){throw("No new rate provided!\n")}
 		else if (!is.Process(new.proc)){throw("Process object invalid!\n")}
@@ -884,7 +884,7 @@ setMethodS3(
 		...
 	){
 
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 		if(is.na(this$.site)){
 			throw("There is no assotiated Site object!\n");
 		}	
@@ -1023,7 +1023,7 @@ setMethodS3(
 	){
 		
 		.checkWriteProtection(this);	
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 		if (is.na(this$.site)) {
 			throw("The event has no target site, so target alphabet is unknown. Refusing to set targetState!\n");
 		}	
@@ -1106,7 +1106,7 @@ setMethodS3(
 	){
 			
 		.checkWriteProtection(this);	
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 		if (!is.Site(new.site)) {throw("Site object invalid!\n")}
 		new.site<-enableVirtual(new.site);
 		if(missing(new.site)) {throw("No site given")}
@@ -1188,7 +1188,7 @@ setMethodS3(
 		...
 	){
 	
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 		if(!is.function(this$.handler)){throw("Event handler is not a function!\n")}		
 		else if (!is.Site(this$.site)){throw("The site associated with the event is not valid!\n")}
 		else if(is.null(this$.position)){throw("The target site position is unknown!Refusing to perform event!\n")}
@@ -1242,7 +1242,7 @@ setMethodS3(
 		new.handler,
 		...
 	){
-		if(!PSIM_FAST){
+		if(!exists(x="PSIM_FAST")){
 		if(missing(new.handler)){throw("No new handler provided!\n")}
 		else if (!is.function(new.handler)){throw("The handler must be a function!\n")}
 		}
@@ -1376,7 +1376,7 @@ setMethodS3(
     ...
   ){
 
-    if(!PSIM_FAST){
+    if(!exists(x="PSIM_FAST")){
     	if(!is.logical(value)) {throw("The new value must be logical!\n")}
     }
     this$.write.protected<-value;
@@ -1401,7 +1401,7 @@ setMethodS3(
     ...
   ){
 
-    if(PSIM_FAST){return(FALSE)}
+    if(exists(x="PSIM_FAST")){return(FALSE)}
     if(this$writeProtected) {throw("Cannot set value because the object is write protected!\n")}
     else {return(FALSE)}
 

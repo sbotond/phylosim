@@ -65,7 +65,7 @@ setConstructorS3(
 	if(!missing(symbols)){
 		symbols<-as.character(symbols);
 		symbol_length<-.checkSymbolLengths(symbols);
-		if(!PSIM_FAST){
+		if(!exists(x="PSIM_FAST")){
 			.checkSymbolDuplicates(symbols);
 		}
 
@@ -309,7 +309,7 @@ setMethodS3(
 		# First check by reference:
 		if ( equals(e1,e2) ) {return(TRUE)}
 		# Check if both objects inherit from Alphabet:
-		if(!PSIM_FAST){
+		if(!exists(x="PSIM_FAST")){
 			if (!length(intersect(intersect(class(e1),class(e2)),c("Alphabet")))){
 				throw("Alphabet object compared to something else!");
 			}
@@ -466,7 +466,7 @@ setMethodS3(
 			}
 			.checkWriteProtection(this);	
 			set<-as.character(set);					
-			if(!PSIM_FAST){
+			if(!exists(x="PSIM_FAST")){
 				.checkSymbolDuplicates(set)
 			}
 			this$.symbolLength<-.checkSymbolLengths(set);
@@ -760,7 +760,7 @@ setMethodS3(
 
 		
 		.checkWriteProtection(this);	
-		if(!PSIM_FAST){
+		if(!exists(x="PSIM_FAST")){
 			if (length(new_type) != 1) {throw("The new type must be a character vector of length 1!")}	
 			if (new_type == "" ){ throw("Cannot set empty type!")}
 		}
@@ -991,7 +991,7 @@ setMethodS3(
 		this,
 		...
 	){
-		if(PSIM_FAST){ return(FALSE) }	
+		if(exists(x="PSIM_FAST")){ return(FALSE) }	
 
 		if(this$writeProtected) {throw("Cannot set value because the object is write protected!\n")}
 		else {return(invisible(FALSE))}

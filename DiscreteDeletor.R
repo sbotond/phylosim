@@ -113,7 +113,7 @@ setConstructorS3(
 		}
 
 		this$proposeBy<-function(process=NA,...){
-			if(!PSIM_FAST){
+			if(!exists(x="PSIM_FAST")){
 			if( !is.numeric(process$.sizes) | !is.numeric(process$.probs) ){
 				throw("Cannot propose deletion length because the length distribution is not defined properly!\n");
 			}

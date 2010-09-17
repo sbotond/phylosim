@@ -114,7 +114,7 @@ setConstructorS3(
 		}
 
 		this$proposeBy<-function(process=NA,...){
-			if(!PSIM_FAST){
+			if(!exists(x="PSIM_FAST")){
 				if(!is.expression(process$.dist)){
 					throw("\"dist\" is undefined, so cannot propose deletion length!\n");
 				}

@@ -472,7 +472,7 @@ setMethodS3(
 		# Duplicating the method is not too elegant, but this way we can avoid the additonal method calls
 		# sloving down the simulation.
 
-	if (!PSIM_FAST) {
+	if (!exists(x="PSIM_FAST")) {
 
       			if(!is.Site(target.site)) {
       			  throw("Target site invalid!\n");
@@ -782,7 +782,7 @@ setMethodS3(
 
     	.checkWriteProtection(this);
     	# Setting unscaled rate:
-	if(!PSIM_FAST) {
+	if(!exists(x="PSIM_FAST")) {
     		if(!is.QMatrix(this$.q.matrix)){
       			throw("Cannot set rate as the rate matrix is undefined!\n");
     		}
@@ -917,7 +917,7 @@ setMethodS3(
   ){
 	
 	.checkWriteProtection(this);		
-	if(!PSIM_FAST){
+	if(!exists(x="PSIM_FAST")){
 			if(missing(value)){
 				throw("No new value provided");
 			}
