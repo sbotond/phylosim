@@ -1314,6 +1314,9 @@ setMethodS3(
     ...
   ){
 
+    if(!exists(x="PSIM_FAST")){
+ 	return(FALSE);
+    }
     if(this$writeProtected) {throw("Cannot set value because the object is write protected!\n")}
     else {return(FALSE)}
 

@@ -728,6 +728,9 @@ setMethodS3(
 	){
 
 	.checkWriteProtection(this);
+
+	if(!exists(x="PSIM_FAST")){
+
 	if(missing(value)){
 		throw("No new value provided!\n");
 	}
@@ -742,8 +745,11 @@ setMethodS3(
 	if(is.matrix(this$.rate.matrix)){
 			warning("Be aware that setting a new alphabet wipes out completely the rate matrix!\n");
 	}
-		this$.alphabet<-value;
-		.buildRateMatrix(this);
+	
+	}
+	
+	this$.alphabet<-value;
+	.buildRateMatrix(this);
 	return(this$.alphabet);
 
 	},
@@ -765,10 +771,6 @@ setMethodS3(
 		name,
 		...
 	){
-
-		if(missing(name)){
-			throw("No name provided!\n");
-		}
 
 		# split the name
 		substitution<-rbind(strsplit(name,split="->")[[1]]);
@@ -830,17 +832,7 @@ setMethodS3(
 		dim,
 		...
 	){
-
-		if(missing(dim)){
-			throw("No event vector provided!\n");
-		}
-		else if(length(dim) != 2) {
-			throw("Event vector is invalid!\n");
-		}
-		# FIXME alphabet check
 		paste(dim,collapse="->");
-
-
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -911,9 +903,6 @@ setMethodS3(
 		...
 	){
 
-			if (isEmpty(this$.alphabet)){
-				throw("Alphabet is valid but empty, so no rates are defined!\n");
-			}
 			# Event specified by name:
 			else if(!missing(name) & missing(from) & missing(to)){
 				# convert to dimnames
@@ -1026,9 +1015,6 @@ setMethodS3(
 		...
 	){
 
-			if (isEmpty(this$.alphabet)){
-				throw("Alphabet is valid but empty, so no rates are defined!\n");
-			}
 			# Event specified by name:
 			else if(!missing(name) & missing(from) & missing(to)){
 				# Convert to dimnames:
@@ -1131,6 +1117,8 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
+
 		if (isEmpty(this$.alphabet)){
 				throw("Alphabet is valid but empty, so no rates are defined!\n");
 		}
@@ -1141,7 +1129,8 @@ setMethodS3(
 		}
 		else if (value < 0){
 			throw("Cannot set negative rate!\n");
-		} else {
+		}
+	}
 			
 			.from<-character();		
 			.to<-character();		
@@ -1189,8 +1178,6 @@ setMethodS3(
 			 		}
 			}
 		 return(invisible(value));
-
-		}
 
 
 	},
@@ -1475,6 +1462,10 @@ setMethodS3(
 		symbol=NA,
 		...
 	){
+
+		if(exists(x="PSIM_FAST")){
+			return(which(rownames(this$.orig.matrix) == symbol));
+		}
 
 		if(missing(symbol)){
 			throw("No symbol specified");
@@ -1774,12 +1765,14 @@ setMethodS3(
 		...
 	){
 
+	if(!exists(x="PSIM_FAST")){
+
 		if(missing(constant)){
 			throw("No scaling constant specified!\n");
 		if(!is.numeric(constant)){
 			throw("Scaling constant must be numeric!\n");
 		}
-		} else {
+	}
 			 
 			 # Set the rescaled matrix to the original matrix
 			 # multiplied by the given constant:
@@ -1787,8 +1780,6 @@ setMethodS3(
 			 # store the current rescaling constant:
 			 this$.norm.const<-constant;
 			 return(invisible(this));
-		}
-
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -2284,8 +2275,12 @@ setMethodS3(
     ...
   ){
 
-    if(this$writeProtected) {throw("Cannot set value because the object is write protected!\n")}
-    else {return(FALSE)}
+   if(!exists(x="PSIM_FAST")){
+	return(FALSE);
+   }
+   
+ 	if(this$writeProtected) {throw("Cannot set value because the object is write protected!\n")}
+    	else {return(FALSE)}
 
   },
   private=FALSE,
