@@ -4648,10 +4648,11 @@ setMethodS3(
 
 		if(length(this$.sites) != (this$.length + insert$.length)) {
 			throw("Length inconsistency after insertion!\n");
-		} else {
-			this$.length<-(this$.length + insert$.length);
 		}
 	  }
+
+	# Setting new length:	
+	this$.length<-(this$.length + insert$.length);
 	# Flagging the inserted sites:
 		this$.flagged.sites<-c(this$.flagged.sites,(position+1):(position+insert$.length));
 
