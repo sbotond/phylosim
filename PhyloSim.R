@@ -107,6 +107,13 @@
 #	# display alignment matrix
 #	sim$alignment
 #
+#	## Check the consistency of object p
+#	print(checkConsistency(p))
+#
+#	## Check the consistency of all PhyloSim
+#	## related objects.
+#	PSRoot$globalConsistencyCheck();
+#
 #	## Example 3 - simulating rate variation,
 #	## insertions and deletions.
 #	## See the examples/example_3_clean.R file
@@ -204,8 +211,15 @@
 #	# delete Fasta file
 #	unlink(file);
 #
-#	## Example 4 - simulating amino acid sequences,
+#	## Example 4 - simulating amino acid sequences
 #	## and exploring more facilities.
+#
+#	# enable fast & careless mode
+#	# WARNING: do not do this only
+#	# if you are sure, that your simulation
+#	# setting is 100% flawless!
+#
+#	PSIM_FAST<-TRUE;
 #	
 #	# construct substitution model objects
 #	wag<-WAG()
@@ -213,9 +227,11 @@
 #	# get a bubble plot of wag
 #	plot(wag)
 #	# construct root sequence
-#	s<-AminoAcidSequence(length=30)
+#	s<-AminoAcidSequence(length=50)
 #	# attach process wag to range 1:10
 #	attachProcess(s,wag,1:10)
+#	# attach process lg to range 31:50
+#	attachProcess(s,lg,31:50)
 #	# create a pattern of processes in range 11:30
 #	setProcesses(s,list(list(wag),list(lg),list(wag,lg)),11:30)
 #	# set rate multipliers to reduce 
@@ -235,10 +251,6 @@
 #	sim$logLevel<-1
 #	# run simulation
 #	Simulate(sim)
-#	# export the number of substitutions as a phylo object
-#	subst<-exportStatTree(sim,"substitution")
-#	# plot the exported phylo object
-#	plot(subst)
 #	# get a sequence object 
 #	rs<-sim$sequences[[4]]
 #	# print sequence string
@@ -251,6 +263,9 @@
 #	cat(paste(scan(nmax=20,file=sim$logFile,what=character(),sep="\n"),collapse="\n"));cat("\n");
 #	# delete log file
 #	unlink(sim$logFile);
+#
+#	# disable fast & careless mode
+#	rm(PSIM_FAST)
 #
 #	## See the package vignette and 
 #	## the GitHub repository for more examples.
@@ -3656,7 +3671,7 @@ setMethodS3(
 		...
 	){
 
- 		if(length(this$.branch.stats) != this$nedges){
+ 		if(!is.matrix(this$.alignment)){
       			throw("Simulation is not complete, cannot export statistics!\n");
     		}
 		else if(missing(event)){
