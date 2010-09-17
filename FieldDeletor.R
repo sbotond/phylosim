@@ -431,9 +431,10 @@ setMethodS3(
     ...
   ){
 
-    if(missing(target.site)) {
-      throw("No target site provided!\n");
-    } else if (!sloppy) {
+  if(!exists(x="PSIM_FAST")){
+      if(missing(target.site)) {
+         throw("No target site provided!\n");
+      }
       if(!is.Site(target.site)) {
         throw("Target site invalid!\n");
       }
@@ -443,12 +444,13 @@ setMethodS3(
       else if (!is.function(this$.accept.by)){
         throw("acceptBy is not set, cannot generate deletion event deletion!\n");
       }
-    } #/!sloppy
 
-     # Complain if sequence has a zero length:
-     if(target.site$.sequence$.length == 0) {
+      # Complain if sequence has a zero length:
+      if(target.site$.sequence$.length == 0) {
        throw("Sequence has zero length so there is nothing to delete! How did you get here anyway?\n");
-     }
+      }
+    
+    } 
 
      # Clone the event template object:
      deletion.event<-clone(this$.event.template);
@@ -1081,8 +1083,8 @@ setMethodS3(
     this,
     site,
     id,
-		value,
-		...
+    value,
+    ...
   ){
 			if(value < 0 | value > 1)	{
 				throw("The field deletion model accepts deletion tolerance only from the [0,1] interval!\n");
