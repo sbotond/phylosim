@@ -1071,7 +1071,7 @@ setMethodS3(
 		}
 		else if (!is.Alphabet(value)){
 			throw("Alphabet object is invalid!\n");
-		} else {
+		}
 	}
 		this$.alphabet<-value;
 		# Set the QMatrix alphabet

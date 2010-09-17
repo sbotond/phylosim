@@ -904,7 +904,7 @@ setMethodS3(
 	){
 
 			# Event specified by name:
-			else if(!missing(name) & missing(from) & missing(to)){
+			if(!missing(name) & missing(from) & missing(to)){
 				# convert to dimnames
 				tmp<-.nameToDim(this, name);
 				# Return the rate from the rescaled matrix: 
@@ -1016,7 +1016,7 @@ setMethodS3(
 	){
 
 			# Event specified by name:
-			else if(!missing(name) & missing(from) & missing(to)){
+			if(!missing(name) & missing(from) & missing(to)){
 				# Convert to dimnames:
 				tmp<-.nameToDim(this, name);
 				# return unscaled rate:
@@ -1769,6 +1769,7 @@ setMethodS3(
 
 		if(missing(constant)){
 			throw("No scaling constant specified!\n");
+		}
 		if(!is.numeric(constant)){
 			throw("Scaling constant must be numeric!\n");
 		}
