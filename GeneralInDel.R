@@ -345,13 +345,14 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
 		if(missing(value)) {
 			throw("No new value provided!\n");}
 		else if(!is.numeric(value)) {
 			throw("Rate must be numeric!\n");
-		} else {
-			this$.rate<-value;
-		}
+		} 
+	}	
+		this$.rate<-value;
 		return(this$.rate);
 
 	},
@@ -482,14 +483,15 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
 		if(missing(value)) {
 				throw("No new value provided!\n");	
 		}
 		else if(!is.function(value)){
 			 throw("The value of proposeBy must be a function.!\n");	
-		} else {
-			this$.propose.by<-value;
 		}
+	}
+		this$.propose.by<-value;
 		return(invisible(this$.propose.by));
 
 	},
@@ -620,14 +622,15 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
 		if(missing(value)) {
 				throw("No new value provided!\n");	
 		}
 		else if(!is.function(value)){
 			 throw("The value of acceptBy must be a function.!\n");	
-		} else {
-			this$.accept.by<-value;
 		}
+	}
+		this$.accept.by<-value;
 		return(invisible(this$.accept.by));
 
 	},
@@ -1011,13 +1014,15 @@ setConstructorS3(
 	###	
 
 	 this$generateBy<-function(process=NA,length=NA,target.seq=NA,event.pos=NA,insert.pos=NA){
-	
+
+		if(!exists(x="PSIM_FAST")){	
 			if(is.na(length) | (length(length) == 0) | length == 0){
 				throw("Invalid insert length!\n");
 			}	
 			else if(is.na(process$.template.seq)){
 				throw("Cannot generate insert without template sequence!\n");
 			}
+		}
 
 			times<-( ceiling( length/this$.template.seq$.length) );
 			to.delete<-( ( (this$.template.seq$.length) * times) - length);
@@ -1303,21 +1308,20 @@ setMethodS3(
 		...
 	){
 
+	if(!exists(x="PSIM_FAST")){
 		if(missing(target.site)) {
 			throw("No target site provided!\n");
-		} else if (!sloppy) {
-			if(!is.Site(target.site)) {
-				throw("Target site invalid!\n");
-			}
-			else if(!is.function(this$.propose.by)) {
-				throw("proposeBy is not set, cannot propose insertion!\n");
-			} 
-			else if (!is.function(this$.accept.by)){
-				throw("acceptBy is not set, cannot generate insertion event!\n");
-			}
-		} #/!sloppy
-
-		# Check if process is attached?
+		}
+		if(!is.Site(target.site)) {
+			throw("Target site invalid!\n");
+		}
+		else if(!is.function(this$.propose.by)) {
+			throw("proposeBy is not set, cannot propose insertion!\n");
+		} 
+		else if (!is.function(this$.accept.by)){
+			throw("acceptBy is not set, cannot generate insertion event!\n");
+		}
+	}
 
 		# Just return an empty list if the rate is undefined or zero:
 		if( is.na(this$.rate) | this$.rate == 0) {
@@ -1596,14 +1600,15 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
 		if(missing(value)) {
 				throw("No new value provided!\n");	
 		}
 		else if(!is.function(value)){
 			 throw("The value of generateBy must be a function.!\n");	
-		} else {
-			this$.generate.by<-value;
 		}
+	}
+		this$.generate.by<-value;
 		return(this$.generate.by);
 
 	},
@@ -1751,6 +1756,7 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
 		if(missing(value)) {
 				throw("No new template sequence provided!\n");	
 		}
@@ -1760,11 +1766,10 @@ setMethodS3(
 		else if(value$length == 0) {
 			throw("Cannot set template sequence of length zero!\n");
 		}
-		else {
-			this$.template.seq<-clone(value);
-			for (site in this$.template.seq$.sites){
-				site$.ancestral<-this;
-			}
+	}
+		this$.template.seq<-clone(value);
+		for (site in this$.template.seq$.sites){
+			site$.ancestral<-this;
 		}
 
 	},
@@ -1903,15 +1908,16 @@ setMethodS3(
 		...
 	){
 
+	.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
 		if(missing(value)){
 			throw("No new value provided");
 		}
 		else if(!all(is.numeric(value)) | (length(value) != 1)){
 			throw("The new value must be a numeric vector of length one.");
 		}
-		else{
-			this$.accept.win<-floor(value);
-		}
+	}
+		this$.accept.win<-floor(value);
 		return(this$.accept.win);
 	},
 	private=FALSE,
@@ -2543,10 +2549,10 @@ setMethodS3(
 		sloppy=FALSE,
 		...
 	){
-
-		if(missing(target.site)) {
-			throw("No target site provided!\n");
-		} else if (!sloppy) {
+		if(!exists(x="PSIM_FAST")){
+			if(missing(target.site)) {
+				throw("No target site provided!\n");
+			}
 			if(!is.Site(target.site)) {
 				throw("Target site invalid!\n");
 			}
@@ -2556,13 +2562,13 @@ setMethodS3(
 			else if (!is.function(this$.accept.by)){
 				throw("acceptBy is not set, cannot generate deletion event deletion!\n");
 			}
-		} #/!sloppy
 
-		 # Complain if sequence has a zero length:
-		 if(target.site$.sequence$.length == 0) {
-			 throw("Sequence has zero length so there is nothing to delete! How did you get here anyway?\n");
-		 }
+		 	# Complain if sequence has a zero length:
+		 	if(target.site$.sequence$.length == 0) {
+				 throw("Sequence has zero length so there is nothing to delete! How did you get here anyway?\n");
+		 	}
 
+		}
 		 # Clone the event template object:
 		 deletion.event<-clone(this$.event.template);
 		 # Set the target position passed in a temporary field:
