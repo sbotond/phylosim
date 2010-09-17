@@ -110,6 +110,16 @@ plot(sim)
 # run simulation
 Simulate(sim)
 
+# get the list of recorded per-branch event counts
+getBranchEvents(sim)
+
+# export the number of subtitions as a phylo object
+subst<-exportStatTree(sim,"substitution")
+subst
+
+# plot the exported phylo object
+plot(subst)
+
 # plot tree and alignment
 plot(sim)
 # save and display alingment

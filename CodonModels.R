@@ -300,8 +300,15 @@ setMethodS3(
 #       sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
 #       # run simulation
 #       Simulate(sim)
-#       # print alignment
-#       sim$alignment
+#	#get the list of recorded per-branch event counts
+#	getBranchEvents(sim)
+#	# export the number of synonymous substitutions as a phylo object
+#	syn.subst<-exportStatTree(sim,"nr.syn.subst")
+#	syn.subst
+#	# plot the exported phylo object
+#	plot(syn.subst)
+#	# print alignment
+#	sim$alignment
 # }
 # 
 # @author
