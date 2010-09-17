@@ -778,6 +778,9 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+
+	if(!exists(x="PSIM_FAST")){
+
 		if(length(intersect(name,names(param.list))) == 0){
 			throw("The specified rate parameter name is not valid!\n");
 		}
@@ -790,14 +793,13 @@ setMethodS3(
 		else if(any(is.na(this$.equ.dist))){
 			throw("Cannot set rate parameter because the nucleotide frequencies are not defined properly!\n");
 		}
-		else {
-			param.list[[name]]<-value;
+	}
+		param.list[[name]]<-value;
 				
-			# We call setRateParamList to rebuild the whole rate
-			# matrix with the new values if one of the rates changed:
-			setRateParamList(this, param.list);
-										
-		}
+		# We call setRateParamList to rebuild the whole rate
+		# matrix with the new values if one of the rates changed:
+		setRateParamList(this, param.list);
+									
 
 	},
 	private=FALSE,
@@ -1045,6 +1047,8 @@ setMethodS3(
 	){
 
 	.checkWriteProtection(this);
+	if(!exists(x="PSIM_FAST")){
+
 	if(missing(value)){
 		throw("No new value provided!\n");
 	}
@@ -1054,20 +1058,21 @@ setMethodS3(
 	else if(any((as.numeric(value)) < 0)){
  		throw("Cannot set negative rate parameter!\n");
 	}
-	else {
+	
+	}
+	
+	# Get the rate parameter names:
+	names<-names(this$.gtr.params);
+	value.names<-names(value);
 
-		# Get the rate parameter names:
-		names<-names(this$.gtr.params);
-		value.names<-names(value);
+	if(.checkRateParamList(this,names,value.names)) {
+	
+	# Set the rate parameters:
+	# The parmeters are named as in 
+	# "Ziheng Yang: Computational Molecular Evolution, 
+	# Oxford university Press, Oxford, 2006", pp. 34.
 
-		if(.checkRateParamList(this,names,value.names)) {
-		
-		# Set the rate parameters:
-		# The parmeters are named as in 
-		# "Ziheng Yang: Computational Molecular Evolution, 
-		# Oxford university Press, Oxford, 2006", pp. 34.
-
-		rate.list=list(
+	rate.list=list(
 
                 	"T->C"=(value[["a"]] * this$.equ.dist[1,"C"] ),
                 	"C->T"=(value[["a"]] * this$.equ.dist[1,"T"] ),
@@ -1083,16 +1088,14 @@ setMethodS3(
                 	"A->G"=(value[["f"]] * this$.equ.dist[1,"G"] ),
                 	"G->A"=(value[["f"]] * this$.equ.dist[1,"A"] )
 
-                );
-			# Setting the parameter field:
-			this$.gtr.params<-value;
-			# Calling setRateList, which will set the 
-			# elements of the rate matrix.
-			setRateList(this,rate.list);
-			}
-
-		}
-		return(invisible(value));
+        );
+	# Setting the parameter field:
+	this$.gtr.params<-value;
+	# Calling setRateList, which will set the 
+	# elements of the rate matrix.
+	setRateList(this,rate.list);
+	}
+	return(invisible(value));
 
 	},
 	private=FALSE,
