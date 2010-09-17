@@ -404,7 +404,7 @@ setMethodS3(
     ...
   ){
 
-		if(!is.PSRoot(this)) {return(FALSE)}
+    if(!is.PSRoot(this)) {return(FALSE)}
     if(!is.null(this$.is.ny98)){return(TRUE)}
     if ( inherits(this, "GY94")) {
       this$.is.process<-TRUE;
@@ -472,25 +472,19 @@ setMethodS3(
 		# Duplicating the method is not too elegant, but this way we can avoid the additonal method calls
 		# sloving down the simulation.
 
-	 if(missing(target.site)) {
-      throw("No target site provided!\n");
-    } 
+	if (!PSIM_FAST) {
 
-			#else if (!sloppy) {
-			# Additional checks. They can be
-			# disabled by sloppy=TRUE			
-
-      			#if(!is.Site(target.site)) {
-      			#  throw("Target site invalid!\n");
-      			#}
-			# Commenting this out for performance:
-	 		#else if(!is.QMatrix(this$.q.matrix)){
-			#	throw("Cannot provide event objects because the rate matrix is not set!\n");	
-			#}
-			#else if(!is.numeric(this$.equ.dist)){
-			#	throw("Cannot provide event objects because the equilibrium frequencies are not defined!\n");	
-			#} 
-			#} 
+      			if(!is.Site(target.site)) {
+      			  throw("Target site invalid!\n");
+      			}
+	 		
+			if(is.na(this$.q.matrix)){
+				throw("Cannot provide event objects because the rate matrix is not set!\n");	
+			}
+			if(!is.numeric(this$.equ.dist)){
+				throw("Cannot provide event objects because the equilibrium frequencies are not defined!\n");	
+			} 
+		} 
 
 			state<-target.site$.state;
 		  	# Just return an empty list if the state is NA:
@@ -688,7 +682,7 @@ setMethodS3(
 		symbols<-alphabet$symbols;
 
 		purines<-c("A","G");
-    pyrimidines<-c("C","T");
+    		pyrimidines<-c("C","T");
 
 		for(i in symbols){
 			for(j in symbols){
@@ -786,18 +780,20 @@ setMethodS3(
     ...
   ){
 
-    # FIXME: try to do this faster!
-    .checkWriteProtection(this);
-    # Setting unscaled rate:
-    if(!is.QMatrix(this$.q.matrix)){
-      throw("Cannot set rate as the rate matrix is undefined!\n");
-    }
-    else if(!missing(name) & missing(from) & missing(to)){
-      return(setRate(this$.q.matrix, name=name, value=value,guess.equ=FALSE));
-    }
-    else if (missing(name) & !missing(from) & !missing(to)){
-      return(setRate(this$.q.matrix, from=from, to=to, value=value,guess.equ=FALSE));
-    }
+    	.checkWriteProtection(this);
+    	# Setting unscaled rate:
+	if(!PSIM_FAST) {
+    		if(!is.QMatrix(this$.q.matrix)){
+      			throw("Cannot set rate as the rate matrix is undefined!\n");
+    		}
+	}
+    
+	if(!missing(name) & missing(from) & missing(to)){
+      		return(setRate(this$.q.matrix, name=name, value=value,guess.equ=FALSE));
+    	}
+    	else if (missing(name) & !missing(from) & !missing(to)){
+      		return(setRate(this$.q.matrix, from=from, to=to, value=value,guess.equ=FALSE));
+    	}
 
 
   },
@@ -919,19 +915,20 @@ setMethodS3(
     value,
     ...
   ){
-
-			.checkWriteProtection(this);		
+	
+	.checkWriteProtection(this);		
+	if(!PSIM_FAST){
 			if(missing(value)){
 				throw("No new value provided");
 			}
 			else if (length(value) != 1 | !is.numeric(value)){
 				throw("The new value must be a numeric vector of length 1!\n");
 			}
-			else {
-				this$.kappa<-value;
-				.buildGY94Rates(this);
-				return(value);
-			}
+	}
+			
+			this$.kappa<-value;
+			.buildGY94Rates(this);
+			return(value);
 
   },
   private=FALSE,
