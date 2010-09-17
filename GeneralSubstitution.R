@@ -2095,7 +2095,7 @@ setMethodS3(
   ){
 
 	# Clone the process object:
-	that<-clone.Object(this);
+	that<-clone.PSRoot(this);
 	# Disable write protection:
       	if(that$writeProtected){
         	that$writeProtected<-FALSE;

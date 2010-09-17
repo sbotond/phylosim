@@ -1,58 +1,25 @@
 
 Each sample represents 0.02 seconds.
-Total run time: 56.5000000000032 seconds.
+Total run time: 2.8 seconds.
 
 Total seconds: time spent in function and callees.
 Self seconds: time spent in function alone.
 
    %       total       %       self
  total    seconds     self    seconds    name
-100.00     56.50     91.50     51.70     "clone.Sequence"
-100.00     56.50      0.00      0.00     "PhyloSim"
-100.00     56.50      0.35      0.20     "clone"
-100.00     56.50      0.00      0.00     "<Anonymous>"
-100.00     56.50      0.71      0.40     "$<-"
-100.00     56.50      1.42      0.80     "$<-.Object"
-  3.82      2.16      1.42      0.80     "clone.Object"
-  1.45      0.82      0.60      0.34     "$"
-  0.85      0.48      0.85      0.48     "assign"
-  0.85      0.48      0.18      0.10     "$.Object"
-  0.81      0.46      0.18      0.10     "getFields"
-  0.81      0.46      0.81      0.46     "get"
-  0.64      0.36      0.07      0.04     "getFields.Object"
-  0.57      0.32      0.57      0.32     "ls"
-  0.32      0.18      0.21      0.12     "substr"
-  0.32      0.18      0.32      0.18     "exists"
-  0.21      0.12      0.21      0.12     "identical"
-  0.14      0.08      0.14      0.08     "paste"
-  0.11      0.06      0.11      0.06     "=="
-  0.07      0.04      0.07      0.04     "attr<-"
-  0.07      0.04      0.07      0.04     "is.null"
-  0.07      0.04      0.07      0.04     "new.env"
-  0.07      0.04      0.07      0.04     "is.character"
-  0.07      0.04      0.07      0.04     "!"
+100.00      2.80      0.00      0.00     "<Anonymous>"
+100.00      2.80      2.86      0.08     "clone.Sequence"
+100.00      2.80      0.00      0.00     "$<-"
+100.00      2.80      0.00      0.00     "PhyloSim"
+100.00      2.80      0.00      0.00     "$<-.Object"
+100.00      2.80      0.00      0.00     "clone"
+ 97.14      2.72     81.43      2.28     "clone.PSRoot"
+ 14.29      0.40     14.29      0.40     "assign"
+  1.43      0.04      1.43      0.04     "attr<-"
 
    %       self        %       total
  self     seconds    total    seconds    name
- 91.50     51.70    100.00     56.50     "clone.Sequence"
-  1.42      0.80      3.82      2.16     "clone.Object"
-  1.42      0.80    100.00     56.50     "$<-.Object"
-  0.85      0.48      0.85      0.48     "assign"
-  0.81      0.46      0.81      0.46     "get"
-  0.71      0.40    100.00     56.50     "$<-"
-  0.60      0.34      1.45      0.82     "$"
-  0.57      0.32      0.57      0.32     "ls"
-  0.35      0.20    100.00     56.50     "clone"
-  0.32      0.18      0.32      0.18     "exists"
-  0.21      0.12      0.21      0.12     "identical"
-  0.21      0.12      0.32      0.18     "substr"
-  0.18      0.10      0.81      0.46     "getFields"
-  0.18      0.10      0.85      0.48     "$.Object"
-  0.14      0.08      0.14      0.08     "paste"
-  0.11      0.06      0.11      0.06     "=="
-  0.07      0.04      0.07      0.04     "attr<-"
-  0.07      0.04      0.07      0.04     "is.null"
-  0.07      0.04      0.07      0.04     "new.env"
-  0.07      0.04      0.64      0.36     "getFields.Object"
-  0.07      0.04      0.07      0.04     "is.character"
-  0.07      0.04      0.07      0.04     "!"
+ 81.43      2.28     97.14      2.72     "clone.PSRoot"
+ 14.29      0.40     14.29      0.40     "assign"
+  2.86      0.08    100.00      2.80     "clone.Sequence"
+  1.43      0.04      1.43      0.04     "attr<-"

@@ -1378,7 +1378,7 @@ setMethodS3(
     ...
   ){
 
-			tmp<-clone.Object(this);
+			tmp<-clone.PSRoot(this);
 			if(tmp$writeProtected){
 					tmp$writeProtected<-FALSE;
 			}
