@@ -25,6 +25,7 @@
 #	\item The possibility of having a different set of processes and site-process specific parameters for every site, which allows for an arbitrary number of partitions in the simulated data.
 #	\item The possibility to evolve sites by a mixture of substitution processes along a single branch.
 #	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes.
+#	\item The possibility to export the counts of various events as phylo objects (see \code{\link{exportStatTree.PhyloSim}}).
 #	}
 #
 #	The examples below demonstrate only some more common simulation settings,
@@ -126,7 +127,7 @@
 #	plot(gtr)
 #
 #	# construct root sequence object
-#	s<-NucleotideSequence(length=30)
+#	s<-NucleotideSequence(length=40)
 #	# attach process via virtual field
 #	s$processes<-list(list(gtr))
 #	# sample states from the equilibrium
@@ -187,6 +188,12 @@
 #	plot(sim)
 #	# run simulation
 #	Simulate(sim)
+# 	#get the list of recorded per-branch event counts
+# 	getBranchEvents(sim)
+#	# export the number of substitutions as a phylo object
+#	subst<-exportStatTree(sim,"substitution")
+#	# plot the exported phylo object
+#	plot(subst)
 #	# plot tree and alignment
 #	plot(sim)
 #	# save and display alingment
@@ -206,16 +213,16 @@
 #	# get a bubble plot of wag
 #	plot(wag)
 #	# construct root sequence
-#	s<-AminoAcidSequence(length=20)
+#	s<-AminoAcidSequence(length=30)
 #	# attach process wag to range 1:10
 #	attachProcess(s,wag,1:10)
-#	# create a pattern of processes in range 11:20
-#	setProcesses(s,list(list(wag),list(lg),list(wag,lg)),11:20)
+#	# create a pattern of processes in range 11:30
+#	setProcesses(s,list(list(wag),list(lg),list(wag,lg)),11:30)
 #	# set rate multipliers to reduce 
 #	# the rate to half at every third site
-#	setRateMultipliers(s,wag,0.5,seq(from=13,to=20,by=3))
-#	setRateMultipliers(s,lg,0.5,seq(from=13,to=20,by=3))
-#	# Now every third site in range 11:20 evolves
+#	setRateMultipliers(s,wag,0.5,seq(from=13,to=30,by=3))
+#	setRateMultipliers(s,lg,0.5,seq(from=13,to=30,by=3))
+#	# Now every third site in range 11:30 evolves
 #	# according to a mixture of amino acid substitution models!
 #
 #	# sample states
@@ -228,6 +235,10 @@
 #	sim$logLevel<-1
 #	# run simulation
 #	Simulate(sim)
+#	# export the number of substitutions as a phylo object
+#	subst<-exportStatTree(sim,"substitution")
+#	# plot the exported phylo object
+#	plot(subst)
 #	# get a sequence object 
 #	rs<-sim$sequences[[4]]
 #	# print sequence string
@@ -3615,7 +3626,7 @@ setMethodS3(
 #	Simulate(sim)
 #	# get the list of recorded per-branch event counts
 #	getBranchEvents(sim)
-#	# export the number of subtitions as a phylo object
+#	# export the number of substitutions as a phylo object
 #	subst<-exportStatTree(sim,"substitution")
 #	# plot the exported phylo object
 #	plot(subst)
@@ -3648,7 +3659,7 @@ setMethodS3(
 			throw("No event name specified!\n");
 		}
 		else if(length(intersect(event, this$branchEvents)) != 1 ){
-			throw("Invalid even name!");
+			throw("Invalid event name!");
 		}
 		else {
 
