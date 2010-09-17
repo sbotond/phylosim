@@ -1485,9 +1485,11 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);	
+	 if(!exists(x="PSIM_FAST")){
 		if(!is.Process(process)){
 			throw("Process object invalid!\n");
 		}
+	 }
  		if (missing(index)) {
       		index<-seq(along.with=this$.sites);
     		} else {
@@ -1563,9 +1565,11 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);	
+	 if(!exists(x="PSIM_FAST")){
 		if(!is.Process(process)){
 			throw("Process object invalid!\n");
 		}
+	}
  		if (missing(index)) {
       		index<-seq(along.with=this$.sites);
     		} else {
@@ -1841,9 +1845,6 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);	
-		if(missing(value)) {
-			throw("No new values specified!\n");
-		}
 
 		if(!is.list(value)) {
 			throw("The value parameter must be a list!\n");
@@ -1951,6 +1952,9 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
+
+	 if(!exists(x="PSIM_FAST")){
+
 		if(missing(process)) {
 			throw("No process given!\n");
 		}
@@ -1963,6 +1967,7 @@ setMethodS3(
 		} else if (missing(value)){
 			throw("No new value given!\n");
 		}
+	}
 
 		if (missing(index)) {
 			index<-seq(along.with=this$.sites);
@@ -2052,6 +2057,7 @@ setMethodS3(
 		...
 	){
 
+	
 		if(missing(process)){
 			throw("No process given!\n");
 		}
@@ -2191,6 +2197,8 @@ setMethodS3(
 		...
 	){
 
+	 if(!exists(x="PSIM_FAST")){
+
 		if(missing(process)) {
 			throw("No process given!\n");
 		}
@@ -2201,6 +2209,7 @@ setMethodS3(
 		} else if (!is.character(id)) {
 			throw("Parameter id must be character!\n");
 		}
+	}
 
 		if (missing(index)) {
 			index<-seq(along.with=this$.sites);
@@ -3156,7 +3165,9 @@ setMethodS3(
 		if (length(index) == 0 ) {
 				return(c());
 		}
-	  if( length(index) == 1 ) {
+           if(!exists(x="PSIM_FAST")){
+	  
+	   if( length(index) == 1 ) {
 			if(is.na(index)) {
 				warning("Index vector is NA! Coercing to empty vector!\n");
 				return(c());
@@ -3174,6 +3185,7 @@ setMethodS3(
 		if( max(index) > this$.length ) {
 			throw("Index vector element ",max(index)," too big!\n");
 		}
+	     }
 		return(index);
 
   },
@@ -3652,6 +3664,7 @@ setMethodS3(
 		...
 	){
 
+	 if(!exists(x="PSIM_FAST")){
 		if(missing(process)){
 			throw("No process given!\n");
 		}
@@ -3661,6 +3674,7 @@ setMethodS3(
 		else if(!inherits(process,"GeneralDeletor")){
 			throw("The specified process is not an insertion process!\n");
 		}
+	}
 		setParameterAtSites(this=this,process=process,id="deletion.tolerance",value=value,index=index);
 		
 	},
@@ -3717,12 +3731,14 @@ setMethodS3(
 		...
 	){
 
+	 if(!exists(x="PSIM_FAST")){
 		if(missing(process)){
 			throw("No process given!\n");
 		}
 		if(!inherits(process,"GeneralDeletor")){
 			throw("The specified process is not an insertion process!\n");
 		}
+	}
 		rm<-getParameterAtSites(this=this,process=process,id="deletion.tolerance",index=index);
 		return(as.numeric(lapply(rm,function(param){param$value})));
 		
@@ -3781,7 +3797,8 @@ setMethodS3(
 		index,
 		...
 	){
-
+	
+	    if(!exists(x="PSIM_FAST")){
 		if(missing(process)){
 			throw("No process given!\n");
 		}
@@ -3791,6 +3808,7 @@ setMethodS3(
 		else if(!inherits(process,"GeneralInsertor")){
 			throw("The specified process is not an insertion process!\n");
 		}
+            }
 		setParameterAtSites(this=this,process=process,id="insertion.tolerance",value=value,index=index);
 		
 	},
@@ -3847,12 +3865,14 @@ setMethodS3(
 		...
 	){
 
+	 if(!exists(x="PSIM_FAST")){
 		if(missing(process)){
 			throw("No process given!\n");
 		}
 		if(!inherits(process,"GeneralInsertor")){
 			throw("The specified process is not an insertion process!\n");
 		}
+	}
 		rm<-getParameterAtSites(this=this,process=process,id="insertion.tolerance",index=index);
 		return(as.numeric(lapply(rm,function(param){param$value})));
 		
@@ -4315,7 +4335,6 @@ setMethodS3(
 		else if(!all(is.numeric(shape)) | length(shape) != 1){
 			throw("The shape parameter must be a numeric vector of lenght 1!\n");	
 		}
-		else {
 		
 			if(missing(index)){
 				index<-seq(along.with=this$.sites);
@@ -4333,7 +4352,6 @@ setMethodS3(
 			}
 			return(invisible(this));
 	
-		}
 		
 
 	},
@@ -4553,6 +4571,8 @@ setMethodS3(
   ){
 
 		.checkWriteProtection(this);
+		 if(!exists(x="PSIM_FAST")){
+
 		if(missing(insert)) {
 			throw("Insert sequence object is missing!\n");
 		}
@@ -4560,17 +4580,17 @@ setMethodS3(
 			throw("Insertion position is missing!\n");
 		}
 
-		if ( sloppy == FALSE ) {
-			if(!is.Sequence(insert)) {
-				throw("Insert object not valid!\n");
-			}
-			else if (this$length == 0 & position != 0 ) {
-				throw("Acceptor sequence length is zero! The only valid insertion position is 0!\n");	
-			}
-			else if ( !( position >= 0 & position <=(this$.length + 1))) {
-				throw("Insertion position ",position," is invalid!\n");
-			}
-	 }
+		if(!is.Sequence(insert)) {
+			throw("Insert object not valid!\n");
+		}
+		else if (this$length == 0 & position != 0 ) {
+			throw("Acceptor sequence length is zero! The only valid insertion position is 0!\n");	
+		}
+		else if ( !( position >= 0 & position <=(this$.length + 1))) {
+			throw("Insertion position ",position," is invalid!\n");
+		}
+	        
+	        }
 
 	 # Just return if insert has zero length:	
 	 if(insert$length == 0){
@@ -4624,17 +4644,18 @@ setMethodS3(
 		}
 
 	 # Checking if lengths are consistent:
-		
+	  if(!exists(x="PSIM_FAST")){	
+
 		if(length(this$.sites) != (this$.length + insert$.length)) {
 			throw("Length inconsistency after insertion!\n");
 		} else {
 			this$.length<-(this$.length + insert$.length);
 		}
-
+	  }
 	# Flagging the inserted sites:
 		this$.flagged.sites<-c(this$.flagged.sites,(position+1):(position+insert$.length));
 
-	if( sloppy == FALSE ) {
+	 if(!exists(x="PSIM_FAST")){
 		if(length(this$.total.rates) != this$.length) {
 			throw("Total rates vector inconsistency after insertion!\n");
 		}
@@ -4724,6 +4745,8 @@ setMethodS3(
   ){
 
 		.checkWriteProtection(this);
+	 if(!exists(x="PSIM_FAST")){
+
 		if(missing(index)) {
 			 throw("No index vector specified!\n");
 		} else if (sloppy != FALSE) {
@@ -4731,7 +4754,8 @@ setMethodS3(
 		}
 		if(length(index) == 0) {
 			return(FALSE);
-		} else {
+		}
+	}
 
 			# Avoid deletion on dirty sequence as
 			# that will cause havoc.
@@ -4754,15 +4778,16 @@ setMethodS3(
 				this$.flagged.sites<-c(this$.flagged.sites,(min.index - 1));
 			}
 
+		 if(!exists(x="PSIM_FAST")){
 			if( length(this$.sites) != (this$.length - length(index) ) ) {
 				throw("Inconsistency after deleting sites!\n");
-			} else{
-				this$.length<-length(this$.sites);
-			}
+			} 
+		 }
+	
+			this$.length<-length(this$.sites);
 			.recalculateCumulativeRates(this);	
 				return(invisible(TRUE));
 		
-		}
 
   },
   private=FALSE,
@@ -4832,9 +4857,12 @@ setMethodS3(
 		else {
 			index<-.checkIndexSanity(this, index);
 		}
+
+	 if(!exists(x="PSIM_FAST")){
 		if(!is.na(process) & !is.Process(process)) {
 			throw("Process object invalid!\n");		
-		} else {
+		} 
+	}
 
 			# Avoid copying from dirty sequence:
 			if(this$.cumulative.rate.flag){
@@ -4879,6 +4907,7 @@ setMethodS3(
 
 			copy$.cumulative.rate.flag<-FALSE;
 
+		 if(!exists(x="PSIM_FAST")){
 			if(length(copy$.sites) != length){
 				throw("Sites list length mismatch!\n")
 			}
@@ -4888,10 +4917,10 @@ setMethodS3(
 			else if(length(copy$.cumulative.rates) != length){
 				throw("Cumulative rates vector length mismatch!\n")
 			}
+		}
 
 			return(copy);
 		
-		}
 
   },
   private=FALSE,
