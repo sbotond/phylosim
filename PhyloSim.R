@@ -1238,6 +1238,8 @@ setMethodS3(
     ...
   ){
 
+	if(!exists(x="PSIM_FAST")){
+
 		if(missing(start.seq)){
 			throw("No starting sequence provided!\n");
 		}
@@ -1247,7 +1249,8 @@ setMethodS3(
 		else if(!is.numeric(branch.length)){
 			throw("The branch length must be numeric!\n");
 		}
-		else if(.checkSeq(this, start.seq) ){
+	}
+		if(.checkSeq(this, start.seq) ){
 		
 			# Cloning the starting sequence:
 			seq<-clone(start.seq);
@@ -1376,9 +1379,10 @@ setMethodS3(
 						Log(this, message);
 					}
 
-			# Update branch statistics:
-
-			.UpdateBranchStats(this,event,event.details, branch.number);
+			# Update branch statistics if not in fast mode:
+			if(!exists(x="PSIM_FAST")){
+				.UpdateBranchStats(this,event,event.details, branch.number);
+			}
 
 			# Abort if sequence length shrunk to zero:
 
