@@ -65,7 +65,9 @@ setConstructorS3(
 	if(!missing(symbols)){
 		symbols<-as.character(symbols);
 		symbol_length<-.checkSymbolLengths(symbols);
-		.checkSymbolDuplicates(symbols);
+		if(!PSIM_FAST){
+			.checkSymbolDuplicates(symbols);
+		}
 
 	}
 	
@@ -307,8 +309,10 @@ setMethodS3(
 		# First check by reference:
 		if ( equals(e1,e2) ) {return(TRUE)}
 		# Check if both objects inherit from Alphabet:
-		if (!length(intersect(intersect(class(e1),class(e2)),c("Alphabet")))){
-			throw("Alphabet object compared to something else!");
+		if(!PSIM_FAST){
+			if (!length(intersect(intersect(class(e1),class(e2)),c("Alphabet")))){
+				throw("Alphabet object compared to something else!");
+			}
 		}
 		# Check ANY flag:
 		if(!is.null(e1$.any.flag) | !is.null(e2$.any.flag)) { return(TRUE) }
@@ -462,7 +466,9 @@ setMethodS3(
 			}
 			.checkWriteProtection(this);	
 			set<-as.character(set);					
-			.checkSymbolDuplicates(set)
+			if(!PSIM_FAST){
+				.checkSymbolDuplicates(set)
+			}
 			this$.symbolLength<-.checkSymbolLengths(set);
 			this$.size<-length(set);
 			this$.symbols<-set;	
@@ -752,10 +758,12 @@ setMethodS3(
 		...
 	){
 
-
+		
 		.checkWriteProtection(this);	
-		if (length(new_type) != 1) {throw("The new type must be a character vector of length 1!")}	
-		if (new_type == "" ){ throw("Cannot set empty type!")}
+		if(!PSIM_FAST){
+			if (length(new_type) != 1) {throw("The new type must be a character vector of length 1!")}	
+			if (new_type == "" ){ throw("Cannot set empty type!")}
+		}
 		this$.type<-new_type;
 
 	},
