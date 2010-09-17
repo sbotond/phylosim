@@ -320,10 +320,14 @@ setMethodS3(
 		...
 	){
 		.checkWriteProtection(this);	
+		if(!PSIM_FAST){
+		
 		if(missing(new.name)){throw("No new name provided!\n")}
 		new.name<-as.character(new.name);	
 		if (new.name == "") {throw("Cannot set empty name!\n")}
-		else { this$.name<-new.name}
+		
+		}
+		this$.name<-new.name;
 		
 	},
 	private=FALSE,
@@ -444,9 +448,13 @@ setMethodS3(
 	){
 	
 		.checkWriteProtection(this);	
+		if(!PSIM_FAST){
+		
 		if(missing(new.rate)){throw("No new rate provided!\n")}
 		else if (!is.numeric(new.rate)){throw("The rate must be numeric!\n")}
-		else { this$.rate<-new.rate }
+		
+		}
+		this$.rate<-new.rate;
 		
 	},
 	private=FALSE,
@@ -568,9 +576,13 @@ setMethodS3(
 	){
 		
 		.checkWriteProtection(this);	
+		if(!PSIM_FAST){
+		
 		if(missing(new.proc)){throw("No new rate provided!\n")}
 		else if (!is.Process(new.proc)){throw("Process object invalid!\n")}
-		else { this$.process<-new.proc}
+		
+		}
+		this$.process<-new.proc;
 
 	},
 	private=FALSE,
@@ -871,7 +883,8 @@ setMethodS3(
 		value,
 		...
 	){
-	
+
+	if(!PSIM_FAST){
 		if(is.na(this$.site)){
 			throw("There is no assotiated Site object!\n");
 		}	
@@ -881,6 +894,7 @@ setMethodS3(
 		if(value > this$.site$.sequence$.length | value < 1) {
 			throw("Invalid position!\n");
 		}
+	}
 		this$.position<-value;
 
 	},
@@ -1009,6 +1023,7 @@ setMethodS3(
 	){
 		
 		.checkWriteProtection(this);	
+	if(!PSIM_FAST){
 		if (is.na(this$.site)) {
 			throw("The event has no target site, so target alphabet is unknown. Refusing to set targetState!\n");
 		}	
@@ -1021,12 +1036,11 @@ setMethodS3(
 		else if (!hasSymbols(this$.site$.alphabet,new.state)) { 
 			throw("The target state must be in the target site alphabet!\n");	
 		}
-		else {
-			if(this$.site$state != new.state) {
+		else if(this$.site$state != new.state) {
 					warning("The proposed new target state is not equal with the current state of the associated site. This is strange, but proceeding anyway.\n");
-			}
-			this$.target.state<-new.state;
 		}
+	}
+		this$.target.state<-new.state;
 
 	},
 	private=FALSE,
@@ -1092,6 +1106,7 @@ setMethodS3(
 	){
 			
 		.checkWriteProtection(this);	
+	if(!PSIM_FAST){
 		if (!is.Site(new.site)) {throw("Site object invalid!\n")}
 		new.site<-enableVirtual(new.site);
 		if(missing(new.site)) {throw("No site given")}
@@ -1101,7 +1116,7 @@ setMethodS3(
 					throw("The site and process alphabets are incompatible!\n");
 			}
 		}
-		
+	}
 		this$.site<-new.site;
 		invisible(this$.site)
 		
@@ -1173,6 +1188,7 @@ setMethodS3(
 		...
 	){
 	
+	if(!PSIM_FAST){
 		if(!is.function(this$.handler)){throw("Event handler is not a function!\n")}		
 		else if (!is.Site(this$.site)){throw("The site associated with the event is not valid!\n")}
 		else if(is.null(this$.position)){throw("The target site position is unknown!Refusing to perform event!\n")}
@@ -1186,8 +1202,7 @@ setMethodS3(
 			warning(paste("The event acts on state ",this$.target.state," but the target site has the state ",this$site$state,"! Doing nothing!\n",sep=""));
 			return(invisible(FALSE));
 		}
-		else {
-
+	}
 			# Better not perform anything on a dirty object!
 			if(this$.site$.sequence$.cumulative.rate.flag) {
 				.recalculateCumulativeRates(this$.site$.sequence);
@@ -1206,7 +1221,6 @@ setMethodS3(
 			.setHandler(this, function(event=this) { throw("You can perform an event only once!\n") } );
 
 			return(output);
-		}
 	
 	},
 	private=FALSE,
@@ -1228,10 +1242,11 @@ setMethodS3(
 		new.handler,
 		...
 	){
-		
+		if(!PSIM_FAST){
 		if(missing(new.handler)){throw("No new handler provided!\n")}
 		else if (!is.function(new.handler)){throw("The handler must be a function!\n")}
-		else { this$.handler<-new.handler}
+		}
+		this$.handler<-new.handler;
 
 	},
 	private=FALSE,
@@ -1361,10 +1376,10 @@ setMethodS3(
     ...
   ){
 
-    if(!is.logical(value)) {throw("The new value must be logical!\n")}
-    else {
-      this$.write.protected<-value;
+    if(!PSIM_FAST){
+    	if(!is.logical(value)) {throw("The new value must be logical!\n")}
     }
+    this$.write.protected<-value;
 
   },
   private=FALSE,
@@ -1386,6 +1401,7 @@ setMethodS3(
     ...
   ){
 
+    if(PSIM_FAST){return(FALSE)}
     if(this$writeProtected) {throw("Cannot set value because the object is write protected!\n")}
     else {return(FALSE)}
 
@@ -1545,7 +1561,7 @@ setMethodS3(
 		this<-x;
 		procid<-NA;
 		if(!is.na(this$.process)){
-			procid<-this$.process$id;
+			procid<-this$.process$.id;
 		}	
 		paste(this$.name," (",this$.rate,")"," <-- ",procid,sep="");	
 		
