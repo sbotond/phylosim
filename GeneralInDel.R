@@ -1254,7 +1254,6 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A GeneralInsertor object.} 
 # 	\item{target.site}{A Site object.} 
-#	\item{sloppy}{Ommiting safety checks if TRUE.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1304,7 +1303,6 @@ setMethodS3(
 	function(
 		this,
 		target.site,
-		sloppy=FALSE,
 		...
 	){
 
@@ -2496,7 +2494,6 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A GeneralDeletor object.} 
 #	\item{target.site}{The target Site object.}
-#	\item{sloppy}{Ommit safety checks if TRUE.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2546,7 +2543,6 @@ setMethodS3(
 	function(
 		this,
 		target.site,
-		sloppy=FALSE,
 		...
 	){
 		if(!exists(x="PSIM_FAST")){

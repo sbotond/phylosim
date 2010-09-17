@@ -156,7 +156,7 @@ setConstructorS3(
 
 			class.seq<-class(target.seq)[[1]];
 			insert<-do.call(class.seq,list(length=length));
-			setProcesses(this=insert,value=list(proc),sloppy=TRUE);
+			setProcesses(this=insert,value=list(proc));
 
 			# For every process...
 			

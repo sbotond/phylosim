@@ -1259,7 +1259,6 @@ setMethodS3(
 		this,
 		value,
 		index,
-		sloppy=FALSE,
 		...
 	){
 
@@ -1291,12 +1290,7 @@ setMethodS3(
         if(value.counter > length(value)) {
           value.counter<-1;
         }
-				# Arguments were verified before, using the sloppy method:
-				if(sloppy) {
-					.setAlphabetSloppy(this$.sites[[i]], value[[value.counter]]);
-				} else {
-					setAlphabet(this$.sites[[i]], value[[value.counter]]);
-				}
+	setAlphabet(this$.sites[[i]], value[[value.counter]]);
 
         value.counter<-(value.counter + 1);
     }
@@ -1801,7 +1795,6 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{value}{A list of list of Process objects, recycled if shorter than the index vector.} 
 #	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if ommited.}
-#	\item{sloppy}{If TRUE then processes will be attached in a more careless (and faster) way.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1840,7 +1833,6 @@ setMethodS3(
 		this,
 		value,
 		index,
-		sloppy=FALSE,
 		...
 	){
 
@@ -1873,11 +1865,8 @@ setMethodS3(
         	if(value.counter > length(value)) {
           		value.counter<-1;
         	}
-		if (sloppy == FALSE) {
-				setProcesses(this$.sites[[i]], value[[value.counter]]);
-		} else {
-			.setProcessesSloppy(this$.sites[[i]], value[[value.counter]]);
-		}
+		setProcesses(this$.sites[[i]], value[[value.counter]]);
+	
         	value.counter<-(value.counter + 1);
     	}
     	invisible(this);
@@ -4545,7 +4534,6 @@ setMethodS3(
 # 	\item{insert}{The Sequence object to be inserted.} 
 # 	\item{position}{The position after the Sequence object will be inserted.} 
 # 	\item{process}{The Process object performing the insertion (optional).} 
-# 	\item{sloppy}{Some more expensive error checking is skipped if TRUE.} 
 # 	\item{paranoid}{If TRUE, then the consistency of teh target objects is checked more rigurously after insertion.} 
 # 	\item{...}{Not used.} 
 # } 
@@ -4579,7 +4567,6 @@ setMethodS3(
 		insert,
 		position,
 		process=NA,
-		sloppy=FALSE,
 		paranoid=FALSE,
     ...
   ){
@@ -4755,22 +4742,27 @@ setMethodS3(
   function(
     		this,
 		index,
-		sloppy=FALSE,
     		...
   ){
-
-		.checkWriteProtection(this);
-	 if(!exists(x="PSIM_FAST")){
-
-		if(missing(index)) {
-			 throw("No index vector specified!\n");
-		} else if (sloppy != FALSE) {
-			index<-.checkIndexSanity(this, index);
-		}
+		
 		if(length(index) == 0) {
 			return(FALSE);
 		}
-	}
+
+		.checkWriteProtection(this);
+	 	if(!exists(x="PSIM_FAST")){
+
+		if(missing(index)) {
+			 throw("No index vector specified!\n");
+		}
+
+
+		if(length(index) == 0) {
+			return(FALSE);
+		}
+		
+		}
+			index<-.checkIndexSanity(this, index);
 
 			# Avoid deletion on dirty sequence as
 			# that will cause havoc.

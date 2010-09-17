@@ -405,7 +405,6 @@ setMethodS3(
 # \arguments{ 
 #       \item{this}{A FieldDeletor object.} 
 #       \item{target.site}{A Site object.} 
-#       \item{sloppy}{Ommiting safety checks if TRUE.}
 #       \item{...}{Not used.} 
 # } 
 # 
@@ -427,7 +426,6 @@ setMethodS3(
   function(
     this,
     target.site,
-    sloppy=TRUE,
     ...
   ){
 
