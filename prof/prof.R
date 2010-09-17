@@ -6,6 +6,9 @@
 ## insertions and deletions.
 ##
 
+## Live fast & die young:
+PSIM_FAST<-TRUE;
+
 #	# Construct a phylo object for the
 #	# simulation, scale total tree length to 2:
 #
