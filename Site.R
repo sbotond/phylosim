@@ -469,12 +469,18 @@ setMethodS3(
 	){
 		
 		new.state<-as.character(new.state);	
+
+		 if(!exists(x="PSIM_FAST")){
+
 		# Check if new.state is scalar:
 		if (length(new.state) != 1 ){throw("The state must be a vector of length 1!\n")}
 		# Check if the site has an alphabet attached:
 		else if(is.na(this$alphabet)) {throw("Cannot set state because the site has no alphabet attached!\n")}
 		# Check if symbol is in the site alphabet:	
 		else if( !hasSymbols(this$.alphabet,new.state)) {throw("Symbol not in site alphabet!\n")}
+
+		}
+
 		flagTotalRate(this);
 		.flagSeqCumulativeRates(this);
 		this$.state<-new.state;
@@ -612,7 +618,9 @@ setMethodS3(
 		new.alphabet,
 		...
 	){
-		
+	
+	 if(!exists(x="PSIM_FAST")){	
+
 		if(!is.Alphabet(new.alphabet)){
 				throw("The supplied alphabet object is not valid!\n");
 		} else if (is.Site(this$.ancestral)) {
@@ -623,11 +631,12 @@ setMethodS3(
 		else if(!is.na(this$.state) & !hasSymbols(new.alphabet, this$.state)){
 			throw("The current state is not part of the new alphabet!\n");
 		}
-		else{
-			flagTotalRate(this);
-		 .flagSeqCumulativeRates(this);
-			this$.alphabet<-new.alphabet;
+
 		}
+		
+		flagTotalRate(this);
+		.flagSeqCumulativeRates(this);
+		this$.alphabet<-new.alphabet;
 
 	},
 	private=FALSE,
@@ -1237,11 +1246,13 @@ setMethodS3(
 		...
 	){
 
+	 if(!exists(x="PSIM_FAST")){
 		if(!is.Sequence(new.seq)) {
 			throw("Sequence object invalid!\n");
-		} else {
-			this$.sequence<-new.seq;
-		}
+		} 
+	}
+		
+		this$.sequence<-new.seq;
 
 	},
 	private=FALSE,
@@ -1464,7 +1475,10 @@ setMethodS3(
     ...
   ){
 			
+
+	 if(!exists(x="PSIM_FAST")){
 		if (!is.Process(process)) {throw("Process object invalid!\n")}	
+	 }
 		attached_processes<-getProcesses(this);
 		if (length(attached_processes) == 0 ){ return(FALSE)}
 			
@@ -1559,6 +1573,12 @@ setMethodS3(
     process,
     ...
   ){
+
+		if(isAttached(this,process)) {
+				warning("Process already attached, doing nothing!\n");
+				return(invisible(this)); 
+		}
+	 if(!exists(x="PSIM_FAST")){
 	
 		if(!is.Process(process)) {
 			throw("Process object is not valid!\n"); }
@@ -1567,23 +1587,20 @@ setMethodS3(
 		else if( is.na(this$alphabet) ){
 				throw("The site has no alphabet attached!\n"); }
 		else if (this$alphabet != process$alphabet) {
-				throw("The site and process alphabets are incompatible!\n"); }
-		else if(isAttached(this,process)) {
-				warning("Process already attached, doing nothing!\n");
-				return(invisible(this)); 
+				throw("The site and process alphabets are incompatible!\n"); 
 		}
-		# FIXME - checking for template sequence 
 		else if( hasUndefinedRate(process) ){
 				warning("The process",process$id," has undefined rates!\n");
 		}
-		else {
-			this$.processes[[process$id]]<-list (
-				object 				= 	process,
+
+		}
+		
+		this$.processes[[process$id]]<-list (
+				object	= process,
 				# We copy the default site-process specific parameters
 				# from the process object.
-				site.params		=		process$siteSpecificParamList	
+				site.params = process$siteSpecificParamList	
 			);
-		}
 		flagTotalRate(this);
 		.flagSeqCumulativeRates(this);
 		
@@ -1695,9 +1712,11 @@ setMethodS3(
     ...
   ){
 			
+	 if(!exists(x="PSIM_FAST")){
 		if(!is.Process(process)) {
 			throw("Process object is not valid!\n");
 		}
+	}
 		else if (!isAttached(this,process)) {
 				warning("Process is not attached, doing nothing!\n");
 		}
