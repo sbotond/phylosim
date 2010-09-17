@@ -4774,6 +4774,7 @@ setMethodS3(
 	...
   ){
 
+	if(!PSIM_FAST){
 		if(missing(codon)){
 			throw("No codon given!\n");
 		}
@@ -4789,6 +4790,10 @@ setMethodS3(
 		else {
 				return(this$.trans.table[[codon]]$aa);			
 		}
+	} else {
+
+		return(this$.trans.table[[codon]]$aa);			
+	}
 
   },
   private=FALSE,
@@ -4843,10 +4848,10 @@ setMethodS3(
   class="CodonAlphabet",
   function(
     this,
-		codon,
+    codon,
     ...
   ){
-
+	if(!PSIM_FAST){
 		if(missing(codon)){
 			throw("No codon given!\n");
 		}
@@ -4856,7 +4861,8 @@ setMethodS3(
 		else if (length(intersect(names(this$.trans.table),codon)) != 1){
 			throw("Codon not in translation table!\n");
 		}
-		else if (this$.trans.table[[codon]]$type == "STOP"){
+	}	
+		if (this$.trans.table[[codon]]$type == "STOP"){
 			return(TRUE);
 		}
 		else {
@@ -4919,7 +4925,7 @@ setMethodS3(
 		codon,
     ...
   ){
-
+	if(!PSIM_FAST){
 		if(missing(codon)){
 			throw("No codon given!\n");
 		}
@@ -4929,7 +4935,9 @@ setMethodS3(
 		else if (length(intersect(names(this$.trans.table),codon)) != 1){
 			throw("Codon not in translation table!\n");
 		}
-		else if (this$.trans.table[[codon]]$type == "START"){
+	}
+		
+		if (this$.trans.table[[codon]]$type == "START"){
 			return(TRUE);
 		}
 		else {
@@ -4992,13 +5000,16 @@ setMethodS3(
 	...
   ){
 
+	if(!PSIM_FAST){
 		if(missing(codons)){
 			throw("No codons given!\n");
 		}
 		else if (!is.character(codons) | (length(codons) != 2)){
 			throw("The codons argument must be a character vector of size 2!\n");
 		}
-		else if (translateCodon(this,codons[1]) == translateCodon(this,codons[2])){
+	}
+		
+		if (translateCodon(this,codons[1]) == translateCodon(this,codons[2])){
 			return(TRUE);
 		}
 		else {
@@ -5025,6 +5036,8 @@ setMethodS3(
     ...
   ){
 
+	if(!PSIM_FAST){
+
 		if(missing(codons)){
 			throw("No codons given!\n");
 		}
@@ -5037,7 +5050,7 @@ setMethodS3(
 		else if (length(intersect(names(this$.trans.table),codons[2])) != 1){
 			throw("Codon 2 is not in translation table!\n");
 		}
-		else {
+	}
 
 			purines<-c("A","G");
 			pyrimidines<-c("C","T");
@@ -5057,7 +5070,6 @@ setMethodS3(
 					}
 			}
 			return(res);	
-		}
 
   },
   private=FALSE,
