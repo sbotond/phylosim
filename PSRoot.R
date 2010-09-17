@@ -470,7 +470,7 @@ setMethodS3(
 			# If the class has no methods, do not 
 			# consider the methods from the parent class.
 			if(names(mlist)[[1]] == class){	
-      	as.character(names(mlist[[1]]));
+      			as.character(names(mlist[[1]]));
 			}
 			else {
 				return(character(0));

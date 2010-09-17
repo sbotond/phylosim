@@ -1845,6 +1845,8 @@ setMethodS3(
 		id,
 		...
   ){
+		
+			if(exists(x="PSIM_FAST")){ return(TRUE) }
 					
 			if (!is.Site(site)) {throw ("Site object not valid!\n")}
 			else if (!hasSiteSpecificParameter(this,id)) {
