@@ -114,12 +114,14 @@ setConstructorS3(
 		}
 
 		this$proposeBy<-function(process=NA,...){
+			if(!PSIM_FAST){
 				if(!is.expression(process$.dist)){
 					throw("\"dist\" is undefined, so cannot propose deletion length!\n");
 				}
 				else if(is.na(process$.max.length)){
 					throw("\"maxLength\" is undefined, so cannot propose deletion length!\n");
 				}
+			}
 				tmp<-round(eval(process$.dist));
 				while( tmp > process$.max.length | tmp < 1){  tmp<-round(eval(process$.dist)) };	
 				return(tmp);
