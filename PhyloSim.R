@@ -404,7 +404,6 @@ setMethodS3(
 					if(!is.null(hook) & !is.function(hook)){
 						throw("Invalid node hook found!\n");
 					}
-					# FIXME - check seq argument.
 				}
 				# Checking the alignment:
 				if(!any(is.na(this$.alignment))){
@@ -1164,7 +1163,6 @@ setMethodS3(
   ){
 
 
-		# Check for the phylo object:	- FIXME: discrimintae NA-s
 		if(!is.phylo(this$.phylo)){
 			throw("Cannot simulate because the phylo object is not set or it is invalid!\n");
 		}
@@ -1429,7 +1427,7 @@ setMethodS3(
 		} #/while
 
 		# FIXME - Calling the garbage collector:
-	  gc();	
+	  	gc();	
 		return(seq);
 
   },
@@ -2163,13 +2161,9 @@ setMethodS3(
   class="PhyloSim",
   function(
     		this,
-		paranoid=PhyloSim$DEBUG,
+		paranoid=FALSE,
     		...
   ){
-		# FIXME: mention this in doc	
-		if(is.null(paranoid)){
-			paranoid<-FALSE;
-		}
 
 		# Refuse to build alignment if at least one of the sequences is NA:
 		for (seq in this$.sequences){
@@ -2436,7 +2430,6 @@ setMethodS3(
 		} # for edge.number
 		alignment <-aln.mat[[ this$rootSeq$name ]];
 		# Check the correcteness of the alignment if paranoid:
-		# FIXME - disable checking by default!
 		if(paranoid){
 			.checkAlignmentConsistency(this, alignment);
 		}
@@ -2592,6 +2585,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A PhyloSim object.} 
+# 	\item{paranoid}{Check the consistency of the alignment.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
