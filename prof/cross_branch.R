@@ -15,6 +15,7 @@ PSIM_FAST<-TRUE;
 #	# simulation, scale total tree length to 2:
 #
 t<-read.tree("smalldemotree.nwk");
+tmp<-PhyloSim(phylo=t);
 scaleTree(tmp,2/tmp$treeLength)
 tmp$treeLength
 t<-tmp$phylo
