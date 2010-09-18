@@ -1187,6 +1187,7 @@ cat("!! WARNING: fast & careless mode is on, most of the error checking is omitt
 cat("!!    Please note that this also disables the saving of branch statistics.      !!\n");
 cat("!!       You can go back to normal mode by deleting the PSIM_FAST object.       !!\n");
 cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+			Log(this,"WARNING: fast & careless mode is on, most of the error checking is omitted!");
 			}
 		
 			# Attach root sequence to root node:
