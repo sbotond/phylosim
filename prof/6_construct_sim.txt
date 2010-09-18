@@ -1,25 +1,28 @@
 
 Each sample represents 0.02 seconds.
-Total run time: 2.8 seconds.
+Total run time: 2.96 seconds.
 
 Total seconds: time spent in function and callees.
 Self seconds: time spent in function alone.
 
    %       total       %       self
  total    seconds     self    seconds    name
-100.00      2.80      0.00      0.00     "<Anonymous>"
-100.00      2.80      2.86      0.08     "clone.Sequence"
-100.00      2.80      0.00      0.00     "$<-"
-100.00      2.80      0.00      0.00     "PhyloSim"
-100.00      2.80      0.00      0.00     "$<-.Object"
-100.00      2.80      0.00      0.00     "clone"
- 97.14      2.72     81.43      2.28     "clone.PSRoot"
- 14.29      0.40     14.29      0.40     "assign"
-  1.43      0.04      1.43      0.04     "attr<-"
+100.00      2.96      0.00      0.00     "<Anonymous>"
+100.00      2.96      0.00      0.00     "$<-"
+100.00      2.96      0.00      0.00     "PhyloSim"
+100.00      2.96      0.00      0.00     "$<-.Object"
+ 99.32      2.94      1.35      0.04     "clone.Sequence"
+ 99.32      2.94      0.00      0.00     "clone"
+ 97.97      2.90     86.49      2.56     "clone.PSRoot"
+ 11.49      0.34     11.49      0.34     "assign"
+  0.68      0.02      0.00      0.00     "$.Object"
+  0.68      0.02      0.68      0.02     "method"
+  0.68      0.02      0.00      0.00     "paste"
+  0.68      0.02      0.00      0.00     "$"
 
    %       self        %       total
  self     seconds    total    seconds    name
- 81.43      2.28     97.14      2.72     "clone.PSRoot"
- 14.29      0.40     14.29      0.40     "assign"
-  2.86      0.08    100.00      2.80     "clone.Sequence"
-  1.43      0.04      1.43      0.04     "attr<-"
+ 86.49      2.56     97.97      2.90     "clone.PSRoot"
+ 11.49      0.34     11.49      0.34     "assign"
+  1.35      0.04     99.32      2.94     "clone.Sequence"
+  0.68      0.02      0.68      0.02     "method"
