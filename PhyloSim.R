@@ -11,7 +11,7 @@
 # \description{ 
 #
 #	PhyloSim is an extensible object-oriented framework for the Monte Carlo simulation 
-#	of sequence evolution.
+#	of sequence evolution written in 100% \code{R}.
 #	It is built on the top of the \code{\link{R.oo}} and \code{\link{ape}} packages and uses 
 #	Gillespie's direct method to simulate substitutions, insertions and deletions.
 #
@@ -25,8 +25,21 @@
 #	\item The possibility of having a different set of processes and site-process specific parameters for every site, which allows for an arbitrary number of partitions in the simulated data.
 #	\item The possibility to evolve sites by a mixture of substitution processes along a single branch.
 #	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes.
-#	\item The possibility to export the counts of various events as phylo objects (see \code{\link{exportStatTree.PhyloSim}}).
+#	\item The possibility to export the counts of various events ("branch statistics") as phylo objects (see \code{\link{exportStatTree.PhyloSim}}).
 #	}
+#
+#	Notes on performance: 
+#	\itemize{
+#	\item The pure \code{R} implementation offers felxibility, but also comes
+#	with a slower simulation speed. If the \code{PSIM_FAST} object is present in the environment, a "fast & careless"
+#	mode is enabled. In this mode most of the error checking is skipped which increases the speed.
+#	It is not recomended to run simulations in fast mode only if you are sure that the simulation
+#	setting is 100 percent sane. It is probably a good practice to set up the simulations in normal mode
+#	with short sequences and enable fast mode when running the actual simulation with long sequences.
+#	\item Please note, that no "branch statistics" are saved in fast mode.
+#	\item Logging also has a negative impact on performance, so it's not a good idea to run
+#	large simulations with logging enabled.
+#  }
 #
 #	The examples below demonstrate only some more common simulation settings,
 #	the framework offers much more flexibility. See the package vignette and the
@@ -35,6 +48,7 @@
 #	
 #	@classhierarchy
 # }
+#
 #
 # \references{
 #	Gillespie, DT (1977) Exact stochastic simulation of coupled chemical reactions - 
