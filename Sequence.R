@@ -230,7 +230,7 @@ setConstructorS3(
 		if(!STATIC) {
 			if ( len > 0 ) {
 				for(position in 1:len) {
-					 this$.sites[[position]]<-clone(site.template);
+					 this$.sites[[position]]<-clone.PSRoot(site.template);
 				}
 			}
 
@@ -4611,7 +4611,7 @@ setMethodS3(
 	 }
 	 for(site in insert$.sites) {
 				site$.ancestral<-process;
-				site$sequence<-this;
+				site$.sequence<-this;
 	 }
 
 	 # Recalculate cumulative rates if the flag is on:
@@ -4634,7 +4634,7 @@ setMethodS3(
 			# Insertion in the sequence
 			this$.sites<-c(insert$.sites, this$.sites);
 			this$.total.rates<-c(rep(NA,times=insert$.length),this$.total.rates);
-      this$.cumulative.rates<-c(rep(NA,times=insert$.length),this$.cumulative.rates);
+      			this$.cumulative.rates<-c(rep(NA,times=insert$.length),this$.cumulative.rates);
 
 		} else {
 			# Insertion at position 0

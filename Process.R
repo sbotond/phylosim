@@ -1814,13 +1814,18 @@ setMethodS3(
     value,
     ...
   ){
+
+    if(!exists(x="PSIM_FAST")){
 	if (missing(id)) {throw("Parameter identifier is missing!\n")};
+    }
      	id<-as.character(id);
 			
 	if (.checkTriplett(this,site,id)){
 
 		type<-site$.processes[[this$id]]$site.params[[id]]$type;
+    if(!exists(x="PSIM_FAST")){
 		if (length(intersect(class(value),type)) == 0 ) {throw("The new value is of wrong type!\n")}
+    }
 		site$.processes[[this$id]]$site.params[[id]]$value<-value;
 	
 	}
