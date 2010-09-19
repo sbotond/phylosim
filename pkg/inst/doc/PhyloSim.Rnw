@@ -1,0 +1,45 @@
+\documentclass[a4paper]{article}
+
+%\VignetteIndexEntry{PhyloSim}
+%\VignettePackage{phylosim}
+%\VignetteDepends{R.oo}
+
+% Packages
+\usepackage{times}
+
+% Definitions
+\newcommand{\psim}{{\tt PhyloSim}}
+\newcommand{\slan}{{\tt S}}
+\newcommand{\rlan}{{\tt R}}
+\newcommand{\lattice}{{\tt lattice}}
+\newcommand{\code}[1]{{\tt #1}}
+\setlength{\parindent}{0in}
+\setlength{\parskip}{.1in}
+\setlength{\textwidth}{140mm}
+\setlength{\oddsidemargin}{10mm}
+
+\title{The \psim\ package}
+\author{Botond Sipos}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+<<echo=FALSE, results=hide>>=
+library(R.oo)
+library(ggplot2)
+library(phylosim)
+options(width=60)
+@
+
+\section{The field deletion model}
+
+Dummy text.
+
+\end{document}
+
+
+
+
