@@ -42,7 +42,8 @@
 #  }
 #
 #	The examples below demonstrate only some more common simulation settings,
-#	the framework offers much more flexibility. See the package vignette and the
+#	the framework offers much more flexibility. See the package
+#	vignette (\code{vignette("PhyloSim",package="phylosim")}) and the
 #	examples directory (\url{http://github.com/sbotond/phylosim/tree/master/examples/}) 
 #	for additional examples.
 #	

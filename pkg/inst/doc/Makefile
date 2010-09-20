@@ -5,4 +5,6 @@ all: PhyloSim.tex
 	rm PhyloSim.log
 	rm PhyloSim.toc
 	rm PhyloSim.tex
+sw:
+	R CMD Sweave PhyloSim.Rnw
 	
