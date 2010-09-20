@@ -600,8 +600,8 @@ setMethodS3(
 			if(length(grep("^Node \\d+$",label,perl=TRUE,value=FALSE)) > 0){
 					throw("Sorry, but the node labels matching \"Node \\d+\" are reserved for internal nodes! Blaming label: ",label,".\n");	
 			}
-			else if(length(grep("^Root Node \\d+$",label,perl=TRUE,value=FALSE)) > 0){
-					throw("Sorry, but the node labels matching \"Root Node \\d+\" are reserved for the root node! Blaming label: ",label,".\n");	
+			else if(length(grep("^Root node \\d+$",label,perl=TRUE,value=FALSE)) > 0){
+					throw("Sorry, but the node labels matching \"Root node \\d+\" are reserved for the root node! Blaming label: ",label,".\n");	
 			}
 			
 		}
@@ -1197,11 +1197,13 @@ setMethodS3(
 			}
 
 			if(exists(x="PSIM_FAST")){
+				if(!quiet){
 cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 cat("!! WARNING: fast & careless mode is on, most of the error checking is omitted!  !!\n");
 cat("!!    Please note that this also disables the saving of branch statistics.      !!\n");
 cat("!!       You can go back to normal mode by deleting the PSIM_FAST object.       !!\n");
 cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+				}
 			Log(this,"WARNING: fast & careless mode is on, most of the error checking is omitted!");
 			}
 		
@@ -2601,6 +2603,8 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A PhyloSim object.} 
+# 	\item{file}{The name of the output file.} 
+# 	\item{skip.internal}{Do not save sequences corresponding to internal nodes.} 
 # 	\item{paranoid}{Check the consistency of the alignment.} 
 # 	\item{...}{Not used.} 
 # } 
@@ -2642,6 +2646,7 @@ setMethodS3(
   function(
     		this,
     		file="phylosim.fas",
+    		skip.internal=FALSE,
 		paranoid=FALSE,
     		...
   ){
@@ -2655,9 +2660,22 @@ setMethodS3(
 				.checkAlignmentConsistency(this, this$.alignment);
 			}
 			sink(file);
-			for(i in 1:dim(this$.alignment)[[1]]){
-				cat(">",rownames(this$.alignment)[[i]],"\n");
-				cat(paste(this$.alignment[i,],collapse=""),"\n");
+			if(!skip.internal){
+				for(i in 1:dim(this$.alignment)[[1]]){
+					cat(">",rownames(this$.alignment)[[i]],"\n");
+					cat(paste(this$.alignment[i,],collapse=""),"\n");
+				}
+			} else {
+				for(i in 1:dim(this$.alignment)[[1]]){
+
+					name<-rownames(this$.alignment)[[i]];
+
+					if(!any((length(grep("^Node \\d+$",name,perl=TRUE,value=FALSE)) > 0),(length(grep("^Root node \\d+$",name,perl=TRUE,value=FALSE)) > 0))){
+						cat(">",name,"\n");
+						cat(paste(this$.alignment[i,],collapse=""),"\n");
+					}
+
+				}
 			}
 			sink(NULL);
 		}
