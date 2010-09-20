@@ -34,7 +34,11 @@ library(phylosim)
 options(width=60)
 @
 
-\section{The field deletion model}
+\section{Advanced examples}
+
+Dummy text.
+
+\section{The details of the field deletion model}
 
 Dummy text.
 
