@@ -5324,7 +5324,7 @@ setMethodS3(
 # \description{ 
 #	This class implements the F84 GTR submodel.
 #
-#	The rate parameters are the following: Kappa (transition/transversion rate ratio).
+#	The rate parameters are the following: Kappa.
 #	@classhierarchy
 # }
 #	
@@ -5380,7 +5380,7 @@ setConstructorS3(
   function( 
 		name="Anonymous",
 		rate.params=list(
-			"Kappa"   = 1
+			"Kappa"   = 0
 			),
 		base.freqs=c(0.25,0.25,0.25,0.25)
 		)	{
