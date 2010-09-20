@@ -3799,9 +3799,11 @@ setMethodS3(
 
 		if(!all(is.na(this$.phylo))){
 			if(is.phylo(this$.phylo)){
+			   if(length(this$.phylo$edge.length) > 2){
 				if(attr(this$.phylo, "order") != "cladewise"){
 					throw("The order of the phylo object is not cladewise! Someone must have been messing with that!\n");
 				}
+			   }
 				tmp<-cbind(this$.phylo$edge,this$.phylo$edge.length);
 				colnames(tmp)<-c("from","to","length");
 				rownames(tmp)<-1:dim(tmp)[[1]];
