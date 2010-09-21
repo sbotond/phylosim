@@ -7,4 +7,6 @@ all: PhyloSim.tex
 	rm PhyloSim.tex
 sw:
 	R CMD Sweave PhyloSim.Rnw
+clean:
+	rm PhyloSim.pdf
 	
