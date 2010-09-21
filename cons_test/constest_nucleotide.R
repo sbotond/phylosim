@@ -3,11 +3,10 @@
 source("common.R");
 
 # sequence length range
-#length_range<-c(10^0,10^1,10^2,10^3,10^4);
-length_range<-c(10,20);
+length_range<-c(10^0,10^1,10^2,10^3,10^4);
 
 # number of replicates
-reps<-5;
+reps<-1:100;
 
 # F84 model parameters:
 f84.true.kappa<-1;
