@@ -3,7 +3,8 @@
 source("common.R");
 
 # sequence length range
-length_range<-c(3,10^1,10^2,10^3,10^4);
+# cannot start from 1 because PAML complains
+length_range<-c(5,10^1,10^2,10^3,10^4);
 
 # number of replicates
 reps<-1:100;
