@@ -4103,8 +4103,7 @@ setMethodS3(
 	){
 		
 		# dummy method to force the creation of the generic function
-		warning("This is just a dummy method!");
-
+		setOmegas.CodonSequence(this,process,index,...);
 		
 	},
 	private=FALSE,
@@ -4128,7 +4127,7 @@ setMethodS3(
 	){
 		
 		# dummy method to force the creation of the generic function
-		warning("This is just a dummy method!");
+		getOmegas.CodonSequence(this,process,index,...);
 
 		
 	},
