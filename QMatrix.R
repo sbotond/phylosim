@@ -773,7 +773,7 @@ setMethodS3(
 	){
 
 		# split the name
-		substitution<-rbind(strsplit(name,split="->")[[1]]);
+		substitution<-rbind(strsplit(name,split="->",fixed=TRUE)[[1]]);
 		if(length(substitution) != 2 ) {
 			throw("Substitution event name was invalid!");
 		}
@@ -808,7 +808,7 @@ setMethodS3(
 		...
 	){
 
-		substitution<-rbind(strsplit(name,split="->")[[1]]);
+		substitution<-rbind(strsplit(name,split="->",fixed=TRUE)[[1]]);
 		colnames(substitution)<-c("from","to");
 		rownames(substitution)<-c("Substitution");
 		substitution;

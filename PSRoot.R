@@ -349,7 +349,7 @@ setMethodS3(
 		this<-as.character(this);	
 		if (length(this) != 1){throw("This function can handle only vectors of length 1!")};
 
-		return(length(strsplit(this,split="")[[1]]));	
+		return(length(strsplit(this,split="",fixed=TRUE)[[1]]));	
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -622,7 +622,7 @@ setMethodS3(
 		method.to.field<-function(method){
 
 			 method<-sub('^(get|set)(.*)','\\2',method);
-			 tmp<-as.array(strsplit(method,""))[[1]];
+			 tmp<-as.array(strsplit(method,"",fixed=TRUE))[[1]];
        tmp[1]<-tolower(tmp[1]);
        paste(tmp,collapse="");			
 

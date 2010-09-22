@@ -5056,8 +5056,8 @@ setMethodS3(
 			pyrimidines<-c("C","T");
 			res<-character();
 
-			codon1<-strsplit(codons[1],"")[[1]];
-			codon2<-strsplit(codons[2],"")[[1]];
+			codon1<-strsplit(codons[1],"",fixed=TRUE)[[1]];
+			codon2<-strsplit(codons[2],"",fixed=TRUE)[[1]];
 
 			for(i in c(1,2,3)){
 					if(codon1[i] == codon2[i]) {

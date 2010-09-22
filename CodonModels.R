@@ -695,8 +695,8 @@ setMethodS3(
 			for(j in symbols){
 
 				# Split codons:
-				nuc.i<-strsplit(i,"")[[1]];
-				nuc.j<-strsplit(j,"")[[1]];
+				nuc.i<-strsplit(i,"",fixed=TRUE)[[1]];
+				nuc.j<-strsplit(j,"",fixed=TRUE)[[1]];
 	
 				diff<-which( (nuc.i == nuc.j) == FALSE);
 

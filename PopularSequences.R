@@ -342,7 +342,7 @@ setConstructorS3(
 				warning("The length of the provided string was not multiple of 3. The incomplete codon was discarded!\n");
 			}
 
-			nuc<-strsplit(string,"")[[1]];
+			nuc<-strsplit(string,"",fixed=TRUE)[[1]];
 
 
 			j<-1;	# counter for the codon position

@@ -204,7 +204,7 @@ setConstructorS3(
 			len<-length;
 		}
 		else if( !missing(string) ) {
-					str<-strsplit(string,split="")[[1]];
+					str<-strsplit(string,split="",fixed=TRUE)[[1]];
 					len<-length(str);
 		}
 		this$.length<-len;
