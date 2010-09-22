@@ -1230,7 +1230,6 @@ setMethodS3(
 	){
 
 		.checkWriteProtection(this);
-		# FIXME - explain this + more chekings
 		setEquDist(this,value,force=TRUE);
 		setRateParamList.GTR(this,value=this$.gtr.params);
 		return(invisible(value));
@@ -4168,7 +4167,6 @@ setMethodS3(
 
 				this$.k81.params<-value;
 				# Setting the GTR rate parameters:
-				# FIXME - doublecheck this!
 				gtr.params<-list(
 					"a"=value[["Alpha"]],
 					"b"=value[["Beta"]],

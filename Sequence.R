@@ -4102,7 +4102,7 @@ setMethodS3(
 		...
 	){
 		
-		# FIXME	- dummy method to force the creation of the generic function
+		# dummy method to force the creation of the generic function
 		warning("This is just a dummy method!");
 
 		
@@ -4127,7 +4127,7 @@ setMethodS3(
 		...
 	){
 		
-		# FIXME	- dummy method to force the creation of the generic function
+		# dummy method to force the creation of the generic function
 		warning("This is just a dummy method!");
 
 		
@@ -4780,7 +4780,6 @@ setMethodS3(
 			
 			# Flag the site before the deletion to
 			# to force cumulative rate recalculation:
-			# FIXME: this will call site$totalRate
 			if (min.index > 2 ) {
 				this$.flagged.sites<-c(this$.flagged.sites,(min.index - 1));
 			}

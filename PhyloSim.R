@@ -1444,7 +1444,6 @@ setMethodS3(
 
 		} #/while
 
-		# FIXME - Calling the garbage collector:
 	  	gc();	
 		return(seq);
 

@@ -622,7 +622,7 @@ setMethodS3(
     sd<-NA;
     if( is.numeric(this$sizes) & is.numeric(this$probs)) {
     expected.length<-weighted.mean(this$sizes, this$probs);
-    # FIXME - check back on this
+
     sd<-sqrt(sum( (this$sizes - expected.length)^2 * this$probs ));
     }
 

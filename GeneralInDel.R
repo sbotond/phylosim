@@ -1063,7 +1063,6 @@ setConstructorS3(
 					 direction<-sample(c("LEFT","RIGHT"),replace=FALSE,size=1);
 
 					 # Set insertion tolerance window:
-					 # FIXME - more general handling
 					 window<-integer();
 					 insert.pos<-position;
 					 if(direction == "LEFT") {

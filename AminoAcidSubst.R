@@ -216,7 +216,6 @@ setMethodS3(
 	
       }
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
-			# FIXME - do we really need this NextMethod?
 			NextMethod();		
 
 	},

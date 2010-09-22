@@ -1821,7 +1821,7 @@ setMethodS3(
     }
 
 		rnorm.gt.1<-function(mean=NA,sd=NA){
-			# FIXME - This is probably the most primitive way to truncate the distribution!
+			# This is probably the most primitive way to truncate the distribution!
 			tmp<-rnorm(1,mean=mean,sd=sd);
 			while( tmp <= 1){
 				tmp<-rnorm(1,mean=mean,sd=sd);
@@ -1918,7 +1918,7 @@ setMethodS3(
     }
 
 		rnorm.gt.0<-function(mean=NA,sd=NA){
-			# FIXME - This is probably the most primitive way to truncate the distribution!
+			# This is probably the most primitive way to truncate the distribution!
 			tmp<-rnorm(1,mean=mean,sd=sd);
 			while( tmp <= 0){
 				tmp<-rnorm(1,mean=mean,sd=sd);
@@ -2029,7 +2029,7 @@ setMethodS3(
     }
 
 		rnorm.gt.0<-function(mean=NA,sd=NA){
-			# FIXME - This is probably the most primitive way to truncate the distribution!
+			# This is probably the most primitive way to truncate the distribution!
 			tmp<-rnorm(1,mean=mean,sd=sd);
 			while( tmp <= 0){
 				tmp<-rnorm(1,mean=mean,sd=sd);
