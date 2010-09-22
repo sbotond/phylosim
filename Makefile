@@ -31,7 +31,7 @@ reinst: pkg
 	R CMD INSTALL	phylosim_0.1.tar.gz
 remove:
 	R CMD REMOVE  phylosim
-aareload: 
+aareload: cat
 	(rm RData/*;true)
 	R --vanilla < misc/recreate_aamodels.R
 
