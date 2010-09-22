@@ -79,7 +79,6 @@ estimate_nuc<-function(phylo, len,rep){
 	tmp$kappa=res.kappa;
 	tmp$alpha=res.alpha;
 	tmp$tree=res.tree;
-	system(paste("rm -fr ",dir));
 	return(list(tmp));
 }
 

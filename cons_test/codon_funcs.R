@@ -74,7 +74,6 @@ estimate_codon<-function(phylo, len,rep){
 	tmp$kappa=res.kappa;
 	tmp$omega=res.omega;
 	tmp$tree=res.tree;
-	system(paste("rm -fr ",dir));	
 	return(list(tmp));
 }
 

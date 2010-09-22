@@ -70,7 +70,6 @@ estimate_aa<-function(phylo, len,rep){
 	tmp$len=len;
 	tmp$alpha=res.alpha;
 	tmp$tree=res.tree;
-	system(paste("rm -fr ",dir));	
 	return(list(tmp));
 }
 

@@ -3,7 +3,7 @@
 source("common.R");
 
 # sequence length range
-length_range<-c(10^0,10^1,10^2,10^3,10^4);
+length_range<-c(10,50,100,500,1000,5000,1000);
 
 # number of replicates
 reps<-1:100;
