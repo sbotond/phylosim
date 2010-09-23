@@ -5,8 +5,12 @@ all: PhyloSim.tex
 	rm PhyloSim.log
 	rm PhyloSim.toc
 	rm PhyloSim.tex
+	rm *.eps
+	rm PhyloSim-*.pdf
 sw:
 	R CMD Sweave PhyloSim.Rnw
 clean:
 	rm PhyloSim.pdf
+v:
+	okular PhyloSim.pdf
 	
