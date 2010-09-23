@@ -167,6 +167,13 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{check.process}{Check the assotiated process object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -1069,8 +1076,12 @@ setMethodS3(
 # \arguments{ 
 #       \item{this}{A QMatrix object.} 
 #       \item{name}{The name of the event.}
+#       \item{value}{The new value of the rate.}
 #       \item{from}{The initial state.}
 #       \item{to}{Target state.}
+#       \item{scale}{Call rate rescaling.}
+#       \item{diag}{Calculate diagonal elements.}
+#       \item{guess.equ}{Guess equilibrium distribution.}
 #       \item{...}{Not used.} 
 # } 
 # 
@@ -1805,7 +1816,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A QMatrix object.} 
+# 	\item{x}{A QMatrix object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 

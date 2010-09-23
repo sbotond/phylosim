@@ -119,6 +119,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -147,7 +153,6 @@ setMethodS3(
   private=FALSE,
   protected=FALSE,
   overwrite=TRUE,
-	static=TRUE,
   conflict="warning"
 );
 
@@ -554,6 +559,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A PSRoot object.} 
+# 	\item{quiet}{Do not print out methods list.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -581,7 +587,7 @@ setMethodS3(
   class="PSRoot",
   function(
     this,
-		quiet=FALSE,
+    quiet=FALSE,
     ...
   ){
 		
@@ -958,7 +964,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A PSRoot object.} 
+# 	\item{x}{A PSRoot object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1011,6 +1017,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -1028,7 +1040,7 @@ setMethodS3(
   "checkConsistency",
   class="PSRoot",
   function(
-		this,
+    this,
     ...
   ){
 		
@@ -1039,7 +1051,6 @@ setMethodS3(
   private=FALSE,
   protected=FALSE,
   overwrite=TRUE,
-	static=TRUE,
   conflict="warning"
 );
 
@@ -1107,7 +1118,6 @@ setMethodS3(
   private=FALSE,
   protected=FALSE,
   overwrite=TRUE,
-  static=TRUE,
   conflict="warning"
 );
 
@@ -1128,7 +1138,6 @@ setMethodS3(
   private=FALSE,
   protected=FALSE,
   overwrite=TRUE,
-	static=TRUE,
   conflict="warning"
 );
 
@@ -1208,7 +1217,6 @@ setMethodS3(
   private=FALSE,
   protected=FALSE,
   overwrite=TRUE,
-	static=TRUE,
   conflict="warning"
 );
 

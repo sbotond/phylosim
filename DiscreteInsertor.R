@@ -145,6 +145,12 @@ setConstructorS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -163,7 +169,6 @@ setMethodS3(
   class="DiscreteInsertor",
   function(
     this,
-    length,
     ...
   ){
 

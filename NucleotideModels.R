@@ -147,6 +147,12 @@ setConstructorS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -359,6 +365,12 @@ setConstructorS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -600,6 +612,12 @@ setConstructorS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -1614,7 +1632,6 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A TN93 object.} 
 #	\item{name}{The name of the rate parameter.}
-#	\item{value}{A numeric vector of length one.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1878,6 +1895,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -2564,6 +2587,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -2903,6 +2932,7 @@ setMethodS3(
 #
 # \arguments{
 #       \item{this}{An object.}
+#       \item{name}{The name of the rate parameter.}
 #       \item{...}{Not used.}
 # }
 #
@@ -2955,6 +2985,7 @@ setMethodS3(
 #
 # \arguments{
 #       \item{this}{An object.}
+#       \item{name}{Not used.}
 #       \item{value}{Not used.}
 #       \item{...}{Not used.}
 # }
@@ -3134,6 +3165,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -3780,6 +3817,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -4454,6 +4497,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -5169,6 +5218,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -5984,6 +6039,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 

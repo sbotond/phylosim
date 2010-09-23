@@ -363,6 +363,13 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{ommit.sites}{Do not check aggregated site objects.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -3386,7 +3393,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A Sequence object.} 
+# 	\item{x}{A Sequence object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 

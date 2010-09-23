@@ -287,6 +287,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -1123,7 +1129,7 @@ setMethodS3(
 	class="Site", 
 	function(
 		this,
-		new.rate,
+		value,
 		...
 	){
 			virtualAssignmentForbidden(this);
@@ -1278,7 +1284,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A Site object.} 
+# 	\item{x}{A Site object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 

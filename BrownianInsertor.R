@@ -211,6 +211,12 @@ setConstructorS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -229,7 +235,6 @@ setMethodS3(
   class="BrownianInsertor",
   function(
     this,
-    length,
     ...
   ){
 
@@ -276,6 +281,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
+#	\item{this}{A BrownianInsertor object.}
 # 	\item{p}{Path parameter (a numeric vector).} 
 # 	\item{a}{Scale paramater (a numeric vector of length one).} 
 # 	\item{...}{Not used.} 
@@ -330,7 +336,6 @@ setMethodS3(
   private=FALSE,
   protected=FALSE,
   overwrite=TRUE,
-  static=TRUE,
   conflict="warning"
 );
 

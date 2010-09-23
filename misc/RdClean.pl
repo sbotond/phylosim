@@ -12,7 +12,9 @@ for my $file (<*.Rd>){
 
 	open(OUT,">$file");
 	for my $l (@lines){
-		if($l !~ /^ \\tab \\code\{\.\S+\} \\tab  -\\cr\n$/){
+		if( ($l !~ /^ \\tab \\code\{\.\S+\} \\tab  -\\cr\n$/) and
+		    ($l !~ /\\keyword{.+}/)	
+		   ){
 			print OUT $l;
 		}
 	}

@@ -114,6 +114,12 @@ setConstructorS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -687,7 +693,6 @@ setMethodS3(
 	class="GeneralInDel", 
 	function(
 		this,
-		value,
 		...
 	){
 
@@ -1179,6 +1184,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -1197,7 +1208,6 @@ setMethodS3(
 	class="GeneralInsertor", 
 	function(
 		this,
-		length,
 		...
 	){
 
@@ -2438,6 +2448,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -2456,7 +2472,6 @@ setMethodS3(
   class="GeneralDeletor",
   function(
     this,
-    length,
     ...
   ){
       NextMethod();

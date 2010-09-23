@@ -412,6 +412,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{An Event object.} 
+# 	\item{value}{The event rate.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -443,18 +444,18 @@ setMethodS3(
 	class="Event", 
 	function(
 		this,
-		new.rate,
+		value,
 		...
 	){
 	
 		.checkWriteProtection(this);	
 		if(!exists(x="PSIM_FAST")){
 		
-		if(missing(new.rate)){throw("No new rate provided!\n")}
-		else if (!is.numeric(new.rate)){throw("The rate must be numeric!\n")}
+		if(missing(value)){throw("No new rate provided!\n")}
+		else if (!is.numeric(value)){throw("The rate must be numeric!\n")}
 		
 		}
-		this$.rate<-new.rate;
+		this$.rate<-value;
 		
 	},
 	private=FALSE,
@@ -689,7 +690,7 @@ setMethodS3(
 	class="Event", 
 	function(
 		this,
-		new.rate,
+		value,
 		...
 	){
 		
@@ -843,6 +844,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{An Event object.} 
+# 	\item{value}{The position.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1427,6 +1429,12 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 

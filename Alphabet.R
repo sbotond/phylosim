@@ -182,6 +182,11 @@ setMethodS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+# 	\item{this}{An object.} 
+# 	\item{...}{Not used.} 
+# } 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found, throws an error otherwise. 
@@ -1071,7 +1076,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{An Alphabet object} 
+# 	\item{x}{An Alphabet object} 
 # 	\item{...}{Not used.} 
 # } 
 # 

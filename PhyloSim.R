@@ -11,7 +11,7 @@
 # \description{ 
 #
 #	PhyloSim is an extensible object-oriented framework for the Monte Carlo simulation 
-#	of sequence evolution written in 100% \code{R}.
+#	of sequence evolution written in 100 percent \code{R}.
 #	It is built on the top of the \code{\link{R.oo}} and \code{\link{ape}} packages and uses 
 #	Gillespie's direct method to simulate substitutions, insertions and deletions.
 #
@@ -39,6 +39,8 @@
 #	\item Please note, that no "branch statistics" are saved in fast mode.
 #	\item Logging also has a negative impact on performance, so it's not a good idea to run
 #	large simulations with logging enabled.
+#	\item The time needed to run a simulation depends not only on the number of the sites, 
+#	but also on the length of the tree.
 #  }
 #
 #	The examples below demonstrate only some more common simulation settings,
@@ -289,15 +291,20 @@
 # @author
 #
 # \seealso{ 
-#	PSRoot Alphabet AminoAcidAlphabet AminoAcidSequence AminoAcidSubst
-#	AnyAlphabet BinaryAlphabet BinarySequence BinarySubst
-#	BrownianInsertor CodonAlphabet CodonSequence CodonUNREST
-#	ContinuousDeletor ContinuousInsertor cpREV DiscreteDeletor
-#	DiscreteInsertor Event F81 F84 FieldDeletor GeneralDeletor
-#	GeneralInDel GeneralInsertor GeneralSubstitution GTR GY94
-#	HKY JC69 JTT JTT.dcmut K80 K81 LG mtArt mtMam mtREV24
-#	MtZoa NucleotideAlphabet NucleotideSequence PAM PAM.dcmut
-#	PhyloSim Process QMatrix Sequence Site T92 TN93 UNREST WAG
+#	\code{\link{PSRoot} \link{Alphabet} \link{AminoAcidAlphabet} 
+#	\link{AminoAcidSequence} \link{AminoAcidSubst}
+#	\link{AnyAlphabet} \link{BinaryAlphabet} \link{BinarySequence} 
+#	\link{BinarySubst} \link{BrownianInsertor} \link{CodonAlphabet}
+#	\link{CodonSequence} \link{CodonUNREST} \link{ContinuousDeletor}
+#	\link{ContinuousInsertor} \link{cpREV} \link{DiscreteDeletor}
+#	\link{DiscreteInsertor} \link{Event} \link{F81} \link{F84}
+#	\link{FieldDeletor} \link{GeneralDeletor}
+#	\link{GeneralInDel} \link{GeneralInsertor} \link{GeneralSubstitution} 
+#	\link{GTR} \link{GY94} \link{HKY} \link{JC69} \link{JTT} \link{JTT.dcmut}
+#	\link{K80} \link{K81} \link{LG} \link{mtArt} \link{mtMam} \link{mtREV24}
+#	\link{MtZoa} \link{NucleotideAlphabet} \link{NucleotideSequence} \link{PAM} 
+#	\link{PAM.dcmut} \link{PhyloSim} \link{Process} \link{QMatrix} \link{Sequence}
+#	\link{Site} \link{T92} \link{TN93} \link{UNREST} \link{WAG}}
 # }
 # 
 #*/###########################################################################
@@ -371,6 +378,12 @@ setConstructorS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -776,7 +789,6 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A PhyloSim object.} 
-# 	\item{value}{A valid Sequence object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -841,7 +853,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A PhyloSim object.} 
+# 	\item{x}{A PhyloSim object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1947,7 +1959,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{tis}{A PhyloSim object.} 
+# 	\item{this}{A PhyloSim object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3112,7 +3124,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A PhyloSim object.} 
-#	\item{this}{The new log level as an integer.}
+#	\item{value}{The new log level as an integer.}
 # 	\item{...}{Not used.} 
 # } 
 # 

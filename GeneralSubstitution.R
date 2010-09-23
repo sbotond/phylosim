@@ -195,6 +195,12 @@ setConstructorS3(
 # } 
 # 
 # @synopsis 
+#
+# \arguments{ 
+#       \item{this}{An object.} 
+#       \item{...}{Not used.} 
+# } 
+# 
 # 
 # \value{ 
 #		Returns an invisible TRUE if no inconsistencies found in the object, throws 
@@ -295,7 +301,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A GeneralSubstitution object.} 
-# 	\item{this}{A Site object. The GeneralSubstitution object must be attached to the Site object.} 
+# 	\item{target.site}{A Site object. The GeneralSubstitution object must be attached to the Site object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1523,6 +1529,7 @@ setMethodS3(
 # 	\item{this}{A GeneralSubstitution object.} 
 #	\item{name}{The name of the event.}
 #	\item{from}{The initial state.}
+#	\item{value}{The new value of the rate.}
 #	\item{to}{Target state.}
 # 	\item{...}{Not used.} 
 # } 
