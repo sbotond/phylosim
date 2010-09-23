@@ -52,7 +52,7 @@ The following code illustrates how to set up a more complicated simulation of am
 
 First, load the package:
 <<echo=FALSE,results=hide>>=
-options(width=80)
+options(width=90)
 @
 <<echo=TRUE>>=
 library(phylosim)
@@ -76,7 +76,6 @@ Get a bubble plot of \code{wag}:
 <<echo=TRUE,fig=TRUE>>=
 plot(wag, scale = 0.4)
 @
-\includegraphics{PhyloSim-005}
 
 Construct a continous deletor process:
 <<echo=TRUE>>=
@@ -194,7 +193,6 @@ Plot the total rates of the sites:
 <<echo=TRUE,fig=TRUE>>=
 plot(seq)
 @
-\includegraphics{PhyloSim-020}
 
 Read in a tree using the \code{ape} package:
 <<echo=FALSE,results=hide>>=
@@ -299,7 +297,7 @@ Construct a discrete deletor process:
 d<-DiscreteDeletor(
         rate=0.025,
         sizes=1:4,
-        probs=c(4,3,2,1)
+        probs=c(4,3,2,1)/10
 );
 @
 
@@ -308,7 +306,7 @@ Construct a discrete insertor process inserting neutrally evolving sites:
 i<-DiscreteInsertor(
         rate=0.04,
         sizes=1:4,
-        probs=c(4,3,2,1),
+        probs=c(4,3,2,1)/10,
         template.seq=CodonSequence(length=4,processes=list(list(p)))
 );
 @

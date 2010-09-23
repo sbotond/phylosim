@@ -25,14 +25,14 @@ summary(p)
 d<-DiscreteDeletor(
 	rate=0.025,
 	sizes=1:4,
-	probs=c(4,3,2,1)	
+	probs=c(4,3,2,1)/10
 );
 
 # Construct a discrete insertor process inserting neutrally evolving sites:
 i<-DiscreteInsertor(
 	rate=0.04,
 	sizes=1:4,
-	probs=c(4,3,2,1),
+	probs=c(4,3,2,1)/10,
 	template.seq=CodonSequence(length=4,processes=list(list(p)))
 );
 
