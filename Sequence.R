@@ -720,17 +720,17 @@ setMethodS3(
 			for(site in this$.sites){
 					if(is.na(site$.state)){
 							if(is.Alphabet(site$.alphabet)){
-								str<-paste(str,paste(rep("?",site$.alphabet$symbolLength),collapse=""),sep="");
+								str<-c(str,rep("?",site$.alphabet$.symbolLength));
 							}
 							else {
-								str<-paste(str,"?",sep="");
+								str<-c(str,"?");
 							}
 					}
 					else {
-						str<-paste(str,site$.state,sep="");
+						str<-c(str,site$.state);
 					}
 			}
-			return(str);
+			return(paste(str,collapse=""));
 
 	},
 	private=FALSE,
