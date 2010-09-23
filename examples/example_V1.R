@@ -12,6 +12,9 @@
 # load PhyloSim
 library("phylosim");
 
+# Enable the "fast & careless mode":
+PSIM_FAST <- TRUE
+
 wag<-WAG();	# Create a WAG substitution process.
 jtt<-JTT();	# Create a JTT substitution process.
 lg<-LG();	# Create a LG substitution process.
@@ -94,13 +97,13 @@ cont.ins.lg$insertHook<-function(seq,target.seq,event.pos,insert.pos){
 # Setting up the root sequence:
 #
 
-seq<-AminoAcidSequence(length=2000); # Create a sequence of length 500.
+seq<-AminoAcidSequence(length=200); # Create a sequence of length 200.
 
 # Create the process pattern:
 process.pattern<-c(
-		rep(list(list(wag,cont.del, cont.ins.wag)), times=60),	# Left linker model: WAG
+		rep(list(list(wag,cont.del, cont.ins.wag)), times=50),	# Left linker model: WAG
 		rep(list(list(jtt)), times=100),			# "Core" model: JTT
-		rep(list(list(lg,cont.del, cont.ins.lg)), times=60)	# Right linker model: LG
+		rep(list(list(lg,cont.del, cont.ins.lg)), times=50)	# Right linker model: LG
 );
 
 # Apply the process pattern to the root sequence:
@@ -153,8 +156,6 @@ tree<-read.tree(
 		file="smalldemotree.nwk"	# the path to the tree file
 	);
 
-# scale total tree length to 2:
-
 # Create the simulation object:
 sim<-PhyloSim(
 			phylo=tree,	# the tree as an APE phylo object
@@ -171,20 +172,25 @@ node.hook<-function(seq){
 	return(seq);
 }
 
-# Attach the hook to node 11:
+# Attach the hook to node 8:
 attachHookToNode(
-		sim,			# PhyloSim object.
-		node=11,		# the node
-		fun=node.hook		# the node hook function
+		sim,		# PhyloSim object.
+		node=8,		# the node
+		fun=node.hook	# the node hook function
 		);
 
 # Run the simulation:
-time<-system.time(Simulate(sim));
-print(time);
+Simulate(sim)
 
-# And finally save the resulting alignment:
+# Plot the resulting alingment alongside the tree:
+plot(sim)
+
+# Save the resulting alignment, skip internal nodes:
 saveAlignment(
 		sim,				# the phylo object	
-		file="example_V1_aln.fas"	# filename for alignment
-	);
+		file="example_V1_aln.fas",
+		skip.internal=TRUE		# filename for alignment
+);
 
+# Disable fast mode:
+rm(PSIM_FAST)
