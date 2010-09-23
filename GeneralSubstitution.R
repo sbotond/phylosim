@@ -2195,7 +2195,7 @@ setMethodS3(
 	grid.newpage();
 
 	size<-dim(qmat)[1];
-	dsize<-(max(c(1/size,( (0.2 * size - 0.65)/size ) )));
+	dsize<-(max(c(1/size,( (0.23 * size - 0.65)/size ) )));
 
 	layout<-grid.layout(nrow=2,ncol=1,heights=c((1 - dsize), dsize),respect=TRUE);
 
