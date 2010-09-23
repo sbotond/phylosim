@@ -8,7 +8,7 @@ all: PhyloSim.tex
 	rm PhyloSim.tex
 	rm *.eps
 	rm PhyloSim-*.pdf
-	rm Rplots.pd
+	rm Rplots.pdf
 sw:
 	R CMD Sweave PhyloSim.Rnw
 clean:

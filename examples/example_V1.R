@@ -12,6 +12,9 @@
 # load PhyloSim
 library("phylosim");
 
+# Use the ll() method to list the methods and virtual fields implemented in the Sequence class:
+ll(Sequence())
+
 # Enable the "fast & careless mode":
 PSIM_FAST <- TRUE
 
@@ -28,7 +31,7 @@ plot(wag);
 
 # Create a continous deletor process:
 cont.del<-ContinuousDeletor(
-			rate=0.005,	# global rate for this deletion process
+			rate=0.5,	# global rate for this deletion process
 			max.length=10,	# the maximum allowed deletion length
 			dist=expression(rnorm(1,mean=5,sd=3))	# length sampling expression
 		);
@@ -44,7 +47,7 @@ templ.seq.lg<-clone(templ.seq.wag);
 
 # Create a continous insertor process object:
 cont.ins.wag<-ContinuousInsertor(
-			rate=0.005,	# global rate for this insertion process
+			rate=0.5,	# global rate for this insertion process
 			max.length=10,	# the maximum allowed insertion length
 			dist=expression(rnorm(1,mean=5,sd=3))	# length sampling expression
 		);
@@ -97,13 +100,13 @@ cont.ins.lg$insertHook<-function(seq,target.seq,event.pos,insert.pos){
 # Setting up the root sequence:
 #
 
-seq<-AminoAcidSequence(length=200); # Create a sequence of length 200.
+seq<-AminoAcidSequence(length=60); # Create a sequence of length 200.
 
 # Create the process pattern:
 process.pattern<-c(
-		rep(list(list(wag,cont.del, cont.ins.wag)), times=50),	# Left linker model: WAG
-		rep(list(list(jtt)), times=100),			# "Core" model: JTT
-		rep(list(list(lg,cont.del, cont.ins.lg)), times=50)	# Right linker model: LG
+		rep(list(list(wag,cont.del, cont.ins.wag)), times=20),	# Left linker model: WAG
+		rep(list(list(jtt)), times=20),				# "Core" model: JTT
+		rep(list(list(lg,cont.del, cont.ins.lg)), times=20)	# Right linker model: LG
 );
 
 # Apply the process pattern to the root sequence:

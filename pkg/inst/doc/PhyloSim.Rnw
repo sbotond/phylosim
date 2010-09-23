@@ -25,7 +25,7 @@
 }
 
 \title{The \psim\ package}
-\author{Botond Sipos}
+\author{Botond Sipos and Tim Massingham}
 
 \usepackage{Sweave}
 \begin{document}
@@ -57,6 +57,12 @@ options(width=90)
 <<echo=TRUE>>=
 library(phylosim)
 @
+
+Use the \code{ll()} method to list the methods and virtual fields implemented in the \code{Sequence} class:
+<<echo=TRUE>>=
+ll(Sequence())
+@
+
 Enable the "fast \& careless mode":
 <<echo=TRUE>>=
 PSIM_FAST <- TRUE
@@ -74,12 +80,12 @@ summary(wag)
 @
 Get a bubble plot of \code{wag}:
 <<echo=TRUE,fig=TRUE>>=
-plot(wag, scale = 0.4)
+plot(wag, scale = 0.8)
 @
 
-Construct a continous deletor process:
+Construct a continuous deletor process:
 <<echo=TRUE>>=
-cont.del <- ContinuousDeletor(rate = 0.005, max.length = 10, 
+cont.del <- ContinuousDeletor(rate = 0.5, max.length = 10, 
     dist = expression(rnorm(1, mean = 5, sd = 3)))
 @
 Construct the template sequence for the \code{cont.ins.lg} insertion process:
@@ -92,15 +98,15 @@ Clone the template sequence for the \code{cont.ins.wag} process:
 templ.seq.lg <- clone(templ.seq.wag)
 @
 
-Construct continous insertor process object \code{cont.ins.wag}:
+Construct continuous insertor process object \code{cont.ins.wag}:
 <<echo=TRUE>>=
-cont.ins.wag <- ContinuousInsertor(rate = 0.005, max.length = 10, 
+cont.ins.wag <- ContinuousInsertor(rate = 0.5, max.length = 10, 
     dist = expression(rnorm(1, mean = 5, sd = 3)))
 @
 
-Construct continous insertor process object \code{cont.ins.lg}:
+Construct continuous insertor process object \code{cont.ins.lg}:
 <<echo=TRUE>>=
-cont.ins.lg <- ContinuousInsertor(rate = 0.005, max.length = 10, 
+cont.ins.lg <- ContinuousInsertor(rate = 0.5, max.length = 10, 
     dist = expression(rnorm(1, mean = 5, sd = 3)))
 @
 
@@ -110,7 +116,7 @@ templ.seq.wag$processes <- list(list(wag, cont.ins.wag, cont.del))
 templ.seq.lg$processes <- list(list(lg, cont.ins.lg, cont.del))
 @
 
-Now the \code{cont.ins.lg} process samples the states from the equlibrium distribution of the \code{LG} model and \code{cont.ins.wag} samples the states from the \code{WAG} model.
+Now the \code{cont.ins.lg} process samples the states from the equilibrium distribution of the \code{LG} model and \code{cont.ins.wag} samples the states from the \code{WAG} model.
 
 Disabling write protection for the insertion processes:
 <<echo=TRUE>>=
@@ -144,15 +150,15 @@ insert hook functions will sample the site-process specific rate multipliers of 
 Now the processes are in place, so it is time to set up the root sequence.
 
 <<echo=TRUE>>=
-seq <- AminoAcidSequence(length = 200)
+seq <- AminoAcidSequence(length = 60)
 @
 
 Now we will create a pattern of processes:
 
 <<echo=TRUE>>=
 process.pattern <- c(rep(list(list(wag, cont.del, cont.ins.wag)), 
-    times = 50), rep(list(list(jtt)), times = 100), rep(list(list(lg, 
-    cont.del, cont.ins.lg)), times = 50))
+    times = 20), rep(list(list(jtt)), times = 20), rep(list(list(lg, 
+    cont.del, cont.ins.lg)), times = 20))
 @
 
 The "left linker", "core" and "right linker" regions evolve by different sets of processes. The core region has no indel processes attached, so its length will remain constant.
@@ -234,26 +240,26 @@ After simulating the branch leading to the node, the resulting
 \code{Sequence} object is passed to the node hook and the returned object
 is used to simulate the downstream branches.
 
-The \code{node.hook} function will attach the \code{pam} substitution process to all
-sites which have the \code{jtt} process attached (the "core" region). The affected sites 
-will evolve with a doubled rate by a mixture of substitution processes in the clade defined by the node.
-
 Attach the hook to node 8:
 <<echo=TRUE>>=
 attachHookToNode(sim, node = 8, fun = node.hook)
 @
+
+The \code{node.hook} function will attach the \code{pam} substitution process to all
+sites which have the \code{jtt} process attached (the "core" region). The affected sites 
+will evolve with a doubled rate by a mixture of substitution processes in the clade defined by the node - \code{(t4, t2)}.
 
 Run the simulation:
 <<echo=TRUE>>=
 Simulate(sim)
 @
 
-Plot the resulting alingment alongside the tree:
+Plot the resulting alignment alongside the tree:
 <<echo=TRUE,fig=TRUE>>=
 plot(sim)
 @
 
-Save the resulting alignment, ommit the internal nodes:
+Save the resulting alignment, omit the internal nodes:
 <<echo=TRUE>>=
 saveAlignment(sim, file = "example_V1_aln.fas", skip.internal = TRUE)
 @
@@ -267,9 +273,9 @@ rm(PSIM_FAST)
 @
 
 
-\subsection{Evolving codon seqeunces}
+\subsection{Evolving codon sequences}
 
-Enable ”fast careless” mode:
+Enable "fast \& careless" mode:
 <<echo=TRUE>>=
 PSIM_FAST <- TRUE
 @
@@ -277,7 +283,7 @@ Construct a GY94 codon substitution model:
 <<echo=TRUE>>=
 p <- GY94()
 @
-Set the transition/transverion rate ratio:
+Set the transition/transversion rate ratio:
 <<echo=TRUE>>=
 p$kappa = 2
 @
@@ -292,10 +298,15 @@ Get object summary for p:
 summary(p)
 @
 
+Get a bubble plot of \code{p}:
+<<echo=TRUE,fig=TRUE>>=
+plot(p,scale=0.5)
+@
+
 Construct a discrete deletor process:
 <<echo=TRUE>>=
 d<-DiscreteDeletor(
-        rate=0.025,
+        rate=1,
         sizes=1:4,
         probs=c(4,3,2,1)/10
 );
@@ -304,16 +315,16 @@ d<-DiscreteDeletor(
 Construct a discrete insertor process inserting neutrally evolving sites:
 <<echo=TRUE>>=
 i<-DiscreteInsertor(
-        rate=0.04,
+        rate=1.5,
         sizes=1:4,
         probs=c(4,3,2,1)/10,
         template.seq=CodonSequence(length=4,processes=list(list(p)))
 );
 @
 
-Construct root sequence and attach process p:
+Construct root sequence and attach process \code{p}:
 <<echo=TRUE>>=
-s<-CodonSequence(length=100,processes=list(list(p)))
+s<-CodonSequence(length=30,processes=list(list(p)))
 @
 
 Sample omegas from a discrete model:
@@ -350,13 +361,35 @@ node.hook <- function(seq) {
 }
 attachHookToNode(sim, node = 8, fun = node.hook)
 @
+
+The \code{node.hook} function will set all omegas to 1 and attach the insertion process \code{i} and deletion process \code{d}. Hence, the sequences will evolve neutrally and with indels in the clade defined by node 8 - \code{(t4, t2)}.
+
+Disable fast mode just before simulation in order to preserve branch statistics:
+<<echo=TRUE>>=
+rm(PSIM_FAST)
+@
+
 Run the simulation:
 <<echo=TRUE>>=
 Simulate(sim)
 @
+
+Plot the resulting alignment alongside the tree:
 <<echo=TRUE,fig=TRUE>>=
 plot(sim)
 @
+
+Export the nonsynonymous substitution counts as a phylo object:
+<<echo=TRUE>>=
+nsyn.subst<-exportStatTree(sim,"nr.nsyn.subst")
+@
+
+Plot the exported phylo object:
+<<echo=TRUE,fig=TRUE>>=
+plot(nsyn.subst)
+nodelabels()
+@
+
 Save the resulting alignment:
 <<echo=TRUE>>=
 saveAlignment(sim, file = "example_V2_aln.fas", )
@@ -365,13 +398,37 @@ saveAlignment(sim, file = "example_V2_aln.fas", )
 file.remove("example_V2_aln.fas")
 @
 
-Disable ”fast careless” mode:
-<<echo=TRUE>>=
-rm(PSIM_FAST)
-@
 \section{The details of the field deletion model}
 
-Dummy text.
+A natural way to incorporate deletions into the Gillespie framework is to assign an individual rate to every possible deletion event. Modelling in this manner is extremely general but requires a lot of specification: not only individual sites' tolerance to deletion but also of how they interact with neighbouring sites. Instead we propose a more restricted ``field model'' of deletion that generalises previous work to allow rate deletions occur to vary across the sequence but only requires one parameter per site -- its deletion tolerance -- to be specified. Under this model, deletions are proposed in same manner as other models, specifying a rate of occurrence and a distribution of lengths and then assuming that the location and orientation of the deletion is chosen uniformly, but proposed deletions may then be rejected based on sites they propose to remove.
+ 
+Firstly consider only single-site deletions and let each site, $i$, in the sequence have an associated deletion tolerance parameter, $d_i \in [0,1]$, representing the probability that it is actually deleted given a deletion is proposed. A proposal / acceptance step is equivalent to just proposing at a slower rate, so this is just a special case of the most general model but one that can be implemented efficiently as a single Gillespie event (a deletion occurred somewhere) rather than a large number of slower events (treating every possible deletion separately). Sites where $d_i=1$ are deleted at the background rate, sites with $d_i < 1$ are deleted more slowly, and sites with $d_i=0$ are never deleted. For proposed deletions that span multiple sites, ${\cal I}$, each site is considered independently and the proposed deletion is accepted if and only if every site accepts it: the total probability of acceptance is therefore $\prod_{i\in {\cal I}} d_i$. 
+
+It is natural to think of the background rate of deletion as a neutral rate but this is not necessary and can lead to the Gillespie algorithm becoming inefficient, for example: an extremely deletion intolerant sequence will reject almost all deletions proposed and so waste many steps. Instead we can rescale the process so that deletions are proposed at a rate equal to what would occur if the entire sequence had a deletion tolerance equal to its most tolerant site (deletion tolerance $d$) and then accept a deletion spanning sites ${\cal I}$ with probability $d_i / d$. Table~\ref{distributions} gives the rate scaling factor and distribution of deletion lengths after scaling for a variety of distributions that could be used to model deletion length. In most cases, the rescaled distribution of deletion lengths is a member of the same family as the ``neutral'' process.
+
+\begin{table}[h]
+\begin{tabular}{llll} 
+Distribution & Density & Scale factor & Rescaled distribution \\ \hline
+Geometric, ${\rm Geom}(\lambda)$
+	& $\lambda^{k-1}(1-\lambda)$ 
+	& $\smash{ d \frac{1-\lambda}{1 - d\lambda}}$ 
+	& ${\rm Geom}(d\lambda)$ \\
+Poisson + 1, ${\rm Po_{+1}}(\lambda)$	
+	& $\smash{ \frac{e^{-\lambda}\lambda^{k-1}}{\Gamma(k)}  }$ 
+	& $d \smash{ e^{-\lambda (1-d)} }$ 
+	& ${\rm Po_{+1}}(d\lambda)$ \\
+Conway-Maxwell Poisson + 1, ${\rm CMP_{+1}}(\lambda,\nu)$ 
+	& $\smash{ \frac{\lambda^{k-1}}{\Gamma(k)^\nu {\cal Z}(\lambda,\nu)} }$ 
+	& $\smash{d \frac{ {\cal Z}(\lambda,\nu)}{ {\cal Z}(d\lambda,\nu)}}$ 
+	&  ${\rm CMP_{+1}}(d\lambda,\nu)$ \\
+Negative Binomial + 1, ${\rm NB_{+1}}(\lambda,r)$ 
+	& $\smash{  \frac{\Gamma(r+k-1)}{\Gamma(k)\Gamma(r)} (1-\lambda)^r \lambda^{k-1} } $
+	& $\smash{ d\frac{(1-\lambda)^r}{(1-d\lambda)^r} }$ 
+	& ${\rm NB_{+1}}(d\lambda,r)$ \\\hline
+\end{tabular}
+\caption{The rate scaling factor and distribution of deletion lengths after scaling for a variety of distributions that could be used to model deletion length.}
+\label{distributions}
+\end{table}
 
 \end{document}
 
