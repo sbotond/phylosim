@@ -6,6 +6,9 @@
 ## insertions and deletions.
 ##
 
+# load the package
+library(phylosim)
+
 #	# Construct a phylo object for the
 #	# simulation, scale total tree length to 2:
 #
