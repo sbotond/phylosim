@@ -183,6 +183,86 @@ setConstructorS3(
 );
 
 ##
+## revComp
+##
+###########################################################################/**
+#
+# @RdocMethod revComp
+# 
+# @title "Reverse complmenet a NucleotideSequence object" 
+# 
+# \description{ 
+#	@get "title".
+#	
+#	The method reverse complements the sequence "in place", no object cloning is performed.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A NucleotideSequence object} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	Invisible TRUE.
+# } 
+# 
+# \examples{
+#	s<-NucleotideSequence(string="ATGC")
+#	s
+#	revComp(s)
+#	s
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+        "revComp",
+        class="NucleotideSequence",
+        function(
+                this,
+                ...
+        ){
+
+		states<-rev(as.character(getStates(this)));	
+		len<-length(states);
+		if(len == 0){return(invisible(TRUE))}
+		for(i in 1:len){
+			if(states[[i]] == "NA"){
+				state<-NA;
+			}
+			else if(states[i] == "A"){
+				state<-"T";
+			}
+			else if(states[i] == "T"){
+				state<-"A";
+			}
+			else if(states[i] == "G"){
+				state<-"C";
+			}
+			else if(states[i] == "C"){
+				state<-"G";
+			} else {
+				throw("Symbol not in NucleotideAlphabet!");
+			}
+			this$.sites[[i]]$.state<-state;
+		}
+                return(invisible(TRUE));
+        },
+        private=TRUE,
+        protected=FALSE,
+        overwrite=FALSE,
+        conflict="warning",
+        validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+##
 ## AminoAcidSequence
 ##
 ##########################################################################/** 
