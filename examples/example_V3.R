@@ -70,3 +70,7 @@ Simulate(sim)
 plot(sim)
 # save alingment
 saveAlignment(sim,file="example_V3.fas");
+
+# disable fast & careless mode
+rm(PSIM_FAST)
+
