@@ -46,7 +46,7 @@ sampleStates(s)
 
 # create among-sites rate variation by sampling
 # the "rate.multiplier" site-process specific parameter
-# from a discrete gamma distribution (F84+G).
+# from a discrete gamma distribution (GTR+G).
 plusGamma(s,gtr,shape=0.5)
 
 # make the range 11:20 invariable
