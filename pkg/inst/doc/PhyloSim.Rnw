@@ -404,7 +404,7 @@ The following code demonstrates how to implement a process which performs invert
 we simply replace the function object stored in the \code{generateBy} virtual field of and \code{GeneralInsertor}
 object. We could have defined a new class and set the insert generating function in the constructor method.
 
-Enable fast & careless mode:
+Enable fast \& careless mode:
 <<echo=TRUE>>=
 PSIM_FAST<-TRUE;
 @
@@ -496,6 +496,10 @@ saveAlignment(sim,file="example_V3.fas");
 @
 <<echo=FALSE,results=hide>>=
 file.remove("example_V3.fas");
+@
+Disable fast \& careless mode:
+<<echo=TRUE>>=
+rm(PSIM_FAST);
 @
 
 
