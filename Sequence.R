@@ -4335,9 +4335,6 @@ setMethodS3(
 		if(missing(process)){
 			throw("No process specified!\n");
 		}
-		if(!is.GeneralSubstitution(process)){
-			throw("The sepcified process is not a substitution process!\n");
-		}
 		else if(missing(shape)){
 			throw("No shape parameter specified!\n");
 		}
@@ -4452,9 +4449,6 @@ setMethodS3(
 
 		if(missing(process)){
 			throw("No process specified!\n");
-		}
-		if(!is.GeneralSubstitution(process)){
-			throw("The sepcified process is not a substitution process!\n");
 		}
 		else if(missing(pinv)){
 			throw("No proportion of invariant sites given!\n");

@@ -125,6 +125,6 @@ plot(subst)
 
 # plot tree and alignment
 plot(sim)
-# save and display alingment
+# save alingment
 file<-paste("PhyloSim_fasta_",Sys.getpid(),".fas",sep="");
 saveAlignment(sim,file=file,paranoid=TRUE);
