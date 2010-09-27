@@ -249,10 +249,16 @@ setMethodS3(
 # 
 # \description{ 
 #	This class implements the codon substitution model of Goldman and Yang (1994). 
-#	The transition/transversion rate ratio is stored in the \code{kappa}. The nonsynonymous/synonymous
-#	substitution rate ratio (omega) is a site-process specific parameter with a default value of one.
+#	The transition/transversion rate ratio is stored in the \code{kappa} virtual field. 
+# 	The nonsynonymous/synonymous substitution rate ratio (omega) is a site-process specific parameter 
+#	with a default value of one.
 #	Hence, after the attachment of the process the variation of omega ratios among sites follows 
 #	the M0 model (see Yang et al. 2000).
+#
+#	If the \code{scale.nuc} constructor argument is TRUE, the rates of the returned \code{Event} objects
+#	will be multiplied by \code{3} to obtain a process which has the expected number of nucleotide substitutions
+#	(not \code{codon} substitutions!) equal to one at equilibrium. This is useful when simulating
+#	mixed sequences. This option doesn't affect the rate matrix in any way.
 #
 #	The M1-M4 models are implemented in the \code{omegaVarM[1-4].CodonSeqeunce} methods.
 #	Simulations under more complex models (M5-M13) can be achieved by first discretizing them 
@@ -277,6 +283,7 @@ setMethodS3(
 #	\item{kappa}{The transition/transversion rate ratio (1 by default).}
 #	\item{omega.default}{The default value of the omega site-process specific parameter (1 by default).}
 #	\item{codon.freqs}{A vector of codon frequencies.}
+#	\item{scale.nuc}{Scale to nucleotide substitutions if TRUE (see above).}
 # 	\item{...}{Additional arguments.}
 #	}
 # 
@@ -332,6 +339,7 @@ setConstructorS3(
 		kappa=1,	  # transition/transversion rate ratio
 		omega.default=1,  # the default value of the omega site-process specific parameter
 		codon.freqs=NA,   # codon frequencies 
+		scale.nuc=FALSE,  # scale Q matrix to nucleotide substitutions
 		... 
 		)	{
 
@@ -348,7 +356,8 @@ setConstructorS3(
 			this,
 			"GY94",
 			.kappa=NA,
-			.is.ny98=TRUE
+			.is.ny98=TRUE,
+			.scale.const=as.double(1.0)
 		);
 
 		# Add the "omega" site-process specific parameter:
@@ -364,6 +373,9 @@ setConstructorS3(
 		setEquDist(this,value=codon.freqs,force=TRUE);	
 		# Set kappa:
 		this$kappa<-kappa;
+		
+		# Scale to nucleotide if requested:
+		this$.scale.const<-as.double(3.0);
 
 		# Set object name:
 		this$name<-name;
@@ -544,12 +556,12 @@ setMethodS3(
 				
 				if( (target.site$.alphabet$.trans.table[[state]]$aa) == (target.site$.alphabet$.trans.table[[new.state]]$aa) ){
 					# and ignore omega in that case
-					event$.rate<-(rate.multiplier * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));		
+					event$.rate<-(this$.scale.const * rate.multiplier * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));		
 					# Mark substitution as synonymous.
 					event$.type<-"synonymous";
 				} else {
 					# incorporate omega otherwise
-					event$.rate<-(rate.multiplier * omega * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));
+					event$.rate<-(this$.scale.const * rate.multiplier * omega * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));
 					# Mark substitution as non-synonymous.
 					event$.type<-"non-synonymous";
 				}
