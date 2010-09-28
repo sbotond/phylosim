@@ -4442,8 +4442,8 @@ setMethodS3(
 		process,
 		pinv,
 		shape,	
-		ncat=4,
 		index,
+		ncat=4,
 		...
 	){
 
