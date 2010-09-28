@@ -808,9 +808,6 @@ setMethodS3(
     else if((!is.numeric(omega))| (length(omega) != 1)){
       throw("The new value must be a numeric vector of length 1!\n");
     }
-		else if(omega < 0){
-			throw("The omega parameter must be greater than zero!\n");
-		}
     else {
 
       if(missing(index)){
@@ -1063,9 +1060,6 @@ setMethodS3(
     else if((!is.numeric(omega_2))| (length(omega_2) != 1)){
       throw("The omega value must be a numeric vector of length 1!\n");
     }
-		else if(omega_2 < 0){
-			throw("The omega parameter must be greater than zero!\n");
-		}
     else {
 
       if(missing(index)){
@@ -1314,7 +1308,7 @@ setMethodS3(
 			throw("No probabilities specified!\n");
 		}
 		else if(!is.numeric(probs)){
-			throw("The omegas must be greater than zero!\n");
+			throw("The probs must be greater than zero!\n");
 		}
 		else if( length(probs) != 5){
 			throw("The length of the \"probs\" vector must be 5!\n");
