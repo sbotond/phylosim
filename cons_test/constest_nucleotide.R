@@ -5,9 +5,11 @@ source("common.R");
 # sequence length range
 # cannot start from 1 because PAML complains
 length_range<-c(10,50,100,500,1000,5000,1000);
+length_range<-c(10);
 
 # number of replicates
 reps<-1:100;
+reps<-1:10;
 
 # F84 model parameters:
 f84.true.kappa<-1;

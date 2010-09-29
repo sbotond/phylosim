@@ -1,17 +1,20 @@
 dir<-"aln_codon";
+system(paste("mkdir",dir));	
+                
+# construct substitution process object
+gy94<-GY94(kappa=gy94.true.kappa);
 
 # simulate nucleotide data
 simulate_codon<-function(phylo,len,reps){
-	# create directories
-	system(paste("mkdir",dir));	
+        # construct root sequence object
+        seq<-CodonSequence(length=len);
+        # attach process
+         attachProcess(seq, gy94);
+
         alns<-c();
         for(i in 1:reps){
-                # construct root sequence object
-                seq<-CodonSequence(length=len);
-                # construct substitution process object
-                gy94<-GY94(kappa=gy94.true.kappa);
-                # attach process
-                attachProcess(seq, gy94);
+                # set all site states to NA
+		clearStates(seq)
                 # set omega
 		omegaVarM0(seq,gy94,omega=gy94.true.omega);
                 # sample states

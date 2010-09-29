@@ -1,20 +1,24 @@
 dir<-"aln_nuc";
+system(paste("mkdir ",dir));
+               
+# construct substitution process object
+f84<-F84();
+# set Kappa
+f84$kappa<-f84.true.kappa;
+# set base frequencies, make it GC-rich
+f84$baseFreqs<-f84.true.base.freqs;
 
 # simulate nucleotide data
 simulate_nuc<-function(phylo,len,reps){
-	system(paste("mkdir ",dir));
-        alns<-c();
+        # construct root sequence object
+        seq<-NucleotideSequence(length=len);
+        # attach process
+        attachProcess(seq, f84);
+        
+	alns<-c();
         for(i in 1:reps){
-                # construct root sequence object
-                seq<-NucleotideSequence(length=len);
-                # construct substitution process object
-                f84<-F84();
-                # set Kappa
-                f84$kappa<-f84.true.kappa;
-                # set base frequencies, make it GC-rich
-                f84$baseFreqs<-f84.true.base.freqs;
-                # attach process
-                attachProcess(seq, f84);
+		# set all states to NA
+		clearStates(seq);
                 # sample rates from a discrete gamma model
                 plusGamma(seq,f84,shape=f84.true.gamma.shape);
                 # sample states

@@ -1,17 +1,20 @@
 dir<-"aln_aa";
+system(paste("mkdir",dir));	
+               
+# construct substitution process object
+wag<-WAG();
 
 # simulate nucleotide data
 simulate_aa<-function(phylo,len,reps){
-	# create directories
-	system(paste("mkdir",dir));	
+	# construct root sequence object
+	seq<-AminoAcidSequence(length=len);
+	# attach process
+	attachProcess(seq, wag);
+
         alns<-c();
         for(i in 1:reps){
-                # construct root sequence object
-                seq<-AminoAcidSequence(length=len);
-                # construct substitution process object
-                wag<-WAG();
-                # attach process
-                attachProcess(seq, wag);
+		# set all site states to NA
+		clearStates(seq);
                 # sample rates from a discrete gamma model
                 plusGamma(seq,wag,shape=wag.true.gamma.shape);
                 # sample states
