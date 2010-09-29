@@ -41,6 +41,8 @@
 #	large simulations with logging enabled.
 #	\item The time needed to run a simulation depends not only on the number of the sites, 
 #	but also on the length of the tree.
+#	\item Constructing \code{Sequence} objects with large number of sites is expensive. Avoid doing
+#	that inside a cycle.
 #  }
 #
 #	The examples below demonstrate only some more common simulation settings,
