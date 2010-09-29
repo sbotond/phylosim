@@ -1179,14 +1179,11 @@ setMethodS3(
     else if((!is.numeric(omegas))){
       throw("The omegas must be numeric!\n");
     }
-		else if(any(omegas < 0)){
-			throw("The omegas must be greater than zero!\n");
-		}
 		else if(missing(probs)){
 			throw("No probabilities specified!\n");
 		}
 		else if(!is.numeric(probs)){
-			throw("The omegas must be greater than zero!\n");
+			throw("The probabilities must be numeric!\n");
 		}
 		else if(length(omegas) != length(probs)){
 			throw("The length of the \"omegas\" and \"probs\" vector must be the same!\n");
