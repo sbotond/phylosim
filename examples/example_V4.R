@@ -8,7 +8,7 @@
 # load the package
 library(phylosim)
 
-
+#
 # The following code demonstrates how to simulate a genomic region
 # containing a gene and noncoding regions.
 #
@@ -17,13 +17,13 @@ library(phylosim)
 #	* NC1 (length: 1000) - noncoding region 1, evolving under  a GTR substitution model
 #	  deletions and insertions of Cs.
 #
-#	* E1 (length: 400) - exon 1, evolving under a nucleotide-scaled GY94 codon model and small indels
+#	* E1 (length: 400) - exon 1, evolving under a nucleotide-scaled GY94 codon model and small indels.
 #
-#	* I1-6 (length: 200) - introns 1-5, evoling under a F84 substitution model and indels
+#	* I1-5 (length: 200) - introns 1-5, evoling under a F84 substitution model and indels.
 #
 #	* E2-5 (length: 200) - exons 1-5, evolving under a nucleotide-scaled GY94 codon model
 #
-#	* E6 (length: 400)   - exon 6, evolving under a nucleotide-scaled GY94 codon model and small indels
+#	* E6 (length: 400)   - exon 6, evolving under a nucleotide-scaled GY94 codon model and small indels.
 #
 #	* NC2 (length: 1400) - noncoding region 2, evolving under a K80 substitution model
 #	
@@ -62,13 +62,13 @@ part$nc1$subst<-GTR(
 )
 
 part$nc1$inc<-DiscreteInsertor(
-	rate=0.08,sizes=1:6,
+	rate=0.5,sizes=1:6,
 	probs=6:1/21,
 	template.seq=NucleotideSequence(string="CCCCCC")
 );
 
 part$nc1$del<-DiscreteDeletor(
-        rate=0.08,
+        rate=0.5,
         sizes=1:6,
         probs=6:1/21
 );
@@ -88,7 +88,7 @@ part$e1<-list(
 part$e1$subst<-GY94(kappa=2,scale.nuc=TRUE);
 
 part$e1$ins<-DiscreteInsertor(
-        rate=0.08,
+        rate=0.05,
         sizes=1:2,
         probs=c(2/3,1/3),
         template.seq=CodonSequence(length=2,processes=list(list(part$e1$subst)))
@@ -96,7 +96,7 @@ part$e1$ins<-DiscreteInsertor(
 
 
 part$e1$del<-DiscreteDeletor(
-        rate=0.08,
+        rate=0.05,
         sizes=1:2,
         probs=c(2/3,1/3)
 );
@@ -110,13 +110,13 @@ gy94.e2_5$kappa<-1.5
 
 # Partitions E2-5 and I1-4:
 del.introns<-DiscreteDeletor(
-        rate=0.08,
+        rate=0.05,
 	sizes=1:8,
         probs=8:1/36
 );
 
 ins.introns<-DiscreteInsertor(
-        rate=0.08,
+        rate=0.05,
         sizes=1:8,
         probs=8:1/36,
         template.seq=NucleotideSequence(length=8,processes=list(list(f84)))
@@ -172,13 +172,13 @@ tmp$kappa<-0.5;
 part$e6$subst<-tmp;
 
 part$e6$del<-DiscreteDeletor(
-        rate=0.08,
+        rate=0.5,
         sizes=1:4,
         probs=c(4,3,2,1)/10
 );
 
 part$e6$ins<-DiscreteInsertor(
-        rate=0.08,
+        rate=0.5,
         sizes=1:2,
         probs=c(1/3,2/3),
         template.seq=CodonSequence(length=2,processes=list(list(part$e6$subst)))
@@ -219,9 +219,9 @@ stop.subst<-GeneralSubstitution(
 		);
 
 # Get a bubble plot of stop.subst:
-plot(stop.subst);
+plot(stop.subst,scale=0.5);
 
-# Iterate over partions, set up processes:
+# Iterate over partitions, set up processes:
 
 pos<-0;
 for(i in part){
@@ -291,10 +291,10 @@ for(i in part){
 sampleStates(s);
 
 # Construct simulation object
-sim<-PhyloSim(root.seq=s, phylo=read.tree("smalldemotree.nwk"));
+sim<-PhyloSim(root.seq=s, phylo=rcoal(3));
 
-# Scale tree length to 0.8:
-scaleTree(sim,0.8/sim$treeLength);
+# Scale tree length to 0.2:
+scaleTree(sim,0.2/sim$treeLength);
 
 # Run simulation
 Simulate(sim)

@@ -38,7 +38,7 @@ ivd$generateBy<-function(process=NA,length=NA,target.seq=NA,event.pos=NA,insert.
 	return(insert);
 }
 
-# Now we have a process which perfroms inverted duplications.
+# Now we have a process which performs inverted duplications.
 
 # construct a JC69 process object
 p<-JC69();
