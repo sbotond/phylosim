@@ -1220,7 +1220,11 @@ setMethodS3(
 			output<-this$.handler(this);
 
 			# Event will self-destruct to prevent trouble:
-			.setHandler(this, function(event=this) { throw("You can perform an event only once!\n") } );
+			
+			if(!exists(x="PSIM_FAST")){
+			
+			this$.handler<-function(event=this) { throw("You can perform an event only once!\n") };
+			}
 
 			return(output);
 	

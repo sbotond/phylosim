@@ -165,7 +165,7 @@ setConstructorS3(
 		# Set the template for handling substitution events:
 		this$.handler.template<-function(event=NA){
 				# Just set the new state base on the event name:
-				setState(getSite(event), strsplit(event$.name,split="->",fixed=TRUE)[[1]][[2]]);
+				setState(event$.site, strsplit(event$.name,split="->",fixed=TRUE)[[1]][[2]]);
 				# The name *should* be valid and correct, so no more checking is needed.
 
 				# Return details:

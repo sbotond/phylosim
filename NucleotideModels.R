@@ -992,7 +992,7 @@ setMethodS3(
 		else {
 			missing<-setdiff(names, value.names);
 			if(length(missing) > 0) {
-				throw("Cannot build the model because the following rate parameters are missing: ",paste(missing,coll=", ")," \n");	
+				throw("Cannot build the model because the following rate parameters are missing: ",paste(missing,collapse=", ")," \n");	
 		} else {
 					return(TRUE);
 			}

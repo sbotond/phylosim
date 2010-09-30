@@ -1060,7 +1060,7 @@ setConstructorS3(
 					 # Using temporary varibales for clarity:
 					 position<-event$.position;
 					 process<-event$.process;
-					 sequence<-getSequence(getSite(event));
+					 sequence<-event$.site$.sequence;
 					 details<-list();
 					 details$type<-"insertion";
 
@@ -2327,7 +2327,7 @@ setConstructorS3(
 					 # Using temporary varibales for clarity:
 					 position<-event$.position;
 					 process<-event$.process;
-					 sequence<-getSequence(getSite(event));
+					 sequence<-event$.site$.sequence;
 					 details<-list();
 					 details$type<-"deletion";
 					 details$accepted<-FALSE;

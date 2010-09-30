@@ -2606,6 +2606,28 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+setMethodS3(
+	".getCumulativeRatesFast", 
+	class="Sequence", 
+	function(
+		this,
+		...
+	){
+
+		if (this$.cumulative.rate.flag){
+			.recalculateCumulativeRates(this);
+		}
+
+		this$.cumulative.rates;
+
+	},
+	private=TRUE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ##	
 ## Method: .recalculateCumulativeRates
 ##	
@@ -2849,7 +2871,6 @@ setMethodS3(
 			if(this$.cumulative.rate.flag)	{
 				.recalculateCumulativeRates(this);	
 			}
-			#getCumulativeRatesFromRange(this, this$.length);
 			return(this$.cumulative.rates[this$.length]);
 		} else {
 			return(NA);
