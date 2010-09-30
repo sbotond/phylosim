@@ -28,7 +28,6 @@
 # 	\item{position}{The position of assotiated Site object in the enclosing Sequence object (if any).}
 #	\item{process}{The generator Process object.}
 #	\item{handler}{The handler function for the Event object. It will be called by the \code{Perform.Event} with the Event object as an argument to make the changes corresponding to the event.}
-#	\item{target.state}{The state of the assotiated Site object in the moment of event generation.}
 # 	\item{...}{Not used.}
 #	}
 # 
@@ -48,7 +47,7 @@
 #	# attach p to s
 #	attachProcess(s,p)
 #	# create an Event object
-#	e<-Event(name="A->G",rate=0.1,site=s,process=p,target.state="A",position=1)
+#	e<-Event(name="A->G",rate=0.1,site=s,process=p,position=1)
 #	# get object summary
 #	summary(e)
 #	# get event name
@@ -83,7 +82,6 @@ setConstructorS3(
 		position=NA,
 		process=NA,
 		handler=NA,
-		target.state=NA,
 		... 
 		){
 
@@ -96,7 +94,6 @@ setConstructorS3(
 			.handler=NA,
 			.site=NA,
 			.position=NA,
-			.target.state=NA,
 			.write.protected=FALSE,
 			.is.event=TRUE
 		);
@@ -127,13 +124,6 @@ setConstructorS3(
 			this$position<-position;
 			STATIC<-FALSE;
 		}	
-		
-		if (!missing(target.state) & missing(site)) {
-			throw("Target state is specified, but no site object given!\n");
-		}
-    		else if (!missing(target.state)) {
-			this$targetState<-target.state;
-		}
 		
 		# The site object was passed through a getField method,
 		# which disabled the virtual fields, so we have to enable them:
@@ -908,151 +898,6 @@ setMethodS3(
 );
 
 ##	
-## Method: getTargetState
-##	
-###########################################################################/**
-#
-# @RdocMethod getTargetState
-# 
-# @title "Get the target state of an Event object" 
-# 
-# \description{ 
-#	@get "title".
-#
-#	The target state is the state of the assotiated Site object in the moment of the generation
-#	of the Event object. It's compared against the actual state of the Site when performing the event when defined.
-# } 
-# 
-# @synopsis 
-# 
-# \arguments{ 
-# 	\item{this}{An Event object.} 
-# 	\item{...}{Not used.} 
-# } 
-# 
-# \value{ 
-# 	The target state (a character vector of length one).
-# } 
-# 
-# \examples{
-#	# create some object
-#	e<-Event(site=Site(state="A",alphabet=NucleotideAlphabet()))
-#	# setting target state
-#	setTargetState(e,"A")
-#	# getting target state
-#	getTargetState(e)
-#	# get target state via virtual field
-#	e$targetState
-# } 
-# 
-# @author 
-# 
-# \seealso{ 
-# 	@seeclass 
-# } 
-# 
-#*/###########################################################################
-setMethodS3(
-	"getTargetState", 
-	class="Event", 
-	function(
-		this,
-		...
-	){
-		
-		this$.target.state;
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
-## Method: setTargetState
-##	
-###########################################################################/**
-#
-# @RdocMethod setTargetState
-# 
-# @title "Set the target state of an Event object" 
-# 
-# \description{ 
-#	@get "title".
-#	The target state is the state of the assotiated Site object in the moment of the generation
-#	of the Event object. It's compared against the actual state of the Site when performing the event when defined.
-# } 
-# 
-# @synopsis 
-# 
-# \arguments{ 
-# 	\item{this}{An Event object.} 
-#	\item{new.state}{A character vector of length one.}
-# 	\item{...}{Not used.} 
-# } 
-# 
-# \value{ 
-# 	The new target state (invisible).
-# } 
-# 
-# \examples{
-#	# create some object
-#	e<-Event(site=Site(state="A",alphabet=NucleotideAlphabet()))
-#	# setting target state
-#	setTargetState(e,"A")
-#	# getting target state
-#	getTargetState(e)
-#	# get target state via virtual field
-#	e$targetState
-# } 
-# 
-# @author 
-# 
-# \seealso{ 
-# 	@seeclass 
-# } 
-# 
-#*/###########################################################################
-setMethodS3(
-	"setTargetState", 
-	class="Event", 
-	function(
-		this,
-		new.state,
-		...
-	){
-		
-		.checkWriteProtection(this);	
-	if(!exists(x="PSIM_FAST")){
-		if (is.na(this$.site)) {
-			throw("The event has no target site, so target alphabet is unknown. Refusing to set targetState!\n");
-		}	
-		else if (!is.Site(this$.site)) {
-			throw("Target site is invalid!\n");
-		}	
-		else if (is.na(new.state)) {
-			return(this$.target.state<-new.state);
-		}
-		else if (!hasSymbols(this$.site$.alphabet,new.state)) { 
-			throw("The target state must be in the target site alphabet!\n");	
-		}
-		else if(this$.site$state != new.state) {
-					warning("The proposed new target state is not equal with the current state of the associated site. This is strange, but proceeding anyway.\n");
-		}
-	}
-		this$.target.state<-new.state;
-
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
 ## Method: setSite
 ##	
 ###########################################################################/**
@@ -1146,8 +991,7 @@ setMethodS3(
 #	the event handler function as returned by \code{getHandler} with the Event object as the first argument.
 #
 #	The event won't be performed if the handler function is invalid, if there is no assotiated Site object, 
-#	if the site position is undefined, if the rate is undefined, if the generator process is invalid, or if the target
-#	state doesn't match with the actual state of the target site.
+#	if the site position is undefined, if the rate is undefined, or if the generator process is invalid.
 #
 #	The handler function will be overwritten after performing an event, so the Perform method should be called
 #	only once for every Event object.
@@ -1199,10 +1043,6 @@ setMethodS3(
 		}
 		else if (is.na(this$.rate)) {
 			throw("The event has no rate. Refusing to perform!\n");
-		}
-		else if (!is.na(this$.target.state) & (this$.target.state != this$site$state) ) {
-			warning(paste("The event acts on state ",this$.target.state," but the target site has the state ",this$site$state,"! Doing nothing!\n",sep=""));
-			return(invisible(FALSE));
 		}
 	}
 			# Better not perform anything on a dirty object!
@@ -1496,13 +1336,6 @@ setMethodS3(
 				this$site<-this$site;
 			}
 
-
-			if (is.null(this$.target.state)){
-				throw("Event target state is NULL!\n");
-			}
-			else if (!is.na(this$.target.state))	{
-				this$targetState<-this$targetState;
-			}
 		}
 		tryCatch(may.fail(this), finally=this$writeProtected<-wp);
 
@@ -1647,7 +1480,6 @@ setMethodS3(
 			site.state<-getState(this$.site);
 		}	
 		
-		this$.summary$"Target state"<-this$.target.state;
 		this$.summary$"Target site state"<-site.state;
 		if(this$writeProtected) {
 			this$.summary$"Write protected"<-TRUE;

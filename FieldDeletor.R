@@ -461,13 +461,11 @@ setMethodS3(
      # Set the target position passed in a temporary field:
      deletion.event$.position<-target.site$.position;
      # Set the target site:
-     deletion.event$site<-target.site;
-     # Set the target state (good for consistency):
-     deletion.event$targetState<-getState(target.site);
+     deletion.event$.site<-target.site;
      # Set event name:
-     deletion.event$name<-"Deletion";
+     deletion.event$.name<-"Deletion";
      # Set the generator process:
-     deletion.event$process<-this;
+     deletion.event$.process<-this;
 
 		 # Calculate the field model specific scaling factor if it is not yet calculated:
 		 if(is.na(this$.field.scaling.factor)){
@@ -476,13 +474,10 @@ setMethodS3(
 
      # Event rate is the product of the general rate, the field model scaling factor and the 
      # site specific rate multiplier:
-     deletion.event$rate<-(this$rate * (getParameterAtSite(this,target.site,"rate.multiplier")$value) * this$.field.scaling.factor );
+     deletion.event$.rate<-(this$.rate * (target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value) * this$.field.scaling.factor);
 
      # Set the handler for the deletion event:
-     .setHandler(deletion.event, this$.handler.template);
-
-    # Write protect the event object: 
-    deletion.event$writeProtected<-TRUE;
+     deletion.event$.handler<-this$.handler.template;
 
     # Return the event object in a list:
     list(deletion.event);

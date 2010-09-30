@@ -407,15 +407,12 @@ setMethodS3(
      		event$.position<-target.site$.position;
      		# Set the target site:
      		event$.site<-target.site;
-     		# Set the target state object (good for consistency):
-     		event$.target.state<-state;
 			
 		# Set the event rate:	
 		event$.rate<-(rate.multiplier * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));
 		# Set the handler for the substitution event:
      		event$.handler<-this$.handler.template;
-   		# Write protect the event object:
-    		event$.write.protected<-TRUE;
+		
 		# Add to events list:	
 		events<-c(events, list(event));
 

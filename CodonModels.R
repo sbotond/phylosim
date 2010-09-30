@@ -549,8 +549,6 @@ setMethodS3(
      				event$.position<-target.site$.position;
      				# Set the target site:
      				event$.site<-target.site;
-     				# Set the target state object (good for consistency):
-				event$.target.state<-state;
 
 				# Figure out wether the event is a synonymous mutation ...
 				

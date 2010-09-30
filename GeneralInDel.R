@@ -1340,27 +1340,22 @@ setMethodS3(
 		 # Set the target position passed in a temporary field:
 		 insertion.event$.position<-target.site$.position;
 		 # Set the target site:
-		 insertion.event$site<-target.site;
-		 # Set the target state (good for consistency):
-		 insertion.event$targetState<-getState(target.site);
+		 insertion.event$.site<-target.site;
 		 # Set event name:
-		 insertion.event$name<-"Insertion";
+		 insertion.event$.name<-"Insertion";
 		 # Set the generator process:
-		 insertion.event$process<-this;
+		 insertion.event$.process<-this;
 		
 		 # Event rate is the product of the general rate and the 
 		 # site specific rate multiplier:
-		 rate.multiplier<-getParameterAtSite(this,target.site,"rate.multiplier")$value;
+		 rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
 		 if(rate.multiplier == 0 ) {
 			return(list());
 		 }
-		 insertion.event$rate<-(this$rate * rate.multiplier );
+		 insertion.event$.rate<-(this$.rate * rate.multiplier );
 
 		 # Set the handler for the insertion event:
-		 .setHandler(insertion.event, this$.handler.template);
-
-		# Write protect the event object:	
-		insertion.event$writeProtected<-TRUE;	
+		 insertion.event$.handler<-this$.handler.template;
 
 		# Return the event object in a list:
 		list(insertion.event);
@@ -2584,24 +2579,20 @@ setMethodS3(
 		 # Set the target position passed in a temporary field:
 		 deletion.event$.position<-target.site$.position;
 		 # Set the target site:
-		 deletion.event$site<-target.site;
-		 # Set the target state (good for consistency):
-		 deletion.event$targetState<-getState(target.site);
+		 deletion.event$.site<-target.site;
 		 # Set event name:
-		 deletion.event$name<-"Deletion";
+		 deletion.event$.name<-"Deletion";
 		 # Set the genrator process:
-		 deletion.event$process<-this;
+		 deletion.event$.process<-this;
 		
 		
 		 # Event rate is the product of the general rate and the 
 		 # site specific rate multiplier:
-		 deletion.event$rate<-(this$rate * (getParameterAtSite(this,target.site,"rate.multiplier")$value) );
+	         rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value; 
+		 deletion.event$.rate<-(this$.rate * rate.multiplier);
 
 		 # Set the handler for the deletion event:
-		 .setHandler(deletion.event, this$.handler.template);
-
-		# Write protect the event object:	
-		deletion.event$writeProtected<-TRUE;	
+		 deletion.event$.handler<-this$.handler.template;		
 
 		# Return the event object in a list:
 		list(deletion.event);
