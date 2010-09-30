@@ -8,34 +8,32 @@ f84$kappa<-f84.true.kappa;
 # set base frequencies, make it GC-rich
 f84$baseFreqs<-f84.true.base.freqs;
 
-# simulate nucleotide data
-simulate_nuc<-function(phylo,len,reps){
-        # construct root sequence object
-        seq<-NucleotideSequence(length=len);
+construct_root_sequence<-function(len){
+	seq<-NucleotideSequence(length=len);	
         # attach process
         attachProcess(seq, f84);
-        
-	alns<-c();
-        for(i in 1:reps){
-		# set all states to NA
-		clearStates(seq);
-                # sample rates from a discrete gamma model
-                plusGamma(seq,f84,shape=f84.true.gamma.shape);
-                # sample states
-                sampleStates(seq);
-                # construct simulation object
-                sim<-PhyloSim(
-                        phylo=phylo,
-                        root.seq=seq
-                );      
-                # run simulation
-                Simulate(sim,quiet=TRUE);
-                # save alignment
-                fname<-paste(dir,"/nucsim_",len,"_",i,".fas",sep="");
-                saveAlignment(sim,file=fname,skip.internal=TRUE);
-                alns<-c(alns, fname);
-        }
-                return(alns);
+	return(seq);
+}
+
+# simulate nucleotide data
+simulate_nuc<-function(phylo,seq,len,rep){
+	# set all states to NA
+	clearStates(seq);
+        # sample rates from a discrete gamma model
+        plusGamma(seq,f84,shape=f84.true.gamma.shape);
+        # sample states
+        sampleStates(seq);
+        # construct simulation object
+        sim<-PhyloSim(
+              phylo=phylo,
+              root.seq=seq
+         );      
+        # run simulation
+        Simulate(sim,quiet=TRUE);
+        # save alignment
+        fname<-paste(dir,"/nucsim_",len,"_",rep,".fas",sep="");
+     	saveAlignment(sim,file=fname,skip.internal=TRUE);
+	return(fname);
 
 }
 
@@ -77,7 +75,7 @@ estimate_nuc<-function(phylo, len,rep){
 	res.tree<-reorder(read.tree("res.nwk"),"pruningwise");
 		
 	setwd(old.wd);
-	system(paste("rm -fr",dir.name));
+	#system(paste("rm -fr",dir.name));
 	tmp<-list();
 	tmp$len=len;
 	tmp$kappa=res.kappa;

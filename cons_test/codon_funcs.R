@@ -4,15 +4,17 @@ system(paste("mkdir",dir));
 # construct substitution process object
 gy94<-GY94(kappa=gy94.true.kappa);
 
-# simulate nucleotide data
-simulate_codon<-function(phylo,len,reps){
+construct_root_sequence<-function(len){
         # construct root sequence object
         seq<-CodonSequence(length=len);
         # attach process
-         attachProcess(seq, gy94);
+        attachProcess(seq, gy94);
+	return(seq);
+}
 
-        alns<-c();
-        for(i in 1:reps){
+
+# simulate nucleotide data
+simulate_codon<-function(phylo,seq,len,rep){
                 # set all site states to NA
 		clearStates(seq)
                 # set omega
@@ -27,12 +29,9 @@ simulate_codon<-function(phylo,len,reps){
                 # run simulation
                 Simulate(sim,quiet=TRUE);
                 # save alignment
-                fname<-paste(dir,"/codonsim_",len,"_",i,".fas",sep="");
+                fname<-paste(dir,"/codonsim_",len,"_",rep,".fas",sep="");
                 saveAlignment(sim,file=fname,skip.internal=TRUE);
-                alns<-c(alns, fname);
-        }
-                return(alns);
-
+                return(fname);
 }
 
 # estimate nucleotide model parameters

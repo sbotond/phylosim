@@ -2,20 +2,17 @@
 
 source("common.R");
 
-# sequence length range
-length_range<-c(10,50,100,500,1000,5000,1000);
-
-# number of replicates
-reps<-1:100;
-
 # model parameters:
 wag.true.gamma.shape<-0.1;
 
 source("aa_funcs.R");
 
 res.bak<-iterate_seq_len(tree,length_range,reps,simulate_aa,estimate_aa);
-res<-res_to_dframe(res.bak);
+res<-res_to_dframe(res.bak$res);
+
 write.table(res,file="results/constest_aa.tab");
+write.table(res.bak$times,file="results/times_aa.tab");
+print_times(res.bak$times,"results/ttab_aa.tab");
 
 pdf("results/constest_aa.pdf");
 plot_dframe(res,tree)

@@ -3,6 +3,9 @@ library(phylosim);
 # load utility functions
 source("utils.R");
 
+length_range<-c(10,50,100,500,1000,5000,10000);
+reps<-1:100;
+
 # enable fast & careless mode
 PSIM_FAST<-TRUE;
 
@@ -16,7 +19,7 @@ iterate_seq_len<-function(phylo,lengths,reps,sim.fun,est.fun){
 
 	for(len in lengths){
 			seq<-construct_root_sequence(len);
-		for(rep in reps)
+		for(rep in reps){
 			sim.t<-system.time(sim.fun(phylo,seq,len,rep));
 			est.t<-system.time(est<-est.fun(phylo,len,rep));
 			res<-c(res, est);
@@ -28,6 +31,7 @@ iterate_seq_len<-function(phylo,lengths,reps,sim.fun,est.fun){
 			times$est<-c(times$est,(as.numeric(est.t[1])+as.numeric(est.t[2])));
 			times$el.sim<-c(times$el.sim,as.numeric(sim.t[3]));
 			times$el.est<-c(times$el.est,as.numeric(est.t[3]));
+		}
 	}
 
 	return(list("res"=res,"times"=as.data.frame(times)));

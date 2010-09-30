@@ -4,15 +4,15 @@ system(paste("mkdir",dir));
 # construct substitution process object
 wag<-WAG();
 
-# simulate nucleotide data
-simulate_aa<-function(phylo,len,reps){
-	# construct root sequence object
-	seq<-AminoAcidSequence(length=len);
+construct_root_sequence<-function(len){
+        seq<-AminoAcidSequence(length=len);
 	# attach process
 	attachProcess(seq, wag);
+	return(seq)
+}
 
-        alns<-c();
-        for(i in 1:reps){
+# simulate nucleotide data
+simulate_aa<-function(phylo,seq,len,rep){
 		# set all site states to NA
 		clearStates(seq);
                 # sample rates from a discrete gamma model
@@ -27,12 +27,9 @@ simulate_aa<-function(phylo,len,reps){
                 # run simulation
                 Simulate(sim,quiet=TRUE);
                 # save alignment
-                fname<-paste(dir,"/aasim_",len,"_",i,".fas",sep="");
+                fname<-paste(dir,"/aasim_",len,"_",rep,".fas",sep="");
                 saveAlignment(sim,file=fname,skip.internal=TRUE);
-                alns<-c(alns, fname);
-        }
-                return(alns);
-
+                return(fname);
 }
 
 # estimate nucleotide model parameters

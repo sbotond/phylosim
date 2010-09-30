@@ -25,4 +25,10 @@ res_to_dframe<-function(l){
         return(d);
 }
 
+print_times<-function(d,f){
+	sim<-xtabs(data=d,sim ~ len);	
+	est<-xtabs(data=d,est ~ len);	
+	tab<-rbind(sim,est)/length(reps);
+	write.table(tab,file=f);
+}
 
