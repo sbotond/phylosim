@@ -75,7 +75,7 @@ estimate_nuc<-function(phylo, len,rep){
 	res.tree<-reorder(read.tree("res.nwk"),"pruningwise");
 		
 	setwd(old.wd);
-	#system(paste("rm -fr",dir.name));
+	system(paste("rm -fr",dir.name));
 	tmp<-list();
 	tmp$len=len;
 	tmp$kappa=res.kappa;
