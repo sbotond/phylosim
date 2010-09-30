@@ -5210,6 +5210,7 @@ setMethodS3(
 # \alias{is.tip}
 # \alias{my.all.equal}
 # \alias{plot.PSRoot}
+# \alias{revComp}
 # 
 # @title "Undocumented generic method (PhyloSim package)" 
 #
