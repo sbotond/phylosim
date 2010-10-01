@@ -4,6 +4,8 @@ PhyloSim
 PhyloSim is an extensible object-oriented framework for the Monte Carlo simulation of sequence evolution written in 100 percent <tt>R</tt>.
 It is built on the top of the [R.oo](http://cran.r-project.org/web/packages/R.oo/index.html) and [ape](http://cran.r-project.org/web/packages/ape/index.html) packages and uses the Gillespie algorithm to simulate substitutions, insertions and deletions.
 
+<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/5Az_7U0-cK0?fs=1&amp;hl=en_US"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/5Az_7U0-cK0?fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object>
+
 Download an install
 -------------------
 
