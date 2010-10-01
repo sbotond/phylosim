@@ -32,7 +32,7 @@ Key features
 
 * See the man page of the <tt>PhyloSim</tt> class and the package vignette for more features and examples.
 
-Building from the source
+Building from source
 ------------------------
 
 The package can be built from the source by issuing <tt>make pack</tt> on a <tt>*nix</tt> system. The building process need the standard unix tools, <tt>Perl</tt> and <tt>R</tt> with the <tt>ape</tt>, <tt>R.oo</tt> and <tt>ggplot2</tt> packages installed.
