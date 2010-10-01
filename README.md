@@ -14,7 +14,7 @@ Key features
 
 * Explicit implementations of the most popular substitution models.
 
-* Simulation under the popular models of among-sites rate variation, like the gamma (+G) and invariants plus gamma (+I+G) models.
+* Simulation under the popular models of among-sites rate variation, like the gamma (<tt>+G</tt>) and invariants plus gamma (<tt>+I+G</tt>) models.
 
 * The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any <tt>R</tt> expression.
 
