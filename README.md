@@ -7,7 +7,7 @@ It is built on the top of the [R.oo](http://cran.r-project.org/web/packages/R.oo
 Download an install
 -------------------
 
-* The releases are available from the [download page](http://github.com/sbotond/phylosim/downloads).
+* The released packages are available from the [download page](http://github.com/sbotond/phylosim/downloads).
 
 Key features
 ------------
