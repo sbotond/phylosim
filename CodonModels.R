@@ -511,11 +511,20 @@ setMethodS3(
 			} 
 		} 
 
-			state<-target.site$.state;
+			state<-as.character(target.site$.state);
 		  	# Just return an empty list if the state is NA:
 			if(is.na(state)){
 				return(list());
 			}
+
+			 # Get rate matrix:
+        		 rate.matrix<-this$.q.matrix$.rate.matrix;
+
+			# Get translation table:
+			trans.table<-target.site$.alphabet$.trans.table;
+		
+			# Get scaling constant:
+			scale.const<-this$.scale.const;
 
 			symbols<-this$.alphabet$.symbols;
 			rest<-symbols[ which(symbols != state) ];
@@ -552,22 +561,21 @@ setMethodS3(
 
 				# Figure out wether the event is a synonymous mutation ...
 				
-				if( (target.site$.alphabet$.trans.table[[state]]$aa) == (target.site$.alphabet$.trans.table[[new.state]]$aa) ){
+				if( (trans.table[[state]]$aa) == (trans.table[[new.state]]$aa) ){
 					# and ignore omega in that case
-					event$.rate<-(this$.scale.const * rate.multiplier * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));		
+					event$.rate<-(scale.const * rate.multiplier * (rate.matrix[state,new.state]);		
 					# Mark substitution as synonymous.
 					event$.type<-"synonymous";
 				} else {
 					# incorporate omega otherwise
-					event$.rate<-(this$.scale.const * rate.multiplier * omega * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));
+					event$.rate<-(scale.const * rate.multiplier * omega * rate.matrix[state,new.state]);
 					# Mark substitution as non-synonymous.
 					event$.type<-"non-synonymous";
 				}
 
 				# Set the handler for the substitution event:
 				event$.handler<-this$.handler.template;
-   				# Write protect the event object:
-				event$.write.protected<-TRUE;
+
 				# Add to events list:	
 				events<-c(events, list(event));
 

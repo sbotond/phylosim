@@ -371,17 +371,18 @@ setMethodS3(
 	#} 
 	#} 
 
-	state<-target.site$.state;
+	state<-as.character(target.site$.state);
 	# Just return an empty list if the state is NA:
 	if(is.na(state)){
 		return(list());
 	}
+	
+	# Get rate matrix:
+	rate.matrix<-this$.q.matrix$.rate.matrix;
 
 	symbols<-this$.alphabet$.symbols;
 	rest<-symbols[ which(symbols != state) ];
-	# Generate the names of the possible events:
-	event.names<-paste(state,rest,sep="->");
-	
+
 	# The rate of the event is the product of the general rate and the
      	# site specific rate multiplier:
      	rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
@@ -409,7 +410,7 @@ setMethodS3(
      		event$.site<-target.site;
 			
 		# Set the event rate:	
-		event$.rate<-(rate.multiplier * (this$.q.matrix$.rate.matrix[as.character(state),as.character(new.state)]));
+		event$.rate<-(rate.multiplier * (rate.matrix[state,new.state]));
 		# Set the handler for the substitution event:
      		event$.handler<-this$.handler.template;
 		
