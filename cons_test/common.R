@@ -3,7 +3,7 @@ library(phylosim);
 # load utility functions
 source("utils.R");
 
-length_range<-c(10,20,30,40,50,60,70,80,90,100,500,1000,5000,10000);
+length_range<-c(10,15,20,25,30,35,40,45,50,60,70,80,90,100,500,1000,5000,10000);
 reps<-1:100;
 
 # enable fast & careless mode
