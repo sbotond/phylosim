@@ -563,7 +563,7 @@ setMethodS3(
 				
 				if( (trans.table[[state]]$aa) == (trans.table[[new.state]]$aa) ){
 					# and ignore omega in that case
-					event$.rate<-(scale.const * rate.multiplier * (rate.matrix[state,new.state]);		
+					event$.rate<-(scale.const * rate.multiplier * rate.matrix[state,new.state]);		
 					# Mark substitution as synonymous.
 					event$.type<-"synonymous";
 				} else {
