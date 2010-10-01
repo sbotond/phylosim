@@ -1,7 +1,7 @@
 PhyloSim
 ========
 
-PhyloSim is an extensible object-oriented framework for the Monte Carlo simulation of sequence evolution written in 100 percent `R`.
+PhyloSim is an extensible object-oriented framework for the Monte Carlo simulation of sequence evolution written in 100 percent <tt>R</tt>.
 It is built on the top of the [R.oo](http://cran.r-project.org/web/packages/R.oo/index.html) and [ape](http://cran.r-project.org/web/packages/ape/index.html) packages and uses the Gillespie algorithm to simulate substitutions, insertions and deletions.
 
 Download an install
@@ -16,9 +16,9 @@ Key features
 
 * Simulation under the popular models of among-sites rate variation, like the gamma (+G) and invariants plus gamma (+I+G) models.
 
-* The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any `R` expression.
+* The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any <tt>R</tt> expression.
 
-* Simulation of one or more separate insertion and/or deletion processes acting on the sequences and which sample the insertion/deletion length from an arbitrary discrete distribution or an `R` expression (so all the probability distributions implemented in `R` are readily available for this purpose).
+* Simulation of one or more separate insertion and/or deletion processes acting on the sequences and which sample the insertion/deletion length from an arbitrary discrete distribution or an <tt>R</tt> expression (so all the probability distributions implemented in <tt>R</tt> are readily available for this purpose).
 
 * Simulation of the effects of variable functional constraints over the sites by site-process specific insertion and deletion tolerance parameters which determine the rejection probability of a proposed insertion/deletion.
 
@@ -28,12 +28,12 @@ Key features
 
 * Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes.
 
-* The possibility to export the counts of various events ("branch statistics") as `phylo` objects (see the man page of `exportStatTree.PhyloSim`).
+* The possibility to export the counts of various events ("branch statistics") as <tt>phylo</tt> objects (see the man page of <tt>exportStatTree.PhyloSim</tt>).
 
-* See the man page of the `PhyloSim` class and the package vignette for more features and examples.
+* See the man page of the <tt>PhyloSim</tt> class and the package vignette for more features and examples.
 
 Building from the source
 ------------------------
 
-The package can be built from the source by issuing `make pack` on a `*nix` system. The building process need the standard unix tools, `Perl` and `R` with the `ape`, `R.oo` and `ggplot2` packages installed.
+The package can be built from the source by issuing <tt>make pack</tt> on a <tt>*nix</tt> system. The building process need the standard unix tools, <tt>Perl</tt> and <tt>R</tt> with the <tt>ape</tt>, <tt>R.oo</tt> and <tt>ggplot2</tt> packages installed.
 
