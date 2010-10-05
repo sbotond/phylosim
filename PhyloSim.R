@@ -28,6 +28,18 @@
 #	\item The possibility to export the counts of various events ("branch statistics") as phylo objects (see \code{\link{exportStatTree.PhyloSim}}).
 #	}
 #
+#	General notes:
+#	\itemize{
+#	\item The \code{Sequence} objects have no "immortal links". The simulation
+#	is aborted if the sequence length shrinks to zero. It is up to the user 
+#	to choose sensible indel rates and sequence lengths to prevent that.
+#	\item The sites near the beginning and end of the sequences have less sites proposing
+#	insertion and deletion events around them. Hence, the insertion and deletion processes 
+#	are affected by an "edge effect". The user can simulate
+#	realistic flanking sequences to alleviate the edge effect in the simulation settings where
+#	this effect is an issue.
+# }
+#
 #	Notes on performance: 
 #	\itemize{
 #	\item The pure \code{R} implementation offers felxibility, but also comes
@@ -38,7 +50,7 @@
 #	with short sequences and enable fast mode when running the actual simulation with long sequences.
 #	\item Please note, that no "branch statistics" are saved in fast mode.
 #	\item Logging also has a negative impact on performance, so it's not a good idea to run
-#	large simulations with logging enabled.
+#	large simulations with the logging enabled.
 #	\item The time needed to run a simulation depends not only on the number of the sites, 
 #	but also on the length of the tree.
 #	\item Constructing \code{Sequence} objects with large number of sites is expensive. Avoid doing
