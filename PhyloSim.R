@@ -17,7 +17,8 @@
 #
 #	Key features offered by the framework:	
 #	\itemize{
-#	\item Explicit implementations of the most popular substitution models.
+#	\item Simulation of the evolution of arbitrary discrete characters.
+#	\item Explicit implementations of the most popular substitution models (nucleotide, amino acid and codon models).
 # 	\item Simulation under the popular models of among-sites rate variation, like the gamma (+G) and invariants plus gamma (+I+G) models.
 #	\item The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any \code{R} expression.
 #	\item Simulation of one or more separate insertion and/or deletion processes acting on the sequences and which sample the insertion/deletion length from an arbitrary discrete distribution or an \code{R} expression (so all the probability distributions implemented in \code{R} are readily available for this purpose).
