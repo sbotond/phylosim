@@ -17,7 +17,7 @@
 #
 #	Key features offered by the framework:	
 #	\itemize{
-#	\item Simulation of the evolution of arbitrary discrete characters.
+#	\item  Simulation of the evolution of a set of discrete characters with arbitrary states evolving #		by a continuous-time Markov process with an arbitrary rate matrix.
 #	\item Explicit implementations of the most popular substitution models (nucleotide, amino acid and codon models).
 # 	\item Simulation under the popular models of among-sites rate variation, like the gamma (+G) and invariants plus gamma (+I+G) models.
 #	\item The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any \code{R} expression.
