@@ -2836,7 +2836,7 @@ setMethodS3(
   },
   private=FALSE,
   protected=FALSE,
-  overwrite=TRUE,
+  overwrite=FALSE,
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
@@ -3242,12 +3242,10 @@ setMethodS3(
   },
   private=TRUE,
   protected=FALSE,
-  overwrite=TRUE,
+  overwrite=FALSE,
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
-
-
 
 ##
 ## Method: summary.PhyloSim
