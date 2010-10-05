@@ -9,6 +9,8 @@ com: *.R
 	git commit -a
 push:
 	git push --all
+fetch:
+	git fetch --all
 gt:
 	gitk --all
 rd: *.R
