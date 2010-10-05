@@ -35,5 +35,5 @@ Key features
 Building from source
 ------------------------
 
-The package can be built from the source by issuing <tt>make pack</tt> on a <tt>*nix</tt> system. The building process need the standard unix tools, <tt>Perl</tt> and <tt>R</tt> with the <tt>ape</tt>, <tt>R.oo</tt> and <tt>ggplot2</tt> packages installed.
+The package can be built from the source by issuing <tt>make pack</tt> on a <tt>*nix</tt> system. The building process need the standard unix tools, <tt>Perl</tt> and <tt>R</tt> with the <tt>ape</tt>, <tt>R.oo</tt>, <tt>ggplot2</tt> and <tt>compoisson</tt> packages installed.
 

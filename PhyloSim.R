@@ -17,7 +17,8 @@
 #
 #	Key features offered by the framework:	
 #	\itemize{
-#	\item Explicit implementations of the most popular substitution models.
+#	\item  Simulation of the evolution of a set of discrete characters with arbitrary states evolving #		by a continuous-time Markov process with an arbitrary rate matrix.
+#	\item Explicit implementations of the most popular substitution models (nucleotide, amino acid and codon models).
 # 	\item Simulation under the popular models of among-sites rate variation, like the gamma (+G) and invariants plus gamma (+I+G) models.
 #	\item The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any \code{R} expression.
 #	\item Simulation of one or more separate insertion and/or deletion processes acting on the sequences and which sample the insertion/deletion length from an arbitrary discrete distribution or an \code{R} expression (so all the probability distributions implemented in \code{R} are readily available for this purpose).
@@ -27,6 +28,18 @@
 #	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes.
 #	\item The possibility to export the counts of various events ("branch statistics") as phylo objects (see \code{\link{exportStatTree.PhyloSim}}).
 #	}
+#
+#	General notes:
+#	\itemize{
+#	\item The \code{Sequence} objects have no "immortal links". The simulation
+#	is aborted if the sequence length shrinks to zero. It is up to the user 
+#	to choose sensible indel rates and sequence lengths to prevent that.
+#	\item The sites near the beginning and end of the sequences have less sites proposing
+#	insertion and deletion events around them. Hence, the insertion and deletion processes 
+#	are affected by an "edge effect". The user can simulate
+#	realistic flanking sequences to alleviate the edge effect in the simulation settings where
+#	this effect is an issue.
+# }
 #
 #	Notes on performance: 
 #	\itemize{
@@ -38,7 +51,7 @@
 #	with short sequences and enable fast mode when running the actual simulation with long sequences.
 #	\item Please note, that no "branch statistics" are saved in fast mode.
 #	\item Logging also has a negative impact on performance, so it's not a good idea to run
-#	large simulations with logging enabled.
+#	large simulations with the logging enabled.
 #	\item The time needed to run a simulation depends not only on the number of the sites, 
 #	but also on the length of the tree.
 #	\item Constructing \code{Sequence} objects with large number of sites is expensive. Avoid doing
