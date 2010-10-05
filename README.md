@@ -12,7 +12,9 @@ Download an install
 Key features
 ------------
 
-* Explicit implementations of the most popular substitution models.
+* Simulation of the evolution of a set of discrete characters with arbitrary states evolving by a continuous-time Markov process with an arbitrary rate matrix.
+
+* Explicit implementations of the most popular substitution models (nucleotide, amino acid and codon substitution models).
 
 * Simulation under the popular models of among-sites rate variation, like the gamma (<tt>+G</tt>) and invariants plus gamma (<tt>+I+G</tt>) models.
 
