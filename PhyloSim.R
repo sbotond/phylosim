@@ -2766,8 +2766,6 @@ setMethodS3(
 #	Simulate(sim)
 #       # Plot the alignment without the tree or ancestral sequences.
 #       plot(sim, plot.ancestors=FALSE, plot.tree=FALSE)
-#       # Plot the alignment spread over 5 pages.
-#       plot(sim, num.pages=5)
 #       # Force a DNA-based color scheme (default is 'auto' to auto-detect based on the sequence composition)
 #       plot(sim, color.scheme='dna')
 # } 
