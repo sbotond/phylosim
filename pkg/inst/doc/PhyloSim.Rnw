@@ -588,7 +588,10 @@ part$e1<-list(
 		"omegas"=c(0,1,1.1),
 		"omega.probs"=c(4,2,1)/5
 	);
+@
 
+Construct a "nucleotide-scaled" codon model which can be used in mixed sequences:
+<<echo=TRUE>>=
 part$e1$subst<-GY94(kappa=2,scale.nuc=TRUE);
 
 part$e1$ins<-DiscreteInsertor(
