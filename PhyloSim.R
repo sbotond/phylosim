@@ -2743,7 +2743,7 @@ setMethodS3(
 # 	\item{num.pages}{Optionally split the alignment over a number of vertically-stacked pages. This is useful for long alignments. 'Auto' chooses a sensible number of pages, numerical values specify a number; defaults to 1.}
 # 	\item{char.text.size}{Specify the text size for the residue characters. This requires tweaking depending on the DPI and output format. Defaults to 1.5.}
 # 	\item{axis.text.size}{Specify the text size for the sequence labels along the y-axis. This requires tweaking depending on the DPI and output format. Defaults to 5.}
-# 	\item{color.scheme}{Color scheme to use ("binary", "dna" and "protein").}
+# 	\item{color.scheme}{Color scheme to use ("auto", "binary", "dna" and "protein").}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2758,10 +2758,12 @@ setMethodS3(
 #	sim<-PhyloSim(
 #		name="TinySim",
 #		phylo=rcoal(3),
-#		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
+#		root.seq=NucleotideSequence(string="ATGCTAGCTAGG",processes=list(list(JC69())))
 #	);
 #       # plot the aggregated phylo object
 #       plot(sim)
+#	# run simulation
+#	Simulate(sim)
 #       # Plot the alignment without the tree or ancestral sequences.
 #       plot(sim, plot.ancestors=FALSE, plot.tree=FALSE)
 #       # Plot the alignment spread over 5 pages.
