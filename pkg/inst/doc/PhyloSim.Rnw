@@ -834,7 +834,7 @@ Simulate(sim)
 
 Plot tree and alignment:
 <<echo=TRUE>>=
-plot(sim)
+plot(sim,num.pages="auto")
 @
 
 Save alignment:
