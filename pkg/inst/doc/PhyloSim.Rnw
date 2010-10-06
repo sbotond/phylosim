@@ -255,7 +255,7 @@ Simulate(sim)
 @
 
 Plot the resulting alignment alongside the tree:
-<<echo=TRUE,fig=TRUE,width=110, height=70>>=
+<<echo=TRUE,fig=TRUE,width=180, height=70>>=
 plot(sim)
 @
 
@@ -375,7 +375,7 @@ Simulate(sim)
 @
 
 Plot the resulting alignment alongside the tree:
-<<echo=TRUE,fig=TRUE,width=110, height=70>>=
+<<echo=TRUE,fig=TRUE,width=180, height=70>>=
 plot(sim)
 @
 
@@ -486,7 +486,7 @@ Run simulation:
 Simulate(sim)
 @
 Plot tree and alignment, omit ancestral sequences:
-<<echo=TRUE,fig=TRUE,width=110, height=70>>=
+<<echo=TRUE,fig=TRUE,width=180, height=70>>=
 plot(sim,plot.ancestors=FALSE)
 @
 
@@ -836,7 +836,7 @@ Simulate(sim)
 @
 
 Plot tree and alignment, omit ancestral sequences:
-<<echo=TRUE,fig=TRUE,width=110, height=70>>=
+<<echo=TRUE,fig=TRUE,width=180, height=70>>=
 plot(sim,num.pages="auto",plot.ancestors=FALSE)
 @
 
