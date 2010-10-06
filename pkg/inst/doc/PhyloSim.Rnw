@@ -150,7 +150,7 @@ insert hook functions will sample the site-process specific rate multipliers of 
 Now the processes are in place, so it is time to set up the root sequence.
 
 <<echo=TRUE>>=
-seq <- AminoAcidSequence(length = 60)
+aa.seq <- AminoAcidSequence(length = 60)
 @
 
 Now we will create a pattern of processes:
@@ -165,25 +165,25 @@ The "left linker", "core" and "right linker" regions evolve by different sets of
 
 Apply the process pattern to the root sequence:
 <<echo=TRUE>>=
-seq$processes <- process.pattern
+aa.seq$processes <- process.pattern
 @
 
 Set up site specific rates by iterating over sites and sampling rates from 
 a substitution process specific distribution:
 <<echo=TRUE>>=
-for (i in 1:seq$length) {
-    if (isAttached(seq$sites[[i]], jtt)) {
+for (i in 1:aa.seq$length) {
+    if (isAttached(aa.seq$sites[[i]], jtt)) {
         while ((site.rate <- rnorm(1, mean = 0.001, sd = 0.01)) < 
             0) {
         }
-        setRateMultipliers(seq, jtt, site.rate, index = i)
+        setRateMultipliers(aa.seq, jtt, site.rate, index = i)
     }
-    else if (isAttached(seq$sites[[i]], wag)) {
-        plusInvGamma(seq, process = wag, pinv = 0.4, shape = 0.6, 
+    else if (isAttached(aa.seq$sites[[i]], wag)) {
+        plusInvGamma(aa.seq, process = wag, pinv = 0.4, shape = 0.6, 
             index = i)
     }
-    else if (isAttached(seq$sites[[i]], lg)) {
-        plusInvGamma(seq, process = lg, pinv = 0.4, shape = 0.6, 
+    else if (isAttached(aa.seq$sites[[i]], lg)) {
+        plusInvGamma(aa.seq, process = lg, pinv = 0.4, shape = 0.6, 
             index = i)
     }
 }
@@ -191,13 +191,13 @@ for (i in 1:seq$length) {
 
 Sample the states of the root sequence from the attached substitution processes:
 <<echo=TRUE>>=
-sampleStates(seq)
-print(seq)
+sampleStates(aa.seq)
+print(aa.seq)
 @
 
 Plot the total rates of the sites:
 <<echo=TRUE,fig=TRUE>>=
-plot(seq)
+plot(aa.seq)
 @
 
 Read in a tree using the \code{ape} package:
@@ -213,7 +213,7 @@ file.remove("smalldemotree.nwk");
 
 Construct the simulation object and get an object summary:
 <<echo=TRUE>>=
-sim <- PhyloSim(phylo = tree, root.seq = seq)
+sim <- PhyloSim(phylo = tree, root.seq = aa.seq)
 summary(sim)
 @
 
