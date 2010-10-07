@@ -138,6 +138,8 @@
 #	Simulate(sim)
 #	# display alignment matrix
 #	sim$alignment
+#	# plot tree and alignment
+#	plot(sim)
 #
 #	## Check the consistency of object p
 #	print(checkConsistency(p))
@@ -289,8 +291,8 @@
 #	rs$string
 #	# show alignment matrix
 #	sim$alignment
-#	# plot tree and alignment
-#	plot(sim)
+#	# plot tree and alignment, omit ancestral sequences
+#	plot(sim,plot.ancestors=FALSE)
 #	# display the head of the log file
 #	cat(paste(scan(nmax=20,file=sim$logFile,what=character(),sep="\n"),collapse="\n"));cat("\n");
 #	# delete log file
@@ -1356,7 +1358,7 @@ setMethodS3(
 					throw("Node hook returned sequence with zero bigRate!\n");
 				}
 				else{
-				 checkConsistency(seq, ommit.sites=TRUE);
+				 checkConsistency(seq, omit.sites=TRUE);
 				}
 			}
 
@@ -2741,7 +2743,7 @@ setMethodS3(
 # 	\item{num.pages}{Optionally split the alignment over a number of vertically-stacked pages. This is useful for long alignments. 'auto' chooses a sensible number of pages, numerical values specify a number; defaults to 'auto'.}
 # 	\item{char.text.size}{Specify the text size for the residue characters. This requires tweaking depending on the DPI and output format. Defaults to 1.5.}
 # 	\item{axis.text.size}{Specify the text size for the sequence labels along the y-axis. This requires tweaking depending on the DPI and output format. Defaults to 5.}
-#       \item{color.scheme}{Specify the color scheme to use when plotting residues. 'Auto' uses the number of unique characters to determine a color scheme; possible manual values are: binary, dna, protein, codon, and everything.}
+#       \item{color.scheme}{Color scheme to use ("auto", "binary", "dna", "protein", "codon", "everything").}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2756,14 +2758,14 @@ setMethodS3(
 #	sim<-PhyloSim(
 #		name="TinySim",
 #		phylo=rcoal(3),
-#		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
+#		root.seq=NucleotideSequence(string="ATGCTAGCTAGG",processes=list(list(JC69())))
 #	);
 #       # plot the aggregated phylo object
 #       plot(sim)
+#	# run simulation
+#	Simulate(sim)
 #       # Plot the alignment without the tree or ancestral sequences.
 #       plot(sim, plot.ancestors=FALSE, plot.tree=FALSE)
-#       # Plot the alignment spread over 5 pages.
-#       plot(sim, num.pages=5)
 #       # Force a DNA-based color scheme (default is 'auto' to auto-detect based on the sequence composition)
 #       plot(sim, color.scheme='dna')
 # } 

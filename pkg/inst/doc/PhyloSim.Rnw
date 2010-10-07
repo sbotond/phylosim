@@ -255,7 +255,7 @@ Simulate(sim)
 @
 
 Plot the resulting alignment alongside the tree:
-<<echo=TRUE,fig=TRUE>>=
+<<echo=TRUE,fig=TRUE,width=180, height=70>>=
 plot(sim)
 @
 
@@ -375,7 +375,7 @@ Simulate(sim)
 @
 
 Plot the resulting alignment alongside the tree:
-<<echo=TRUE,fig=TRUE>>=
+<<echo=TRUE,fig=TRUE,width=180, height=70>>=
 plot(sim)
 @
 
@@ -411,7 +411,7 @@ PSIM_FAST<-TRUE;
 
 Construct a DiscreteInsertor process:
 <<echo=TRUE>>=
-ivd<-DiscreteInsertor(rate=0.04,sizes=c(4,6),probs=c(2/3,1/3));
+ivd<-DiscreteInsertor(rate=0.06,sizes=c(4,6),probs=c(2/3,1/3));
 @
 
 Set template sequence just to make the process object happy:
@@ -485,9 +485,9 @@ Run simulation:
 <<echo=TRUE>>=
 Simulate(sim)
 @
-Plot tree and alignment:
-<<echo=TRUE>>=
-plot(sim)
+Plot tree and alignment, omit ancestral sequences:
+<<echo=TRUE,fig=TRUE,width=180, height=70>>=
+plot(sim,plot.ancestors=FALSE)
 @
 
 Save alignment:
@@ -588,7 +588,10 @@ part$e1<-list(
 		"omegas"=c(0,1,1.1),
 		"omega.probs"=c(4,2,1)/5
 	);
+@
 
+Construct a "nucleotide-scaled" codon model which can be used in mixed sequences:
+<<echo=TRUE>>=
 part$e1$subst<-GY94(kappa=2,scale.nuc=TRUE);
 
 part$e1$ins<-DiscreteInsertor(
@@ -832,9 +835,9 @@ Run simulation:
 Simulate(sim)
 @
 
-Plot tree and alignment:
-<<echo=TRUE>>=
-plot(sim)
+Plot tree and alignment, omit ancestral sequences:
+<<echo=TRUE,fig=TRUE,width=180, height=70>>=
+plot(sim,num.pages="auto",plot.ancestors=FALSE)
 @
 
 Save alignment:
