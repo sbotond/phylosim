@@ -17,7 +17,8 @@
 #
 #	Key features offered by the framework:	
 #	\itemize{
-#	\item Explicit implementations of the most popular substitution models.
+#	\item  Simulation of the evolution of a set of discrete characters with arbitrary states evolving #		by a continuous-time Markov process with an arbitrary rate matrix.
+#	\item Explicit implementations of the most popular substitution models (nucleotide, amino acid and codon substitution models).
 # 	\item Simulation under the popular models of among-sites rate variation, like the gamma (+G) and invariants plus gamma (+I+G) models.
 #	\item The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any \code{R} expression.
 #	\item Simulation of one or more separate insertion and/or deletion processes acting on the sequences and which sample the insertion/deletion length from an arbitrary discrete distribution or an \code{R} expression (so all the probability distributions implemented in \code{R} are readily available for this purpose).
@@ -27,6 +28,18 @@
 #	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes.
 #	\item The possibility to export the counts of various events ("branch statistics") as phylo objects (see \code{\link{exportStatTree.PhyloSim}}).
 #	}
+#
+#	General notes:
+#	\itemize{
+#	\item The \code{Sequence} objects have no "immortal links". The simulation
+#	is aborted if the sequence length shrinks to zero. It is up to the user 
+#	to choose sensible indel rates and sequence lengths to prevent that.
+#	\item The sites near the beginning and end of the sequences have less sites proposing
+#	insertion and deletion events around them. Hence, the insertion and deletion processes 
+#	are affected by an "edge effect". The user can simulate
+#	realistic flanking sequences to alleviate the edge effect in the simulation settings where
+#	this effect is an issue.
+# }
 #
 #	Notes on performance: 
 #	\itemize{
@@ -38,7 +51,7 @@
 #	with short sequences and enable fast mode when running the actual simulation with long sequences.
 #	\item Please note, that no "branch statistics" are saved in fast mode.
 #	\item Logging also has a negative impact on performance, so it's not a good idea to run
-#	large simulations with logging enabled.
+#	large simulations with the logging enabled.
 #	\item The time needed to run a simulation depends not only on the number of the sites, 
 #	but also on the length of the tree.
 #	\item Constructing \code{Sequence} objects with large number of sites is expensive. Avoid doing
@@ -125,6 +138,8 @@
 #	Simulate(sim)
 #	# display alignment matrix
 #	sim$alignment
+#	# plot tree and alignment
+#	plot(sim)
 #
 #	## Check the consistency of object p
 #	print(checkConsistency(p))
@@ -276,8 +291,8 @@
 #	rs$string
 #	# show alignment matrix
 #	sim$alignment
-#	# plot tree and alignment
-#	plot(sim)
+#	# plot tree and alignment, omit ancestral sequences
+#	plot(sim,plot.ancestors=FALSE)
 #	# display the head of the log file
 #	cat(paste(scan(nmax=20,file=sim$logFile,what=character(),sep="\n"),collapse="\n"));cat("\n");
 #	# delete log file
@@ -1343,7 +1358,7 @@ setMethodS3(
 					throw("Node hook returned sequence with zero bigRate!\n");
 				}
 				else{
-				 checkConsistency(seq, ommit.sites=TRUE);
+				 checkConsistency(seq, omit.sites=TRUE);
 				}
 			}
 
@@ -2712,14 +2727,23 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #
-#	This method simply calls the \code{plot.phylo} method on the aggregated phylo object
-#	and adds the nodelabels.
+#       This method plots the aggregated alignment alongside the tree used for simulation. Various options
+#       allow for control over the plot style.
+#
 # } 
 # 
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{x}{A PhyloSim object.} 
+# 	\item{x}{A PhyloSim object.}
+# 	\item{plot.tree}{Whether to plot the tree alongside the alignment. TRUE or FALSE; defaults to TRUE.}
+# 	\item{plot.ancestors}{Whether to plot the ancestral sequences. TRUE or FALSE; defaults to TRUE.}
+# 	\item{plot.chars}{Whether to plot the actual text of the characters.}
+# 	\item{aspect.ratio}{Constraints the alignment residues to have a certain aspect ratio; values above 1 cause vertically-stretched blocks. FALSE disables aspect ratio control, numerical values set the aspect ratio; defaults to FALSE.}
+# 	\item{num.pages}{Optionally split the alignment over a number of vertically-stacked pages. This is useful for long alignments. 'auto' chooses a sensible number of pages, numerical values specify a number; defaults to 'auto'.}
+# 	\item{char.text.size}{Specify the text size for the residue characters. This requires tweaking depending on the DPI and output format. Defaults to 1.5.}
+# 	\item{axis.text.size}{Specify the text size for the sequence labels along the y-axis. This requires tweaking depending on the DPI and output format. Defaults to 5.}
+#       \item{color.scheme}{Color scheme to use ("auto", "binary", "dna", "protein", "codon", "everything").}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2734,10 +2758,16 @@ setMethodS3(
 #	sim<-PhyloSim(
 #		name="TinySim",
 #		phylo=rcoal(3),
-#		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
+#		root.seq=NucleotideSequence(string="ATGCTAGCTAGG",processes=list(list(JC69())))
 #	);
 #       # plot the aggregated phylo object
 #       plot(sim)
+#	# run simulation
+#	Simulate(sim)
+#       # Plot the alignment without the tree or ancestral sequences.
+#       plot(sim, plot.ancestors=FALSE, plot.tree=FALSE)
+#       # Force a DNA-based color scheme (default is 'auto' to auto-detect based on the sequence composition)
+#       plot(sim, color.scheme='dna')
 # } 
 # 
 # @author 
@@ -2752,11 +2782,55 @@ setMethodS3(
   class="PhyloSim",
   function(
     x,
+    plot.tree,
+    plot.ancestors,
+    plot.chars,
+    aspect.ratio,
+    num.pages,
+    char.text.size,
+    axis.text.size,
+    color.scheme,
     ...
   ){
+		if(missing(char.text.size)){
+			char.text.size <- 1.5
+		}
+		if(missing(axis.text.size)){
+			axis.text.size <- 5
+		}
+		if(missing(color.scheme)){
+			color.scheme <- 'auto'
+		}
+		if(missing(plot.tree)){
+			plot.tree <- TRUE
+		}
+		if(missing(plot.ancestors)){
+			plot.ancestors <- TRUE
+		}
+		if(missing(plot.chars)){
+			plot.chars <- TRUE
+		}
+		if(missing(aspect.ratio)){
+			aspect.ratio <- FALSE
+		}
+		if(missing(num.pages)){
+			num.pages='auto'
+		}
+                if(missing(color.scheme)){
+                        color.scheme='auto'
+                }
 	
 		if(all(!is.na(x$.alignment), is.matrix(x$.alignment))){
-			.plotWithAlignment(x);
+			.plotWithAlignment(x,
+				plot.tree=plot.tree,
+				plot.ancestors=plot.ancestors,
+				plot.chars=plot.chars,
+				aspect.ratio=aspect.ratio,
+				num.pages=num.pages,
+                                char.text.size=char.text.size,
+                                axis.text.size=axis.text.size,
+                                color.scheme=color.scheme
+			);
 			return(invisible(x));
 		}
 
@@ -2781,21 +2855,412 @@ setMethodS3(
   class="PhyloSim",
   function(
     x,
+    plot.tree,
+    plot.ancestors,
+    plot.chars,
+    aspect.ratio,
+    num.pages,
+    char.text.size,
+    axis.text.size,
+    color.scheme,
     ...
   ){
-		# Hi Greg!
-		# This method will be called only if the alignment matrix is not empty,
-		# which is normally set after the simulation is finished.
 
-		x$.alignment # the alignment matrix	
-		x$.phylo     # the ape object
-		
-		# In the original method I use the following snipet to 
-		# plot the tree:
-		plot(x$.phylo);
-		nodelabels();
-		
-		# this method has no meaningful return value
+    ### First, we need to define a bunch of sparsely-documented utility functions. ###
+
+    # Extracts a list of child node IDs for the given node. Returns (-1,-1) if the node is a leaf.
+    child.nodes <- function(phylo,node) {
+      edge.indices <- which(phylo$edge[,1]==node)
+      nodes <- phylo$edge[edge.indices,2]
+      if (length(nodes)==0) {
+        nodes <- list(c(-1,-1))
+      } else {
+        nodes <- list(nodes)
+      }
+      return(list(nodes))
+    }
+
+    # Extracts the parent node ID for the given node. Returns -1 if the node is root.
+    parent.node <- function(phylo,node) {
+      edge.index <- which(phylo$edge[,2]==node)
+      node <- phylo$edge[edge.index,1]
+      if (length(node)==0) {
+        node <- -1
+      }
+      return(node)
+    }
+
+    # Extracts the length of the branch above the given node. Returns 0 if the node is root.
+    branch.length <- function(phylo,node) {
+      edge.index <- which(phylo$edge[,2]==node)
+      bl <- phylo$edge.length[edge.index]
+      if (length(bl)==0) {
+        bl <- 0
+      }
+      return(bl)
+    }
+
+    # The maximum root-to-tip length in the tree.
+    max.length.to.root <- function(phylo) {
+      max.length <- 0
+      for (i in 1:length(phylo$tip.label)) {
+        cur.length <- length.to.root(phylo,i)
+        max.length <- max(max.length,cur.length)
+      }
+      return(max.length)
+    }
+
+    # The length from the root to the given node. Can be given either as a node ID or a tip label.
+    length.to.root <- function(phylo,node) {
+      tip.index <- node
+      if (is.character(node)) {
+        tip.index <- which(phylo$tip.label==node)
+      }
+      
+      cur.node.b <- tip.index
+
+      p.edges <- phylo$edge
+      p.lengths <- phylo$edge.length
+      
+      length <- 0
+      while(length(which(p.edges[,2]==cur.node.b)) > 0) {
+        cur.edge.index <- which(p.edges[,2]==cur.node.b)
+        cur.edge.length <- p.lengths[cur.edge.index]
+        length <- length + cur.edge.length
+        cur.node.a <- p.edges[cur.edge.index,1]
+        cur.node.b <- cur.node.a # Move up to the next edge
+      }
+      return(length)
+    }
+
+    # Returns a data frame defining segments to draw the phylogenetic tree.
+    phylo.layout.df <- function(phylo,layout.ancestors=FALSE,align.seq.names=NULL) {
+      # Number of nodes and leaves.
+      n.nodes <- length(phylo$tip.label)+phylo$Nnode
+      n.leaves <- length(phylo$tip.label)
+
+      # Create the skeleton data frame.
+      df <- data.frame(
+                       node=c(1:n.nodes),                                            # Nodes with IDs 1 to N.
+                       x=0,                                                          # These will contain the x and y coordinates after the layout procedure below.
+                       y=0,
+                       label=c(phylo$tip.label,((n.leaves+1):n.nodes)),            # The first n.leaves nodes are the labeled tips.
+                       is.leaf=c(rep(TRUE,n.leaves),rep(FALSE,n.nodes-n.leaves)),    # Just for convenience, store a boolean whether it's a leaf or not.
+                       parent=0,                                                     # Will contain the ID of the current node's parent
+                       children=0,                                                   # Will contain a list of IDs of the current node's children
+                       branch.length=0                                               # Will contain the branch lengths
+                       )
+
+      # Collect the parents, children, and branch lengths
+      parent <- c()
+      bl <- list()
+      children <- list()
+      for (i in 1:nrow(df)) {
+        node <- df[i,]$node
+        parent <- c(parent,parent.node(phylo,node))
+        bl <- c(bl,branch.length(phylo,node))
+        children <- c(children,child.nodes(phylo,node))
+      }
+      df$parent <- parent
+      df$children <- children
+      df$branch.length <- bl
+
+      # Start the layout procedure by equally spacing the leaves in the y-dimension.
+      df[df$is.leaf==TRUE,]$y = c(1:n.leaves)
+
+      # For each leaf: travel up towards the root, laying out each internal node along the way.
+      for (i in 1:n.leaves) {
+        cur.node <- i
+        while (length(cur.node) > 0 && cur.node != -1) {
+          # We always use branch lengths: x-position is simply the length to the root.
+          df[cur.node,]$x <- length.to.root(phylo,cur.node)
+
+          # The y-position for internal nodes is the mean of the y-position of the two children.
+          children <- unlist(df[cur.node,]$children)
+          if (length(children) > 0 && children[1] != -1) {
+            child.a <- children[1]
+            child.b <- children[2]
+            child.a.y <- df[child.a,]$y
+            child.b.y <- df[child.b,]$y
+            df[cur.node,]$y <- (child.a.y+child.b.y)/2
+          }
+
+          # Try to find the index of this node in the alignment names.
+          if (!is.null(align.seq.names)) {
+            lbl <- df[cur.node,]$label
+            index.in.names <- which(align.seq.names == lbl | align.seq.names %in% c(paste('Node',lbl),paste('Root node',lbl)))
+            if (length(index.in.names)>0) {
+              df[cur.node,]$y <- index.in.names
+            }
+          }
+          
+          cur.node <- unlist(df[cur.node,]$parent)
+        }
+      }
+      
+      # We have a data frame with each node positioned.
+      # Now we go through and make two line segments for each node (for a 'square corner' type tree plot).
+      line.df <- data.frame()
+      for (i in 1:nrow(df)) {
+        row <- df[i,]            # Data frame row for the current node.
+        if (row$parent == -1) {
+          next; # Root node!
+        }
+        p.row <- df[row$parent,] # Data frame row for the parent node.
+
+        if (layout.ancestors) {
+          horiz.line <- data.frame(x=row$x,xend=p.row$x,y=row$y,yend=p.row$y,lbl=row$label)
+          line.df <- rbind(line.df,horiz.line)
+        } else {
+          horiz.line <- data.frame(x=row$x,xend=p.row$x,y=row$y,yend=row$y,lbl=row$label)    # First a line from row.x to parent.
+          vert.line <- data.frame(x=p.row$x,xend=p.row$x,y=row$y,yend=p.row$y,lbl=row$label) # Now a line from row.y to parent.y
+          
+          #horiz.line <- data.frame(x=row$x,xend=(p.row$x+row$x)/2,y=row$y,yend=row$y,lbl=row$label)    # First a line from row.x to parent.
+          #vert.line <- data.frame(x=(p.row$x+row$x)/2,xend=p.row$x,y=row$y,yend=p.row$y,lbl=row$label) # Now a line from row.y to parent.y
+          line.df <- rbind(line.df,horiz.line,vert.line)
+        }
+      }
+      return(line.df)
+    }
+
+    # Call this to put a ggplot panel into a specified layout position [for example: print(p,vp=subplot(1,2)) ]
+    subplot <- function(x, y) viewport(layout.pos.col=x, layout.pos.row=y)
+
+    # Call this to create a layout with x and y rows and columns, respectively
+    vplayout <- function(x, y) {
+      grid.newpage()
+      pushViewport(viewport(layout=grid.layout(y,x)))
+    }
+
+    # Creates a color aesthetic for alignments
+    alignment.colors <- function(scheme) {
+      scheme <- tolower(scheme)
+      if (scheme == 'binary') {
+        cols <- c(
+                  '0' = "#000000",
+                  '1' = '#FFFFFF'
+                  )
+      } else if (scheme == 'dna') {
+        cols <- c(
+                  'G' = "#FFFF00",
+                  'C' = "#00FF00",
+                  'T' = "#FF0000",
+                  'A' = "#0000FF"
+                  )
+      } else if (scheme == 'taylor' || scheme == 'protein') {
+        cols <- c(
+                  'A' = "#CCFF00",       'a' = "#CCFF00",
+                  'C' = "#FFFF00",       'c' = "#FFFF00",
+                  'D' = "#FF0000",       'd' = "#FF0000",
+                  'E' = "#FF0066",       'e' = "#FF0066",
+                  'F' = "#00FF66",       'f' = "#00FF66",
+                  'G' = "#FF9900",       'g' = "#FF9900",
+                  'H' = "#0066FF",       'h' = "#0066FF",
+                  'I' = "#66FF00",       'i' = "#66FF00",
+                  'K' = "#6600FF",       'k' = "#6600FF",
+                  'L' = "#33FF00",       'l' = "#33FF00",
+                  'M' = "#00FF00",       'm' = "#00FF00",
+                  'N' = "#CC00FF",       'n' = "#CC00FF",
+                  'P' = "#FFCC00",       'p' = "#FFCC00",
+                  'Q' = "#FF00CC",       'q' = "#FF00CC",
+                  'R' = "#0000FF",       'r' = "#0000FF",
+                  'S' = "#FF3300",       's' = "#FF3300",
+                  'T' = "#FF6600",       't' = "#FF6600",
+                  'V' = "#99FF00",       'v' = "#99FF00",
+                  'W' = "#00CCFF",       'w' = "#00CCFF",
+                  'Y' = "#00FFCC",       'y' = "#00FFCC",
+                  '2' = "#888888",       '2' = "#888888",
+                  'O' = "#424242",       'o' = "#424242",
+                  'B' = "#7D7D7D",       'b' = "#7D7D7D",
+                  'Z' = "#EEEEEE",       'z' = "#EEEEEE",
+                  'X' = "#000000",       'x' = "#000000"
+                  )
+      } else if (scheme == 'codon') {
+                                        # Get the protein colors.
+        protein.colors <- alignment.colors('protein')
+                                        # Create a list of codons.
+        ca <- CodonAlphabet()
+        nucs <- c('G','A','C','T')
+        codons <- expand.grid(nucs,nucs,nucs,stringsAsFactors=F)
+                                        # For each codon give the protein color.
+        codon.colors <- c()
+        for (i in 1:nrow(codons)) {
+          codon = paste(codons[i,],collapse='')
+          aa <- translateCodon(ca,codon)
+          codon.colors[codon] = protein.colors[aa]
+        }
+        cols <- codon.colors
+      } else if (scheme == 'everything') {
+        dna.colors <- alignment.colors('dna')
+                                        # Make the DNA stand out here by being a little darker
+        for (i in 1:length(dna.colors)) {
+          color <- dna.colors[i]
+          darker.color <- darker(color)
+          dna.colors[i] <- darker.color
+        }
+        binary.colors <- alignment.colors('binary')
+        protein.colors <- alignment.colors('protein')
+        codon.colors <- alignment.colors('codon')
+                                        # Put them all together. (One remaining issue: the protein G,A,T,C will be colored as DNA!)
+        cols <- c(dna.colors,protein.colors,binary.colors,codon.colors)
+      }
+      return(cols)
+    }
+
+    darker <- function(color) {
+      x <- col2rgb(color)
+      x <- round(x * 0.7)
+      y <- rgb(x[1],x[2],x[3],maxColorValue=255)
+      return(y)
+    }
+    
+    ####################################
+    ### Let the real plotting begin! ###
+    ####################################
+    
+    df <- data.frame()
+    aln <- x$.alignment
+
+    phylo <- x$.phylo
+    names <- dimnames(aln)[[1]]
+
+    #print(paste("Aln length:",length(aln[1,])))
+    #print(paste("Num seqs:",length(names)))
+    for (i in 1:length(names)) {
+      char.list <- aln[i,]
+
+      name <- names[i]
+                                        # Store the indices of where the gaps are -- we won't plot the gaps.
+      gaps <- char.list == '-' 
+      seq.pos <- seq(1,length(char.list))
+                                        # Get the position and character of each non-gap residue.
+      pos.nogaps <- seq.pos[gaps==FALSE]
+      char.nogaps <- char.list[gaps==FALSE]
+                                        # Create a data frame with 1 row per residue to plot.
+      df <- rbind(df,data.frame(
+                                id=rep(name,length(pos.nogaps)),      # Sequence ID to which this residue belongs
+                                seq_index=rep(i,length(pos.nogaps)),  # Index of the containing sequence
+                                pos=pos.nogaps,                       # Alignment position
+                                char=char.nogaps                      # Character of the residue
+                                ))
+    }
+    
+                                        # Turn the IDs into a factor to plot along the y axis.
+    df$id <- factor(df$id,levels=rev(names))
+    
+    if (!plot.ancestors) {
+                                        # Remove the ancestral nodes from the plot.
+      tip.name.indices <- grep("node",names,ignore.case=T,invert=T)
+      names <- names[tip.name.indices]
+      df$id <- factor(df$id,levels=rev(names))
+      df <- subset(df,id %in% names)
+    }
+
+    if (tolower(num.pages) == 'auto' || num.pages > 1) {
+                                        # Plotting a multi-page alignment.
+      aln.length <- length(aln[1,])
+      if (tolower(num.pages) == 'auto') {
+        num.seqs <- length(names)
+                                        # Formula to get a square-ish total plot.
+        num.pages <- sqrt(aln.length/num.seqs)
+        num.pages <- ceiling(num.pages)+1
+                                        # One-page rule for short alignments.
+        if (aln.length < 30) {num.pages <- 1}
+      }
+                                        # Add a 'page' factor to the data frame and use facet_grid.
+      chars.per.page <- ceiling(aln.length / num.pages)
+      df$page <- floor((df$pos-1) / chars.per.page)
+      df$pos <- df$pos - (chars.per.page*(df$page))
+      page.labels <- paste((0:(num.pages-1))*chars.per.page+1,(1:num.pages)*chars.per.page,sep="-")
+      df$page <- factor(df$page,labels=page.labels)
+    }    
+
+    if (color.scheme == 'auto') {
+      all.chars <- unlist(aln)
+      all.chars <- all.chars[all.chars != '-']
+      n.chars <- length(unique(all.chars))
+      
+      if (n.chars <= 2) {
+        color.scheme = 'binary'
+      } else if (n.chars <= 4) {
+        color.scheme = 'dna'
+      } else if (n.chars <= 20) {
+        color.scheme = 'protein'
+      } else if (n.chars <= 64) {
+        color.scheme = 'codon'
+      } else {
+        color.scheme = 'everything'
+      }
+    }
+    
+                                        # Create the ggplot panel.
+    p <- ggplot(df,aes(x=pos,y=as.numeric(id)))
+    p <- p + geom_tile(aes(fill=char))
+    p <- p + scale_fill_manual(values=alignment.colors(color.scheme))
+    p <- p + scale_x_continuous(limits=c(0,max(df$pos)+1),expand=c(0,0))
+    p <- p + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=names,expand=c(0,0))
+    
+    if (num.pages > 1) {
+      p <- p + facet_grid(page ~ .)
+    }    
+    if (plot.chars) {
+      p <- p + geom_text(aes(label=char),colour='black',size=char.text.size)
+    }    
+    if (aspect.ratio) {
+      p <- p + coord_equal(ratio=aspect.ratio)
+    }
+
+    plot.opts <- opts(
+		  legend.position='none',
+		  axis.text.y = theme_text(size=axis.text.size,hjust=1),
+		  axis.title.x = theme_blank(),
+		  axis.title.y = theme_blank()
+                  )
+    p <- p + plot.opts
+    
+    if (plot.tree) {
+      if (plot.ancestors) {
+        tree.df <- phylo.layout.df(phylo,layout.ancestors=TRUE,align.seq.names=names)
+      } else {
+        tree.df <- phylo.layout.df(phylo,align.seq.names=names)
+      }
+
+      if (num.pages > 1) {
+        tree.df$page <- 1
+        df.copy <- tree.df
+        for (i in 2 : num.pages) {
+          df.copy$page <- i
+          tree.df <- rbind(tree.df,df.copy)
+        }
+      }
+
+      max.length <- max.length.to.root(phylo)
+      aln.length <- length(aln[1,])
+      n.leaves <- length(names)
+      
+      n.leaves <- length(phylo$tip.label)
+      q <- ggplot(tree.df)
+      q <- q + geom_segment(aes(x=x,y=y,xend=xend,yend=yend))
+      q <- q + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=names,expand=c(0,0))
+      q <- q + scale_x_continuous(limits=c(0,max.length),expand=c(0.05,0))
+      q <- q + plot.opts
+      if (num.pages > 1) {
+        q <- q + facet_grid(page ~ .)
+      }
+
+      if (aspect.ratio) {
+        warning("Aspect ratio set while plotting tree -- the alignment and tree won't line up!")
+      }
+      
+      vplayout(4,1)
+      print(p,vp=subplot(2:4,1))
+      print(q,vp=subplot(1,1))
+    } else {
+      p <- p + plot.opts
+      print(p)
+    }
+    
+    # this method has no meaningful return value
   },
   private=TRUE,
   protected=FALSE,

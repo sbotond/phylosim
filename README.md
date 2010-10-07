@@ -1,8 +1,10 @@
 PhyloSim
 ========
 
-PhyloSim is an extensible object-oriented framework for the Monte Carlo simulation of sequence evolution written in 100 percent <tt>R</tt>.
+<tt>PhyloSim</tt> is an extensible object-oriented framework for the Monte Carlo simulation of sequence evolution written in 100 percent <tt>R</tt>.
 It is built on the top of the [R.oo](http://cran.r-project.org/web/packages/R.oo/index.html) and [ape](http://cran.r-project.org/web/packages/ape/index.html) packages and uses the Gillespie algorithm to simulate substitutions, insertions and deletions.
+
+<tt>PhyloSim</tt> was brought to you by the [Goldman group](http://www.ebi.ac.uk/goldman) from [EMBL-EBI](http://www.ebi.ac.uk).
 
 Download an install
 -------------------
@@ -12,7 +14,9 @@ Download an install
 Key features
 ------------
 
-* Explicit implementations of the most popular substitution models.
+* Simulation of the evolution of a set of discrete characters with arbitrary states evolving by a continuous-time Markov process with an arbitrary rate matrix.
+
+* Explicit implementations of the most popular substitution models (nucleotide, amino acid and codon substitution models).
 
 * Simulation under the popular models of among-sites rate variation, like the gamma (<tt>+G</tt>) and invariants plus gamma (<tt>+I+G</tt>) models.
 
@@ -35,5 +39,5 @@ Key features
 Building from source
 ------------------------
 
-The package can be built from the source by issuing <tt>make pack</tt> on a <tt>*nix</tt> system. The building process need the standard unix tools, <tt>Perl</tt> and <tt>R</tt> with the <tt>ape</tt>, <tt>R.oo</tt> and <tt>ggplot2</tt> packages installed.
+The package can be built from the source by issuing <tt>make pack</tt> on a <tt>*nix</tt> system. The building process need the standard unix tools, <tt>Perl</tt> and <tt>R</tt> with the <tt>ape</tt>, <tt>R.oo</tt>, <tt>ggplot2</tt> and <tt>compoisson</tt> packages installed.
 

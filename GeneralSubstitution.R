@@ -2214,7 +2214,7 @@ setMethodS3(
 	zz<-c();	
 
 	for(cl in (colnames(qmat))){
-		for(rw in rownames(qmat)){
+		for(rw in rev(rownames(qmat))){
 			if(rw != cl){
 				xx<-c(xx,cl)
 				yy<-c(yy,rw)

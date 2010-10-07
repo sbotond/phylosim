@@ -647,7 +647,7 @@ setMethodS3(
 # 	\item{this}{A CodonSequence object.} 
 #	\item{process}{A process object inheriting from GY94.}
 #	\item{value}{A vector containing the new values of the site-process specific parameter, recycled if shorter than the index vector.}
-#	\item{index}{A vector of positions. It is set to 1:seq$length if ommited.}
+#	\item{index}{A vector of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
