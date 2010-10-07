@@ -867,19 +867,19 @@ It is natural to think of the background rate of deletion as a neutral rate but 
 Distribution & Density & Scale factor & Rescaled distribution \\ \hline
 Geometric, ${\rm Geom}(\lambda)$
 	& $\lambda^{k-1}(1-\lambda)$ 
-	& $\smash{ d \frac{1-\lambda}{1 - d\lambda}}$ 
+	& ${ d \frac{1-\lambda}{1 - d\lambda}}$ 
 	& ${\rm Geom}(d\lambda)$ \\
 Poisson + 1, ${\rm Po_{+1}}(\lambda)$	
-	& $\smash{ \frac{e^{-\lambda}\lambda^{k-1}}{\Gamma(k)}  }$ 
-	& $d \smash{ e^{-\lambda (1-d)} }$ 
+	& ${ \frac{e^{-\lambda}\lambda^{k-1}}{\Gamma(k)}  }$ 
+	& $d { e^{-\lambda (1-d)} }$ 
 	& ${\rm Po_{+1}}(d\lambda)$ \\
 Conway-Maxwell Poisson + 1, ${\rm CMP_{+1}}(\lambda,\nu)$ 
-	& $\smash{ \frac{\lambda^{k-1}}{\Gamma(k)^\nu {\cal Z}(\lambda,\nu)} }$ 
-	& $\smash{d \frac{ {\cal Z}(\lambda,\nu)}{ {\cal Z}(d\lambda,\nu)}}$ 
+	& ${ \frac{\lambda^{k-1}}{\Gamma(k)^\nu {\cal Z}(\lambda,\nu)} }$ 
+	& ${d \frac{ {\cal Z}(\lambda,\nu)}{ {\cal Z}(d\lambda,\nu)}}$ 
 	&  ${\rm CMP_{+1}}(d\lambda,\nu)$ \\
 Negative Binomial + 1, ${\rm NB_{+1}}(\lambda,r)$ 
-	& $\smash{  \frac{\Gamma(r+k-1)}{\Gamma(k)\Gamma(r)} (1-\lambda)^r \lambda^{k-1} } $
-	& $\smash{ d\frac{(1-\lambda)^r}{(1-d\lambda)^r} }$ 
+	& ${  \frac{\Gamma(r+k-1)}{\Gamma(k)\Gamma(r)} (1-\lambda)^r \lambda^{k-1} } $
+	& ${ d\frac{(1-\lambda)^r}{(1-d\lambda)^r} }$ 
 	& ${\rm NB_{+1}}(d\lambda,r)$ \\\hline
 \end{tabular}
 \caption{The rate scaling factor and distribution of deletion lengths after scaling for a variety of distributions that could be used to model deletion length.}
