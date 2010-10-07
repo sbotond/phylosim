@@ -494,11 +494,6 @@ setMethodS3(
 		...
 	){
 
-		# This method is almost an exact duplicate of the getEventsAtSite.GeneralSubstitution,
-		# with the exception of the portions dealing with the omega site-process specific parameters.
-		# Duplicating the method is not too elegant, but this way we can avoid the additonal method calls
-		# sloving down the simulation.
-
 	if (!exists(x="PSIM_FAST")) {
 
       			if(!is.Site(target.site)) {
@@ -535,7 +530,7 @@ setMethodS3(
 			events<-list();
 			  
 			# The rate of the event is the product of the general rate and the
-     	# site specific rate multiplier:
+     			# site-process specific rate multiplier:
 			rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
     
 			# Get the omega site-process specific parameter: 
