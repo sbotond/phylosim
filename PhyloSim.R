@@ -2738,9 +2738,10 @@ setMethodS3(
 # 	\item{plot.ancestors}{Whether to plot the ancestral sequences. TRUE or FALSE; defaults to TRUE.}
 # 	\item{plot.chars}{Whether to plot the actual text of the characters.}
 # 	\item{aspect.ratio}{Constraints the alignment residues to have a certain aspect ratio; values above 1 cause vertically-stretched blocks. FALSE disables aspect ratio control, numerical values set the aspect ratio; defaults to FALSE.}
-# 	\item{num.pages}{Optionally split the alignment over a number of vertically-stacked pages. This is useful for long alignments. 'Auto' chooses a sensible number of pages, numerical values specify a number; defaults to 1.}
+# 	\item{num.pages}{Optionally split the alignment over a number of vertically-stacked pages. This is useful for long alignments. 'auto' chooses a sensible number of pages, numerical values specify a number; defaults to 'auto'.}
 # 	\item{char.text.size}{Specify the text size for the residue characters. This requires tweaking depending on the DPI and output format. Defaults to 1.5.}
 # 	\item{axis.text.size}{Specify the text size for the sequence labels along the y-axis. This requires tweaking depending on the DPI and output format. Defaults to 5.}
+#       \item{color.scheme}{Specify the color scheme to use when plotting residues. 'Auto' uses the number of unique characters to determine a color scheme; possible manual values are: binary, dna, protein, codon, and everything.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2811,8 +2812,11 @@ setMethodS3(
 			aspect.ratio <- FALSE
 		}
 		if(missing(num.pages)){
-			num.pages=1
+			num.pages='auto'
 		}
+                if(missing(color.scheme)){
+                        color.scheme='auto'
+                }
 	
 		if(all(!is.na(x$.alignment), is.matrix(x$.alignment))){
 			.plotWithAlignment(x,
@@ -3027,7 +3031,7 @@ setMethodS3(
     }
 
     # Creates a color aesthetic for alignments
-    alignment.colors <- function(scheme=color.scheme) {
+    alignment.colors <- function(scheme) {
       scheme <- tolower(scheme)
       if (scheme == 'binary') {
         cols <- c(
@@ -3069,35 +3073,43 @@ setMethodS3(
                   'Z' = "#EEEEEE",       'z' = "#EEEEEE",
                   'X' = "#000000",       'x' = "#000000"
                   )
-      } else {
-        cols <- c(
-                  'A' = "#B8B8B8",       'a' = "#B8B8B8",
-                  'C' = "#E6E600",       'c' = "#E6E600",
-                  'D' = "#E60A0A",       'd' = "#E60A0A",
-                  'E' = "#E60A0A",       'e' = "#E60A0A",
-                  'F' = "#3232AA",       'f' = "#3232AA",
-                  'G' = "#C8C8C8",       'g' = "#C8C8C8",
-                  'H' = "#8282D2",       'h' = "#8282D2",
-                  'I' = "#0F820F",       'i' = "#0F820F",
-                  'K' = "#145AFF",       'k' = "#145AFF",
-                  'L' = "#0F820F",       'l' = "#0F820F",
-                  'M' = "#E6E600",       'm' = "#E6E600",
-                  'N' = "#00DCDC",       'n' = "#00DCDC",
-                  'P' = "#DC9682",       'p' = "#DC9682",
-                  'Q' = "#E60A0A",       'q' = "#E60A0A",
-                  'R' = "#145AFF",       'r' = "#145AFF",
-                  'S' = "#FA9600",       's' = "#FA9600",
-                  'T' = "#FA9600",       't' = "#FA9600",
-                  'V' = "#C8C8C8",       'v' = "#C8C8C8",
-                  'W' = "#C8C8C8",       'w' = "#C8C8C8",
-                  'Y' = "#C8C8C8",       'y' = "#C8C8C8",
-                  '2' = "#888888",       '2' = "#888888",
-                  'O' = "#424242",       'o' = "#424242",
-                  'B' = "#7D7D7D",       'b' = "#7D7D7D",
-                  'Z' = "#EEEEEE",       'z' = "#EEEEEE"
-                  )
+      } else if (scheme == 'codon') {
+                                        # Get the protein colors.
+        protein.colors <- alignment.colors('protein')
+                                        # Create a list of codons.
+        ca <- CodonAlphabet()
+        nucs <- c('G','A','C','T')
+        codons <- expand.grid(nucs,nucs,nucs,stringsAsFactors=F)
+                                        # For each codon give the protein color.
+        codon.colors <- c()
+        for (i in 1:nrow(codons)) {
+          codon = paste(codons[i,],collapse='')
+          aa <- translateCodon(ca,codon)
+          codon.colors[codon] = protein.colors[aa]
+        }
+        cols <- codon.colors
+      } else if (scheme == 'everything') {
+        dna.colors <- alignment.colors('dna')
+                                        # Make the DNA stand out here by being a little darker
+        for (i in 1:length(dna.colors)) {
+          color <- dna.colors[i]
+          darker.color <- darker(color)
+          dna.colors[i] <- darker.color
+        }
+        binary.colors <- alignment.colors('binary')
+        protein.colors <- alignment.colors('protein')
+        codon.colors <- alignment.colors('codon')
+                                        # Put them all together. (One remaining issue: the protein G,A,T,C will be colored as DNA!)
+        cols <- c(dna.colors,protein.colors,binary.colors,codon.colors)
       }
       return(cols)
+    }
+
+    darker <- function(color) {
+      x <- col2rgb(color)
+      x <- round(x * 0.7)
+      y <- rgb(x[1],x[2],x[3],maxColorValue=255)
+      return(y)
     }
     
     ####################################
@@ -3106,6 +3118,7 @@ setMethodS3(
     
     df <- data.frame()
     aln <- x$.alignment
+
     phylo <- x$.phylo
     names <- dimnames(aln)[[1]]
 
@@ -3113,6 +3126,7 @@ setMethodS3(
     #print(paste("Num seqs:",length(names)))
     for (i in 1:length(names)) {
       char.list <- aln[i,]
+
       name <- names[i]
                                         # Store the indices of where the gaps are -- we won't plot the gaps.
       gaps <- char.list == '-' 
@@ -3120,7 +3134,6 @@ setMethodS3(
                                         # Get the position and character of each non-gap residue.
       pos.nogaps <- seq.pos[gaps==FALSE]
       char.nogaps <- char.list[gaps==FALSE]
-      
                                         # Create a data frame with 1 row per residue to plot.
       df <- rbind(df,data.frame(
                                 id=rep(name,length(pos.nogaps)),      # Sequence ID to which this residue belongs
@@ -3141,14 +3154,16 @@ setMethodS3(
       df <- subset(df,id %in% names)
     }
 
-    if (num.pages == 'auto' || num.pages > 1) {
+    if (tolower(num.pages) == 'auto' || num.pages > 1) {
                                         # Plotting a multi-page alignment.
       aln.length <- length(aln[1,])
-      if (num.pages == 'auto') {
+      if (tolower(num.pages) == 'auto') {
         num.seqs <- length(names)
                                         # Formula to get a square-ish total plot.
         num.pages <- sqrt(aln.length/num.seqs)
         num.pages <- ceiling(num.pages)+1
+                                        # One-page rule for short alignments.
+        if (aln.length < 30) {num.pages <- 1}
       }
                                         # Add a 'page' factor to the data frame and use facet_grid.
       chars.per.page <- ceiling(aln.length / num.pages)
@@ -3156,18 +3171,23 @@ setMethodS3(
       df$pos <- df$pos - (chars.per.page*(df$page))
       page.labels <- paste((0:(num.pages-1))*chars.per.page+1,(1:num.pages)*chars.per.page,sep="-")
       df$page <- factor(df$page,labels=page.labels)
-    }
+    }    
 
     if (color.scheme == 'auto') {
       all.chars <- unlist(aln)
       all.chars <- all.chars[all.chars != '-']
       n.chars <- length(unique(all.chars))
+      
       if (n.chars <= 2) {
         color.scheme = 'binary'
       } else if (n.chars <= 4) {
         color.scheme = 'dna'
+      } else if (n.chars <= 20) {
+        color.scheme = 'protein'
+      } else if (n.chars <= 64) {
+        color.scheme = 'codon'
       } else {
-        color.scheme = 'taylor'
+        color.scheme = 'everything'
       }
     }
     
