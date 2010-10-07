@@ -375,7 +375,9 @@ setConstructorS3(
 		this$kappa<-kappa;
 		
 		# Scale to nucleotide if requested:
-		this$.scale.const<-as.double(3.0);
+		if(scale.nuc){
+			this$.scale.const<-as.double(3.0);
+		}
 
 		# Set object name:
 		this$name<-name;
