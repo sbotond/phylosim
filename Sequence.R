@@ -988,7 +988,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{index}{An integer vector specifying a set of positions. 
-#	It is set to 1:seq$length if omited.} 
+#	It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1062,7 +1062,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 #	\item{value}{A character vector containg the states (recycled if shorter than the index vector). The states must be compatible with the corresponding Alphabet object.}
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1152,7 +1152,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1227,7 +1227,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{value}{A list of Alphabet objects, recycled if shorter than the index vector.} 
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1447,7 +1447,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.}
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1529,7 +1529,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1609,7 +1609,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1801,7 +1801,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{value}{A list of list of Process objects, recycled if shorter than the index vector.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1906,7 +1906,7 @@ setMethodS3(
 # 	\item{process}{A valid Process object.} 
 # 	\item{id}{The identifier of the site-process specific parameter.} 
 #	\item{value}{A vector containing the new values of the site-process specific parameter, recycled if shorter than the index vector. It should be consistent with the type of the parameter.}
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2026,7 +2026,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A valid Process object.} 
 #	\item{value}{A numeric vector containing the new values of the site-process specific parameter, recycled if shorter than the index vector.}
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2092,7 +2092,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A valid Process object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2152,7 +2152,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A valid Process object.} 
 # 	\item{id}{The identifier of the site-process specific parameter.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2245,7 +2245,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2319,7 +2319,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2551,7 +2551,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3471,7 +3471,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{x}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3570,7 +3570,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
 # 	\item{id}{The identifier of the site-process specific parameter.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3668,7 +3668,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
 # 	\item{value}{A numeric vector, recycled if shorter than the index vector.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3736,7 +3736,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3802,7 +3802,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
 # 	\item{value}{A numeric vector, recycled if shorter than the index vector.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3870,7 +3870,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3940,7 +3940,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4059,7 +4059,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4183,7 +4183,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4731,7 +4731,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An index vector specifying a collection of sites to be deleted. It is set to 1:seq$length if omited.}
+#	\item{index}{An index vector specifying a collection of sites to be deleted. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4841,7 +4841,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An index vector specifying a collection of sites to be copied. It is set to 1:seq$length if omited.}
+#	\item{index}{An index vector specifying a collection of sites to be copied. It is set to 1:seq$length if omitted.}
 # 	\item{process}{The Process object performing the copy (optional).} 
 # 	\item{...}{Not used.} 
 # } 
