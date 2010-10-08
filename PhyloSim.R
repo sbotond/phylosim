@@ -17,15 +17,16 @@
 #
 #	Key features offered by the framework:	
 #	\itemize{
-#	\item  Simulation of the evolution of a set of discrete characters with arbitrary states evolving #		by a continuous-time Markov process with an arbitrary rate matrix.
-#	\item Explicit implementations of the most popular substitution models (nucleotide, amino acid and codon substitution models).
+#	\item  Simulation of the evolution of a set of discrete characters with arbitrary states evolving 
+#		by a continuous-time Markov process with an arbitrary rate matrix.
+#	\item Explicit implementations of the most popular substitution models (for nucleotides, amino acids and codons).
 # 	\item Simulation under the popular models of among-sites rate variation, like the gamma (+G) and invariants plus gamma (+I+G) models.
-#	\item The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any \code{R} expression.
-#	\item Simulation of one or more separate insertion and/or deletion processes acting on the sequences and which sample the insertion/deletion length from an arbitrary discrete distribution or an \code{R} expression (so all the probability distributions implemented in \code{R} are readily available for this purpose).
-#	\item Simulation of the effects of variable functional constraints over the sites by site-process specific insertion and deletion tolerance parameters which determine the rejection probability of a proposed insertion/deletion.
-#	\item The possibility of having a different set of processes and site-process specific parameters for every site, which allows for an arbitrary number of partitions in the simulated data.
+#	\item The possibility to simulate with arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any \code{R} expression.
+#	\item Simulation with one or more separate insertion and/or deletion processes acting on the sequences, which sample the insertion/deletion length from an arbitrary discrete distribution or an \code{R} expression (so all the probability distributions implemented in \code{R} are readily available for this purpose).
+#	\item Simulation of the effects of variable functional constraints over the sites by site-process-specific insertion and deletion tolerance parameters, which determine the rejection probability of a proposed insertion/deletion.
+#	\item The possibility of having a different set of processes and site-process-specific parameters for every site, which allow for an arbitrary number of partitions in the simulated data.
 #	\item The possibility to evolve sites by a mixture of substitution processes along a single branch.
-#	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes.
+#	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes of the phylogeny.
 #	\item The possibility to export the counts of various events ("branch statistics") as phylo objects (see \code{\link{exportStatTree.PhyloSim}}).
 #	}
 #
@@ -35,19 +36,19 @@
 #	is aborted if the sequence length shrinks to zero. It is up to the user 
 #	to choose sensible indel rates and sequence lengths to prevent that.
 #	\item The sites near the beginning and end of the sequences have less sites proposing
-#	insertion and deletion events around them. Hence, the insertion and deletion processes 
-#	are affected by an "edge effect". The user can simulate
+#	insertion and deletion events around the so the insertion and deletion processes 
+#	have an "edge effect". The user can simulate
 #	realistic flanking sequences to alleviate the edge effect in the simulation settings where
-#	this effect is an issue.
+#	it may be an issue.
 # }
 #
 #	Notes on performance: 
 #	\itemize{
 #	\item The pure \code{R} implementation offers felxibility, but also comes
 #	with a slower simulation speed. If the \code{PSIM_FAST} object is present in the environment, a "fast & careless"
-#	mode is enabled. In this mode most of the error checking is skipped which increases the speed.
-#	It is not recomended to run simulations in fast mode only if you are sure that the simulation
-#	setting is 100 percent sane. It is probably a good practice to set up the simulations in normal mode
+#	mode is enabled. In this mode most of the error checking is skipped, increasing the speed.
+#	It is recomended that simulations are only run in fast mode if you are sure that the simulation
+#	settings are free from errors. It is probably a good practice to set up the simulations in normal mode
 #	with short sequences and enable fast mode when running the actual simulation with long sequences.
 #	\item Please note, that no "branch statistics" are saved in fast mode.
 #	\item Logging also has a negative impact on performance, so it's not a good idea to run
@@ -95,7 +96,7 @@
 #	## \url{http://github.com/sbotond/phylosim/tree/master/examples/}
 #
 #	## The ll() method gives information about the methods defined
-#	## in the immediate class of and object.
+#	## in the immediate class of an object.
 #	## Useful when exploring the framework.
 #
 #	s<-Sequence()
@@ -103,7 +104,7 @@
 #	ll(PhyloSim())
 #	ll(GTR())
 #
-#	## Example 1 - The shortest simulation ever:
+#	## Example 1 - A short simulation:
 #	## simulate nucleotide seqeunces and display 
 #	## the resulting alignment matrix.
 #
@@ -111,7 +112,7 @@
 #		PhyloSim(phy=rcoal(3),root=NucleotideSequence(string="ATGC", proc=list(list(JC69())) ) )
 #	)$alignment
 #
-#	# Construct a phylo object for the next
+#	# Construct a phylo object for the following
 #	# simulations, scale total tree length to 2:
 #
 #	tmp<-PhyloSim(phylo=rcoal(3))
@@ -126,9 +127,9 @@
 #	t<-rcoal(3)
 #	# construct root sequence object
 #	s<-BinarySequence(string="00000000")
-#	# construct substitution process object
+#	# construct a substitution process object
 #	p<-BinarySubst(rate.list=list("0->1"=1,"1->0"=0.5))
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #	# attach process to sequence
 #	attachProcess(s,p)
@@ -164,7 +165,7 @@
 #       )
 #	# get object summary
 #	summary(gtr)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(gtr)
 #
 #	# construct root sequence object
@@ -174,8 +175,8 @@
 #	# sample states from the equilibrium
 #	# distribution of the attached processes
 #	sampleStates(s)
-#	# create among-sites rate variation by sampling
-#	# the "rate.multiplier" site-process specific parameter
+#	# create among-site rate variation by sampling
+#	# the "rate.multiplier" site-process-specific parameter
 #	# from a discrete gamma distribution (GTR+G).
 #	plusGamma(s,gtr,shape=0.5)
 #	# make the range 11:20 invariable
@@ -183,8 +184,8 @@
 #	# get the rate multipliers for s and gtr
 #	getRateMultipliers(s,gtr)
 #
-	# construct deletion process object
-#	# proposing length in range 1:3
+	# construct a deletion process object
+#	# proposing lengths in the range 1:3
 #	d<-DiscreteDeletor(
 #		rate=1,
 #		name="MyDel",
@@ -195,13 +196,13 @@
 #	summary(d)
 #	# plot deletion length distribution
 #	plot(d)
-#	# attach d to s
+#	# attach deletion process d to sequence s
 #	attachProcess(s,d)
 # 	# create a region rejecting all deletions
 #       setDeletionTolerance(s,d,0,11:20)
 #
-#	# construct insertion process object
-#	# proposing length in range 1:3
+#	# construct an insertion process object
+#	# proposing lengths in the range 1:3
 #	i<-DiscreteInsertor(
 #		rate=1,
 #		name="MyDel",
@@ -214,7 +215,7 @@
 #	summary(i)
 #	# plot insertion length distribution
 #	plot(i)
-#	# attach i to s
+#	# attach insertion process i to sequence s
 #	attachProcess(s,i)
 # 	# create a region rejecting all insertions
 #       setInsertionTolerance(s,i,0,11:20)
@@ -229,7 +230,7 @@
 #	plot(sim)
 #	# run simulation
 #	Simulate(sim)
-# 	#get the list of recorded per-branch event counts
+# 	# get the list of recorded per-branch event counts
 # 	getBranchEvents(sim)
 #	# export the number of substitutions as a phylo object
 #	subst<-exportStatTree(sim,"substitution")
@@ -251,28 +252,28 @@
 #	# enable fast & careless mode
 #	# WARNING: do not do this only
 #	# if you are sure, that your simulation
-#	# setting is 100% flawless!
+#	# settings are 100% flawless!
 #
 #	PSIM_FAST<-TRUE;
 #	
 #	# construct substitution model objects
 #	wag<-WAG()
 #	lg<-LG()
-#	# get a bubble plot of wag
+#	# display a bubble plot of wag
 #	plot(wag)
 #	# construct root sequence
 #	s<-AminoAcidSequence(length=50)
-#	# attach process wag to range 1:10
+#	# attach process wag to the range 1:10
 #	attachProcess(s,wag,1:10)
-#	# attach process lg to range 31:50
+#	# attach process lg to the range 31:50
 #	attachProcess(s,lg,31:50)
-#	# create a pattern of processes in range 11:30
+#	# create a pattern of processes in the range 11:30
 #	setProcesses(s,list(list(wag),list(lg),list(wag,lg)),11:30)
 #	# set rate multipliers to reduce 
 #	# the rate to half at every third site
 #	setRateMultipliers(s,wag,0.5,seq(from=13,to=30,by=3))
 #	setRateMultipliers(s,lg,0.5,seq(from=13,to=30,by=3))
-#	# Now every third site in range 11:30 evolves
+#	# Now every third site in the range 11:30 evolves
 #	# according to a mixture of amino acid substitution models!
 #
 #	# sample states
@@ -291,7 +292,7 @@
 #	rs$string
 #	# show alignment matrix
 #	sim$alignment
-#	# plot tree and alignment, omit ancestral sequences
+#	# plot tree and alignment, omitting ancestral sequences
 #	plot(sim,plot.ancestors=FALSE)
 #	# display the head of the log file
 #	cat(paste(scan(nmax=20,file=sim$logFile,what=character(),sep="\n"),collapse="\n"));cat("\n");
@@ -1890,7 +1891,7 @@ setMethodS3(
 #
 # @RdocMethod getSeqFromNode
 # 
-# @title "Get the Sequence object assotiated with a given node of a phylo object aggregated by a PhyloSim object" 
+# @title "Get the Sequence object associated with a given node of a phylo object aggregated by a PhyloSim object" 
 # 
 # \description{ 
 #	@get "title".
@@ -1917,7 +1918,7 @@ setMethodS3(
 #		phylo=rcoal(3),
 #		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
 #	);
-#	# get the sequence assotiated with node 5
+#	# get the sequence associated with node 5
 #	getSeqFromNode(sim,5)	# Should be NA
 #	# Run the simulation
 #	Simulate(sim)
@@ -1964,12 +1965,12 @@ setMethodS3(
 #
 # @RdocMethod getSequences
 # 
-# @title "Gets all the Sequence objects assotiated with the nodes of a phylo object aggregated by a PhyloSim object" 
+# @title "Gets all the Sequence objects associated with the nodes of a phylo object aggregated by a PhyloSim object" 
 # 
 # \description{ 
 #	@get "title".
 #
-#	The order of the Sequence objects in the returned list reflects the identifiers of the assotiated nodes.
+#	The order of the Sequence objects in the returned list reflects the identifiers of the associated nodes.
 # } 
 # 
 # @synopsis 
@@ -1994,9 +1995,9 @@ setMethodS3(
 #	);
 #	# run the simulation
 #	Simulate(sim)
-#	# get all the assotiated sequence objects
+#	# get all the associated sequence objects
 #	getSequences(sim)
-#	# get the sequence assotiated with node 3
+#	# get the sequence associated with node 3
 #	# via virtual field
 #	sim$sequences[[3]]
 # } 
@@ -2037,7 +2038,7 @@ setMethodS3(
 #
 # @RdocMethod setSequences
 #
-# @title "Forbidden action: setting the Sequence objects assotiated with the nodes of a phylo object aggregated by a PhyloSim object"
+# @title "Forbidden action: setting the Sequence objects associated with the nodes of a phylo object aggregated by a PhyloSim object"
 #
 # \description{
 #       @get "title".
@@ -2479,7 +2480,7 @@ setMethodS3(
 			.checkAlignmentConsistency(this, alignment);
 		}
 
-		# The whole alignment is assotiated with the root node:
+		# The whole alignment is associated with the root node:
 		return(alignment);
 		
   },
@@ -3618,7 +3619,7 @@ setMethodS3(
 						if(file.access(this$.log.file,mode=0) == c(0)){
 							warning("The log file already existed and it was wiped out!\n");
 						}
-						# Creating the assotiated connection:
+						# Creating the associated connection:
 						this$.log.connection<-file(paste(this$.log.file),"w+");
 				}
 				this$.log.level<-value;
