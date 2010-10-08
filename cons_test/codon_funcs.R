@@ -17,7 +17,7 @@ construct_root_sequence<-function(len){
 simulate_codon<-function(phylo,seq,len,rep){
                 # set all site states to NA
 		clearStates(seq)
-                # set omega
+                # set omega 
 		omegaVarM0(seq,gy94,omega=gy94.true.omega);
                 # sample states
                 sampleStates(seq);
