@@ -12,10 +12,12 @@
 # 
 # @title "The AnyAlphabet class"
 # 
-# \description{ 
-#	This is a special Alphabet class. The '=='.Alphabet method alway returns
-#	TRUE when one of the compared object inherits form AnyAlphabet.
-#	This behaviour is handy when creating processes which have no alphabet preference (like deletion processes).
+# \description{
+#	This is a special Alphabet class which matches any alphabet. 
+#	The '=='.Alphabet method always returns TRUE when one of the
+#	compared objects inherits from AnyAlphabet. This behaviour is 
+#	handy when creating processes that have no alphabet preference 
+#	(like a deletion process).
 #
 #		@classhierarchy
 # }
@@ -31,7 +33,7 @@
 # }
 # 
 # \examples{ 
-#	# Create seom alphabet objects
+#	# create some alphabet objects
 #	a<-BinaryAlphabet()
 #	b<-NucleotideAlphabet()
 #	any<-AnyAlphabet()
@@ -72,7 +74,7 @@ setConstructorS3(
 # @title "The BinaryAlphabet class"
 # 
 # \description{ 
-#	An Alphabet object with the c("0","1") symbol set.
+#	 Class of Alphabet objects with the c("0","1") symbol set.
 #
 #	@classhierarchy
 # }
@@ -122,7 +124,8 @@ setConstructorS3(
 # @title "The NucleotideAlphabet class"
 # 
 # \description{ 
-#	Alphabet objects with the c("T","C","A","G") symbol set.
+#	Class of Alphabet objects with the c("T","C","A","G") symbol
+#	set, representing nucleotides.
 #
 #	@classhierarchy
 # }
@@ -172,7 +175,8 @@ setConstructorS3(
 # @title "The AminoAcidAlphabet class"
 # 
 # \description{ 
-#	Alphabet objects having the one-letter IUPAC amino acid codes as symbol set:
+#	Class of Alphabet objects representing amino acids, using the
+#	one-letter IUPAC amino acid codes as symbol set:
 #	\preformatted{
 #	IUPAC code	Amino acid
 #
@@ -213,7 +217,6 @@ setConstructorS3(
 # 
 # \examples{ 
 #	a<-AminoAcidAlphabet();
-#	a
 #	# get object summary
 #	summary(a)
 # }
