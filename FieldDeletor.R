@@ -16,7 +16,7 @@
 #	If the majority of the sites have low deletion tolerance most of the events are rejected, which
 #	slows down the simulation without performing much events. 
 #
-#	The \code{FieldDeletor} processes scale down the rate and length distribution of the proposed 
+#	The \code{FieldDeletor} process scales down the rate and length distribution of the proposed 
 #	events based on the highest insertion tolerance value observed in the root sequence 
 #	(see the package vignette for details), thus making the simulation more efficient.
 #
