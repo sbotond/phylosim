@@ -202,7 +202,7 @@ print(aa.seq)
 @
 
 Plot the total rates of the sites:
-<<echo=TRUE,fig=TRUE,width=180>>=
+<<echo=TRUE,fig=TRUE>>=
 plot(aa.seq)
 @
 
@@ -223,7 +223,7 @@ sim <- PhyloSim(phylo = tree, root.seq = aa.seq)
 summary(sim)
 @
 
-Plot the simulation object (includes node labels):
+Plot the simulation object (tree with node labels):
 <<echo=TRUE,fig=TRUE>>=
 plot(sim)
 @
@@ -261,7 +261,7 @@ Simulate(sim)
 @
 
 Plot the resulting alignment alongside the tree:
-<<echo=TRUE,fig=TRUE,width=180, height=70>>=
+<<echo=TRUE,fig=TRUE,width=180, height=80>>=
 plot(sim)
 @
 
@@ -382,7 +382,7 @@ Simulate(sim)
 @
 
 Plot the resulting alignment alongside the tree:
-<<echo=TRUE,fig=TRUE,width=180, height=70>>=
+<<echo=TRUE,fig=TRUE,width=180, height=80>>=
 plot(sim)
 @
 
@@ -492,9 +492,9 @@ Run simulation:
 <<echo=TRUE>>=
 Simulate(sim)
 @
-Plot tree and alignment, omitting ancestral sequences:
-<<echo=TRUE,fig=TRUE,width=180, height=70>>=
-plot(sim,plot.ancestors=FALSE)
+Plot tree and alignment:
+<<echo=TRUE,fig=TRUE,width=180, height=80>>=
+plot(sim)
 @
 
 Save alignment:
@@ -843,7 +843,7 @@ Simulate(sim)
 @
 
 Plot tree and alignment, omitting ancestral sequences:
-<<echo=TRUE,fig=TRUE,width=180, height=70>>=
+<<echo=TRUE,fig=TRUE,width=180, height=100>>=
 plot(sim,num.pages="auto",plot.ancestors=FALSE)
 @
 
