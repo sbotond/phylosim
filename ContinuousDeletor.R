@@ -12,8 +12,8 @@
 #	This class implements a process which performs deletions with
 #       lengths sampled from a user-specified R expression returning a 
 #	numeric value.
-#       See \code{GeneralDeletor} for the workings of the deletion
-#       processes.
+#       See \code{GeneralDeletor} for the how the deletion processes
+#	works.
 #
 #	@classhierarchy
 # }

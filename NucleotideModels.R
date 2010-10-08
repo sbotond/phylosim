@@ -9,8 +9,8 @@
 # @title "The UNREST class"
 # 
 # \description{ 
-#	This class implements the unrestricted nucleotide substitution model.
-#	UNREST objects are basically GeneralSubstitution processes acting on a 
+#	This class implements the UNRESTricted nucleotide substitution model.
+#	UNREST objects are basically a GeneralSubstitution process acting on a 
 #	nucleotide alphabet.
 #
 #	@classhierarchy
@@ -41,17 +41,17 @@
 #	))
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)
@@ -266,7 +266,7 @@ setMethodS3(
 # @title "The JC69 class"
 # 
 # \description{ 
-#	This class implements Jukes-Cantor unrestricted nucleotide substitution model.
+#	This class implements Jukes-Cantor nucleotide substitution model.
 #
 #	@classhierarchy
 # }
@@ -291,17 +291,17 @@ setMethodS3(
 #       p<-JC69()
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)
@@ -490,7 +490,7 @@ setMethodS3(
 #	The rate parameters are named as in PAML (see PAML documentation: \url{http://bit.ly/9SQK2f}).
 #
 #	The default value for the rate parameters is 1 and the default value for the base 
-#	frequencies is 0.25. So the GTR objects are equivalent with the JC69 objects by default.
+#	frequencies is 0.25. So the GTR objects are equivalent to JC69 objects by default.
 #
 #	@classhierarchy
 # }
@@ -513,8 +513,6 @@ setMethodS3(
 # }
 # 
 # \examples{ 
-#	# enable fast & careless mode
-#	PSIM_FAST<-TRUE
 #	# create substitution process object
 #       p<-GTR(
 #		rate.params=list(
@@ -525,28 +523,25 @@ setMethodS3(
 #	)
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)
-#	# create a simulation object
+#	# create a simulation object and run simulation
 #	sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
-#	# enable fast & careless mode
 #	Simulate(sim)
 #	# print alignment
 #	sim$alignment
-#	# disable fast & careless mode
-#	rm(PSIM_FAST)
 # }
 # 
 # @author
@@ -1339,7 +1334,7 @@ setMethodS3(
 # @title "The TN93 class"
 # 
 # \description{ 
-#	This class implements the Tamura-Nei 93 GTR submodel.
+#	This class implements the Tamura-Nei 93 GTR-submodel.
 #
 #	The rate parameters are the following: "Alpha1", "Alpha2","Beta".
 #	@classhierarchy
@@ -1370,17 +1365,17 @@ setMethodS3(
 #	)
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)
@@ -2037,7 +2032,7 @@ setMethodS3(
 # @title "The HKY class"
 # 
 # \description{ 
-#	This class implements the HKY GTR submodel.
+#	This class implements the HKY GTR-submodel.
 #
 #	The rate parameters are the following: "Alpha", "Beta".
 #	@classhierarchy
@@ -2067,17 +2062,17 @@ setMethodS3(
 #	)
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)
@@ -2731,7 +2726,7 @@ setMethodS3(
 # @title "The F81 class"
 # 
 # \description{ 
-#	This class implements the F81 GTR submodel.
+#	This class implements the F81 GTR-submodel.
 #
 #	@classhierarchy
 # }
@@ -2757,17 +2752,17 @@ setMethodS3(
 #       p<-F81(base.freqs=c(1,2,3,4)/10)
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)
@@ -3288,7 +3283,7 @@ setMethodS3(
 # @title "The K80 class"
 # 
 # \description{ 
-#	This class implements the K80 (Kimura 2-parameter) GTR submodel.
+#	This class implements the K80 (Kimura 2-parameter) GTR-submodel.
 #
 #	The rate parameters are the following: "Alpha", "Beta".
 #	@classhierarchy
@@ -3318,17 +3313,17 @@ setMethodS3(
 #	)
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)
@@ -3966,7 +3961,7 @@ setMethodS3(
 # @title "The K81 class"
 # 
 # \description{ 
-#	This class implements the K81 (Kimura 3-parameter) GTR submodel.
+#	This class implements the K81 (Kimura 3-parameter) GTR-submodel.
 #
 #	The rate parameters are the following: "Alpha", "Beta","Gamma".
 #	@classhierarchy
@@ -3993,17 +3988,17 @@ setMethodS3(
 #       p<-K81(rate.params=list( "Alpha"=10,"Beta"=2,"Gamma"=5))
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)
@@ -4643,7 +4638,7 @@ setMethodS3(
 # @title "The T92 class"
 # 
 # \description{ 
-#	This class implements the T92 GTR submodel.
+#	This class implements the T92 GTR-submodel.
 #
 #	The rate parameters are the following: "Alpha", "Beta","Gamma".
 #	The \code{theta} virtual field stores the GC content parameter.
@@ -4674,17 +4669,17 @@ setMethodS3(
 #       p<-T92(rate.params=list( "Alpha"=10,"Beta"=2),theta=0.8)
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)
@@ -5375,7 +5370,7 @@ setMethodS3(
 # @title "The F84 class"
 # 
 # \description{ 
-#	This class implements the F84 GTR submodel.
+#	This class implements the F84 GTR-submodel.
 #
 #	The rate parameters are the following: Kappa.
 #	@classhierarchy
@@ -5399,17 +5394,17 @@ setMethodS3(
 #       p<-F84(rate.params=list( "Kappa"=2), base.freqs=c(1,2,3,4))
 #       # get a summary
 #       summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#	# The following code demostrates how to use 
+#	# The following code demonstrates how to use 
 #	# the process in a simulation.
 #
 #	# create a sequence, attach process p
 #	s<-NucleotideSequence(length=20,processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# make the range 1:5 invariable
+#	# make the first five positions invariable
 #	setRateMultipliers(s,p,0,1:5)
 #	# get rate multipliers
 #	getRateMultipliers(s,p)

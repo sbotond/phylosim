@@ -250,14 +250,14 @@ setMethodS3(
 # \description{ 
 #	This class implements the codon substitution model of Goldman and Yang (1994). 
 #	The transition/transversion rate ratio is stored in the \code{kappa} virtual field. 
-# 	The nonsynonymous/synonymous substitution rate ratio (omega) is a site-process specific parameter 
+# 	The nonsynonymous/synonymous substitution rate ratio (\code{omega}) is a site-process specific parameter 
 #	with a default value of one.
 #	Hence, after the attachment of the process the variation of omega ratios among sites follows 
 #	the M0 model (see Yang et al. 2000).
 #
 #	If the \code{scale.nuc} constructor argument is TRUE, the rates of the returned \code{Event} objects
 #	will be multiplied by \code{3} to obtain a process which has the expected number of nucleotide substitutions
-#	(not \code{codon} substitutions!) equal to one at equilibrium. This is useful when simulating
+#	(not \code{codon} substitutions) equal to one at equilibrium. This is useful when simulating
 #	mixed sequences. This option doesn't affect the rate matrix in any way.
 #
 #	The M1-M4 models are implemented in the \code{omegaVarM[1-4].CodonSeqeunce} methods.
@@ -298,13 +298,13 @@ setMethodS3(
 #	is.GY94(p)
 #	# get object summary
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #	# create a codon sequence, attach process
 #	s<-CodonSequence(length=10, processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# set range 1:3 invariable
+#	# make first three positions invariable
 #	setRateMultipliers(s,p,0,1:3)
 #	# sample omega values from the M3 (discrete) model.
 #	omegaVarM3(s,p,omegas=c(0,1,2,3),probs=c(2/5,1/5,1/5,1/5))
@@ -313,7 +313,7 @@ setMethodS3(
 #       sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
 #       # run simulation
 #       Simulate(sim)
-#	#get the list of recorded per-branch event counts
+#	# get the list of recorded per-branch event counts
 #	getBranchEvents(sim)
 #	# export the number of synonymous substitutions as a phylo object
 #	syn.subst<-exportStatTree(sim,"nr.syn.subst")

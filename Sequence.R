@@ -11,7 +11,7 @@
 # \description{ 
 #	
 #	This is the class representing a sequence. The backbone of the Sequence objects are
-#	lists aggregating Site objects. The class has fileds for keeping track of cumulative
+#	lists aggregating Site objects. The class has fields for keeping track of cumulative
 #	site rates, the sum of all active event rates and methods for performing actions 
 #	on a collection of sites (positions).
 #
@@ -26,10 +26,10 @@
 #	
 # \arguments{
 #	\item{name}{The name of the Sequence object.}
-# 	\item{string}{A string containing symbols belonging to the assotiated Alphabet object. 
-#	It can be used to set the initial states of the aggregated Site objects. It also specifies th length of the sequence}
+# 	\item{string}{A string containing symbols belonging to the associated Alphabet object. 
+#	It can be used to set the initial states of the aggregated Site objects. It also specifies the length of the sequence}
 # 	\item{length}{The length of the sequence. It cannot be used when 'string' is specified.}
-# 	\item{alphabets}{A list of Alphabet objects to be assotiated with the Site objects. 
+# 	\item{alphabets}{A list of Alphabet objects to be associated with the Site objects. 
 #	The list is recycled in the case it is shorter than the sequence length.}
 # 	\item{processes}{A list of lists of Process objects to be attached 
 #	(recycled if shorter than sequence length). }
@@ -42,8 +42,8 @@
 # }
 # 
 # \examples{ 
-#	# create a sequence object
-#	# provide alphabets, processes and states
+#	# create a sequence object by
+#	# providng alphabets, processes and states
 #	s.one<-Sequence(
 #		name="Seq",
 #		string="AATTGGCCTTAAGGCCTTAA",
@@ -55,8 +55,8 @@
 #	is.Sequence(s.one)
 #	# get object summary
 #	summary(s.one)
-#	# create a sequence object
-#	# specify length and alphabets
+#	# create a sequence object,
+#	# specifying length, alphabets
 #	# and ancestral object
 #	s<-Sequence(
 #		name="Seq",
@@ -69,12 +69,12 @@
 #	s$sites
 #	# get object id
 #	s$id
-#	# set/get name
+#	# set and get name
 #	s$name<-"SeqSeq"
 #	s$seq
 #	# get length
 #	s$length
-#	# get/set ancestral object
+#	# get and set ancestral object
 #	s$ancestral
 #	s$ancestral<-Sequence();
 #	# set alphabets
@@ -96,7 +96,7 @@
 #	# attach a GTR process to range 11:20
 #	gtr<-GTR()
 #	attachProcess(s,gtr,11:20)
-#	# set/get rate multiplier for gtr
+#	# set and get rate multipliers for gtr
 #	setRateMultipliers(s, gtr, c(0,5,1), 11:20)
 #	getRateMultipliers(s, gtr, 11:20)
 #	# get processes from range 1:5
@@ -1318,7 +1318,7 @@ setMethodS3(
 #
 # @RdocMethod getUniqueAlphabets
 # 
-# @title "Get the list of unique Alphabet objects assotiated to Site objects aggaregated by a Sequence object" 
+# @title "Get the list of unique Alphabet objects associated to Site objects aggaregated by a Sequence object" 
 # 
 # \description{ 
 #	@get "title".

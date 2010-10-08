@@ -11,8 +11,7 @@
 # \description{ 
 #       This class implements a process which performs insertions with
 #       lengths sampled from a user-specified discrete distribution.
-#       See \code{GeneralInsertor} for the workings of the insertion
-#       processes.
+#       See \code{GeneralInsertor} for how the insertion process works.
 #
 #       @classhierarchy
 # }
@@ -55,7 +54,7 @@
 #       # The following code illustrates how to use
 #       # a DiscreteInsertor process in a simulation
 #       
-#       # create a sequence object, attach process i
+#       # create a sequence object and attach process i to it
 #       s<-NucleotideSequence(string="AAAAAAAAAAGGGGAAAAAAAAAA",processes=list(list(i)))
 #       # set the insertion tolerance to zero in range 11:15
 #       # creating a region rejecting all insertions
