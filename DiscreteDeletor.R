@@ -11,8 +11,7 @@
 # \description{ 
 #	This class implements a process which performs deletions with
 #	lengths sampled from a user-specified discrete distribution.
-#	See \code{GeneralDeletor} for the workings of the deletion
-#	processes.
+#	See \code{GeneralDeletor} for how the deletion process works.
 #
 #	@classhierarchy
 # }
@@ -55,7 +54,7 @@
 #	
 #	# create a sequence object, attach process d
 #	s<-NucleotideSequence(string="AAAAAAAAAAGGGGAAAAAAAAAA",processes=list(list(d)))
-#	# set the deletion tolerance to zero in range 11:15
+#	# set the deletion tolerance to zero in the range 11:15
 #	# creating a region rejecting all deletions
 #	setDeletionTolerance(s,d,0,11:15)	
 #	# get deletion tolerances
