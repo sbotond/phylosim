@@ -24,7 +24,7 @@
 # 	\item{name}{Name of the Sequence object.}
 # 	\item{string}{A string specifying the length and the states of the Sequence object.}
 #	\item{length}{The length of the sequence. Mutually exclusive with "string".}
-# 	\item{processes}{A list of list of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
+# 	\item{processes}{A list of lists of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
 #	\item{ancestral.obj}{The ancestral object of the Sequence object (a valid Sequence or Process object).}
 # 	\item{...}{Not used.}
 #	}
@@ -114,7 +114,7 @@ setConstructorS3(
 # 	\item{name}{Name of the Sequence object.}
 # 	\item{string}{A string specifying the length and the states of the Sequence object.}
 #	\item{length}{The length of the sequence. Mutually exclusive with "string".}
-# 	\item{processes}{A list of list of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
+# 	\item{processes}{A list of lists of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
 #	\item{ancestral.obj}{The ancestral object of the Sequence object (a valid Sequence or Process object).}
 # 	\item{...}{Not used.}
 #	}
@@ -283,7 +283,7 @@ setMethodS3(
 # 	\item{name}{Name of the Sequence object.}
 # 	\item{string}{A string specifying the length and the states of the Sequence object.}
 #	\item{length}{The length of the sequence. Mutually exclusive with "string".}
-# 	\item{processes}{A list of list of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
+# 	\item{processes}{A list of lists of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
 #	\item{ancestral.obj}{The ancestral object of the Sequence object (a valid Sequence or Process object).}
 # 	\item{...}{Not used.}
 #	}
@@ -372,7 +372,7 @@ setConstructorS3(
 #       \item{string}{A string specifying the length and the states of the Sequence object.}
 #       \item{length}{The length of the sequence. Mutually exclusive with "string".}
 #	\item{table.id}{The genetic code table to use in the attached CodonAlphabet object ("Standard" by default).}
-#       \item{processes}{A list of list of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
+#       \item{processes}{A list of lists of Process objects, to be attached to the aggregated Site objects. Recycled if shorter than the length of the sequence.}
 #       \item{ancestral.obj}{The ancestral object of the Sequence object (a valid Sequence or Process object).}
 #       \item{...}{Not used.}
 #	}
