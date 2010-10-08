@@ -9,20 +9,20 @@
 # 
 # \description{ 
 #
-#	This is the class representing a site. Site objects can have one assotiated Alphabet object and one or 
-#	more Process objects potentially acting on their states.
-#	The assotiated Process and Site objects must have assotiated Alphabet objects with the same symbols set, or
-#	at least one of the Alphabet objects should inherit form the class AnyAlphabet.
+#	This is the class representing a site. Site objects can have one associated Alphabet object and one or 
+#	more Process objects that act on their states.
+#	The associated Process and Site objects must have associated Alphabet objects with the same symbols set, or
+#	at least one of the Alphabet objects should inherit from the class AnyAlphabet.
 #
-#	The Site objects store the site-process specific parameters of the attached Process objects. 
-#	A site-process specific parameter is a list containing the identifier, the name, the value and type of the parameter.
-#	For example the ubiquitous rate multiplier site-process specific parameter looks like 
+#	Site objects store the site-process-specific parameters of the attached Process objects. 
+#	A site-process-specific parameter is a list containing: the identifier, the name, the value and type of the parameter.
+#	For example the ubiquitous rate multiplier site-process-specific parameter looks like 
 #	\code{list(id="rate.multiplier",name="Rate multiplier",value=1,type="numeric")}.
 #
-#	The templates for site-process specific parameters and their default values are stored in the Process objects and 
-#	copied into thr Site object when the process is attached.
+#	Templates for site-process-specific parameters and their default values are stored in the Process objects and 
+#	copied into the Site object when the process is attached.
 #
-#	Site objects have fields for assotiated ancestral Site objects and Sequence objects.
+#	Site objects have fields for associated ancestral Site objects and Sequence objects.
 #
 #  	@classhierarchy
 # 
@@ -35,7 +35,7 @@
 # 	\item{alphabet}{An alphabet object.}
 # 	\item{ancestral}{The ancestral Site object.}
 # 	\item{processes}{A list of Process objects.}
-# 	\item{sequence}{The Sequence object to whom the Site object belongs.}
+# 	\item{sequence}{The Sequence object to which the Site object belongs.}
 #	\item{...}{Not used.}
 #	}
 # 
@@ -46,7 +46,7 @@
 # \examples{ 
 #		# create a site object
 #		site<-Site();
-#		# print the character represenation (state)
+#		# print the character representation (state)
 #		print(site);
 #		# get a summary
 #		summary(site);
@@ -54,7 +54,7 @@
 #		site<-Site(state="A",alphabet=NucleotideAlphabet());
 #		# set site state
 #		site$state<-"G"
-#		# manipulate the assotiated Sequence object
+#		# manipulate the associated Sequence object
 #		site$sequence<-Sequence()
 #		site$sequence
 #		# attach a substitution process
@@ -1148,7 +1148,7 @@ setMethodS3(
 #
 # @RdocMethod getSequence
 # 
-# @title "Get the Sequence object assotiated with a given Site object" 
+# @title "Get the Sequence object associated with a given Site object" 
 # 
 # \description{ 
 #	@get "title".
@@ -1168,9 +1168,9 @@ setMethodS3(
 # \examples{
 #	# create a site object
 #	s<-Site(sequence=Sequence())
-#	# get the assotiated Sequence object
+#	# get the associated Sequence object
 #	getSequence(s)
-#	# get the assotiated Sequence object via virtual field	
+#	# get the associated Sequence object via virtual field	
 #	s$sequence
 #
 # } 
@@ -1228,9 +1228,9 @@ setMethodS3(
 # \examples{
 #	# create a site object
 #	s<-Site()
-#	# get assotiated Sequence object
+#	# get associated Sequence object
 #	s$sequence
-#	# set assotiated Sequence object
+#	# set associated Sequence object
 #	setSequence(s,Sequence())
 #	s$sequence
 #
@@ -1530,7 +1530,7 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #
-#	The Alphabet objects assotiated with the Site and Process objects must have the same symbol set, or at least one
+#	The Alphabet objects associated with the Site and Process objects must have the same symbol set, or at least one
 #	of them should inherit from the class AnyAlphabet. 
 #
 #	During the attachment, the site-process specific parameter templates are copied from the Process object and 
@@ -1552,7 +1552,7 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a Site object and the assotiated NucleotideAlphabet object
+#	# create a Site object and the associated NucleotideAlphabet object
 #	s<-Site(alphabet=NucleotideAlphabet())
 #	# create a K80 substitution process
 #	p<-K80()
