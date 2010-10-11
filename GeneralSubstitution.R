@@ -377,25 +377,25 @@ setMethodS3(
 		return(list());
 	}
 	
+	# The rate of the event is the product of the general rate and the
+     	# site specific rate multiplier:
+     	rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
+		
+	# Return empty list if the rate multiplier is zero.
+     	if(rate.multiplier == 0 ) {
+      		return(list());
+     	}	
+	
 	# Get rate matrix:
 	rate.matrix<-this$.q.matrix$.rate.matrix;
 
 	symbols<-this$.alphabet$.symbols;
 	rest<-symbols[ which(symbols != state) ];
 
-	# The rate of the event is the product of the general rate and the
-     	# site specific rate multiplier:
-     	rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
-
 	# Create the event objects:
 	events<-list();
 	for(new.state in rest){
 		
-		# Return empty list if the rate multiplier is zero.
-     		if(rate.multiplier == 0 ) {
-      			return(list());
-     		}	
-				
 		name<-paste(state,new.state,sep="->");
 	 	# Clone the event template object:
      		event<-clone(this$.event.template);

@@ -532,16 +532,23 @@ setMethodS3(
 			# The rate of the event is the product of the general rate and the
      			# site-process specific rate multiplier:
 			rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
+			# Return empty list if the rate multiplier is zero.
+     			if(rate.multiplier == 0 ) {
+      				return(list());
+     			}	
     
 			# Get the omega site-process specific parameter: 
 			omega<-target.site$.processes[[this$.id]]$site.params[["omega"]]$value;
 			
 			for(new.state in rest){
 				
-				# Return empty list if the rate multiplier is zero.
-     				if(rate.multiplier == 0 ) {
-      				return(list());
-     				}	
+				# Get the base rate:
+				base.rate<-rate.matrix[state,new.state];
+
+				# Skip event if base rate is zero:
+				if(base.rate == 0){
+					next;
+				}
 
 			  	name<-paste(state,new.state,sep="->");
 		 		# Clone the event template object:
@@ -560,12 +567,12 @@ setMethodS3(
 				
 				if( (trans.table[[state]]$aa) == (trans.table[[new.state]]$aa) ){
 					# and ignore omega in that case
-					event$.rate<-(scale.const * rate.multiplier * rate.matrix[state,new.state]);		
+					event$.rate<-(scale.const * rate.multiplier * base.rate);		
 					# Mark substitution as synonymous.
 					event$.type<-"synonymous";
 				} else {
 					# incorporate omega otherwise
-					event$.rate<-(scale.const * rate.multiplier * omega * rate.matrix[state,new.state]);
+					event$.rate<-(scale.const * rate.multiplier * omega * base.rate);
 					# Mark substitution as non-synonymous.
 					event$.type<-"non-synonymous";
 				}
