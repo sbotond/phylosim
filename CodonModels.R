@@ -71,7 +71,6 @@ setConstructorS3(
 					rate.list=rate.list,
 					equ.dist=equ.dist
 				);	
-				this<-extend(this, "CodonUNREST");
 			}
 		
 			# Got rate list	
@@ -81,7 +80,6 @@ setConstructorS3(
 					alphabet=CodonAlphabet(table.id=table.id),
 					rate.list=rate.list
 				);	
-				this<-extend(this, "CodonUNREST");
 			}
 			
 			# Got equlibrium distribution,
@@ -92,7 +90,6 @@ setConstructorS3(
 					alphabet=CodonAlphabet(table.id=table.id),
 					equ.dist=equ.dist
 				);	
-				this<-extend(this, "CodonUNREST");
 			}
 
 			# Got nothing:
@@ -101,12 +98,10 @@ setConstructorS3(
 					name=name,
 					alphabet=CodonAlphabet(table.id=table.id)
 				);	
-				this<-extend(this, "CodonUNREST");
 			}
+				
+			this<-extend(this, "CodonUNREST");
 
-		# Force clearing id cache:		
-		this$name<-this$name;
-	
 		return(this);
 	
   },
@@ -364,7 +359,8 @@ setConstructorS3(
 			"GY94",
 			.kappa=NA,
 			.is.ny98=TRUE,
-			.scale.const=as.double(1.0)
+			.scale.const=as.double(1.0),
+			.syn.cache=NA
 		);
 
 		# Add the "omega" site-process specific parameter:
@@ -388,6 +384,34 @@ setConstructorS3(
 
 		# Set object name:
 		this$name<-name;
+
+		 # Force clearing id cache:              
+                this$name<-this$name;
+
+                # create syn/nsyn matrix cache
+                # Get translation table:
+                trans.table<-this$.alphabet$.trans.table;
+                symbols<-this$.alphabet$symbols;
+
+                syn.cache<-matrix(nrow=this$.alphabet$size,ncol=this$.alphabet$size);
+		colnames(syn.cache)<-symbols;
+		rownames(syn.cache)<-symbols;
+
+                for(i in symbols){
+                        for(j in symbols){
+                                if(i == j) { next }
+
+                                 if( (trans.table[[i]]$aa) == (trans.table[[j]]$aa) ){
+                                        syn.cache[i,j]<-1;
+                                 }
+                                 else{ 
+                                        syn.cache[i,j]<-0;
+                                 }
+                        }
+                }
+
+                this$.syn.cache<-syn.cache;
+
 		return(this);
 
   },
@@ -530,6 +554,9 @@ setMethodS3(
 			# Get scaling constant:
 			scale.const<-this$.scale.const;
 
+			# get syn cache:
+			syn.cache<-this$.syn.cache;
+
 			symbols<-this$.alphabet$.symbols;
 			rest<-symbols[ which(symbols != state) ];
 
@@ -572,7 +599,7 @@ setMethodS3(
 
 				# Figure out wether the event is a synonymous mutation ...
 				
-				if( (trans.table[[state]]$aa) == (trans.table[[new.state]]$aa) ){
+				if( syn.cache[state,new.state] ){
 					# and ignore omega in that case
 					event$.rate<-(scale.const * rate.multiplier * base.rate);		
 					# Mark substitution as synonymous.
