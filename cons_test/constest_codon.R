@@ -8,6 +8,9 @@ gy94.true.kappa<-4;
 
 source("codon_funcs.R");
 
+# Calculate PAML-style branch length scaling factor:
+sf<-getOmegaScalingFactor(gy94,gy94.true.omega);
+
 res.bak<-iterate_seq_len(tree,length_range,reps,simulate_codon,estimate_codon);
 res<-res_to_dframe(res.bak$res);
 
