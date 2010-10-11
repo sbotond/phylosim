@@ -5676,6 +5676,8 @@ setMethodS3(
 # \alias{my.all.equal}
 # \alias{plot.PSRoot}
 # \alias{revComp}
+# \alias{scaleWithOmega}
+# \alias{getOmegaScalingFactor}
 # 
 # @title "Undocumented generic method (PhyloSim package)" 
 #

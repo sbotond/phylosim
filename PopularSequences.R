@@ -719,6 +719,101 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+###########################################################################/**
+#
+# @RdocMethod scaleWithOmega
+# 
+# @title "Switch to PAML-style rate scaling" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method sets the site-process specific rate multipliers ("rate.multiplier") in order to have
+#	the expected number of substitutions \emph{after selection} equal to one at equilibrium 
+#	(PAML-style scaling).
+#
+#	The scaling factor is calculated by the \code{\link{getOmegaScalingFactor.GY94}} method.
+#	The scaling factors are based on the actual values of the omega site-process specific parameters,
+#	so rescaling is needed after changing the omega values.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A CodonSequence object.} 
+#	\item{process}{A GY94 substitution process object.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	The sequences object (invisible).
+# } 
+# 
+# \examples{
+#	# construct a GY94 object
+#	p<-GY94(kappa=4)
+#	# construct a codon sequence object,
+#	# attach process p
+#	s<-CodonSequence(length=10,processes=list(list(p)))
+#	# sample omegas from a discrete model
+#	omegaVarM3(s,p,c(0.5,1,2),c(1/3,1/3,1/3));
+#	# set rate multipliers to obtain PAML-style scaling
+#	scaleWithOmega(s,p)
+#	# get omegas
+#	getOmegas(s,p)
+#	# get rate multipliers
+#	getRateMultipliers(s,p)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "scaleWithOmega",
+  class="CodonSequence",
+  function(
+	this,
+	process,
+    	...
+  ){
+
+if(!exists("PSIM_FAST")){
+    if(missing(process)){
+      throw("No process specified!\n");
+    }
+    if(!is.GY94(process)){
+      throw("The sepcified process is not a GY94 codon substitution process!\n");
+    }
+}
+	cache<-list();
+	for(s in this$.sites){
+		omega<-s$.processes[[process$.id]]$site.params[["omega"]]$value;	
+		mul<-NA;
+
+		if(!is.null(cache[[as.character(omega)]])){
+			mul<-cache[[as.character(omega)]];
+		}
+		else {
+			mul<-getOmegaScalingFactor(process,omega);
+			cache[[as.character(omega)]]<-mul;
+		}
+		
+		setParameterAtSite(process,s,"rate.multiplier",mul);
+	}
+		return(invisible(this));
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ##  
 ## Method: omegaVarM0 - one ratio
 ##  
