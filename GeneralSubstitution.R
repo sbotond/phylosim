@@ -1829,6 +1829,7 @@ setMethodS3(
 		K <- 0; 
 		# get the symbols:
 		symbols<-this$alphabet$symbols;
+		orig.matrix<-this$.q.matrix$.orig.matrix;
 			
 		# For every symbol:
 		for (i in symbols) {
@@ -1837,7 +1838,7 @@ setMethodS3(
 		for(j in symbols){
 			if(i == j){next}
 			# For every other symbol - update the constant:
-			K <- K + (i.equ * getRate(this$.q.matrix, from=i, to=j ) );
+			K <- K + (i.equ * orig.matrix[i,j] );
 			}
 		}
 	
