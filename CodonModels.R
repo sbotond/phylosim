@@ -255,6 +255,13 @@ setMethodS3(
 #	Hence, after the attachment of the process the variation of omega ratios among sites follows 
 #	the M0 model (see Yang et al. 2000).
 #
+#       The rate matrix of the \code{\link{GY94}} model is scaled in a way that the expected number
+#       of substiutions \emph{before selection} ("potential" substiutions) is equal to one at equlibrium. 
+#       The \emph{codeml} program from the PAML package scales the rate matrix in order to have 
+#       the expected number of substiutions \emph{after selection} equal to one. Use the
+#	\code{\link{getOmegaScalingFactor.GY94}} and \code{\link{scaleWithOmega.CodonSequence}} methods
+#	to switch to PAML-style scaling.
+#
 #	If the \code{scale.nuc} constructor argument is TRUE, the rates of the returned \code{Event} objects
 #	will be multiplied by \code{3} to obtain a process which has the expected number of nucleotide substitutions
 #	(not \code{codon} substitutions) equal to one at equilibrium. This is useful when simulating
@@ -691,6 +698,106 @@ setMethodS3(
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
 			NextMethod();		
 
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+###########################################################################/**
+#
+# @RdocMethod getOmegaScalingFactor
+# 
+# @title "Get the omega scaling factor" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	The rate matrix of the \code{\link{GY94}} model is scaled in a way that the expected number
+#	of substiutions \emph{before selection} ("potential" substiutions) is equal to one at equlibrium. 
+#	The \emph{codeml} program from the PAML package scales the rate matrix in order to have 
+#	the expected number of substiutions \emph{after selection} equal to one.
+#	This method calculates the value of the rate multiplier needed for switching 
+#	to PAML-style scaling given a fixed omega.
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GY94 object.} 
+#	\item{omega}{The value of omega.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# construct a GY94 process object
+#	p<-GY94(kappa=4)
+#	# Calculate scaling factor for omega=2
+#	getOmegaScalingFactor(p,omega=2)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+	"getOmegaScalingFactor", 
+	class="GY94", 
+	function(
+		this,
+		omega,
+		...
+	){
+
+		if(missing(omega)){
+			throw("No omega provided!");
+		}
+		if(!is.numeric(omega)){
+			throw("Omega must be numeric!");
+		}
+
+		neutral.K<-0.0;
+
+		K <- 0.0;
+                # get the symbols:
+                symbols<-this$.alphabet$symbols;
+
+		# Get translation table and rate matrix:
+                trans.table<-this$.alphabet$.trans.table;
+		rate.matrix<-this$.q.matrix$.rate.matrix;
+
+                # For every symbol:
+                for (i in symbols) {
+
+                # Get the equlibrium probability:
+                i.equ<-this$.equ.dist[[ which(colnames(this$.equ.dist) == i) ]];
+                for(j in symbols){
+                        if(i == j){next}
+				base.rate<-rate.matrix[i,j];
+				neutral.K<- neutral.K + (i.equ * base.rate);
+
+				if( (trans.table[[i]]$aa) == (trans.table[[j]]$aa) ){
+                        		K <- K + (i.equ * base.rate);
+				}
+				else {
+                        		K <- K + (i.equ * omega * base.rate);
+				}
+                        }
+
+                }
+
+		return(neutral.K/K);
 	},
 	private=FALSE,
 	protected=FALSE,
