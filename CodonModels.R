@@ -251,11 +251,11 @@ setMethodS3(
 #	the M0 model (see Yang et al. 2000).
 #
 #       The rate matrix of the \code{\link{GY94}} model is scaled in a way that the expected number
-#       of substiutions \emph{before selection} ("potential" substiutions) is equal to one at equlibrium. 
+#       of potential substiutions per site is equal to one at equlibrium. 
 #       The \emph{codeml} program from the PAML package scales the rate matrix in order to have 
-#       the expected number of substiutions \emph{after selection} equal to one. Use the
-#	\code{\link{getOmegaScalingFactor.GY94}} and \code{\link{scaleWithOmega.CodonSequence}} methods
-#	to switch to PAML-style scaling.
+#       the expected number of accepted substiutions per site equal to one. Use the
+#	\code{\link{getOmegaScalingFactor.GY94}} method to claculate a branch length scaling factor
+#	which allows to switch to a PAML-style scaling given an average omega.
 #
 #	If the \code{scale.nuc} constructor argument is TRUE, the rates of the returned \code{Event} objects
 #	will be multiplied by \code{3} to obtain a process which has the expected number of nucleotide substitutions
@@ -743,11 +743,12 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #
-#	The rate matrix of the \code{\link{GY94}} model is scaled in a way that the expected number
-#	of substiutions \emph{before selection} ("potential" substiutions) is equal to one at equlibrium. 
-#	The \emph{codeml} program from the PAML package scales the rate matrix in order to have 
-#	the expected number of substiutions \emph{after selection} equal to one.
-#	This method calculates the value of the rate multiplier needed for switching 
+#       The rate matrix of the \code{\link{GY94}} model is scaled in a way that the expected number
+#       of potential substiutions per site is equal to one at equlibrium. 
+#       The \emph{codeml} program from the PAML package scales the rate matrix in order to have 
+#       the expected number of accepted substiutions per site equal to one. 
+#
+#	This method calculates the branch length multiplier needed for switching 
 #	to PAML-style scaling given a fixed omega.
 #
 # } 
