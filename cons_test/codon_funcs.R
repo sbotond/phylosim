@@ -19,6 +19,8 @@ simulate_codon<-function(phylo,seq,len,rep){
 		clearStates(seq)
                 # set omega 
 		omegaVarM0(seq,gy94,omega=gy94.true.omega);
+		# switch to PAML-style scaling:
+		scaleWithOmega(seq,gy94);
                 # sample states
                 sampleStates(seq);
                 # construct simulation object
