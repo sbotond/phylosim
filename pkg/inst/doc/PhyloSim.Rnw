@@ -49,9 +49,9 @@
 
 \section{Advanced examples}
 
-\subsection{Simulating ''domains'' and heterogeneous evolution}
+\subsection{Simulating ``domains'' and heterogeneous evolution}
 
-The following code illustrates how to setup a more complicated simulation of amino acid sequences involving ''domains'' and heterogeneous evolution.
+The following code illustrates how to setup a more complicated simulation of amino acid sequences involving ``domains'' and heterogeneous evolution.
 
 First load the package:
 <<echo=FALSE,results=hide>>=
@@ -228,7 +228,7 @@ Plot the simulation object (tree with node labels):
 plot(sim)
 @
 
-A ''node hook'' is a function which accepts a \code{Sequence} object
+A ``node hook'' is a function which accepts a \code{Sequence} object
 through the named argument "seq" and returns a \code{Sequence} object.
 After simulating the branch leading to the node, the resulting
 \code{Sequence} object is passed to the node hook and the returned object
@@ -509,7 +509,7 @@ rm(PSIM_FAST);
 @
 
 
-\subsection{Evolving a genomic region containing a ''gene''}
+\subsection{Evolving a genomic region containing a ``gene''}
 
 The following code demonstrates how to simulate a genomic region
 containing a gene with introns and noncoding regions.
@@ -860,13 +860,13 @@ rm(PSIM_FAST)
 @
 
 
-\section{Details of the field deletion model}
+\section{Details of the fast field deletion model}
 
 A natural way to incorporate deletions into the Gillespie framework is to assign an individual rate to every possible deletion event. Modelling in this manner is extremely general but requires a lot of specification: not only individual sites' tolerance to deletion but also of how they interact with neighbouring sites. Instead we propose a more restricted ``field model'' of deletion that generalises previous work to allow rate deletions occur to vary across the sequence but only requires one parameter per site -- its deletion tolerance -- to be specified. Under this model, deletions are proposed in same manner as other models, specifying a rate of occurrence and a distribution of lengths and then assuming that the location and orientation of the deletion is chosen uniformly, but proposed deletions may then be rejected based on sites they propose to remove.
  
 Firstly consider only single-site deletions and let each site, $i$, in the sequence have an associated deletion tolerance parameter, $d_i \in [0,1]$, representing the probability that it is actually deleted given a deletion is proposed. A proposal / acceptance step is equivalent to just proposing at a slower rate, so this is just a special case of the most general model but one that can be implemented efficiently as a single Gillespie event (a deletion occurred somewhere) rather than a large number of slower events (treating every possible deletion separately). Sites where $d_i=1$ are deleted at the background rate, sites with $d_i < 1$ are deleted more slowly, and sites with $d_i=0$ are never deleted. For proposed deletions that span multiple sites, ${\cal I}$, each site is considered independently and the proposed deletion is accepted if and only if every site accepts it: the total probability of acceptance is therefore $\prod_{i\in {\cal I}} d_i$. 
 
-It is natural to think of the background rate of deletion as a neutral rate but this is not necessary and can lead to the Gillespie algorithm becoming inefficient, for example: an extremely deletion intolerant sequence will reject almost all deletions proposed and so waste many steps. Instead we can rescale the process so that deletions are proposed at a rate equal to what would occur if the entire sequence had a deletion tolerance equal to its most tolerant site (deletion tolerance $d$) and then accept a deletion spanning sites ${\cal I}$ with probability $d_i / d$. Table~\ref{distributions} gives the rate scaling factor and distribution of deletion lengths after scaling for a variety of distributions that could be used to model deletion length. In most cases, the rescaled distribution of deletion lengths is a member of the same family as the ``neutral'' process.
+It is natural to think of the background rate of deletion as a neutral rate but this is not necessary and can lead to the Gillespie algorithm becoming inefficient, for example: an extremely deletion intolerant sequence will reject almost all deletions proposed and so waste many steps. Instead we can rescale the process (``fast field deletion model'') so that deletions are proposed at a rate equal to what would occur if the entire sequence had a deletion tolerance equal to its most tolerant site (deletion tolerance $d$) and then accept a deletion spanning sites ${\cal I}$ with probability $d_i / d$. Table~\ref{distributions} gives the rate scaling factor and distribution of deletion lengths after scaling for a variety of distributions that could be used to model deletion length. In most cases, the rescaled distribution of deletion lengths is a member of the same family as the ``neutral'' process.
 
 \begin{table}[h]
 \begin{tabular}{llll} 
