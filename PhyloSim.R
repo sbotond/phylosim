@@ -299,6 +299,26 @@
 #	# delete log file
 #	unlink(sim$logFile);
 #
+#	# Reading alignments:
+#
+#	# get a safe file name  
+#       fname<-paste("PhyloSim_dummy_fas_",Sys.getpid(),sep="")
+#       # write out a fasta alignment
+#       cat("> t3\nGTCTTT-CG-\n",file=fname);
+#       cat("> t4\nG--TC-TCGG\n",file=fname,append=TRUE);
+#       cat("> t2\nG--TC-TCGG\n",file=fname,append=TRUE);
+#       cat("> t1\nGTC-G-TCGG",file=fname,append=TRUE);
+#       # construct a PhyloSim object,
+#       # set the phylo object
+#       sim<-PhyloSim(phylo=rcoal(4))
+#       # read the alignment
+#       readAlignment(sim,fname)
+#       # remove alignment file
+#       unlink(fname)
+#       # plot the tree & alignment
+#       plot(sim)
+
+#
 #	# disable fast & careless mode
 #	rm(PSIM_FAST)
 #
@@ -4512,7 +4532,7 @@ setMethodS3(
 # } 
 # 
 # \value{ 
-# 	A mtrix containing the tip labels.
+# 	A matrix containing the tip labels.
 # } 
 # 
 # \examples{
@@ -5422,6 +5442,93 @@ setMethodS3(
 		}
 		
 
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+###########################################################################/**
+#
+# @RdocMethod readAlignment
+# 
+# @title "Read alignment from file" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method reads an alignment by using the \code{read.dna} function from the \code{\link{ape}}
+#	package and stores in the \code{PhyloSim} object. The phylo object must be set before reading 
+#	the alignment. The alignment must contain all the sequences corresponding to tip nodes.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+#	\item{file}{A file name specified by either a variable of mode character, or a double-quoted string.}
+#	\item{format}{a character string specifying the format of the DNA sequences. Four choices are possible: "interleaved", "sequential", "clustal", or "fasta", or any unambiguous abbreviation of these.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#	The PhyloSim object (invisible).
+# } 
+# 
+# \examples{
+#	# get a safe file name	
+#	fname<-paste("PhyloSim_dummy_fas_",Sys.getpid(),sep="")
+#	# write out a fasta alignment
+#	cat("> t3\nGTCTTT-CG-\n",file=fname);
+#	cat("> t4\nG--TC-TCGG\n",file=fname,append=TRUE);
+#	cat("> t2\nG--TC-TCGG\n",file=fname,append=TRUE);
+#	cat("> t1\nGTC-G-TCGG",file=fname,append=TRUE);
+#	# construct a PhyloSim object,
+#	# set the phylo object
+#	sim<-PhyloSim(phylo=rcoal(4))
+#	# read the alignment
+#	readAlignment(sim,fname)
+#	# remove alignment file
+#	unlink(fname)
+#	# plot the tree & alignment
+#	plot(sim)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "readAlignment",
+  class="PhyloSim",
+  function(
+    		this,
+		file,
+		format="fasta",
+    		...
+  ){
+
+	if(all(is.na(this$.phylo))){
+		throw("The phylo object must be set before reading alignments!");
+	}
+
+	aln<-toupper(read.dna(file=file,format=format,as.matrix=TRUE,as.character=TRUE));
+	aln.names<-dimnames(aln)[[1]];	
+	tip.labels<-this$tipLabels;
+	
+	if(length(intersect(tip.labels,aln.names)) != length(tip.labels)){
+		throw("The alignment must contain all sequences corresponding to tip nodes!");
+	}
+
+	this$.alignment<-aln;
+
+	return(invisible(this));
+  
   },
   private=FALSE,
   protected=FALSE,

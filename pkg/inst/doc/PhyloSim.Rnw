@@ -260,14 +260,13 @@ Run the simulation:
 Simulate(sim)
 @
 
-Plot the resulting alignment alongside the tree:
-<<echo=TRUE,fig=TRUE,width=180, height=80>>=
-plot(sim)
-@
-
 Save the resulting alignment, omitting the internal nodes:
 <<echo=TRUE>>=
 saveAlignment(sim, file = "example_V1_aln.fas", skip.internal = TRUE)
+@
+Plot the resulting alignment alongside the tree:
+<<echo=TRUE,fig=TRUE,width=180, height=80>>=
+plot(sim)
 @
 <<echo=FALSE,results=hide>>=
 file.remove("example_V1_aln.fas")
