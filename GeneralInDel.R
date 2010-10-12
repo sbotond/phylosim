@@ -2258,7 +2258,7 @@ setMethodS3(
 # @author
 #
 # \seealso{ 
-# 	GeneralInDel DiscreteDeletor ContinuousDeletor FieldDeletor
+# 	GeneralInDel DiscreteDeletor ContinuousDeletor FastFieldDeletor
 # }
 # 
 #*/###########################################################################

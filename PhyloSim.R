@@ -336,7 +336,7 @@
 #	\link{CodonSequence} \link{CodonUNREST} \link{ContinuousDeletor}
 #	\link{ContinuousInsertor} \link{cpREV} \link{DiscreteDeletor}
 #	\link{DiscreteInsertor} \link{Event} \link{F81} \link{F84}
-#	\link{FieldDeletor} \link{GeneralDeletor}
+#	\link{FastFieldDeletor} \link{GeneralDeletor}
 #	\link{GeneralInDel} \link{GeneralInsertor} \link{GeneralSubstitution} 
 #	\link{GTR} \link{GY94} \link{HKY} \link{JC69} \link{JTT} \link{JTT.dcmut}
 #	\link{K80} \link{K81} \link{LG} \link{mtArt} \link{mtMam} \link{mtREV24}
