@@ -2813,6 +2813,7 @@ setMethodS3(
     color.scheme,
     ...
   ){
+		
 		if(missing(char.text.size)){
 			char.text.size <- 1.5
 		}
@@ -2886,6 +2887,13 @@ setMethodS3(
     color.scheme,
     ...
   ){
+
+   # ugly empirical fix of some R CMD check warnings:
+   pos<-NA;
+   char<-NA;
+   xend<-NA;
+   yend<-NA;
+
 
     ### First, we need to define a bunch of sparsely-documented utility functions. ###
 
@@ -5783,7 +5791,7 @@ setMethodS3(
 # \alias{my.all.equal}
 # \alias{plot.PSRoot}
 # \alias{revComp}
-# \alias{scaleWithOmega}
+# \alias{readAlignment}
 # \alias{getOmegaScalingFactor}
 # 
 # @title "Undocumented generic method (PhyloSim package)" 
