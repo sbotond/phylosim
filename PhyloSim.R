@@ -2893,6 +2893,7 @@ setMethodS3(
    char<-NA;
    xend<-NA;
    yend<-NA;
+   y<-NA;
 
 
     ### First, we need to define a bunch of sparsely-documented utility functions. ###
