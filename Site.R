@@ -787,7 +787,7 @@ setMethodS3(
 );
 
 ##	
-## Method: recalculateTotalRate
+## Method: .recalculateTotalRate
 ##	
 setMethodS3(
 	".recalculateTotalRate", 
@@ -797,14 +797,18 @@ setMethodS3(
 		...
 	){
 
-		if(!is.na(getState(this))){
-			this<-enableVirtual(this);	
-			total.rate<-0;	
-			for(e in this$events) {
-				total.rate<-(total.rate + getRate(e));
-			}
-			this$.total.rate<-total.rate	
-		}
+if(!is.na(this$.state)){
+  total.rate<-0;	
+  proc<-this$.processes;
+  for (p in lapply(names(proc),function(id){proc[[id]][["object"]]})) {
+                                for(e in getEventsAtSite(p, this)){
+					total.rate<- total.rate + e$.rate;
+                                }
+  }
+			
+  this$.total.rate<-total.rate	
+
+}
 	},
 	private=TRUE,
 	protected=FALSE,
@@ -1392,7 +1396,7 @@ setMethodS3(
 			}		
 
 			this$.total.rate<-NA;
-		 this$.sequence$.cumulative.rate.flag<-TRUE;
+		 	this$.sequence$.cumulative.rate.flag<-TRUE;
 
 			this$.summary[[header]]<-tmp;
 			
