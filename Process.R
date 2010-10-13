@@ -1834,7 +1834,7 @@ setMethodS3(
 	
 	}
 	flagTotalRate(site);
-	.flagSeqCumulativeRates(site);
+	this$.sequence$.cumulative.rate.flag<-TRUE;
 	invisible(this);
 				
   },
