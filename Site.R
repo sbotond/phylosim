@@ -487,7 +487,8 @@ setMethodS3(
 
 		}
 
-		flagTotalRate(this);
+		this$.total.rate<-NA;
+		
 		this$.sequence$.cumulative.rate.flag<-TRUE;
 		this$.state<-new.state;
 		
@@ -640,7 +641,7 @@ setMethodS3(
 
 		}
 		
-		flagTotalRate(this);
+		this$.total.rate<-NA;
 		this$.sequence$.cumulative.rate.flag<-TRUE;
 		this$.alphabet<-new.alphabet;
 
@@ -1366,7 +1367,7 @@ setMethodS3(
 				tmp<-paste(tmp,"\n ",p$id)
 			}		
 
-			flagTotalRate(this);
+			this$.total.rate<-NA;
 		 this$.sequence$.cumulative.rate.flag<-TRUE;
 
 			this$.summary[[header]]<-tmp;
@@ -1584,7 +1585,7 @@ setMethodS3(
 				# from the process object.
 				site.params = process$siteSpecificParamList	
 			);
-		flagTotalRate(this);
+		this$.total.rate<-NA;
 		this$.sequence$.cumulative.rate.flag<-TRUE;
 		
 		# The user should not modify the process
@@ -1622,7 +1623,7 @@ setMethodS3(
 				site.params		=		process$siteSpecificParamList	
 			);
 		}
-		flagTotalRate(this);
+		this$.total.rate<-NA;
 		this$.sequence$.cumulative.rate.flag<-TRUE;
 		
 		# The user should not modify the process
@@ -1708,7 +1709,7 @@ setMethodS3(
 		# so it will wanish from the list.
 		this$.processes[[process$id]]<-NULL;
 	
-		flagTotalRate(this);
+		this$.total.rate<-NA;
 		this$.sequence$.cumulative.rate.flag<-TRUE;
 		invisible(this);
   },

@@ -1833,7 +1833,8 @@ setMethodS3(
 		site$.processes[[this$id]]$site.params[[id]]$value<-value;
 	
 	}
-	flagTotalRate(site);
+
+	site$.total.rate<-NA;
 	this$.sequence$.cumulative.rate.flag<-TRUE;
 	invisible(this);
 				
