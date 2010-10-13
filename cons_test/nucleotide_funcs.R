@@ -88,7 +88,7 @@ plot_dframe<-function(d,p){
         t<-reorder(p,"pruningwise");
 
         for(col in names(d)){
-                pl<-qplot(data=d,as.factor(len),d[[col]],geom=c("boxplot","jitter"),h=0,xlab="Sequence length",ylab=col,log="y");
+		pl<-my_qplot(d,col);
 
                 true<-NA;
                 if(col=="len"){
@@ -105,7 +105,7 @@ plot_dframe<-function(d,p){
                         true<-t$edge.length[edge.nr];
                 }
 
-                pl<-pl + geom_abline(slope=0,intercept=log(true,base=10),colour="red",size=0.5);
+		pl<-hline(pl,true);
                 print(pl);
                 Sys.sleep(10);
         }
