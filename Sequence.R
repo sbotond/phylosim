@@ -2640,48 +2640,29 @@ setMethodS3(
 		...
 	){
 		
-		# No flagged sites, we have a fresh start:	
-
-		if( length(this$.flagged.sites) == 0 ) {
-			if( this$.length > 0 ) {
-				# Calculate total rates:
-				for(i in 1:this$.length) {
-					this$.total.rates[[i]]<-this$.sites[[i]]$totalRate;
-				}
-				this$.cumulative.rates<-cumsum(this$.total.rates);	
-				this$.flagged.sites<-integer(0);
-
-			}
-	
-		} else {
-			if( this$.length > 0 ) {
-
-				# We have some flagged sites, recalculate just their total rates:
-        			for(i in this$.flagged.sites) {
-          				this$.total.rates[[i]]<-this$.sites[[i]]$totalRate;
-        			}	
-
-				# The site before the first flagged site: 
-				min.index<-(min(this$.flagged.sites) - 1);
-				
-				if(min.index > 1){
-					
-					# Do the cumsum only on the dirty part:
-					new.cumrates<-this$.cumulative.rates[1:(min.index-1)];
-					new.cumrates<-c(new.cumrates, cumsum( c(this$.cumulative.rates[min.index], this$.total.rates[(min.index+1):length(this$.total.rates) ] ) ) );
-					this$.cumulative.rates<-new.cumrates;
-
-				} else {
-        				this$.cumulative.rates<-cumsum(this$.total.rates);
-				}
-				
-				# Cleaning out flagged sites.
-				this$.flagged.sites<-integer(0);
-				
-      		} #/else
-	
+		length<-this$.length;
+		if(length ==  0){
+			return();
 		}
-	
+
+		total.rates<-this$.total.rates;
+		sites<-this$.sites;
+		flagged.sites<-this$.flagged.sites;
+
+		if( length(flagged.sites) == 0 ) {
+			# Fresh start:
+			for(i in 1:length) {
+					total.rates<-as.numeric(lapply(sites,getTotalRate));
+			}
+
+		} else {
+			# We have some flagged sites, recalculate just their total rates:
+			total.rates[flagged.sites]<-as.numeric(lapply(sites[flagged.sites],getTotalRate));
+		}
+		
+		this$.total.rates<-total.rates;
+		this$.cumulative.rates<-cumsum(total.rates);	
+		this$.flagged.sites<-integer(0);
 		this$.cumulative.rate.flag<-FALSE;
 	},
 	private=FALSE,

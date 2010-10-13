@@ -1835,7 +1835,9 @@ setMethodS3(
 	}
 
 	site$.total.rate<-NA;
-	this$.sequence$.cumulative.rate.flag<-TRUE;
+	if(!is.na(site$.sequence)){
+	site$.sequence$.cumulative.rate.flag<-TRUE;
+	}
 	invisible(this);
 				
   },

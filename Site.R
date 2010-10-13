@@ -489,7 +489,9 @@ setMethodS3(
 
 		this$.total.rate<-NA;
 		
+		if(!is.na(this$.sequence)){
 		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		this$.state<-new.state;
 		
 	},
@@ -642,7 +644,9 @@ setMethodS3(
 		}
 		
 		this$.total.rate<-NA;
+		if(!is.na(this$.sequence)){
 		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		this$.alphabet<-new.alphabet;
 
 	},
@@ -1399,7 +1403,9 @@ setMethodS3(
 			}		
 
 			this$.total.rate<-NA;
+			if(!is.na(this$.sequence)){
 		 	this$.sequence$.cumulative.rate.flag<-TRUE;
+			}
 
 			this$.summary[[header]]<-tmp;
 			
@@ -1617,7 +1623,10 @@ setMethodS3(
 				site.params = process$siteSpecificParamList	
 			);
 		this$.total.rate<-NA;
+		
+		if(!is.na(this$.sequence)){
 		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		
 		# The user should not modify the process
 		# after is attached to a site!
@@ -1655,7 +1664,9 @@ setMethodS3(
 			);
 		}
 		this$.total.rate<-NA;
+		if(!is.na(this$.sequence)){
 		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		
 		# The user should not modify the process
 		# after is attached to a site!
@@ -1741,7 +1752,9 @@ setMethodS3(
 		this$.processes[[process$id]]<-NULL;
 	
 		this$.total.rate<-NA;
+		if(!is.na(this$.sequence)){
 		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		invisible(this);
   },
   private=FALSE,
