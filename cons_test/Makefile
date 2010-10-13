@@ -1,5 +1,7 @@
 all: 
-	@echo "Options: nuc aa codon"
+	@echo "Options: nuc aa codon cons_test"
+cons_test:
+	bsub "make codon"; bsub "make aa"; bsub "make nuc"
 nuc:
 	(R --vanilla < constest_nucleotide.R 2>&1) > results/constest_nucleotide.log
 aa:
