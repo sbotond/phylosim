@@ -869,12 +869,15 @@ setMethodS3(
 		this,
 		...
 	){
-		
-		if(is.na(this$.total.rate)) {
+
+		tr<-this$.total.rate;		
+		if(is.na(tr)) {
 			.recalculateTotalRate(this);
+			return(this$.total.rate);
+		} else {
+			return(tr);
 		}
 
-			return(this$.total.rate);
 		
 	},
 	private=FALSE,
