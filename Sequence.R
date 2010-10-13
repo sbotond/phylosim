@@ -1121,7 +1121,7 @@ setMethodS3(
         this$.sites[[ index[[i]] ]]$state<-value[i];
     }
 		# Flagging the changed sites:
-		.flagCumulativeRates(this);
+		this$.cumulative.rate.flag<-TRUE;
 		this$.flagged.sites<-c(this$.flagged.sites, index);
 		.recalculateCumulativeRates(this);
 
@@ -2683,27 +2683,6 @@ setMethodS3(
 		}
 	
 		this$.cumulative.rate.flag<-FALSE;
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
-## Method: .flagCumulativeRates
-##	
-setMethodS3(
-	".flagCumulativeRates", 
-	class="Sequence", 
-	function(
-		this,
-		...
-	){
-		
-		this$.cumulative.rate.flag<-TRUE;
-
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -4641,7 +4620,7 @@ setMethodS3(
 	 }
 
 	 # Flagging cumulative rates:
-		.flagCumulativeRates(this);
+		this$.cumulative.rate.flag<-TRUE;
 
 		# Inserting new site objects:
 
@@ -4791,7 +4770,7 @@ setMethodS3(
 			 .recalculateCumulativeRates(this);	
 			}
 			# Flagging cumulative rates:	
-			.flagCumulativeRates(this);
+			this$.cumulative.rate.flag<-TRUE;
 			min.index<-min(index);
 			# Deleting site objects:	
 			this$.sites[index]<-NULL;
