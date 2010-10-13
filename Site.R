@@ -1070,6 +1070,30 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+setMethodS3(
+	".getEventRates", 
+	class="Site", 
+	function(
+		this,
+		...
+	){
+
+	tmp<-double();
+	for (p in lapply(names(this$.processes),function(id){this$.processes[[id]][["object"]]})) {
+				for(e in getEventsAtSite(p, this)){
+					tmp<-c(tmp,e$.rate);
+				}
+	}
+	return(tmp);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ##	
 ## Method: setEvents
 ##	
