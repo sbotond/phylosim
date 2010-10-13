@@ -88,7 +88,7 @@ plot_dframe<-function(d,p){
         t<-reorder(p,"pruningwise");
 
         for(col in names(d)){
-                pl<-qplot(data=d,as.factor(len),d[[col]],geom=c("boxplot","jitter"),h=0,xlab="Sequence length",ylab=col);
+                pl<-qplot(data=d,as.factor(len),d[[col]],geom=c("boxplot","jitter"),h=0,xlab="Sequence length",ylab=col,log="y");
 
                 true<-NA;
                 if(col=="len"){
