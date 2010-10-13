@@ -4083,7 +4083,10 @@ setMethodS3(
 	
     		for(site in this$.sites[index]){
 			site$.state<-NA;
+			site$.total.rate<-NA;
     		}
+		
+		this$.cumulative.rate.flag<-TRUE;
 
 		return(invisible(this));
 	
