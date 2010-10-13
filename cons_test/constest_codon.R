@@ -16,7 +16,8 @@ res<-res_to_dframe(res.bak$res);
 
 write.table(res,file="results/constest_codon.tab");
 write.table(res.bak$times,file="results/times_codon.tab");
-print_times(res.bak$times,"results/ttab_codon.tab");
+ttab<-print_times(res.bak$times,"results/ttab_codon.tab");
+save_times_latex(ttab,"ttab_codon.tab");
 
 pdf("results/constest_codon.pdf");
 plot_dframe(res,tree)
