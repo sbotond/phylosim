@@ -91,7 +91,7 @@ plot_dframe<-function(d,p){
                         true<-t$edge.length[edge.nr];
                 }
 
-                pl<-pl + geom_abline(slope=0,intercept=true,colour="red",size=0.5);
+                pl<-pl + geom_abline(slope=0,intercept=log(true,base=10),colour="red",size=0.5);
                 print(pl);
                 Sys.sleep(10);
         }

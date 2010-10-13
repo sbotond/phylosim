@@ -16,6 +16,6 @@ write.table(res,file="results/constest_nucleotide.tab");
 write.table(res.bak$times,file="results/times_nucleotide.tab");
 print_times(res.bak$times,"results/ttab_nucleotide.tab");
 
-pdf("results/constest_nuceotide.pdf");
+pdf("results/constest_nucleotide.pdf");
 plot_dframe(res,tree);
 
