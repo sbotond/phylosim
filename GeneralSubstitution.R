@@ -2215,7 +2215,7 @@ setMethodS3(
 	zz<-c();	
 
 	for(cl in (colnames(qmat))){
-		for(rw in rev(rownames(qmat))){
+		for(rw in (rownames(qmat))){
 			if(rw != cl){
 				xx<-c(xx,cl)
 				yy<-c(yy,rw)
@@ -2224,10 +2224,11 @@ setMethodS3(
 		}
 	}
 
+
 	# visual aspect tuned by "magic" formulas :)
 	my.plot<-(qplot(x=xx,y=yy,size=zz,xlab="To:",ylab="From:",main="Rate matrix") + geom_point(colour="blue") +
 	scale_area(limits=c(0,max(zz)),to=c(0,(scale * 5 * log(128/size))), name="Size:")
-	);
+	) + xlim(colnames(qmat)) + ylim(rev(rownames(qmat)));
 	print(my.plot, vp=vp1);
 	popViewport(1);
 
