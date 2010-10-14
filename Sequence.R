@@ -2651,9 +2651,7 @@ setMethodS3(
 
 		if( length(flagged.sites) == 0 ) {
 			# Fresh start:
-			for(i in 1:length) {
-					total.rates<-as.numeric(lapply(sites,getTotalRate));
-			}
+			total.rates<-as.numeric(lapply(sites,getTotalRate));
 
 		} else {
 			# We have some flagged sites, recalculate just their total rates:
