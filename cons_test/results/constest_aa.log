@@ -43,7 +43,9 @@ Loading required package: proto
 > 
 > write.table(res,file="results/constest_aa.tab");
 > write.table(res.bak$times,file="results/times_aa.tab");
-> print_times(res.bak$times,"results/ttab_aa.tab");
+> ttab<-print_times(res.bak$times,"results/ttab_aa.tab");
+> save_times_latex(ttab,"ttab_aa");
+[1] TRUE
 > 
 > pdf("results/constest_aa.pdf");
 > plot_dframe(res,tree)
