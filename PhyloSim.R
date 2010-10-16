@@ -2739,6 +2739,7 @@ setMethodS3(
 # 	\item{plot.tree}{Whether to plot the tree alongside the alignment. TRUE or FALSE; defaults to TRUE.}
 # 	\item{plot.ancestors}{Whether to plot the ancestral sequences. TRUE or FALSE; defaults to TRUE.}
 # 	\item{plot.chars}{Whether to plot the actual text of the characters.}
+# 	\item{plot.legend}{Whether to plot the legend showing the character-to-color mapping.}
 # 	\item{aspect.ratio}{Constraints the alignment residues to have a certain aspect ratio; values above 1 cause vertically-stretched blocks. FALSE disables aspect ratio control, numerical values set the aspect ratio; defaults to FALSE.}
 # 	\item{num.pages}{Optionally split the alignment over a number of vertically-stacked pages. This is useful for long alignments. 'auto' chooses a sensible number of pages, numerical values specify a number; defaults to 'auto'.}
 # 	\item{char.text.size}{Specify the text size for the residue characters. This requires tweaking depending on the DPI and output format. Defaults to 1.5.}
@@ -2767,7 +2768,7 @@ setMethodS3(
 #       # Plot the alignment without the tree or ancestral sequences.
 #       plot(sim, plot.ancestors=FALSE, plot.tree=FALSE)
 #       # Force a DNA-based color scheme (default is 'auto' to auto-detect based on the sequence composition)
-#       plot(sim, color.scheme='dna')
+#       plot(sim, color.scheme='dna', plot.legend=T)
 # } 
 # 
 # @author 
@@ -2785,6 +2786,7 @@ setMethodS3(
     plot.tree,
     plot.ancestors,
     plot.chars,
+    plot.legend,
     aspect.ratio,
     num.pages,
     char.text.size,
@@ -2810,6 +2812,9 @@ setMethodS3(
 		if(missing(plot.chars)){
 			plot.chars <- TRUE
 		}
+		if(missing(plot.legend)){
+			plot.legend <- FALSE
+		}
 		if(missing(aspect.ratio)){
 			aspect.ratio <- FALSE
 		}
@@ -2825,6 +2830,7 @@ setMethodS3(
 				plot.tree=plot.tree,
 				plot.ancestors=plot.ancestors,
 				plot.chars=plot.chars,
+                                plot.legend=plot.legend,
 				aspect.ratio=aspect.ratio,
 				num.pages=num.pages,
                                 char.text.size=char.text.size,
@@ -2847,6 +2853,7 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+
 ##
 ## Method: .plotWithAlignment
 ##
@@ -2858,6 +2865,7 @@ setMethodS3(
     plot.tree,
     plot.ancestors,
     plot.chars,
+    plot.legend,
     aspect.ratio,
     num.pages,
     char.text.size,
@@ -2968,6 +2976,8 @@ setMethodS3(
       # Start the layout procedure by equally spacing the leaves in the y-dimension.
       df[df$is.leaf==TRUE,]$y = c(1:n.leaves)
 
+      found.any.internal.node.sequences <- FALSE
+
       # For each leaf: travel up towards the root, laying out each internal node along the way.
       for (i in 1:n.leaves) {
         cur.node <- i
@@ -2991,6 +3001,9 @@ setMethodS3(
             index.in.names <- which(align.seq.names == lbl | align.seq.names %in% c(paste('Node',lbl),paste('Root node',lbl)))
             if (length(index.in.names)>0) {
               df[cur.node,]$y <- index.in.names
+              if (!df[cur.node,]$is.leaf) {
+                found.any.internal.node.sequences <- TRUE
+              }
             }
           }
           
@@ -3008,7 +3021,7 @@ setMethodS3(
         }
         p.row <- df[row$parent,] # Data frame row for the parent node.
 
-        if (layout.ancestors) {
+        if (layout.ancestors && found.any.internal.node.sequences) {
           horiz.line <- data.frame(x=row$x,xend=p.row$x,y=row$y,yend=p.row$y,lbl=row$label)
           line.df <- rbind(line.df,horiz.line)
         } else {
@@ -3047,6 +3060,21 @@ setMethodS3(
                   'T' = "#FF0000",
                   'A' = "#0000FF"
                   )
+      } else if (scheme == 'numbers') {
+        #cols <- heat.colors(10)      
+        cols <- colorRampPalette(c("red","yellow","green"))(10)
+        cols <- c(
+                  '0' = cols[1],
+                  '1' = cols[2],
+                  '2' = cols[3],
+                  '3' = cols[4],
+                  '4' = cols[5],
+                  '5' = cols[6],
+                  '6' = cols[7],
+                  '7' = cols[8],
+                  '8' = cols[9],
+                  '9' = cols[10]
+        )
       } else if (scheme == 'taylor' || scheme == 'protein') {
         cols <- c(
                   'A' = "#CCFF00",       'a' = "#CCFF00",
@@ -3178,19 +3206,22 @@ setMethodS3(
     if (color.scheme == 'auto') {
       all.chars <- unlist(aln)
       all.chars <- all.chars[all.chars != '-']
-      n.chars <- length(unique(all.chars))
+      n.chars <- length(unique(toupper(all.chars)))
       
       if (n.chars <= 2) {
         color.scheme = 'binary'
       } else if (n.chars <= 4) {
         color.scheme = 'dna'
-      } else if (n.chars <= 20) {
+      } else if (sum(all.chars %in% 0:9) > 5) {
+        color.scheme = 'numbers'
+      } else if (n.chars <= 20+2) { # 2 as a fudge factor
         color.scheme = 'protein'
-      } else if (n.chars <= 64) {
+      } else if (n.chars <= 64+2) {
         color.scheme = 'codon'
       } else {
         color.scheme = 'everything'
       }
+      print(paste("Auto color scheme:",color.scheme))
     }
     
                                         # Create the ggplot panel.
@@ -3211,12 +3242,15 @@ setMethodS3(
     }
 
     plot.opts <- opts(
-		  legend.position='none',
 		  axis.text.y = theme_text(size=axis.text.size,hjust=1),
 		  axis.title.x = theme_blank(),
 		  axis.title.y = theme_blank()
                   )
     p <- p + plot.opts
+
+    if (!plot.legend) {
+       p <- p + opts(legend.position='none')
+    }
     
     if (plot.tree) {
       if (plot.ancestors) {
