@@ -3146,13 +3146,13 @@ setMethodS3(
     }
     
                                         # Turn the IDs into a factor to plot along the y axis.
-    df$id <- factor(df$id,levels=rev(names))
+    df$id <- factor(df$id,levels=names)
     
     if (!plot.ancestors) {
                                         # Remove the ancestral nodes from the plot.
       tip.name.indices <- grep("node",names,ignore.case=T,invert=T)
       names <- names[tip.name.indices]
-      df$id <- factor(df$id,levels=rev(names))
+      df$id <- factor(df$id,levels=names)
       df <- subset(df,id %in% names)
     }
 
