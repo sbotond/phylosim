@@ -2761,10 +2761,11 @@ setMethodS3(
 # 	\item{plot.ancestors}{Whether to plot the ancestral sequences. TRUE or FALSE; defaults to TRUE.}
 # 	\item{plot.chars}{Whether to plot the actual text of the characters.}
 # 	\item{plot.legend}{Whether to plot the legend showing the character-to-color mapping.}
+# 	\item{plot.labels}{Whether to plot the sequence labels along the y-axis}
 # 	\item{aspect.ratio}{Constraints the alignment residues to have a certain aspect ratio; values above 1 cause vertically-stretched blocks. FALSE disables aspect ratio control, numerical values set the aspect ratio; defaults to FALSE.}
 # 	\item{num.pages}{Optionally split the alignment over a number of vertically-stacked pages. This is useful for long alignments. 'auto' chooses a sensible number of pages, numerical values specify a number; defaults to 'auto'.}
-# 	\item{char.text.size}{Specify the text size for the residue characters. This requires tweaking depending on the DPI and output format. Defaults to 1.5.}
-# 	\item{axis.text.size}{Specify the text size for the sequence labels along the y-axis. This requires tweaking depending on the DPI and output format. Defaults to 5.}
+# 	\item{char.text.size}{Text size for the aligned characters. This may require tweaking depending on the DPI and output format. Defaults to 'auto'.}
+# 	\item{axis.text.size}{Text size for the sequence labels along the y-axis. This may require tweaking depending on the DPI and output format. Defaults to 'auto'.}
 #       \item{color.scheme}{Color scheme to use ("auto", "binary", "dna", "protein", "codon", "everything").}
 # 	\item{...}{Not used.} 
 # } 
@@ -2808,6 +2809,7 @@ setMethodS3(
     plot.ancestors,
     plot.chars,
     plot.legend,
+    plot.labels,
     aspect.ratio,
     num.pages,
     char.text.size,
@@ -2817,10 +2819,10 @@ setMethodS3(
   ){
 		
 		if(missing(char.text.size)){
-			char.text.size <- 1.5
+   		        char.text.size <- 'auto'
 		}
 		if(missing(axis.text.size)){
-			axis.text.size <- 5
+			axis.text.size <- 'auto'
 		}
 		if(missing(color.scheme)){
 			color.scheme <- 'auto'
@@ -2837,6 +2839,9 @@ setMethodS3(
 		if(missing(plot.legend)){
 			plot.legend <- FALSE
 		}
+		if(missing(plot.labels)){
+			plot.labels <- TRUE
+		}
 		if(missing(aspect.ratio)){
 			aspect.ratio <- FALSE
 		}
@@ -2846,13 +2851,18 @@ setMethodS3(
                 if(missing(color.scheme)){
                         color.scheme='auto'
                 }
-	
+
+                if(is.na(x$.phylo)) {
+                  plot.tree <- FALSE
+                }
+                
 		if(all(!is.na(x$.alignment), is.matrix(x$.alignment))){
 			.plotWithAlignment(x,
 				plot.tree=plot.tree,
 				plot.ancestors=plot.ancestors,
 				plot.chars=plot.chars,
                                 plot.legend=plot.legend,
+                                plot.labels=plot.labels,
 				aspect.ratio=aspect.ratio,
 				num.pages=num.pages,
                                 char.text.size=char.text.size,
@@ -2888,6 +2898,7 @@ setMethodS3(
     plot.ancestors,
     plot.chars,
     plot.legend,
+    plot.labels,
     aspect.ratio,
     num.pages,
     char.text.size,
@@ -2906,6 +2917,15 @@ setMethodS3(
 
     ### First, we need to define a bunch of sparsely-documented utility functions. ###
 
+   # Re-orders the alignment rows by matching the tree's tips.
+   sort.aln.by.tree = function(aln,tree) {
+     names <- dimnames(aln)[[1]]
+     newPositions <- rev(match(tree$tip.label,names))
+     aln[newPositions,] <- aln
+     dimnames(aln) <- list(names[newPositions])
+     return(aln)
+   }
+   
     # Extracts a list of child node IDs for the given node. Returns (-1,-1) if the node is a leaf.
     child.nodes <- function(phylo,node) {
       edge.indices <- which(phylo$edge[,1]==node)
@@ -3090,7 +3110,7 @@ setMethodS3(
                   'T' = "#FF0000",
                   'A' = "#0000FF"
                   )
-      } else if (scheme == 'numbers') {
+      } else if (scheme == 'numeric') {
         #cols <- heat.colors(10)      
         cols <- colorRampPalette(c("red","yellow","green"))(10)
         cols <- c(
@@ -3148,7 +3168,7 @@ setMethodS3(
           codon.colors[codon] = protein.colors[aa]
         }
         cols <- codon.colors
-      } else if (scheme == 'everything') {
+      } else if (scheme == 'combined') {
         dna.colors <- alignment.colors('dna')
                                         # Make the DNA stand out here by being a little darker
         for (i in 1:length(dna.colors)) {
@@ -3178,15 +3198,25 @@ setMethodS3(
     
     df <- data.frame()
     aln <- x$.alignment
-
     phylo <- x$.phylo
-    names <- dimnames(aln)[[1]]
 
+                                        # Do some reordering of alignment & tree.
+    if (!is.na(phylo)) {
+      x$.phylo <- reorder(x$.phylo, order="cladewise");
+      aln <- sort.aln.by.tree(aln,phylo)
+    }
+
+    names <- dimnames(aln)[[1]]
+   
     #print(paste("Aln length:",length(aln[1,])))
     #print(paste("Num seqs:",length(names)))
+
+   # Create a factor of all the characters in the alignment.
+   char.levels <- sort(unique(as.vector(aln)))
+   names.levels <- names
+   
     for (i in 1:length(names)) {
       char.list <- aln[i,]
-
       name <- names[i]
                                         # Store the indices of where the gaps are -- we won't plot the gaps.
       gaps <- char.list == '-' 
@@ -3196,15 +3226,14 @@ setMethodS3(
       char.nogaps <- char.list[gaps==FALSE]
                                         # Create a data frame with 1 row per residue to plot.
       df <- rbind(df,data.frame(
-                                id=rep(name,length(pos.nogaps)),      # Sequence ID to which this residue belongs
+                                id=factor(x=rep(name,length(pos.nogaps)),levels=names.levels),      # Sequence ID to which this residue belongs
                                 seq_index=rep(i,length(pos.nogaps)),  # Index of the containing sequence
                                 pos=pos.nogaps,                       # Alignment position
-                                char=char.nogaps                      # Character of the residue
+                                char=factor(x=char.nogaps,levels=char.levels)                      # Character of the residue
                                 ))
     }
     
                                         # Turn the IDs into a factor to plot along the y axis.
-    df$id <- factor(df$id,levels=names)
     
     if (!plot.ancestors) {
                                         # Remove the ancestral nodes from the plot.
@@ -3214,6 +3243,8 @@ setMethodS3(
       df <- subset(df,id %in% names)
     }
 
+   #print(paste("Plot df size:",nrow(df),"rows"))
+   
     if (tolower(num.pages) == 'auto' || num.pages > 1) {
                                         # Plotting a multi-page alignment.
       aln.length <- length(aln[1,])
@@ -3227,43 +3258,64 @@ setMethodS3(
       }
                                         # Add a 'page' factor to the data frame and use facet_grid.
       chars.per.page <- ceiling(aln.length / num.pages)
-      df$page <- floor((df$pos-1) / chars.per.page)
-      df$pos <- df$pos - (chars.per.page*(df$page))
+      df$page <- floor((df$pos-1) / chars.per.page) + 1
+      df$pos <- df$pos - (chars.per.page*(df$page-1))
       page.labels <- paste((0:(num.pages-1))*chars.per.page+1,(1:num.pages)*chars.per.page,sep="-")
-      df$page <- factor(df$page,labels=page.labels)
+      page.numbers <- sort(unique(df$page))
+      page.labels <- page.labels[page.numbers]
+      df$page <- factor(df$page,levels=page.numbers,labels=page.labels)
+
+      num.pages <- length(page.labels)
+      print(paste("Num pages:",num.pages))
     }    
 
     if (color.scheme == 'auto') {
       all.chars <- unlist(aln)
       all.chars <- all.chars[all.chars != '-']
       n.chars <- length(unique(toupper(all.chars)))
-      
+
+      # Detect coloring scheme based on the character content. Use some fudge factors
+      # to allow for Ns and Xs in DNA, protein, and codon sets.
       if (n.chars <= 2) {
-        color.scheme = 'binary'
-      } else if (n.chars <= 4) {
-        color.scheme = 'dna'
-      } else if (sum(all.chars %in% 0:9) > 5) {
-        color.scheme = 'numbers'
-      } else if (n.chars <= 20+2) { # 2 as a fudge factor
-        color.scheme = 'protein'
+        color.scheme <- 'binary'
+      } else if (n.chars <= 4+2) {
+        color.scheme <- 'dna'
+      } else if (sum(all.chars %in% 0:9) > 4) { # For numeric coloring, it's a bit special...
+        color.scheme <- 'numeric'
+      } else if (n.chars <= 20+2) {
+        color.scheme <- 'protein'
       } else if (n.chars <= 64+2) {
-        color.scheme = 'codon'
+        color.scheme <- 'codon'
       } else {
-        color.scheme = 'everything'
+        color.scheme <- 'combined'
       }
-      print(paste("Auto color scheme:",color.scheme))
+      print(paste("Color scheme:",color.scheme))
     }
-    
+
+   legend.title <- color.scheme
+   
                                         # Create the ggplot panel.
     p <- ggplot(df,aes(x=pos,y=as.numeric(id)))
-    p <- p + geom_tile(aes(fill=char))
-    p <- p + scale_fill_manual(values=alignment.colors(color.scheme))
+    p <- p + geom_tile(aes(fill=as.character(char)))
+    p <- p + scale_fill_manual(legend.title,values=alignment.colors(color.scheme))
     p <- p + scale_x_continuous(limits=c(0,max(df$pos)+1),expand=c(0,0))
-    p <- p + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=names,expand=c(0,0))
+
+    if (plot.labels) {
+      p <- p + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=names,expand=c(0,0))
+    } else {
+      p <- p + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=rep('',length(names)),expand=c(0,0))
+    }
     
     if (num.pages > 1) {
       p <- p + facet_grid(page ~ .)
-    }    
+    }
+
+    if (char.text.size == 'auto') {
+      char.text.size <- 250 / (num.pages * (length(names)+1))
+      char.text.size <- min(char.text.size,10)
+      char.text.size <- max(char.text.size,1)
+    }
+   
     if (plot.chars) {
       p <- p + geom_text(aes(label=char),colour='black',size=char.text.size)
     }    
@@ -3271,10 +3323,18 @@ setMethodS3(
       p <- p + coord_equal(ratio=aspect.ratio)
     }
 
+    if (axis.text.size == 'auto') {
+      axis.text.size <- 500 / (num.pages * (length(names)+1))
+      axis.text.size <- min(axis.text.size,10)
+      axis.text.size <- max(axis.text.size,1)
+    }
+   
     plot.opts <- opts(
 		  axis.text.y = theme_text(size=axis.text.size,hjust=1),
 		  axis.title.x = theme_blank(),
-		  axis.title.y = theme_blank()
+		  axis.title.y = theme_blank(),
+                  axis.ticks = theme_blank(),
+                  plot.margin = unit(c(0,0,0,0),'npc')
                   )
     p <- p + plot.opts
 
@@ -3282,7 +3342,7 @@ setMethodS3(
        p <- p + opts(legend.position='none')
     }
     
-    if (plot.tree) {
+    if (plot.tree) {      
       if (plot.ancestors) {
         tree.df <- phylo.layout.df(phylo,layout.ancestors=TRUE,align.seq.names=names)
       } else {
@@ -3302,14 +3362,20 @@ setMethodS3(
       aln.length <- length(aln[1,])
       n.leaves <- length(names)
       
-      n.leaves <- length(phylo$tip.label)
+      n.leaves <- length(names)
       q <- ggplot(tree.df)
       q <- q + geom_segment(aes(x=x,y=y,xend=xend,yend=yend))
-      q <- q + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=names,expand=c(0,0))
+      if (plot.labels) {
+        q <- q + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=names,expand=c(0,0))
+      } else {
+        q <- q + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=rep('',length(names)),expand=c(0,0))
+      }
       q <- q + scale_x_continuous(limits=c(0,max.length),expand=c(0.05,0))
       q <- q + plot.opts
+#      q <- q + opts(plot.margin = unit(c(0,0,0,0),'npc'))
       if (num.pages > 1) {
         q <- q + facet_grid(page ~ .)
+        q <- q + opts(strip.text.y=theme_blank())
       }
 
       if (aspect.ratio) {
@@ -5503,8 +5569,9 @@ setMethodS3(
 #	@get "title".
 #
 #	This method reads an alignment by using the \code{read.dna} function from the \code{\link{ape}}
-#	package and stores in the \code{PhyloSim} object. The phylo object must be set before reading 
-#	the alignment. The alignment must contain all the sequences corresponding to tip nodes.
+#	package and stores in the \code{PhyloSim} object. If a tree is already attached to the \code{PhyloSim}
+#       object, the alignment must at least contain the sequences corresponding to tip nodes (but it
+#       may also contain additional ancestral sequences).
 # } 
 # 
 # @synopsis 
@@ -5556,17 +5623,19 @@ setMethodS3(
     		...
   ){
 
-	if(all(is.na(this$.phylo))){
-		throw("The phylo object must be set before reading alignments!");
-	}
-
 	aln<-toupper(read.dna(file=file,format=format,as.matrix=TRUE,as.character=TRUE));
-	aln.names<-dimnames(aln)[[1]];	
-	tip.labels<-this$tipLabels;
-	
-	if(length(intersect(tip.labels,aln.names)) != length(tip.labels)){
-		throw("The alignment must contain all sequences corresponding to tip nodes!");
-	}
+	aln.names<-dimnames(aln)[[1]];
+
+        if (!is.na(this$.phylo)) {
+          tip.labels<-this$tipLabels;
+          length.overlap <- length(intersect(tip.labels,aln.names))
+          if(length.overlap != length(tip.labels)){
+            throw("The alignment must contain all sequences corresponding to tip nodes!");
+          }
+          if (length(aln.names) > length(tip.labels)) {
+            warning("Alignment has more sequences than the tree's leaf count -- either it contains ancestral sequences or something is wrong!")
+          }
+        }
 
 	this$.alignment<-aln;
 
@@ -5579,6 +5648,89 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+###########################################################################/**
+#
+# @RdocMethod readTree
+# 
+# @title "Read tree from file" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method reads a tree by using the \code{read.tree} function from the \code{\link{ape}}
+#	package and stores in the \code{PhyloSim} object. If an alignment is already attached
+#       to the \code{PhyloSim} object, it must contain all sequences corresponding to tip nodes.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+#	\item{file}{A file name specified by either a variable of mode character, or a double-quoted string.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#	The PhyloSim object (invisible).
+# } 
+# 
+# \examples{
+#	# get a safe file name	
+#	fname<-paste("PhyloSim_dummy_fas_",Sys.getpid(),sep="")
+#	# write out a fasta alignment
+#	cat("(a,(b,c));",file=fname);
+#	# construct a PhyloSim object,
+#	# set the phylo object
+#	sim<-PhyloSim(_
+#	# read the alignment
+#	readTree(sim,fname)
+#	# remove alignment file
+#	unlink(fname)
+#	# plot the tree
+#	plot(sim)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "readTree",
+  class="PhyloSim",
+  function(
+    		this,
+		file,
+    		...
+  ){
+        tree <- read.tree(file)
+
+        if (!any(is.na(this$.alignment))) {
+          # Check for overlap between leaves and seqs.
+          aln <- this$.alignment;
+          aln.names <- dimnames(aln)[[1]];
+          tip.labels <- tree$tip.label;
+          aln.tree.overlap <- length(intersect(tip.labels,aln.names))
+          if(aln.tree.overlap != length(tip.labels)){
+            throw("The alignment must contain all sequences corresponding to tip nodes!");
+          }
+          if (length(aln.names) > length(tip.labels)) {
+            warning("Alignment has more sequences than the tree's leaf count -- either it contains ancestral sequences or something is wrong!")
+          }
+        }
+        
+        this$.phylo <- tree
+	return(invisible(this));  
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ###########################################################################/**
 #
 # @RdocMethod Undocumented
