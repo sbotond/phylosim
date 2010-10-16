@@ -14,7 +14,7 @@
 # 
 # \description{ 
 #	This class implements codon alphabets and handles the translation of codons 
-#	to corresponding amino acids. Stop codons are excluded from the symbols set, 
+#	to their corresponding amino acids. Stop codons are excluded from the symbol set, 
 #	thus the symbol set depends on the genetic code table.
 #	The genetic code table can be specified through the \code{table.id} constructor parameter.
 #
@@ -56,7 +56,6 @@
 # \examples{ 
 #	# create a CodonAlphabet object
 #	a<-CodonAlphabet(table.id=2)
-#	a
 #	# get object summary
 #	summary(a)
 # }

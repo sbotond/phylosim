@@ -17,7 +17,7 @@ construct_root_sequence<-function(len){
 simulate_codon<-function(phylo,seq,len,rep){
                 # set all site states to NA
 		clearStates(seq)
-                # set omega
+                # set omega 
 		omegaVarM0(seq,gy94,omega=gy94.true.omega);
                 # sample states
                 sampleStates(seq);
@@ -26,6 +26,8 @@ simulate_codon<-function(phylo,seq,len,rep){
                         phylo=phylo,
                         root.seq=seq
                 );      
+		# scale tree:
+		scaleTree(sim,sf);
                 # run simulation
                 Simulate(sim,quiet=TRUE);
                 # save alignment
@@ -83,7 +85,7 @@ plot_dframe<-function(d,p){
         t<-reorder(p,"pruningwise");
 
         for(col in names(d)){
-                pl<-qplot(data=d,as.factor(len),d[[col]],geom=c("boxplot","jitter"),h=0,xlab="Sequence length",ylab=col);
+		pl<-my_qplot(d,col);
 
                 true<-NA;
                 if(col=="len"){
@@ -100,7 +102,7 @@ plot_dframe<-function(d,p){
                         true<-t$edge.length[edge.nr];
                 }
 
-                pl<-pl + geom_abline(slope=0,intercept=true,colour="red",size=0.5);
+		pl<-hline(pl,true);
                 print(pl);
                 Sys.sleep(10);
         }

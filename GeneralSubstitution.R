@@ -20,7 +20,7 @@
 #	The GeneralSubstitution objects aggregate a QMatrix object, which stores the 
 #	unscaled and scaled rate matrices. The scaled rate matrices, along with the
 #	site-process specific rate multiplier parameters define the rates of the generated
-#	Event objects.		
+#	Event objects.
 #
 #	@classhierarchy
 # }
@@ -40,7 +40,7 @@
 # }
 # 
 # \examples{ 
-#	# create a GeneralSubstitution object
+#	# Create a GeneralSubstitution object
 #	# also provide an Alphabet objects 
 #	# and the list of unscaled rates
 #	a<-BinaryAlphabet()
@@ -65,13 +65,13 @@
 #	gs$rateList
 #	# set the \emph{unscaled} rates
 #	gs$rateList<-list("0->1"=1,"1->0"=1)
-#	# re-set equilibrium distribution
+#	# reset equilibrium distribution
 #	gs$equDist<- 5 * gs$equDist
 #	# get the equilibrium distribution
 #	gs$equDist
 #	# sample a state form the equilibrium distribution
 #	sampleState(gs)
-#	# get the assotiated QMatrix object
+#	# get the associated QMatrix object
 #	gs$qMatrix
 #	# create a site object
 #	s<-Site(alphabet=a, state="0")
@@ -83,7 +83,7 @@
 #	getEventsAtSite(gs,s,"0->1")
 #	# get the list of active event objects given the state of s
 #	getEventsAtSite(gs,s)
-#	# get the assotiated Alphabet object 
+#	# get the associated Alphabet object 
 #	gs$alphabet
 #	# clone the object
 #	gsc<-clone(gs)
@@ -377,25 +377,25 @@ setMethodS3(
 		return(list());
 	}
 	
+	# The rate of the event is the product of the general rate and the
+     	# site specific rate multiplier:
+     	rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
+		
+	# Return empty list if the rate multiplier is zero.
+     	if(rate.multiplier == 0 ) {
+      		return(list());
+     	}	
+	
 	# Get rate matrix:
 	rate.matrix<-this$.q.matrix$.rate.matrix;
 
 	symbols<-this$.alphabet$.symbols;
 	rest<-symbols[ which(symbols != state) ];
 
-	# The rate of the event is the product of the general rate and the
-     	# site specific rate multiplier:
-     	rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
-
 	# Create the event objects:
 	events<-list();
 	for(new.state in rest){
 		
-		# Return empty list if the rate multiplier is zero.
-     		if(rate.multiplier == 0 ) {
-      			return(list());
-     		}	
-				
 		name<-paste(state,new.state,sep="->");
 	 	# Clone the event template object:
      		event<-clone(this$.event.template);
@@ -1019,7 +1019,7 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #
-#	This method also sets the alphabet for the assotiated QMatrix object, which will set all rates to NA.
+#	This method also sets the alphabet for the associated QMatrix object, which will set all rates to NA.
 #	This method will also re-initialize the equlibrium distribution by setting all frequencies to NA.
 # } 
 # 
@@ -1105,7 +1105,7 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #
-#	This method also sets the alphabet for the assotiated QMatrix object, which will set all rates to NA.
+#	This method also sets the alphabet for the associated QMatrix object, which will set all rates to NA.
 # } 
 # 
 # @synopsis 
@@ -1240,7 +1240,7 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #	
-#	This method return the element from the scaled rate matrix stored in the assotiated QMatrix object corresponding to
+#	This method return the element from the scaled rate matrix stored in the associated QMatrix object corresponding to
 #	a given event. The event can be specified by the inital and target states ("from" and "to" arguments), or by the
 #	event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
 #
@@ -1322,7 +1322,7 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #	
-#	This method return the element from the assotiated QMatrix object corresponding to
+#	This method return the element from the associated QMatrix object corresponding to
 #	a given event multiplied by the "rate.multiplier" site-process specific parameter stored in the specified site object.
 #	The event can be specified by the inital and target states ("from" and "to" arguments), or by the
 #	event name ("from->to"). The event name takes precedence over the "from" and "to" arguments. 
@@ -1605,7 +1605,7 @@ setMethodS3(
 #	@get "title".
 #
 #	This method returns the list of event rates from the \emph{unscaled} Q matrix (as returbed bvy the \code{getEventRate} method). 
-#	The returned list contains the rates assotiated with the corresponding event names.
+#	The returned list contains the rates associated with the corresponding event names.
 # } 
 # 
 # @synopsis 
@@ -1632,7 +1632,7 @@ setMethodS3(
 #	p$rateList
 #	# set rates in the unscaled rate matrix via virtual field
 #	p$rateList<-list("0->1"=3,"1->0"=1);
-#	# check the contenst of the assotiated QMatrix object
+#	# check the contenst of the associated QMatrix object
 #	summary(p$QMatrix)
 # } 
 # 
@@ -1681,14 +1681,14 @@ setMethodS3(
 #	@get "title".
 #	
 #	This method set the rates in the \emph{unscaled} Q  matrix based on the provided list containing even names
-#	and the assotiated rates. The rate must be specified for every event!
+#	and the associated rates. The rate must be specified for every event!
 # } 
 # 
 # @synopsis 
 # 
 # \arguments{ 
 # 	\item{this}{A GeneralSubstitution object.} 
-#	\item{value}{A list with the events names and the assotiated rates.}
+#	\item{value}{A list with the events names and the associated rates.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1709,7 +1709,7 @@ setMethodS3(
 #	p$rateList
 #	# set rates in the unscaled rate matrix via virtual field
 #	p$rateList<-list("0->1"=3,"1->0"=1);
-#	# check the contenst of the assotiated QMatrix object
+#	# check the contenst of the associated QMatrix object
 #	summary(p$QMatrix)
 # } 
 # 
@@ -1764,7 +1764,7 @@ setMethodS3(
 #	The QMatrix objects aggregated by the GeneralSubstitution objects store two rate matrices: one containes
 #	the rates provided by the user (unscaled rate matrix), the other matrix (scaled rate matrix) is rescaled to have the 
 #	expected number of subsitutions per unit time equal to one when the process is at equlibrium.
-#	This method performes the re-scaling of the scaled rate matrix in the assotiated QMatrix object based on 
+#	This method performes the re-scaling of the scaled rate matrix in the associated QMatrix object based on 
 #	the equlibrium distribution and the unscaled rate matrix.
 #
 #	This method is mainly used internally as the scaled matrix is rescaled every time the unscaled matrix 
@@ -1829,6 +1829,7 @@ setMethodS3(
 		K <- 0; 
 		# get the symbols:
 		symbols<-this$alphabet$symbols;
+		orig.matrix<-this$.q.matrix$.orig.matrix;
 			
 		# For every symbol:
 		for (i in symbols) {
@@ -1837,7 +1838,7 @@ setMethodS3(
 		for(j in symbols){
 			if(i == j){next}
 			# For every other symbol - update the constant:
-			K <- K + (i.equ * getRate(this$.q.matrix, from=i, to=j ) );
+			K <- K + (i.equ * orig.matrix[i,j] );
 			}
 		}
 	
@@ -2214,7 +2215,7 @@ setMethodS3(
 	zz<-c();	
 
 	for(cl in (colnames(qmat))){
-		for(rw in rownames(qmat)){
+		for(rw in (rownames(qmat))){
 			if(rw != cl){
 				xx<-c(xx,cl)
 				yy<-c(yy,rw)
@@ -2223,10 +2224,11 @@ setMethodS3(
 		}
 	}
 
+
 	# visual aspect tuned by "magic" formulas :)
 	my.plot<-(qplot(x=xx,y=yy,size=zz,xlab="To:",ylab="From:",main="Rate matrix") + geom_point(colour="blue") +
 	scale_area(limits=c(0,max(zz)),to=c(0,(scale * 5 * log(128/size))), name="Size:")
-	);
+	) + xlim(colnames(qmat)) + ylim(rev(rownames(qmat)));
 	print(my.plot, vp=vp1);
 	popViewport(1);
 

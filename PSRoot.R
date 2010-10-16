@@ -694,7 +694,7 @@ setMethodS3(
 #
 # @RdocMethod getComments
 # 
-# @title "Get the comments assotiated with an object" 
+# @title "Get the comments associated with an object" 
 # 
 # \description{ 
 #	@get "title".
@@ -754,7 +754,7 @@ setMethodS3(
 #
 # @RdocMethod setComments
 # 
-# @title "Set the comments assotiated with an object" 
+# @title "Set the comments associated with an object" 
 # 
 # \description{ 
 #	@get "title".

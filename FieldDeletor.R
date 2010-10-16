@@ -4,9 +4,9 @@
 ##	
 ##########################################################################/** 
 #
-# @RdocClass FieldDeletor
+# @RdocClass FastFieldDeletor
 # 
-# @title "The FieldDeletor class"
+# @title "The FastFieldDeletor class"
 # 
 # \description{ 
 #	The \code{\link{DiscreteDeletor}} and \code{\link{ContinuousDeletor}} processes
@@ -16,7 +16,7 @@
 #	If the majority of the sites have low deletion tolerance most of the events are rejected, which
 #	slows down the simulation without performing much events. 
 #
-#	The \code{FieldDeletor} processes scale down the rate and length distribution of the proposed 
+#	The \code{FastFieldDeletor} process scales down the rate and length distribution of the proposed 
 #	events based on the highest insertion tolerance value observed in the root sequence 
 #	(see the package vignette for details), thus making the simulation more efficient.
 #
@@ -52,9 +52,9 @@
 # }
 # 
 # \examples{ 
-#	# create a FieldDeletor object, default (geometric) type
+#	# create a FastFieldDeletor object, default (geometric) type
 #	# length.param.1 is "lambda"
-#	p<-FieldDeletor(rate=1,length.param.1=0.9, tolerance.margin=0.8)
+#	p<-FastFieldDeletor(rate=1,length.param.1=0.9, tolerance.margin=0.8)
 #	# get type
 #	p$type
 #	# get object summary
@@ -88,7 +88,7 @@
 # 
 #*/###########################################################################
 setConstructorS3(
-  "FieldDeletor",
+  "FastFieldDeletor",
   function( 
 		name="Anonymous",
 		type="geometric",
@@ -118,10 +118,10 @@ setConstructorS3(
 				}
 			}
 
-			# Extending as FieldDeletor:
+			# Extending as FastFieldDeletor:
     	this<-extend(
       	this,
-      	"FieldDeletor",
+      	"FastFieldDeletor",
 				.type=type, 		# field model flavour
 				.tolerance.margin=NA,	# minimum tolerance used for scaling
 				.tolerance.max=NA,	# maximum tolerance obseved at first call of 
@@ -218,7 +218,7 @@ setConstructorS3(
 ##	
 setMethodS3(
   ".checkLengthParams",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     ...
@@ -278,7 +278,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "checkConsistency",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     ...
@@ -330,7 +330,7 @@ setMethodS3(
 );
 
 ##	
-## Method: summary.FieldDeletor
+## Method: summary.FastFieldDeletor
 ##	
 ###########################################################################/**
 #
@@ -356,7 +356,7 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#       a<-FieldDeletor()
+#       a<-FastFieldDeletor()
 #       # get a summary
 #       summary(a)
 # }
@@ -370,7 +370,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "summary",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     object,
     ...
@@ -409,7 +409,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-#       \item{this}{A FieldDeletor object.} 
+#       \item{this}{A FastFieldDeletor object.} 
 #       \item{target.site}{A Site object.} 
 #       \item{...}{Not used.} 
 # } 
@@ -428,7 +428,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "getEventsAtSite",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     target.site,
@@ -497,7 +497,7 @@ setMethodS3(
 #
 # @RdocMethod getType
 # 
-# @title "Get the type of a FieldDeletor object" 
+# @title "Get the type of a FastFieldDeletor object" 
 # 
 # \description{ 
 #	@get "title".
@@ -506,7 +506,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A FieldDeletor object.} 
+# 	\item{this}{A FastFieldDeletor object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -515,12 +515,12 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a FieldDeletor, default type (geometric)
-#	p<-FieldDeletor()
+#	# create a FastFieldDeletor, default type (geometric)
+#	p<-FastFieldDeletor()
 #	# get type
 #	getType(p)
-#	# create a FieldDeletor, poisson type
-#	p<-FieldDeletor(type="poisson")
+#	# create a FastFieldDeletor, poisson type
+#	p<-FastFieldDeletor(type="poisson")
 #	p$type
 # } 
 # 
@@ -533,7 +533,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "getType",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     ...
@@ -556,7 +556,7 @@ setMethodS3(
 #
 # @RdocMethod setType
 #
-# @title "Forbidden action: setting the type of a FieldDeletor object"
+# @title "Forbidden action: setting the type of a FastFieldDeletor object"
 #
 # \description{
 #       @get "title".
@@ -585,14 +585,14 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "setType",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     value,
     ...
   ){
 
-		throw("The type of the FieldDeletor process cannot be modified. Please set it by the constructor argument.");
+		throw("The type of the FastFieldDeletor process cannot be modified. Please set it by the constructor argument.");
 
   },
   private=TRUE,
@@ -618,7 +618,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A FieldDeletor object.} 
+# 	\item{this}{A FastFieldDeletor object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -627,8 +627,8 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a geometric FieldDeletor
-#	p<-FieldDeletor()
+#	# create a geometric FastFieldDeletor
+#	p<-FastFieldDeletor()
 #	# set/get the first length parameter
 #	setLengthParam1(p,0.5)
 #	getLengthParam1(p)
@@ -646,7 +646,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "getLengthParam1",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     ...
@@ -679,7 +679,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A FieldDeletor object.} 
+# 	\item{this}{A FastFieldDeletor object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -688,8 +688,8 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a geometric FieldDeletor
-#	p<-FieldDeletor()
+#	# create a geometric FastFieldDeletor
+#	p<-FastFieldDeletor()
 #	# set/get the second length parameter
 #	setLengthParam2(p,0.5)
 #	getLengthParam2(p)
@@ -707,7 +707,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "getLengthParam2",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     ...
@@ -740,7 +740,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A FieldDeletor object.} 
+# 	\item{this}{A FastFieldDeletor object.} 
 # 	\item{value}{A numeric vector of length one.} 
 # 	\item{...}{Not used.} 
 # } 
@@ -750,8 +750,8 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a geometric FieldDeletor
-#	p<-FieldDeletor()
+#	# create a geometric FastFieldDeletor
+#	p<-FastFieldDeletor()
 #	# set/get the first length parameter
 #	setLengthParam1(p,0.5)
 #	getLengthParam1(p)
@@ -769,7 +769,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "setLengthParam1",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
 		value,
@@ -814,7 +814,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A FieldDeletor object.} 
+# 	\item{this}{A FastFieldDeletor object.} 
 # 	\item{value}{A numeric vector of length one.} 
 # 	\item{...}{Not used.} 
 # } 
@@ -824,8 +824,8 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a geometric FieldDeletor
-#	p<-FieldDeletor()
+#	# create a geometric FastFieldDeletor
+#	p<-FastFieldDeletor()
 #	# set/get the second length parameter
 #	setLengthParam2(p,0.5)
 #	getLengthParam2(p)
@@ -843,7 +843,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "setLengthParam2",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     value,
@@ -888,7 +888,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A FieldDeletor object.} 
+# 	\item{this}{A FastFieldDeletor object.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -897,8 +897,8 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a geometric FieldDeletor
-#	p<-FieldDeletor()
+#	# create a geometric FastFieldDeletor
+#	p<-FastFieldDeletor()
 #	# set/get tolerance margin
 #	setToleranceMargin(p,0.8)
 #	getToleranceMargin(p)
@@ -916,7 +916,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "getToleranceMargin",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     ...
@@ -948,7 +948,7 @@ setMethodS3(
 # @synopsis 
 # 
 # \arguments{ 
-# 	\item{this}{A FieldDeletor object.} 
+# 	\item{this}{A FastFieldDeletor object.} 
 # 	\item{value}{A numeric vector of length one.} 
 # 	\item{...}{Not used.} 
 # } 
@@ -958,8 +958,8 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a geometric FieldDeletor
-#	p<-FieldDeletor()
+#	# create a geometric FastFieldDeletor
+#	p<-FastFieldDeletor()
 #	# set/get tolerance margin
 #	setToleranceMargin(p,0.8)
 #	getToleranceMargin(p)
@@ -977,7 +977,7 @@ setMethodS3(
 #*/###########################################################################
 setMethodS3(
   "setToleranceMargin",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
 		value,
@@ -1010,7 +1010,7 @@ setMethodS3(
 ##	
 setMethodS3(
   ".getScalingFactor",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     		this,
 		process,
@@ -1074,11 +1074,11 @@ setMethodS3(
 );
 
 ##
-## Method: setParameterAtSite.FieldDeletor
+## Method: setParameterAtSite.FastFieldDeletor
 ##
 setMethodS3(
   "setParameterAtSite",
-  class="FieldDeletor",
+  class="FastFieldDeletor",
   function(
     this,
     site,

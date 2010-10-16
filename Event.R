@@ -24,10 +24,10 @@
 # \arguments{
 # 	\item{name}{The name of the Event object. Often stores useful information.}
 # 	\item{rate}{The rate of the event.}
-# 	\item{site}{The assotiated Site object.}
-# 	\item{position}{The position of assotiated Site object in the enclosing Sequence object (if any).}
+# 	\item{site}{The associated Site object.}
+# 	\item{position}{The position of associated Site object in the enclosing Sequence object (if any).}
 #	\item{process}{The generator Process object.}
-#	\item{handler}{The handler function for the Event object. It will be called by the \code{Perform.Event} with the Event object as an argument to make the changes corresponding to the event.}
+#	\item{handler}{The handler function for the Event object. It will be called by \code{Perform.Event} with the Event object as an argument to make the changes corresponding to the event.}
 # 	\item{...}{Not used.}
 #	}
 # 
@@ -701,7 +701,7 @@ setMethodS3(
 #
 # @RdocMethod getSite
 # 
-# @title "Get the Site object assotiated with an Event object" 
+# @title "Get the Site object associated with an Event object" 
 # 
 # \description{ 
 #	@get "title".
@@ -723,7 +723,7 @@ setMethodS3(
 #	s<-NucleotideSequence(string="ATGC",processes=list(list(JC69())))
 #	# get the first active event from the first site
 #	e<-s$sites[[1]]$events[[1]]
-#	# get the site assotiated with e
+#	# get the site associated with e
 #	getSite(e)
 #	# get site via virtual field
 #	e$site
@@ -761,7 +761,7 @@ setMethodS3(
 #
 # @RdocMethod getPosition
 # 
-# @title "Get the position of the Site object assotiated to an Event object in the enclosing Sequence object" 
+# @title "Get the position of the Site object associated to an Event object in the enclosing Sequence object" 
 # 
 # \description{ 
 #	@get "title".
@@ -783,7 +783,7 @@ setMethodS3(
 #	s<-NucleotideSequence(string="ATGC",processes=list(list(JC69())))
 #	# get the first active event from the first site
 #	e<-getEvents(s,1)[[1]]
-#	# get the position of the site assotiated with e
+#	# get the position of the site associated with e
 #	getPosition(e)
 #	# get position via virtual field
 #	e$position
@@ -821,7 +821,7 @@ setMethodS3(
 #
 # @RdocMethod setPosition
 # 
-# @title "Set the position of the Site object assotiated to an Event object" 
+# @title "Set the position of the Site object associated to an Event object" 
 # 
 # \description{ 
 #	@get "title".
@@ -851,7 +851,7 @@ setMethodS3(
 #	e<-getEvents(s,1)[[1]]
 #	# get event position
 #	e$position
-#	# set the position of the site assotiated with e
+#	# set the position of the site associated with e
 #	setPosition(e,2)
 #	# get position via virtual field
 #	e$position
@@ -878,7 +878,7 @@ setMethodS3(
 
 	if(!exists(x="PSIM_FAST")){
 		if(is.na(this$.site)){
-			throw("There is no assotiated Site object!\n");
+			throw("There is no associated Site object!\n");
 		}	
 		if(is.na(this$.site$.sequence)){
 			throw("The site is not part of any sequence!\n");	
@@ -919,7 +919,7 @@ setMethodS3(
 # } 
 # 
 # \value{ 
-# 	The new assotiated Site object (invisible).
+# 	The new associated Site object (invisible).
 # } 
 # 
 # \examples{
@@ -990,7 +990,7 @@ setMethodS3(
 #	Performing an event means that the modifications described by the Event object are actually made by calling
 #	the event handler function as returned by \code{getHandler} with the Event object as the first argument.
 #
-#	The event won't be performed if the handler function is invalid, if there is no assotiated Site object, 
+#	The event won't be performed if the handler function is invalid, if there is no associated Site object, 
 #	if the site position is undefined, if the rate is undefined, or if the generator process is invalid.
 #
 #	The handler function will be overwritten after performing an event, so the Perform method should be called

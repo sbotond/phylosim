@@ -71,7 +71,6 @@ setConstructorS3(
 					rate.list=rate.list,
 					equ.dist=equ.dist
 				);	
-				this<-extend(this, "CodonUNREST");
 			}
 		
 			# Got rate list	
@@ -81,7 +80,6 @@ setConstructorS3(
 					alphabet=CodonAlphabet(table.id=table.id),
 					rate.list=rate.list
 				);	
-				this<-extend(this, "CodonUNREST");
 			}
 			
 			# Got equlibrium distribution,
@@ -92,7 +90,6 @@ setConstructorS3(
 					alphabet=CodonAlphabet(table.id=table.id),
 					equ.dist=equ.dist
 				);	
-				this<-extend(this, "CodonUNREST");
 			}
 
 			# Got nothing:
@@ -101,12 +98,10 @@ setConstructorS3(
 					name=name,
 					alphabet=CodonAlphabet(table.id=table.id)
 				);	
-				this<-extend(this, "CodonUNREST");
 			}
+				
+			this<-extend(this, "CodonUNREST");
 
-		# Force clearing id cache:		
-		this$name<-this$name;
-	
 		return(this);
 	
   },
@@ -250,14 +245,21 @@ setMethodS3(
 # \description{ 
 #	This class implements the codon substitution model of Goldman and Yang (1994). 
 #	The transition/transversion rate ratio is stored in the \code{kappa} virtual field. 
-# 	The nonsynonymous/synonymous substitution rate ratio (omega) is a site-process specific parameter 
+# 	The nonsynonymous/synonymous substitution rate ratio (\code{omega}) is a site-process specific parameter 
 #	with a default value of one.
 #	Hence, after the attachment of the process the variation of omega ratios among sites follows 
 #	the M0 model (see Yang et al. 2000).
 #
+#       The rate matrix of the \code{\link{GY94}} model is scaled in a way that the expected number
+#       of potential substiutions per site is equal to one at equlibrium. 
+#       The \emph{codeml} program from the PAML package scales the rate matrix in order to have 
+#       the expected number of accepted substiutions per site equal to one. Use the
+#	\code{\link{getOmegaScalingFactor.GY94}} method to claculate a branch length scaling factor
+#	which allows to switch to a PAML-style scaling given an average omega.
+#
 #	If the \code{scale.nuc} constructor argument is TRUE, the rates of the returned \code{Event} objects
 #	will be multiplied by \code{3} to obtain a process which has the expected number of nucleotide substitutions
-#	(not \code{codon} substitutions!) equal to one at equilibrium. This is useful when simulating
+#	(not \code{codon} substitutions) equal to one at equilibrium. This is useful when simulating
 #	mixed sequences. This option doesn't affect the rate matrix in any way.
 #
 #	The M1-M4 models are implemented in the \code{omegaVarM[1-4].CodonSeqeunce} methods.
@@ -298,13 +300,13 @@ setMethodS3(
 #	is.GY94(p)
 #	# get object summary
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #	# create a codon sequence, attach process
 #	s<-CodonSequence(length=10, processes=list(list(p)))
 #	# sample states
 #	sampleStates(s)
-#	# set range 1:3 invariable
+#	# make first three positions invariable
 #	setRateMultipliers(s,p,0,1:3)
 #	# sample omega values from the M3 (discrete) model.
 #	omegaVarM3(s,p,omegas=c(0,1,2,3),probs=c(2/5,1/5,1/5,1/5))
@@ -313,7 +315,7 @@ setMethodS3(
 #       sim<-PhyloSim(root.seq=s,phylo=rcoal(2))
 #       # run simulation
 #       Simulate(sim)
-#	#get the list of recorded per-branch event counts
+#	# get the list of recorded per-branch event counts
 #	getBranchEvents(sim)
 #	# export the number of synonymous substitutions as a phylo object
 #	syn.subst<-exportStatTree(sim,"nr.syn.subst")
@@ -357,7 +359,8 @@ setConstructorS3(
 			"GY94",
 			.kappa=NA,
 			.is.ny98=TRUE,
-			.scale.const=as.double(1.0)
+			.scale.const=as.double(1.0),
+			.syn.cache=NA
 		);
 
 		# Add the "omega" site-process specific parameter:
@@ -375,10 +378,40 @@ setConstructorS3(
 		this$kappa<-kappa;
 		
 		# Scale to nucleotide if requested:
-		this$.scale.const<-as.double(3.0);
+		if(scale.nuc){
+			this$.scale.const<-as.double(3.0);
+		}
 
 		# Set object name:
 		this$name<-name;
+
+		 # Force clearing id cache:              
+                this$name<-this$name;
+
+                # create syn/nsyn matrix cache
+                # Get translation table:
+                trans.table<-this$.alphabet$.trans.table;
+                symbols<-this$.alphabet$symbols;
+
+                syn.cache<-matrix(nrow=this$.alphabet$size,ncol=this$.alphabet$size);
+		colnames(syn.cache)<-symbols;
+		rownames(syn.cache)<-symbols;
+
+                for(i in symbols){
+                        for(j in symbols){
+                                if(i == j) { next }
+
+                                 if( (trans.table[[i]]$aa) == (trans.table[[j]]$aa) ){
+                                        syn.cache[i,j]<-1;
+                                 }
+                                 else{ 
+                                        syn.cache[i,j]<-0;
+                                 }
+                        }
+                }
+
+                this$.syn.cache<-syn.cache;
+
 		return(this);
 
   },
@@ -492,11 +525,6 @@ setMethodS3(
 		...
 	){
 
-		# This method is almost an exact duplicate of the getEventsAtSite.GeneralSubstitution,
-		# with the exception of the portions dealing with the omega site-process specific parameters.
-		# Duplicating the method is not too elegant, but this way we can avoid the additonal method calls
-		# sloving down the simulation.
-
 	if (!exists(x="PSIM_FAST")) {
 
       			if(!is.Site(target.site)) {
@@ -526,6 +554,9 @@ setMethodS3(
 			# Get scaling constant:
 			scale.const<-this$.scale.const;
 
+			# get syn cache:
+			syn.cache<-this$.syn.cache;
+
 			symbols<-this$.alphabet$.symbols;
 			rest<-symbols[ which(symbols != state) ];
 
@@ -533,18 +564,25 @@ setMethodS3(
 			events<-list();
 			  
 			# The rate of the event is the product of the general rate and the
-     	# site specific rate multiplier:
+     			# site-process specific rate multiplier:
 			rate.multiplier<-target.site$.processes[[this$.id]]$site.params[["rate.multiplier"]]$value;
+			# Return empty list if the rate multiplier is zero.
+     			if(rate.multiplier == 0 ) {
+      				return(list());
+     			}	
     
 			# Get the omega site-process specific parameter: 
 			omega<-target.site$.processes[[this$.id]]$site.params[["omega"]]$value;
 			
 			for(new.state in rest){
 				
-				# Return empty list if the rate multiplier is zero.
-     				if(rate.multiplier == 0 ) {
-      				return(list());
-     				}	
+				# Get the base rate:
+				base.rate<-rate.matrix[state,new.state];
+
+				# Skip event if base rate is zero:
+				if(base.rate == 0){
+					next;
+				}
 
 			  	name<-paste(state,new.state,sep="->");
 		 		# Clone the event template object:
@@ -561,14 +599,14 @@ setMethodS3(
 
 				# Figure out wether the event is a synonymous mutation ...
 				
-				if( (trans.table[[state]]$aa) == (trans.table[[new.state]]$aa) ){
+				if( syn.cache[state,new.state] ){
 					# and ignore omega in that case
-					event$.rate<-(scale.const * rate.multiplier * rate.matrix[state,new.state]);		
+					event$.rate<-(scale.const * rate.multiplier * base.rate);		
 					# Mark substitution as synonymous.
 					event$.type<-"synonymous";
 				} else {
 					# incorporate omega otherwise
-					event$.rate<-(scale.const * rate.multiplier * omega * rate.matrix[state,new.state]);
+					event$.rate<-(scale.const * rate.multiplier * omega * base.rate);
 					# Mark substitution as non-synonymous.
 					event$.type<-"non-synonymous";
 				}
@@ -687,6 +725,107 @@ setMethodS3(
       tryCatch(may.fail(this),finally=this$writeProtected<-wp);
 			NextMethod();		
 
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
+
+###########################################################################/**
+#
+# @RdocMethod getOmegaScalingFactor
+# 
+# @title "Get the omega scaling factor" 
+# 
+# \description{ 
+#	@get "title".
+#
+#       The rate matrix of the \code{\link{GY94}} model is scaled in a way that the expected number
+#       of potential substiutions per site is equal to one at equlibrium. 
+#       The \emph{codeml} program from the PAML package scales the rate matrix in order to have 
+#       the expected number of accepted substiutions per site equal to one. 
+#
+#	This method calculates the branch length multiplier needed for switching 
+#	to PAML-style scaling given a fixed omega.
+#
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A GY94 object.} 
+#	\item{omega}{The value of omega.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# construct a GY94 process object
+#	p<-GY94(kappa=4)
+#	# Calculate scaling factor for omega=2
+#	getOmegaScalingFactor(p,omega=2)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+	"getOmegaScalingFactor", 
+	class="GY94", 
+	function(
+		this,
+		omega,
+		...
+	){
+
+		if(missing(omega)){
+			throw("No omega provided!");
+		}
+		if(!is.numeric(omega)){
+			throw("Omega must be numeric!");
+		}
+
+		neutral.K<-0.0;
+
+		K <- 0.0;
+                # get the symbols:
+                symbols<-this$.alphabet$symbols;
+
+		# Get translation table and rate matrix:
+                trans.table<-this$.alphabet$.trans.table;
+		rate.matrix<-this$.q.matrix$.rate.matrix;
+
+                # For every symbol:
+                for (i in symbols) {
+
+                # Get the equlibrium probability:
+                i.equ<-this$.equ.dist[[ which(colnames(this$.equ.dist) == i) ]];
+                for(j in symbols){
+                        if(i == j){next}
+				base.rate<-rate.matrix[i,j];
+				neutral.K<- neutral.K + (i.equ * base.rate);
+
+				if( (trans.table[[i]]$aa) == (trans.table[[j]]$aa) ){
+                        		K <- K + (i.equ * base.rate);
+				}
+				else {
+                        		K <- K + (i.equ * omega * base.rate);
+				}
+                        }
+
+                }
+
+		return(neutral.K/K);
 	},
 	private=FALSE,
 	protected=FALSE,

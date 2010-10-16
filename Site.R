@@ -9,20 +9,20 @@
 # 
 # \description{ 
 #
-#	This is the class representing a site. Site objects can have one assotiated Alphabet object and one or 
-#	more Process objects potentially acting on their states.
-#	The assotiated Process and Site objects must have assotiated Alphabet objects with the same symbols set, or
-#	at least one of the Alphabet objects should inherit form the class AnyAlphabet.
+#	This is the class representing a site. Site objects can have one associated Alphabet object and one or 
+#	more Process objects that act on their states.
+#	The associated Process and Site objects must have associated Alphabet objects with the same symbols set, or
+#	at least one of the Alphabet objects should inherit from the class AnyAlphabet.
 #
-#	The Site objects store the site-process specific parameters of the attached Process objects. 
-#	A site-process specific parameter is a list containing the identifier, the name, the value and type of the parameter.
-#	For example the ubiquitous rate multiplier site-process specific parameter looks like 
+#	Site objects store the site-process-specific parameters of the attached Process objects. 
+#	A site-process-specific parameter is a list containing: the identifier, the name, the value and type of the parameter.
+#	For example the ubiquitous rate multiplier site-process-specific parameter looks like 
 #	\code{list(id="rate.multiplier",name="Rate multiplier",value=1,type="numeric")}.
 #
-#	The templates for site-process specific parameters and their default values are stored in the Process objects and 
-#	copied into thr Site object when the process is attached.
+#	Templates for site-process-specific parameters and their default values are stored in the Process objects and 
+#	copied into the Site object when the process is attached.
 #
-#	Site objects have fields for assotiated ancestral Site objects and Sequence objects.
+#	Site objects have fields for associated ancestral Site objects and Sequence objects.
 #
 #  	@classhierarchy
 # 
@@ -35,7 +35,7 @@
 # 	\item{alphabet}{An alphabet object.}
 # 	\item{ancestral}{The ancestral Site object.}
 # 	\item{processes}{A list of Process objects.}
-# 	\item{sequence}{The Sequence object to whom the Site object belongs.}
+# 	\item{sequence}{The Sequence object to which the Site object belongs.}
 #	\item{...}{Not used.}
 #	}
 # 
@@ -46,7 +46,7 @@
 # \examples{ 
 #		# create a site object
 #		site<-Site();
-#		# print the character represenation (state)
+#		# print the character representation (state)
 #		print(site);
 #		# get a summary
 #		summary(site);
@@ -54,7 +54,7 @@
 #		site<-Site(state="A",alphabet=NucleotideAlphabet());
 #		# set site state
 #		site$state<-"G"
-#		# manipulate the assotiated Sequence object
+#		# manipulate the associated Sequence object
 #		site$sequence<-Sequence()
 #		site$sequence
 #		# attach a substitution process
@@ -487,8 +487,11 @@ setMethodS3(
 
 		}
 
-		flagTotalRate(this);
-		.flagSeqCumulativeRates(this);
+		this$.total.rate<-NA;
+		
+		if(!is.na(this$.sequence)){
+		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		this$.state<-new.state;
 		
 	},
@@ -640,8 +643,10 @@ setMethodS3(
 
 		}
 		
-		flagTotalRate(this);
-		.flagSeqCumulativeRates(this);
+		this$.total.rate<-NA;
+		if(!is.na(this$.sequence)){
+		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		this$.alphabet<-new.alphabet;
 
 	},
@@ -786,7 +791,7 @@ setMethodS3(
 );
 
 ##	
-## Method: recalculateTotalRate
+## Method: .recalculateTotalRate
 ##	
 setMethodS3(
 	".recalculateTotalRate", 
@@ -796,14 +801,18 @@ setMethodS3(
 		...
 	){
 
-		if(!is.na(getState(this))){
-			this<-enableVirtual(this);	
-			total.rate<-0;	
-			for(e in this$events) {
-				total.rate<-(total.rate + getRate(e));
-			}
-			this$.total.rate<-total.rate	
-		}
+if(!is.na(this$.state)){
+  total.rate<-0;	
+  proc<-this$.processes;
+  for (p in lapply(names(proc),function(id){proc[[id]][["object"]]})) {
+                                for(e in getEventsAtSite(p, this)){
+					total.rate<- total.rate + e$.rate;
+                                }
+  }
+			
+  this$.total.rate<-total.rate	
+
+}
 	},
 	private=TRUE,
 	protected=FALSE,
@@ -864,12 +873,15 @@ setMethodS3(
 		this,
 		...
 	){
-		
-		if(is.na(this$.total.rate)) {
+
+		tr<-this$.total.rate;		
+		if(is.na(tr)) {
 			.recalculateTotalRate(this);
+			return(this$.total.rate);
+		} else {
+			return(tr);
 		}
 
-			return(this$.total.rate);
 		
 	},
 	private=FALSE,
@@ -1002,29 +1014,6 @@ setMethodS3(
 );
 
 ##	
-## Method: .flagSeqCumulativeRates
-##	
-setMethodS3(
-	".flagSeqCumulativeRates", 
-	class="Site", 
-	function(
-		this,
-		...
-	){
-		
-		if(is.Sequence(this$.sequence)) {
-			.flagCumulativeRates(this$.sequence);
-		}
-
-	},
-	private=TRUE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
-
-##	
 ## Method: getEvents
 ##	
 ###########################################################################/**
@@ -1092,6 +1081,30 @@ setMethodS3(
 	validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+setMethodS3(
+	".getEventRates", 
+	class="Site", 
+	function(
+		this,
+		...
+	){
+
+	tmp<-double();
+	for (p in lapply(names(this$.processes),function(id){this$.processes[[id]][["object"]]})) {
+				for(e in getEventsAtSite(p, this)){
+					tmp<-c(tmp,e$.rate);
+				}
+	}
+	return(tmp);
+
+	},
+	private=FALSE,
+	protected=FALSE,
+	overwrite=FALSE,
+	conflict="warning",
+	validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ##	
 ## Method: setEvents
 ##	
@@ -1148,7 +1161,7 @@ setMethodS3(
 #
 # @RdocMethod getSequence
 # 
-# @title "Get the Sequence object assotiated with a given Site object" 
+# @title "Get the Sequence object associated with a given Site object" 
 # 
 # \description{ 
 #	@get "title".
@@ -1168,9 +1181,9 @@ setMethodS3(
 # \examples{
 #	# create a site object
 #	s<-Site(sequence=Sequence())
-#	# get the assotiated Sequence object
+#	# get the associated Sequence object
 #	getSequence(s)
-#	# get the assotiated Sequence object via virtual field	
+#	# get the associated Sequence object via virtual field	
 #	s$sequence
 #
 # } 
@@ -1228,9 +1241,9 @@ setMethodS3(
 # \examples{
 #	# create a site object
 #	s<-Site()
-#	# get assotiated Sequence object
+#	# get associated Sequence object
 #	s$sequence
-#	# set assotiated Sequence object
+#	# set associated Sequence object
 #	setSequence(s,Sequence())
 #	s$sequence
 #
@@ -1389,8 +1402,10 @@ setMethodS3(
 				tmp<-paste(tmp,"\n ",p$id)
 			}		
 
-			flagTotalRate(this);
-		 .flagSeqCumulativeRates(this);
+			this$.total.rate<-NA;
+			if(!is.na(this$.sequence)){
+		 	this$.sequence$.cumulative.rate.flag<-TRUE;
+			}
 
 			this$.summary[[header]]<-tmp;
 			
@@ -1530,7 +1545,7 @@ setMethodS3(
 # \description{ 
 #	@get "title".
 #
-#	The Alphabet objects assotiated with the Site and Process objects must have the same symbol set, or at least one
+#	The Alphabet objects associated with the Site and Process objects must have the same symbol set, or at least one
 #	of them should inherit from the class AnyAlphabet. 
 #
 #	During the attachment, the site-process specific parameter templates are copied from the Process object and 
@@ -1552,7 +1567,7 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a Site object and the assotiated NucleotideAlphabet object
+#	# create a Site object and the associated NucleotideAlphabet object
 #	s<-Site(alphabet=NucleotideAlphabet())
 #	# create a K80 substitution process
 #	p<-K80()
@@ -1607,8 +1622,11 @@ setMethodS3(
 				# from the process object.
 				site.params = process$siteSpecificParamList	
 			);
-		flagTotalRate(this);
-		.flagSeqCumulativeRates(this);
+		this$.total.rate<-NA;
+		
+		if(!is.na(this$.sequence)){
+		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		
 		# The user should not modify the process
 		# after is attached to a site!
@@ -1645,8 +1663,10 @@ setMethodS3(
 				site.params		=		process$siteSpecificParamList	
 			);
 		}
-		flagTotalRate(this);
-		.flagSeqCumulativeRates(this);
+		this$.total.rate<-NA;
+		if(!is.na(this$.sequence)){
+		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		
 		# The user should not modify the process
 		# after is attached to a site!
@@ -1731,8 +1751,10 @@ setMethodS3(
 		# so it will wanish from the list.
 		this$.processes[[process$id]]<-NULL;
 	
-		flagTotalRate(this);
-		.flagSeqCumulativeRates(this);
+		this$.total.rate<-NA;
+		if(!is.na(this$.sequence)){
+		this$.sequence$.cumulative.rate.flag<-TRUE;
+		}
 		invisible(this);
   },
   private=FALSE,

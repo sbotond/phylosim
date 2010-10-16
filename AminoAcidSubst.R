@@ -10,11 +10,11 @@
 # 
 # \description{ 
 #       This is a class implementing a continuous-time Markov process acting on 
-#       the state space defined by the \code{AminoAcidAlphabet} class. The rate
+#       the state-space defined by the \code{AminoAcidAlphabet} class. The rate
 #	matrix of this model is completely unrestricted.
 #
 #	The rate matrix can be built from PAML files specified by the \code{paml.file} argument.
-#	Alternatively the rates can be specified in a list through the \code{rate.list} parameter.
+#	Alternatively the rates can be specified as a list through the \code{rate.list} parameter.
 #
 #	@classhierarchy
 # }

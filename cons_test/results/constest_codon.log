@@ -1,0 +1,57 @@
+
+R version 2.11.1 (2010-05-31)
+Copyright (C) 2010 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> #!/usr/bin/env Rscript
+> 
+> source("common.R");
+Loading required package: R.oo
+Loading required package: R.methodsS3
+R.methodsS3 v1.2.0 (2010-03-13) successfully loaded. See ?R.methodsS3 for help.
+R.oo v1.7.3 (2010-06-04) successfully loaded. See ?R.oo for help.
+Loading required package: ape
+Loading required package: compoisson
+Loading required package: MASS
+Loading required package: ggplot2
+Loading required package: reshape
+Loading required package: plyr
+Loading required package: grid
+Loading required package: proto
+> 
+> # GY94 model parameters:
+> gy94.true.omega<-2;
+> gy94.true.kappa<-4;
+> 
+> source("codon_funcs.R");
+> 
+> # Calculate PAML-style branch length scaling factor:
+> sf<-getOmegaScalingFactor(gy94,gy94.true.omega);
+> 
+> res.bak<-iterate_seq_len(tree,length_range,reps,simulate_codon,estimate_codon);
+> res<-res_to_dframe(res.bak$res);
+> 
+> write.table(res,file="results/constest_codon.tab");
+> write.table(res.bak$times,file="results/times_codon.tab");
+> ttab<-print_times(res.bak$times,"results/ttab_codon.tab");
+> save_times_latex(ttab,"ttab_codon.tab");
+[1] TRUE
+> 
+> pdf("results/constest_codon.pdf");
+> plot_dframe(res,tree)
+> 
+> 

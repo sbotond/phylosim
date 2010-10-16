@@ -11,14 +11,14 @@
 # \description{ 
 #
 #	This is the class representing a generic process acting on Site and Sequence objects. Process objects can be attached
-#	to Site objects if the assotiated Alphabet objects match.
+#	to Site objects if the associated Alphabet objects match.
 #
-#	The processes can have site-process specific parameters.
-#	The templates for site-process specific parameters and their default values are stored in the Process objects and
+#	The processes can have site-process-specific parameters.
+#	The templates for site-process-specific parameters and their default values are stored in the Process objects and
 #       copied into the Site object when the process is attached. See the documentation of the Site class for more details.
 #
 #	The rate multiplier parameter (id="rate.multiplier") is
-#	present in the Process class and it's inherited by all descendant classes.
+#	present in the Process class and is inherited by all descendant classes.
 #	
 #	@classhierarchy
 # }
@@ -27,7 +27,7 @@
 #	
 # \arguments{
 # 	\item{name}{The name of the Process object: a character vector of length one.}
-#	\item{alphabet}{The assotiated Alphabet object.}
+#	\item{alphabet}{The associated Alphabet object.}
 # 	\item{...}{Not used.}
 #	}
 # 
@@ -48,7 +48,7 @@
 #	p$name
 #	# get unique process identifier
 #	p$id
-#	# fet the list of site specific paramters and paramter IDs
+#	# get the list of site specific paramters and paramter IDs
 #	p$siteSpecificParamList
 #	p$siteSpecificParamIds
 #	# get Process object summary
@@ -925,7 +925,7 @@ setMethodS3(
 #
 # @RdocMethod getAlphabet
 # 
-# @title "Get the Alphabet object assotiated with a given Process object" 
+# @title "Get the Alphabet object associated with a given Process object" 
 # 
 # \description{ 
 #	@get "title".
@@ -945,7 +945,7 @@ setMethodS3(
 # \examples{
 #	# create a process object
 #	p<-Process(alphabet=NucleotideAlphabet())
-#	# get assotiated Alphabet object
+#	# get associated Alphabet object
 #	getAlphabet(p)
 #	# via virtual field
 #	p$alphabet
@@ -1764,7 +1764,7 @@ setMethodS3(
 ###########################################################################/**
 #
 # @RdocMethod setParameterAtSite
-# \alias{setParameterAtSite.FieldDeletor} 
+# \alias{setParameterAtSite.FastFieldDeletor} 
 # @title "Set the value of a site-process specific paramter in a Site object attached to a Process object" 
 # 
 # \description{ 
@@ -1833,8 +1833,11 @@ setMethodS3(
 		site$.processes[[this$id]]$site.params[[id]]$value<-value;
 	
 	}
-	flagTotalRate(site);
-	.flagSeqCumulativeRates(site);
+
+	site$.total.rate<-NA;
+	if(!is.na(site$.sequence)){
+	site$.sequence$.cumulative.rate.flag<-TRUE;
+	}
 	invisible(this);
 				
   },

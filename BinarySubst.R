@@ -33,9 +33,9 @@
 #       # the use of the BinarySubst process    
 #       # during a simulation.
 #       p<-BinarySubst(rate=0.25,name="Binary",rate.list=list("0->1"=2,"1->0"=1))
-#       # create a sequnce object, attach process p
+#       # create a sequence object, attach process p
 #       s<-BinarySequence(string="000000000000000000",processes=list(list(p)));
-#       # set the range 1:5 to invariable
+#       # make the first five positions invariable
 #       setRateMultipliers(s,p,0,1:5)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)

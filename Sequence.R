@@ -11,7 +11,7 @@
 # \description{ 
 #	
 #	This is the class representing a sequence. The backbone of the Sequence objects are
-#	lists aggregating Site objects. The class has fileds for keeping track of cumulative
+#	lists aggregating Site objects. The class has fields for keeping track of cumulative
 #	site rates, the sum of all active event rates and methods for performing actions 
 #	on a collection of sites (positions).
 #
@@ -26,10 +26,10 @@
 #	
 # \arguments{
 #	\item{name}{The name of the Sequence object.}
-# 	\item{string}{A string containing symbols belonging to the assotiated Alphabet object. 
-#	It can be used to set the initial states of the aggregated Site objects. It also specifies th length of the sequence}
+# 	\item{string}{A string containing symbols belonging to the associated Alphabet object. 
+#	It can be used to set the initial states of the aggregated Site objects. It also specifies the length of the sequence}
 # 	\item{length}{The length of the sequence. It cannot be used when 'string' is specified.}
-# 	\item{alphabets}{A list of Alphabet objects to be assotiated with the Site objects. 
+# 	\item{alphabets}{A list of Alphabet objects to be associated with the Site objects. 
 #	The list is recycled in the case it is shorter than the sequence length.}
 # 	\item{processes}{A list of lists of Process objects to be attached 
 #	(recycled if shorter than sequence length). }
@@ -42,8 +42,8 @@
 # }
 # 
 # \examples{ 
-#	# create a sequence object
-#	# provide alphabets, processes and states
+#	# create a sequence object by
+#	# providng alphabets, processes and states
 #	s.one<-Sequence(
 #		name="Seq",
 #		string="AATTGGCCTTAAGGCCTTAA",
@@ -55,8 +55,8 @@
 #	is.Sequence(s.one)
 #	# get object summary
 #	summary(s.one)
-#	# create a sequence object
-#	# specify length and alphabets
+#	# create a sequence object,
+#	# specifying length, alphabets
 #	# and ancestral object
 #	s<-Sequence(
 #		name="Seq",
@@ -69,12 +69,12 @@
 #	s$sites
 #	# get object id
 #	s$id
-#	# set/get name
+#	# set and get name
 #	s$name<-"SeqSeq"
 #	s$seq
 #	# get length
 #	s$length
-#	# get/set ancestral object
+#	# get and set ancestral object
 #	s$ancestral
 #	s$ancestral<-Sequence();
 #	# set alphabets
@@ -96,7 +96,7 @@
 #	# attach a GTR process to range 11:20
 #	gtr<-GTR()
 #	attachProcess(s,gtr,11:20)
-#	# set/get rate multiplier for gtr
+#	# set and get rate multipliers for gtr
 #	setRateMultipliers(s, gtr, c(0,5,1), 11:20)
 #	getRateMultipliers(s, gtr, 11:20)
 #	# get processes from range 1:5
@@ -988,7 +988,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{index}{An integer vector specifying a set of positions. 
-#	It is set to 1:seq$length if omited.} 
+#	It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1062,7 +1062,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 #	\item{value}{A character vector containg the states (recycled if shorter than the index vector). The states must be compatible with the corresponding Alphabet object.}
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1121,7 +1121,7 @@ setMethodS3(
         this$.sites[[ index[[i]] ]]$state<-value[i];
     }
 		# Flagging the changed sites:
-		.flagCumulativeRates(this);
+		this$.cumulative.rate.flag<-TRUE;
 		this$.flagged.sites<-c(this$.flagged.sites, index);
 		.recalculateCumulativeRates(this);
 
@@ -1152,7 +1152,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1227,7 +1227,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{value}{A list of Alphabet objects, recycled if shorter than the index vector.} 
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1318,7 +1318,7 @@ setMethodS3(
 #
 # @RdocMethod getUniqueAlphabets
 # 
-# @title "Get the list of unique Alphabet objects assotiated to Site objects aggaregated by a Sequence object" 
+# @title "Get the list of unique Alphabet objects associated to Site objects aggaregated by a Sequence object" 
 # 
 # \description{ 
 #	@get "title".
@@ -1447,7 +1447,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.}
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1529,7 +1529,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1609,7 +1609,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.} 
+# 	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.} 
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1801,7 +1801,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{value}{A list of list of Process objects, recycled if shorter than the index vector.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -1906,7 +1906,7 @@ setMethodS3(
 # 	\item{process}{A valid Process object.} 
 # 	\item{id}{The identifier of the site-process specific parameter.} 
 #	\item{value}{A vector containing the new values of the site-process specific parameter, recycled if shorter than the index vector. It should be consistent with the type of the parameter.}
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2026,7 +2026,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A valid Process object.} 
 #	\item{value}{A numeric vector containing the new values of the site-process specific parameter, recycled if shorter than the index vector.}
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2092,7 +2092,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A valid Process object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2152,7 +2152,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A valid Process object.} 
 # 	\item{id}{The identifier of the site-process specific parameter.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2245,7 +2245,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2319,7 +2319,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2551,7 +2551,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2640,70 +2640,28 @@ setMethodS3(
 		...
 	){
 		
-		# No flagged sites, we have a fresh start:	
-
-		if( length(this$.flagged.sites) == 0 ) {
-			if( this$.length > 0 ) {
-				# Calculate total rates:
-				for(i in 1:this$.length) {
-					this$.total.rates[[i]]<-this$.sites[[i]]$totalRate;
-				}
-				this$.cumulative.rates<-cumsum(this$.total.rates);	
-				this$.flagged.sites<-integer(0);
-
-			}
-	
-		} else {
-			if( this$.length > 0 ) {
-
-				# We have some flagged sites, recalculate just their total rates:
-        			for(i in this$.flagged.sites) {
-          				this$.total.rates[[i]]<-this$.sites[[i]]$totalRate;
-        			}	
-
-				# The site before the first flagged site: 
-				min.index<-(min(this$.flagged.sites) - 1);
-				
-				if(min.index > 1){
-					
-					# Do the cumsum only on the dirty part:
-					new.cumrates<-this$.cumulative.rates[1:(min.index-1)];
-					new.cumrates<-c(new.cumrates, cumsum( c(this$.cumulative.rates[min.index], this$.total.rates[(min.index+1):length(this$.total.rates) ] ) ) );
-					this$.cumulative.rates<-new.cumrates;
-
-				} else {
-        				this$.cumulative.rates<-cumsum(this$.total.rates);
-				}
-				
-				# Cleaning out flagged sites.
-				this$.flagged.sites<-integer(0);
-				
-      		} #/else
-	
+		length<-this$.length;
+		if(length ==  0){
+			return();
 		}
-	
-		this$.cumulative.rate.flag<-FALSE;
-	},
-	private=FALSE,
-	protected=FALSE,
-	overwrite=FALSE,
-	conflict="warning",
-	validators=getOption("R.methodsS3:validators:setMethodS3")
-);
 
-##	
-## Method: .flagCumulativeRates
-##	
-setMethodS3(
-	".flagCumulativeRates", 
-	class="Sequence", 
-	function(
-		this,
-		...
-	){
+		total.rates<-this$.total.rates;
+		sites<-this$.sites;
+		flagged.sites<-this$.flagged.sites;
+
+		if( length(flagged.sites) == 0 ) {
+			# Fresh start:
+			total.rates<-as.numeric(lapply(sites,getTotalRate));
+
+		} else {
+			# We have some flagged sites, recalculate just their total rates:
+			total.rates[flagged.sites]<-as.numeric(lapply(sites[flagged.sites],getTotalRate));
+		}
 		
-		this$.cumulative.rate.flag<-TRUE;
-
+		this$.total.rates<-total.rates;
+		this$.cumulative.rates<-cumsum(total.rates);	
+		this$.flagged.sites<-integer(0);
+		this$.cumulative.rate.flag<-FALSE;
 	},
 	private=FALSE,
 	protected=FALSE,
@@ -3471,7 +3429,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{x}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3570,7 +3528,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
 # 	\item{id}{The identifier of the site-process specific parameter.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3668,7 +3626,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
 # 	\item{value}{A numeric vector, recycled if shorter than the index vector.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3736,7 +3694,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3802,7 +3760,7 @@ setMethodS3(
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
 # 	\item{value}{A numeric vector, recycled if shorter than the index vector.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3870,7 +3828,7 @@ setMethodS3(
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
 # 	\item{process}{A Process object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -3940,7 +3898,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4059,7 +4017,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4104,7 +4062,10 @@ setMethodS3(
 	
     		for(site in this$.sites[index]){
 			site$.state<-NA;
+			site$.total.rate<-NA;
     		}
+		
+		this$.cumulative.rate.flag<-TRUE;
 
 		return(invisible(this));
 	
@@ -4183,7 +4144,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omited.}
+#	\item{index}{An integer vector specifying a set of positions. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4641,7 +4602,7 @@ setMethodS3(
 	 }
 
 	 # Flagging cumulative rates:
-		.flagCumulativeRates(this);
+		this$.cumulative.rate.flag<-TRUE;
 
 		# Inserting new site objects:
 
@@ -4731,7 +4692,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An index vector specifying a collection of sites to be deleted. It is set to 1:seq$length if omited.}
+#	\item{index}{An index vector specifying a collection of sites to be deleted. It is set to 1:seq$length if omitted.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -4791,7 +4752,7 @@ setMethodS3(
 			 .recalculateCumulativeRates(this);	
 			}
 			# Flagging cumulative rates:	
-			.flagCumulativeRates(this);
+			this$.cumulative.rate.flag<-TRUE;
 			min.index<-min(index);
 			# Deleting site objects:	
 			this$.sites[index]<-NULL;
@@ -4841,7 +4802,7 @@ setMethodS3(
 # 
 # \arguments{ 
 # 	\item{this}{A Sequence object.} 
-#	\item{index}{An index vector specifying a collection of sites to be copied. It is set to 1:seq$length if omited.}
+#	\item{index}{An index vector specifying a collection of sites to be copied. It is set to 1:seq$length if omitted.}
 # 	\item{process}{The Process object performing the copy (optional).} 
 # 	\item{...}{Not used.} 
 # } 
