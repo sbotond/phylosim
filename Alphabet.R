@@ -18,8 +18,8 @@
 # @synopsis
 #	
 # \arguments{
-# 	\item{symbols}{A character vector containing the symbols. All elements must have the 
-#	same length. No duplicates are allowed. The elements may not contain the dash symbol, which is reserved for gaps.}
+# 	\item{symbols}{A character vector containing the symbols for the alphabet. All elements must have the 
+#	same length and no duplicates are allowed. No element of the vector may contain the dash symbol, which is reserved for gaps.}
 # 	\item{type}{An identifier for the Alphabet object.}
 #	\item{...}{Not used.}
 #	}
@@ -49,7 +49,7 @@
 #
 #
 # \seealso{ 
-# 	Site, Process, Event
+# 	Site Process Event BinaryAlphabet NucleotideAlphabet AminoAcidAlphabet
 # }
 # 
 #*/###########################################################################

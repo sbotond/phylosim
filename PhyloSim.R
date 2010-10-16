@@ -17,15 +17,16 @@
 #
 #	Key features offered by the framework:	
 #	\itemize{
-#	\item  Simulation of the evolution of a set of discrete characters with arbitrary states evolving #		by a continuous-time Markov process with an arbitrary rate matrix.
-#	\item Explicit implementations of the most popular substitution models (nucleotide, amino acid and codon substitution models).
+#	\item  Simulation of the evolution of a set of discrete characters with arbitrary states evolving 
+#		by a continuous-time Markov process with an arbitrary rate matrix.
+#	\item Explicit implementations of the most popular substitution models (for nucleotides, amino acids and codons).
 # 	\item Simulation under the popular models of among-sites rate variation, like the gamma (+G) and invariants plus gamma (+I+G) models.
-#	\item The possibility to simulate under arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any \code{R} expression.
-#	\item Simulation of one or more separate insertion and/or deletion processes acting on the sequences and which sample the insertion/deletion length from an arbitrary discrete distribution or an \code{R} expression (so all the probability distributions implemented in \code{R} are readily available for this purpose).
-#	\item Simulation of the effects of variable functional constraints over the sites by site-process specific insertion and deletion tolerance parameters which determine the rejection probability of a proposed insertion/deletion.
-#	\item The possibility of having a different set of processes and site-process specific parameters for every site, which allows for an arbitrary number of partitions in the simulated data.
+#	\item The possibility to simulate with arbitrarily complex patterns of among-sites rate variation by setting the site specific rates according to any \code{R} expression.
+#	\item Simulation with one or more separate insertion and/or deletion processes acting on the sequences, which sample the insertion/deletion length from an arbitrary discrete distribution or an \code{R} expression (so all the probability distributions implemented in \code{R} are readily available for this purpose).
+#	\item Simulation of the effects of variable functional constraints over the sites by site-process-specific insertion and deletion tolerance parameters, which determine the rejection probability of a proposed insertion/deletion.
+#	\item The possibility of having a different set of processes and site-process-specific parameters for every site, which allow for an arbitrary number of partitions in the simulated data.
 #	\item The possibility to evolve sites by a mixture of substitution processes along a single branch.
-#	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes.
+#	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes of the phylogeny.
 #	\item The possibility to export the counts of various events ("branch statistics") as phylo objects (see \code{\link{exportStatTree.PhyloSim}}).
 #	}
 #
@@ -35,19 +36,19 @@
 #	is aborted if the sequence length shrinks to zero. It is up to the user 
 #	to choose sensible indel rates and sequence lengths to prevent that.
 #	\item The sites near the beginning and end of the sequences have less sites proposing
-#	insertion and deletion events around them. Hence, the insertion and deletion processes 
-#	are affected by an "edge effect". The user can simulate
+#	insertion and deletion events around the so the insertion and deletion processes 
+#	have an "edge effect". The user can simulate
 #	realistic flanking sequences to alleviate the edge effect in the simulation settings where
-#	this effect is an issue.
+#	it may be an issue.
 # }
 #
 #	Notes on performance: 
 #	\itemize{
 #	\item The pure \code{R} implementation offers felxibility, but also comes
 #	with a slower simulation speed. If the \code{PSIM_FAST} object is present in the environment, a "fast & careless"
-#	mode is enabled. In this mode most of the error checking is skipped which increases the speed.
-#	It is not recomended to run simulations in fast mode only if you are sure that the simulation
-#	setting is 100 percent sane. It is probably a good practice to set up the simulations in normal mode
+#	mode is enabled. In this mode most of the error checking is skipped, increasing the speed.
+#	It is recomended that simulations are only run in fast mode if you are sure that the simulation
+#	settings are free from errors. It is probably a good practice to set up the simulations in normal mode
 #	with short sequences and enable fast mode when running the actual simulation with long sequences.
 #	\item Please note, that no "branch statistics" are saved in fast mode.
 #	\item Logging also has a negative impact on performance, so it's not a good idea to run
@@ -95,7 +96,7 @@
 #	## \url{http://github.com/sbotond/phylosim/tree/master/examples/}
 #
 #	## The ll() method gives information about the methods defined
-#	## in the immediate class of and object.
+#	## in the immediate class of an object.
 #	## Useful when exploring the framework.
 #
 #	s<-Sequence()
@@ -103,7 +104,7 @@
 #	ll(PhyloSim())
 #	ll(GTR())
 #
-#	## Example 1 - The shortest simulation ever:
+#	## Example 1 - A short simulation:
 #	## simulate nucleotide seqeunces and display 
 #	## the resulting alignment matrix.
 #
@@ -111,7 +112,7 @@
 #		PhyloSim(phy=rcoal(3),root=NucleotideSequence(string="ATGC", proc=list(list(JC69())) ) )
 #	)$alignment
 #
-#	# Construct a phylo object for the next
+#	# Construct a phylo object for the following
 #	# simulations, scale total tree length to 2:
 #
 #	tmp<-PhyloSim(phylo=rcoal(3))
@@ -126,9 +127,9 @@
 #	t<-rcoal(3)
 #	# construct root sequence object
 #	s<-BinarySequence(string="00000000")
-#	# construct substitution process object
+#	# construct a substitution process object
 #	p<-BinarySubst(rate.list=list("0->1"=1,"1->0"=0.5))
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #	# attach process to sequence
 #	attachProcess(s,p)
@@ -164,7 +165,7 @@
 #       )
 #	# get object summary
 #	summary(gtr)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(gtr)
 #
 #	# construct root sequence object
@@ -174,8 +175,8 @@
 #	# sample states from the equilibrium
 #	# distribution of the attached processes
 #	sampleStates(s)
-#	# create among-sites rate variation by sampling
-#	# the "rate.multiplier" site-process specific parameter
+#	# create among-site rate variation by sampling
+#	# the "rate.multiplier" site-process-specific parameter
 #	# from a discrete gamma distribution (GTR+G).
 #	plusGamma(s,gtr,shape=0.5)
 #	# make the range 11:20 invariable
@@ -183,8 +184,8 @@
 #	# get the rate multipliers for s and gtr
 #	getRateMultipliers(s,gtr)
 #
-	# construct deletion process object
-#	# proposing length in range 1:3
+	# construct a deletion process object
+#	# proposing lengths in the range 1:3
 #	d<-DiscreteDeletor(
 #		rate=1,
 #		name="MyDel",
@@ -195,13 +196,13 @@
 #	summary(d)
 #	# plot deletion length distribution
 #	plot(d)
-#	# attach d to s
+#	# attach deletion process d to sequence s
 #	attachProcess(s,d)
 # 	# create a region rejecting all deletions
 #       setDeletionTolerance(s,d,0,11:20)
 #
-#	# construct insertion process object
-#	# proposing length in range 1:3
+#	# construct an insertion process object
+#	# proposing lengths in the range 1:3
 #	i<-DiscreteInsertor(
 #		rate=1,
 #		name="MyDel",
@@ -214,7 +215,7 @@
 #	summary(i)
 #	# plot insertion length distribution
 #	plot(i)
-#	# attach i to s
+#	# attach insertion process i to sequence s
 #	attachProcess(s,i)
 # 	# create a region rejecting all insertions
 #       setInsertionTolerance(s,i,0,11:20)
@@ -229,7 +230,7 @@
 #	plot(sim)
 #	# run simulation
 #	Simulate(sim)
-# 	#get the list of recorded per-branch event counts
+# 	# get the list of recorded per-branch event counts
 # 	getBranchEvents(sim)
 #	# export the number of substitutions as a phylo object
 #	subst<-exportStatTree(sim,"substitution")
@@ -251,28 +252,28 @@
 #	# enable fast & careless mode
 #	# WARNING: do not do this only
 #	# if you are sure, that your simulation
-#	# setting is 100% flawless!
+#	# settings are 100% flawless!
 #
 #	PSIM_FAST<-TRUE;
 #	
 #	# construct substitution model objects
 #	wag<-WAG()
 #	lg<-LG()
-#	# get a bubble plot of wag
+#	# display a bubble plot of wag
 #	plot(wag)
 #	# construct root sequence
 #	s<-AminoAcidSequence(length=50)
-#	# attach process wag to range 1:10
+#	# attach process wag to the range 1:10
 #	attachProcess(s,wag,1:10)
-#	# attach process lg to range 31:50
+#	# attach process lg to the range 31:50
 #	attachProcess(s,lg,31:50)
-#	# create a pattern of processes in range 11:30
+#	# create a pattern of processes in the range 11:30
 #	setProcesses(s,list(list(wag),list(lg),list(wag,lg)),11:30)
 #	# set rate multipliers to reduce 
 #	# the rate to half at every third site
 #	setRateMultipliers(s,wag,0.5,seq(from=13,to=30,by=3))
 #	setRateMultipliers(s,lg,0.5,seq(from=13,to=30,by=3))
-#	# Now every third site in range 11:30 evolves
+#	# Now every third site in the range 11:30 evolves
 #	# according to a mixture of amino acid substitution models!
 #
 #	# sample states
@@ -291,12 +292,32 @@
 #	rs$string
 #	# show alignment matrix
 #	sim$alignment
-#	# plot tree and alignment, omit ancestral sequences
+#	# plot tree and alignment, omitting ancestral sequences
 #	plot(sim,plot.ancestors=FALSE)
 #	# display the head of the log file
 #	cat(paste(scan(nmax=20,file=sim$logFile,what=character(),sep="\n"),collapse="\n"));cat("\n");
 #	# delete log file
 #	unlink(sim$logFile);
+#
+#	# Reading alignments:
+#
+#	# get a safe file name  
+#       fname<-paste("PhyloSim_dummy_fas_",Sys.getpid(),sep="")
+#       # write out a fasta alignment
+#       cat("> t3\nGTCTTT-CG-\n",file=fname);
+#       cat("> t4\nG--TC-TCGG\n",file=fname,append=TRUE);
+#       cat("> t2\nG--TC-TCGG\n",file=fname,append=TRUE);
+#       cat("> t1\nGTC-G-TCGG",file=fname,append=TRUE);
+#       # construct a PhyloSim object,
+#       # set the phylo object
+#       sim<-PhyloSim(phylo=rcoal(4))
+#       # read the alignment
+#       readAlignment(sim,fname)
+#       # remove alignment file
+#       unlink(fname)
+#       # plot the tree & alignment
+#       plot(sim)
+
 #
 #	# disable fast & careless mode
 #	rm(PSIM_FAST)
@@ -315,7 +336,7 @@
 #	\link{CodonSequence} \link{CodonUNREST} \link{ContinuousDeletor}
 #	\link{ContinuousInsertor} \link{cpREV} \link{DiscreteDeletor}
 #	\link{DiscreteInsertor} \link{Event} \link{F81} \link{F84}
-#	\link{FieldDeletor} \link{GeneralDeletor}
+#	\link{FastFieldDeletor} \link{GeneralDeletor}
 #	\link{GeneralInDel} \link{GeneralInsertor} \link{GeneralSubstitution} 
 #	\link{GTR} \link{GY94} \link{HKY} \link{JC69} \link{JTT} \link{JTT.dcmut}
 #	\link{K80} \link{K81} \link{LG} \link{mtArt} \link{mtMam} \link{mtREV24}
@@ -1890,7 +1911,7 @@ setMethodS3(
 #
 # @RdocMethod getSeqFromNode
 # 
-# @title "Get the Sequence object assotiated with a given node of a phylo object aggregated by a PhyloSim object" 
+# @title "Get the Sequence object associated with a given node of a phylo object aggregated by a PhyloSim object" 
 # 
 # \description{ 
 #	@get "title".
@@ -1917,7 +1938,7 @@ setMethodS3(
 #		phylo=rcoal(3),
 #		root.seq=NucleotideSequence(string="ATG",processes=list(list(JC69())))
 #	);
-#	# get the sequence assotiated with node 5
+#	# get the sequence associated with node 5
 #	getSeqFromNode(sim,5)	# Should be NA
 #	# Run the simulation
 #	Simulate(sim)
@@ -1964,12 +1985,12 @@ setMethodS3(
 #
 # @RdocMethod getSequences
 # 
-# @title "Gets all the Sequence objects assotiated with the nodes of a phylo object aggregated by a PhyloSim object" 
+# @title "Gets all the Sequence objects associated with the nodes of a phylo object aggregated by a PhyloSim object" 
 # 
 # \description{ 
 #	@get "title".
 #
-#	The order of the Sequence objects in the returned list reflects the identifiers of the assotiated nodes.
+#	The order of the Sequence objects in the returned list reflects the identifiers of the associated nodes.
 # } 
 # 
 # @synopsis 
@@ -1994,9 +2015,9 @@ setMethodS3(
 #	);
 #	# run the simulation
 #	Simulate(sim)
-#	# get all the assotiated sequence objects
+#	# get all the associated sequence objects
 #	getSequences(sim)
-#	# get the sequence assotiated with node 3
+#	# get the sequence associated with node 3
 #	# via virtual field
 #	sim$sequences[[3]]
 # } 
@@ -2037,7 +2058,7 @@ setMethodS3(
 #
 # @RdocMethod setSequences
 #
-# @title "Forbidden action: setting the Sequence objects assotiated with the nodes of a phylo object aggregated by a PhyloSim object"
+# @title "Forbidden action: setting the Sequence objects associated with the nodes of a phylo object aggregated by a PhyloSim object"
 #
 # \description{
 #       @get "title".
@@ -2479,7 +2500,7 @@ setMethodS3(
 			.checkAlignmentConsistency(this, alignment);
 		}
 
-		# The whole alignment is assotiated with the root node:
+		# The whole alignment is associated with the root node:
 		return(alignment);
 		
   },
@@ -2739,6 +2760,7 @@ setMethodS3(
 # 	\item{plot.tree}{Whether to plot the tree alongside the alignment. TRUE or FALSE; defaults to TRUE.}
 # 	\item{plot.ancestors}{Whether to plot the ancestral sequences. TRUE or FALSE; defaults to TRUE.}
 # 	\item{plot.chars}{Whether to plot the actual text of the characters.}
+# 	\item{plot.legend}{Whether to plot the legend showing the character-to-color mapping.}
 # 	\item{aspect.ratio}{Constraints the alignment residues to have a certain aspect ratio; values above 1 cause vertically-stretched blocks. FALSE disables aspect ratio control, numerical values set the aspect ratio; defaults to FALSE.}
 # 	\item{num.pages}{Optionally split the alignment over a number of vertically-stacked pages. This is useful for long alignments. 'auto' chooses a sensible number of pages, numerical values specify a number; defaults to 'auto'.}
 # 	\item{char.text.size}{Specify the text size for the residue characters. This requires tweaking depending on the DPI and output format. Defaults to 1.5.}
@@ -2767,7 +2789,7 @@ setMethodS3(
 #       # Plot the alignment without the tree or ancestral sequences.
 #       plot(sim, plot.ancestors=FALSE, plot.tree=FALSE)
 #       # Force a DNA-based color scheme (default is 'auto' to auto-detect based on the sequence composition)
-#       plot(sim, color.scheme='dna')
+#       plot(sim, color.scheme='dna', plot.legend=T)
 # } 
 # 
 # @author 
@@ -2785,6 +2807,7 @@ setMethodS3(
     plot.tree,
     plot.ancestors,
     plot.chars,
+    plot.legend,
     aspect.ratio,
     num.pages,
     char.text.size,
@@ -2792,6 +2815,7 @@ setMethodS3(
     color.scheme,
     ...
   ){
+		
 		if(missing(char.text.size)){
 			char.text.size <- 1.5
 		}
@@ -2810,6 +2834,9 @@ setMethodS3(
 		if(missing(plot.chars)){
 			plot.chars <- TRUE
 		}
+		if(missing(plot.legend)){
+			plot.legend <- FALSE
+		}
 		if(missing(aspect.ratio)){
 			aspect.ratio <- FALSE
 		}
@@ -2825,6 +2852,7 @@ setMethodS3(
 				plot.tree=plot.tree,
 				plot.ancestors=plot.ancestors,
 				plot.chars=plot.chars,
+                                plot.legend=plot.legend,
 				aspect.ratio=aspect.ratio,
 				num.pages=num.pages,
                                 char.text.size=char.text.size,
@@ -2847,6 +2875,7 @@ setMethodS3(
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
 
+
 ##
 ## Method: .plotWithAlignment
 ##
@@ -2858,6 +2887,7 @@ setMethodS3(
     plot.tree,
     plot.ancestors,
     plot.chars,
+    plot.legend,
     aspect.ratio,
     num.pages,
     char.text.size,
@@ -2865,6 +2895,14 @@ setMethodS3(
     color.scheme,
     ...
   ){
+
+   # ugly empirical fix of some R CMD check warnings:
+   pos<-NA;
+   char<-NA;
+   xend<-NA;
+   yend<-NA;
+   y<-NA;
+
 
     ### First, we need to define a bunch of sparsely-documented utility functions. ###
 
@@ -2968,6 +3006,8 @@ setMethodS3(
       # Start the layout procedure by equally spacing the leaves in the y-dimension.
       df[df$is.leaf==TRUE,]$y = c(1:n.leaves)
 
+      found.any.internal.node.sequences <- FALSE
+
       # For each leaf: travel up towards the root, laying out each internal node along the way.
       for (i in 1:n.leaves) {
         cur.node <- i
@@ -2991,6 +3031,9 @@ setMethodS3(
             index.in.names <- which(align.seq.names == lbl | align.seq.names %in% c(paste('Node',lbl),paste('Root node',lbl)))
             if (length(index.in.names)>0) {
               df[cur.node,]$y <- index.in.names
+              if (!df[cur.node,]$is.leaf) {
+                found.any.internal.node.sequences <- TRUE
+              }
             }
           }
           
@@ -3008,7 +3051,7 @@ setMethodS3(
         }
         p.row <- df[row$parent,] # Data frame row for the parent node.
 
-        if (layout.ancestors) {
+        if (layout.ancestors && found.any.internal.node.sequences) {
           horiz.line <- data.frame(x=row$x,xend=p.row$x,y=row$y,yend=p.row$y,lbl=row$label)
           line.df <- rbind(line.df,horiz.line)
         } else {
@@ -3047,6 +3090,21 @@ setMethodS3(
                   'T' = "#FF0000",
                   'A' = "#0000FF"
                   )
+      } else if (scheme == 'numbers') {
+        #cols <- heat.colors(10)      
+        cols <- colorRampPalette(c("red","yellow","green"))(10)
+        cols <- c(
+                  '0' = cols[1],
+                  '1' = cols[2],
+                  '2' = cols[3],
+                  '3' = cols[4],
+                  '4' = cols[5],
+                  '5' = cols[6],
+                  '6' = cols[7],
+                  '7' = cols[8],
+                  '8' = cols[9],
+                  '9' = cols[10]
+        )
       } else if (scheme == 'taylor' || scheme == 'protein') {
         cols <- c(
                   'A' = "#CCFF00",       'a' = "#CCFF00",
@@ -3178,19 +3236,22 @@ setMethodS3(
     if (color.scheme == 'auto') {
       all.chars <- unlist(aln)
       all.chars <- all.chars[all.chars != '-']
-      n.chars <- length(unique(all.chars))
+      n.chars <- length(unique(toupper(all.chars)))
       
       if (n.chars <= 2) {
         color.scheme = 'binary'
       } else if (n.chars <= 4) {
         color.scheme = 'dna'
-      } else if (n.chars <= 20) {
+      } else if (sum(all.chars %in% 0:9) > 5) {
+        color.scheme = 'numbers'
+      } else if (n.chars <= 20+2) { # 2 as a fudge factor
         color.scheme = 'protein'
-      } else if (n.chars <= 64) {
+      } else if (n.chars <= 64+2) {
         color.scheme = 'codon'
       } else {
         color.scheme = 'everything'
       }
+      print(paste("Auto color scheme:",color.scheme))
     }
     
                                         # Create the ggplot panel.
@@ -3211,12 +3272,15 @@ setMethodS3(
     }
 
     plot.opts <- opts(
-		  legend.position='none',
 		  axis.text.y = theme_text(size=axis.text.size,hjust=1),
 		  axis.title.x = theme_blank(),
 		  axis.title.y = theme_blank()
                   )
     p <- p + plot.opts
+
+    if (!plot.legend) {
+       p <- p + opts(legend.position='none')
+    }
     
     if (plot.tree) {
       if (plot.ancestors) {
@@ -3637,7 +3701,7 @@ setMethodS3(
 						if(file.access(this$.log.file,mode=0) == c(0)){
 							warning("The log file already existed and it was wiped out!\n");
 						}
-						# Creating the assotiated connection:
+						# Creating the associated connection:
 						this$.log.connection<-file(paste(this$.log.file),"w+");
 				}
 				this$.log.level<-value;
@@ -4511,7 +4575,7 @@ setMethodS3(
 # } 
 # 
 # \value{ 
-# 	A mtrix containing the tip labels.
+# 	A matrix containing the tip labels.
 # } 
 # 
 # \examples{
@@ -5428,6 +5492,93 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+###########################################################################/**
+#
+# @RdocMethod readAlignment
+# 
+# @title "Read alignment from file" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method reads an alignment by using the \code{read.dna} function from the \code{\link{ape}}
+#	package and stores in the \code{PhyloSim} object. The phylo object must be set before reading 
+#	the alignment. The alignment must contain all the sequences corresponding to tip nodes.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+#	\item{file}{A file name specified by either a variable of mode character, or a double-quoted string.}
+#	\item{format}{a character string specifying the format of the DNA sequences. Four choices are possible: "interleaved", "sequential", "clustal", or "fasta", or any unambiguous abbreviation of these.}
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+#	The PhyloSim object (invisible).
+# } 
+# 
+# \examples{
+#	# get a safe file name	
+#	fname<-paste("PhyloSim_dummy_fas_",Sys.getpid(),sep="")
+#	# write out a fasta alignment
+#	cat("> t3\nGTCTTT-CG-\n",file=fname);
+#	cat("> t4\nG--TC-TCGG\n",file=fname,append=TRUE);
+#	cat("> t2\nG--TC-TCGG\n",file=fname,append=TRUE);
+#	cat("> t1\nGTC-G-TCGG",file=fname,append=TRUE);
+#	# construct a PhyloSim object,
+#	# set the phylo object
+#	sim<-PhyloSim(phylo=rcoal(4))
+#	# read the alignment
+#	readAlignment(sim,fname)
+#	# remove alignment file
+#	unlink(fname)
+#	# plot the tree & alignment
+#	plot(sim)
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "readAlignment",
+  class="PhyloSim",
+  function(
+    		this,
+		file,
+		format="fasta",
+    		...
+  ){
+
+	if(all(is.na(this$.phylo))){
+		throw("The phylo object must be set before reading alignments!");
+	}
+
+	aln<-toupper(read.dna(file=file,format=format,as.matrix=TRUE,as.character=TRUE));
+	aln.names<-dimnames(aln)[[1]];	
+	tip.labels<-this$tipLabels;
+	
+	if(length(intersect(tip.labels,aln.names)) != length(tip.labels)){
+		throw("The alignment must contain all sequences corresponding to tip nodes!");
+	}
+
+	this$.alignment<-aln;
+
+	return(invisible(this));
+  
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
 ###########################################################################/**
 #
 # @RdocMethod Undocumented
@@ -5675,6 +5826,8 @@ setMethodS3(
 # \alias{my.all.equal}
 # \alias{plot.PSRoot}
 # \alias{revComp}
+# \alias{readAlignment}
+# \alias{getOmegaScalingFactor}
 # 
 # @title "Undocumented generic method (PhyloSim package)" 
 #

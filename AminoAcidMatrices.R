@@ -20,7 +20,8 @@
 # \references{
 # Adachi, J., P. J. Waddell, W. Martin, and M. Hasegawa (2000) Plastid
 # genome phylogeny and a model of amino acid substitution for proteins
-# encoded by chloroplast DNA - Journal of Molecular Evolution 50:348 358 \url{http://bit.ly/bnBVLm}
+# encoded by chloroplast DNA - Journal of Molecular Evolution 50:348--358 
+# DOI: 10.1007/s002399910038 \url{http://bit.ly/bnBVLm}
 # }
 #	
 # @synopsis
@@ -39,18 +40,18 @@
 #	p<-cpREV()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:5 invariable
-#       setRateMultipliers(s,p,0,1:5)
+#       # make the first three positions invariable
+#       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
 #       # create a simulation object
@@ -124,17 +125,17 @@ setConstructorS3(
 #	p<-PAM()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first three positions invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -208,17 +209,17 @@ setConstructorS3(
 #	p<-PAM.dcmut()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first three invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -292,17 +293,17 @@ setConstructorS3(
 #	p<-JTT()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first three positions invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -379,17 +380,17 @@ setConstructorS3(
 #	p<-JTT.dcmut()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first threee positions invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -463,17 +464,17 @@ setConstructorS3(
 #	p<-LG()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first three positions invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -548,17 +549,17 @@ setConstructorS3(
 #	p<-mtArt()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first three positions invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -633,17 +634,17 @@ setConstructorS3(
 #	p<-mtMam()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first three positions invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -718,17 +719,17 @@ setConstructorS3(
 #	p<-mtREV24()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first three positions invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -802,17 +803,17 @@ setConstructorS3(
 #	p<-MtZoa()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first three positions invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -883,23 +884,21 @@ setConstructorS3(
 # }
 # 
 # \examples{ 
-#       # enable fast & careless mode
-#       PSIM_FAST<-TRUE
 #	# create substitution model object 
 #	p<-WAG()
 #	# get object summary	
 #	summary(p)
-#	# get a bubble plot
+#	# display a bubble plot
 #	plot(p)
 #
-#       # The following code demostrates how to use 
+#       # The following code demonstrates how to use 
 #       # the process in a simulation.
 #	
 #	# create a sequence, attach process p
 #	s<-AminoAcidSequence(length=10,processes=list(list(p)) )
 #	# sample states
 #	sampleStates(s)
-#       # make the range 1:3 invariable
+#       # make the first three positions invariable
 #       setRateMultipliers(s,p,0,1:3)
 #       # get rate multipliers
 #       getRateMultipliers(s,p)
@@ -909,8 +908,6 @@ setConstructorS3(
 #       Simulate(sim)
 #       # print alignment
 #       sim$alignment
-#       # enable fast & careless mode
-#       PSIM_FAST<-TRUE
 # }
 # 
 # @author

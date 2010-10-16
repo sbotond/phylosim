@@ -12,8 +12,8 @@
 #       This class implements a process which performs insertions with
 #       lengths sampled from a user-specified R expression returning a 
 #       numeric value.
-#       See \code{GeneralInsertor} for the workings of the insertion
-#       processes.
+#       See \code{GeneralInsertor} for the how the insertion process
+#	works.
 #
 #       @classhierarchy
 # }
