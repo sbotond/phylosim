@@ -2815,6 +2815,7 @@ setMethodS3(
     char.text.size,
     axis.text.size,
     color.scheme,
+    color.branches,
     ...
   ){
 		
@@ -2826,6 +2827,9 @@ setMethodS3(
 		}
 		if(missing(color.scheme)){
 			color.scheme <- 'auto'
+		}
+		if(missing(color.branches)){
+			color.branches <- 'substitutions'
 		}
 		if(missing(plot.tree)){
 			plot.tree <- TRUE
@@ -2852,7 +2856,7 @@ setMethodS3(
                         color.scheme='auto'
                 }
 
-                if(is.na(x$.phylo)) {
+                if(any(is.na(x$.phylo))) {
                   plot.tree <- FALSE
                 }
                 
@@ -2867,7 +2871,8 @@ setMethodS3(
 				num.pages=num.pages,
                                 char.text.size=char.text.size,
                                 axis.text.size=axis.text.size,
-                                color.scheme=color.scheme
+                                color.scheme=color.scheme,
+                                color.branches=color.branches
 			);
 			return(invisible(x));
 		}
@@ -2904,6 +2909,7 @@ setMethodS3(
     char.text.size,
     axis.text.size,
     color.scheme,
+    color.branches,
     ...
   ){
 
@@ -2913,6 +2919,7 @@ setMethodS3(
    xend<-NA;
    yend<-NA;
    y<-NA;
+   substitutions<-NA;
 
 
     ### First, we need to define a bunch of sparsely-documented utility functions. ###
@@ -2920,6 +2927,9 @@ setMethodS3(
    # Re-orders the alignment rows by matching the tree's tips.
    sort.aln.by.tree = function(aln,tree) {
      names <- dimnames(aln)[[1]]
+     if (length(names) > length(tree$tip.label)) {
+       return(aln)
+     }
      newPositions <- rev(match(tree$tip.label,names))
      aln[newPositions,] <- aln
      dimnames(aln) <- list(names[newPositions])
@@ -2948,6 +2958,55 @@ setMethodS3(
       return(node)
     }
 
+    generic.count <- function(sim,node,type) {
+      if (type == 'insertions' || type == 'ins') {
+        type <- 'insertion'
+      }
+      if (type == 'deletions' || type == 'del') {
+        type <- 'deletion'
+      }
+      if (type == 'substitutions' || type == 'subst' || type == 'sub') {
+        type <- 'substitution'
+      }
+      if (type == 'syn') {
+        type <- 'synonymous'
+      }
+      if (type == 'nsyn') {
+        type <- 'non-synonymous'
+      }
+                                        # Default value of 0.
+      cnt <- 0
+      if(type=='none' || type == '') {
+        return(as.numeric(cnt))
+      }
+                                        # Find the edge which points to the given node.
+      edge.index <- which(phylo$edge[,2]==node)
+      if (length(edge.index) > 0) {
+        bs <- sim$.branch.stats
+        cnt <- bs[[paste(edge.index)]][[type]]
+        if (is.null(cnt) || is.na(cnt)) {
+          cnt <- 0
+        }
+      }
+      return(as.numeric(cnt))
+    }
+   
+    subst.count <- function(sim,node) {
+      return(generic.count(sim,node,'substitution'))
+    }
+    ins.count <- function(sim,node) {
+      return(generic.count(sim,node,'insertion'))
+    }
+    del.count <- function(sim,node) {
+      return(generic.count(sim,node,'deletion'))
+    }
+    syn.count <- function(sim,node) {
+      return(generic.count(sim,node,'synonymous'))
+    }
+    nsyn.count <- function(sim,node) {
+      return(generic.count(sim,node,'non-synonymous'))
+    }
+   
     # Extracts the length of the branch above the given node. Returns 0 if the node is root.
     branch.length <- function(phylo,node) {
       edge.index <- which(phylo$edge[,2]==node)
@@ -3009,19 +3068,22 @@ setMethodS3(
                        branch.length=0                                               # Will contain the branch lengths
                        )
 
-      # Collect the parents, children, and branch lengths
+      # Collect the parents, children, and branch lengths for each node
       parent <- c()
       bl <- list()
       children <- list()
+      event.count <- list()
       for (i in 1:nrow(df)) {
         node <- df[i,]$node
         parent <- c(parent,parent.node(phylo,node))
         bl <- c(bl,branch.length(phylo,node))
         children <- c(children,child.nodes(phylo,node))
+        event.count <- c(event.count,generic.count(x,node,color.branches))
       }
       df$parent <- parent
       df$children <- children
       df$branch.length <- bl
+      df$event.count <- as.numeric(event.count)
 
       # Start the layout procedure by equally spacing the leaves in the y-dimension.
       df[df$is.leaf==TRUE,]$y = c(1:n.leaves)
@@ -3070,13 +3132,33 @@ setMethodS3(
           next; # Root node!
         }
         p.row <- df[row$parent,] # Data frame row for the parent node.
-
         if (layout.ancestors && found.any.internal.node.sequences) {
-          horiz.line <- data.frame(x=row$x,xend=p.row$x,y=row$y,yend=p.row$y,lbl=row$label)
+          horiz.line <- data.frame(
+                                   x=row$x,
+                                   xend=p.row$x,
+                                   y=row$y,
+                                   yend=p.row$y,
+                                   lbl=row$label,
+                                   event.count=row$event.count
+                                   )
           line.df <- rbind(line.df,horiz.line)
         } else {
-          horiz.line <- data.frame(x=row$x,xend=p.row$x,y=row$y,yend=row$y,lbl=row$label)    # First a line from row.x to parent.
-          vert.line <- data.frame(x=p.row$x,xend=p.row$x,y=row$y,yend=p.row$y,lbl=row$label) # Now a line from row.y to parent.y
+          horiz.line <- data.frame(
+                                   x=row$x,
+                                   xend=p.row$x,
+                                   y=row$y,
+                                   yend=row$y,
+                                   lbl=row$label,
+                                   event.count=row$event.count
+                                   )    # First a line from row.x to parent.
+          vert.line <- data.frame(
+                                  x=p.row$x,
+                                  xend=p.row$x,
+                                  y=row$y,
+                                  yend=p.row$y,
+                                  lbl=row$label,
+                                  event.count=row$event.count
+                                  ) # Now a line from row.y to parent.y
           
           #horiz.line <- data.frame(x=row$x,xend=(p.row$x+row$x)/2,y=row$y,yend=row$y,lbl=row$label)    # First a line from row.x to parent.
           #vert.line <- data.frame(x=(p.row$x+row$x)/2,xend=p.row$x,y=row$y,yend=p.row$y,lbl=row$label) # Now a line from row.y to parent.y
@@ -3201,7 +3283,7 @@ setMethodS3(
     phylo <- x$.phylo
 
                                         # Do some reordering of alignment & tree.
-    if (!is.na(phylo)) {
+    if (!any(is.na(phylo))) {
       x$.phylo <- reorder(x$.phylo, order="cladewise");
       aln <- sort.aln.by.tree(aln,phylo)
     }
@@ -3223,7 +3305,7 @@ setMethodS3(
       seq.pos <- seq(1,length(char.list))
                                         # Get the position and character of each non-gap residue.
       pos.nogaps <- seq.pos[gaps==FALSE]
-      char.nogaps <- char.list[gaps==FALSE]
+      char.nogaps <- as.character(char.list[gaps==FALSE])
                                         # Create a data frame with 1 row per residue to plot.
       df <- rbind(df,data.frame(
                                 id=factor(x=rep(name,length(pos.nogaps)),levels=names.levels),      # Sequence ID to which this residue belongs
@@ -3305,13 +3387,18 @@ setMethodS3(
     } else {
       p <- p + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=rep('',length(names)),expand=c(0,0))
     }
-    
+
+   if (aspect.ratio) {
+      axis.text.size <- 5
+      char.text.size <- 2
+   }
+   
     if (num.pages > 1) {
       p <- p + facet_grid(page ~ .)
     }
 
     if (char.text.size == 'auto') {
-      char.text.size <- 250 / (num.pages * (length(names)+1))
+      char.text.size <- 125 / (num.pages * (length(names)+1))
       char.text.size <- min(char.text.size,10)
       char.text.size <- max(char.text.size,1)
     }
@@ -3362,8 +3449,14 @@ setMethodS3(
       aln.length <- length(aln[1,])
       n.leaves <- length(names)
       
-      n.leaves <- length(names)
-      q <- ggplot(tree.df)
+      if (max(tree.df$event.count) > 0) {
+        print(paste("Coloring tree by",color.branches))
+        q <- ggplot(tree.df,aes(colour=event.count))
+        q <- q + scale_colour_gradient()
+      } else {
+        q <- ggplot(tree.df)
+      }
+
       q <- q + geom_segment(aes(x=x,y=y,xend=xend,yend=yend))
       if (plot.labels) {
         q <- q + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=names,expand=c(0,0))
@@ -3376,6 +3469,10 @@ setMethodS3(
       if (num.pages > 1) {
         q <- q + facet_grid(page ~ .)
         q <- q + opts(strip.text.y=theme_blank())
+      }
+
+      if (!plot.legend) {
+        q <- q + opts(legend.position='none')
       }
 
       if (aspect.ratio) {
