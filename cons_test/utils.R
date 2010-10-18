@@ -36,11 +36,9 @@ print_times<-function(d,f){
 save_times_latex<-function(d,name){
         d<-(round(d,digits=5));
 
-        row1.sim<-as.character(d[1,1:9]);
-        row2.sim<-as.character(d[1,10:17]);
+        row1.sim<-as.character(d[1,]);
 
-        row1.est<-as.character(d[2,1:9]);
-        row2.est<-as.character(d[2,10:17]);
+        row1.est<-as.character(d[2,]);
 
         ts<-paste(c("Simulation",row1.sim),collapse="& ");
         ts<-paste(ts,"\\\\\n",sep="");
@@ -51,14 +49,6 @@ save_times_latex<-function(d,name){
         cat(ts,file=paste("results/",name,"_r1.tex",sep=""));
         cat(te,file=paste("results/",name,"_r1.tex",sep=""),append=TRUE);
 
-        ts<-paste(c("Simulation",row2.sim),collapse="& ");
-        ts<-paste(ts,"\\\\\n",sep="");
-
-        te<-paste(c("Estimation",row2.est),collapse="& ",sep="");
-        te<-paste(te,"\\\\\n",sep="");
-
-        cat(ts,file=paste("results/",name,"_r2.tex",sep=""));
-        cat(te,file=paste("results/",name,"_r2.tex",sep=""),append=TRUE);
         return(TRUE);
 }
 
