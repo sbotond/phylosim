@@ -57,7 +57,7 @@ sampleStates(s)
 # Construct the simulation object:
 sim<-PhyloSim(
 	root.seq=s,
-	phylo=read.tree("smalldemotree.nwk")
+	phylo=read.tree("data/smalldemotree.nwk")
 );
 
 # Create a node hook function and attach to node 9:
