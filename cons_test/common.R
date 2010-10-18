@@ -39,7 +39,7 @@ iterate_seq_len<-function(phylo,lengths,reps,sim.fun,est.fun){
 
 # function to create ggplot objects
 my_qplot<-function(d,col){
-	qplot(data=d,as.factor(len),d[[col]],geom=c("jitter"),h=0,xlab="Sequence length",ylab=col,log="y",size=0.7) + geom_boxplot(size=0.3,colour="blue",fill=alpha("blue",0.3/3),outlier.size=0.3) + opts(legend.position = "none");
+	qplot(data=d,as.factor(len),d[[col]],geom=c("jitter"),h=0,xlab="Sequence length",ylab=col,log="y",size=0.7) + geom_boxplot(size=0.3,colour="blue",fill=alpha("blue",0.3/3),outlier.size=0.3,coef=100000) + opts(legend.position = "none");
 }
 
 # function to draw horizontal line
