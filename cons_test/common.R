@@ -1,5 +1,9 @@
 # load PhyloSim
 library(phylosim);
+
+# get CPU info:
+system("cat /proc/cpuinfo");
+
 # load utility functions
 source("utils.R");
 
