@@ -5,7 +5,7 @@ source("common.R");
 # F84 model parameters:
 f84.true.kappa<-1;
 f84.true.base.freqs<-c(1.5/6,1.25/6,1.5/6,1.25/6);
-f84.true.gamma.shape<-0.5;
+f84.true.gamma.shape<-0.25;
 
 source("nucleotide_funcs.R");
 

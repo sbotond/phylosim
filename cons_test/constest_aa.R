@@ -3,7 +3,7 @@
 source("common.R");
 
 # model parameters:
-wag.true.gamma.shape<-0.1;
+wag.true.gamma.shape<-1;
 
 source("aa_funcs.R");
 
