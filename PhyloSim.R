@@ -2767,6 +2767,7 @@ setMethodS3(
 # 	\item{char.text.size}{Text size for the aligned characters. This may require tweaking depending on the DPI and output format. Defaults to 'auto'.}
 # 	\item{axis.text.size}{Text size for the sequence labels along the y-axis. This may require tweaking depending on the DPI and output format. Defaults to 'auto'.}
 #       \item{color.scheme}{Color scheme to use ("auto", "binary", "dna", "protein", "codon", "everything").}
+#       \item{color.branches}{The event count used to color the branches ("substitutions" by default). See \code{\link{getBranchEvents.PhyloSim}}.}
 # 	\item{...}{Not used.} 
 # } 
 # 

@@ -1,9 +1,13 @@
-# load PhyloSim
+# load PhyloSim 
 library(phylosim);
+
+# get CPU info:
+system("cat /proc/cpuinfo");
+
 # load utility functions
 source("utils.R");
 
-length_range<-c(10,15,20,25,30,35,40,45,50,60,70,80,90,100,500,1000,5000,10000);
+length_range<-c(10, 50, 100, 500, 1000, 5000, 10000);
 reps<-1:100;
 
 # enable fast & careless mode
@@ -39,7 +43,7 @@ iterate_seq_len<-function(phylo,lengths,reps,sim.fun,est.fun){
 
 # function to create ggplot objects
 my_qplot<-function(d,col){
-	qplot(data=d,as.factor(len),d[[col]],geom=c("jitter"),h=0,xlab="Sequence length",ylab=col,log="y",size=0.7) + geom_boxplot(size=0.3,colour="blue",fill=alpha("blue",0.3/3),outlier.size=0.3) + opts(legend.position = "none");
+	qplot(data=d,as.factor(len),d[[col]],geom=c("jitter"),h=0,xlab="Sequence length",ylab=col,log="y",size=0.7) + geom_boxplot(size=0.3,colour="blue",fill=alpha("blue",0.3/3),outlier.size=0.3,coef=100000) + opts(legend.position = "none");
 }
 
 # function to draw horizontal line
