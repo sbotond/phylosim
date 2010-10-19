@@ -1,7 +1,8 @@
-library(R.oo)
-library(ape)
-library(ggplot2)
-source("../PhyloSimSource.R")
+##
+## Extra example 1: plotting trees and alignments
+##
+
+library(phylosim)
 
 # Ensembl pax gene family.
 pax.aln <- "data/ensembl_pax.fasta"
