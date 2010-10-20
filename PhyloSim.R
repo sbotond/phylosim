@@ -57,6 +57,8 @@
 #	but also on the length of the tree.
 #	\item Constructing \code{Sequence} objects with large number of sites is expensive. Avoid doing
 #	that inside a cycle.
+#	\item In the case of \code{Sequence} objects with a large number of sites (more than 10 000) the 
+#	amount of available memory can be limiting as well.
 #  }
 #
 #	The examples below demonstrate only some more common simulation settings,
