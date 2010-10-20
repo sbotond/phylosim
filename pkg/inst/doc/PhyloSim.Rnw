@@ -41,17 +41,15 @@
 
 \item{Serious users might consider reading all class documentations which provide more focused examples.}
 
-\item{Additional examples can be found at \href{http://github.com/sbotond/phylosim/tree/master/examples}{http://github.com/sbotond/phylosim/tree/master/examples}}
+\item{Additional example scripts can be found at \href{http://github.com/sbotond/phylosim/tree/master/examples}{http://github.com/sbotond/phylosim/tree/master/examples}}
 
 \item{The \code{ll()} method list the methods and virtual field implemented in the immediate class of an object which is useful as ``proto-documentation''.}
 
 \end{itemize}
 
-\section{Advanced examples}
+\section{Basic examples}
 
-\subsection{Simulating ``domains'' and heterogeneous evolution}
-
-The following code illustrates how to set up a more complicated simulation of amino acid sequences involving ``domains'' and heterogeneous evolution.
+The following examples illustrates how to set up simple simulations.
 
 First load the package:
 <<echo=FALSE,results=hide>>=
@@ -60,6 +58,466 @@ options(width=90)
 <<echo=TRUE>>=
 library(phylosim)
 @
+
+\subsection{Simulating substitutions under the JC69 model}
+
+We will simulate the evolution of nucleotide sequences of length 50 along a random coalescent tree
+with 3 tips under the JC69 model. The following two examples are equivalent.
+
+\subsubsection{Compact example}
+
+<<echo=TRUE>>=
+Simulate(PhyloSim(
+	root.seq=sampleStates( NucleotideSequence(len=50,proc=list(list(JC69())) )),
+	phylo=rcoal(3)
+))$alignment
+@
+
+\subsubsection{``Unrolled'' example}
+
+Construct the root sequence:
+<<echo=TRUE>>=
+root.seq<-NucleotideSequence(length=50)
+@
+
+Construct a JC69 substitution process object:
+<<echo=TRUE>>=
+p<-JC69()
+@
+
+Attach the substitution process to root sequence:
+<<echo=TRUE>>=
+attachProcess(root.seq,p)
+@
+
+Sample the site states from the equilibrium distribution of the JC69
+substitution process:
+<<echo=TRUE>>=
+sampleStates(root.seq)
+@
+
+Generate a random coalescent tree with 3 leaves:
+<<echo=TRUE>>=
+tree<-rcoal(3)
+@
+
+Construct a \psim\ object:
+<<echo=TRUE>>=
+sim<-PhyloSim()
+@
+
+Set the phylo object:
+<<echo=TRUE>>=
+sim$phylo<-tree
+@
+
+Set the root sequence:
+<<echo=TRUE>>=
+sim$rootSeq<-root.seq
+@
+
+Run the simulation:
+<<echo=TRUE>>=
+Simulate(sim)
+@
+
+Display the resulting alignment matrix:
+<<echo=TRUE>>=
+sim$alignment
+@
+
+\subsection{Simulating substitutions under the HKY model}
+
+Construct an HKY substitution process object:
+<<echo=TRUE>>=
+p<-HKY(rate.params=list( "Alpha"=10,"Beta"=2),
+                     base.freqs=c(4,3,2,1)/10
+   )
+@
+
+Construct the root sequence, attach the substitution
+process to root sequence via the constructor and sample states:
+<<echo=TRUE>>=
+root.seq<-NucleotideSequence(length=50,processes=list(list(p)))
+sampleStates(root.seq)
+@
+
+Construct a \psim\ object, set the phylo object and the root sequence:
+<<echo=TRUE>>=
+sim<-PhyloSim(
+	root.seq=root.seq,
+	phylo=rcoal(3)
+);
+@
+
+Run simulation:
+<<echo=TRUE>>=
+Simulate(sim)
+@
+
+Save the resulting alignment:
+<<echo=TRUE>>=
+saveAlignment(sim,file="HKY_sim.fas")
+@
+<<echo=FALSE>>=
+unlink("HKY_sim.fas")
+@
+
+Plot the alignment alongside the tree (including sequences at ancestral nodes):
+<<echo=TRUE,fig=TRUE,width=180,height=40>>=
+plot(sim,num.pages=1)
+@
+
+\subsection{Simulating among-sites rate variation}
+
+\subsubsection{Simulating under the discrete gamma (GTR+d$\Gamma$) model}
+
+Construct a GTR subsection process object:
+
+<<echo=TRUE>>=
+         p<-GTR(
+                     rate.params=list(
+                             "a"=1, "b"=2, "c"=3,
+                             "d"=1, "e"=2, "f"=3
+                     ),
+                     base.freqs=c(2,2,1,1)/6
+             )
+@
+
+Construct the root sequence, attach substitution process:
+<<echo=TRUE>>=
+root.seq<-NucleotideSequence(length=50,processes=list( list(p) ))
+@
+
+Sample rate multipliers form a discrete gamma distribution with 4 categories and
+shape parameter 0.5:
+
+<<echo=TRUE>>=
+plusGamma(root.seq,p,0.5)
+@
+
+Get the sampled rate multipliers:
+<<echo=TRUE>>=
+getRateMultipliers(root.seq,p);
+@
+
+Construct the \psim\ object, sample states and set the phylo object:
+<<echo=TRUE>>=
+sim<-PhyloSim(
+	root.seq=sampleStates(root.seq),
+	phylo=rcoal(3)	
+)
+@
+
+Run the simulation:
+<<echo=TRUE>>=
+Simulate(sim)
+@
+
+Plot the alignment alongside the tree, skip sequences at ancestral nodes:
+<<echo=TRUE,fig=TRUE,width=180,height=40>>=
+plot(sim,num.pages=1,plot.ancestors=FALSE)
+@
+
+
+\subsubsection{Simulating under the invariants and discrete gamma (GTR+I+d$\Gamma$) model}
+
+We will reuse the root sequence object and GTR object from the previous example. The process is already attached, but we need to clear the states to have a new root sequence.
+
+Clear the states of the root sequence object and sample a set of new states:
+<<echo=TRUE>>=
+clearStates(root.seq)
+sampleStates(root.seq)
+@
+
+Sample rate multipliers form a +I+d$\Gamma$ model:
+<<echo=TRUE>>=
+plusInvGamma(root.seq,p,pinv=0.8,shape=0.5)
+@
+
+Deal with the rest of the simulation:
+<<echo=TRUE,fig=TRUE,width=180,height=40>>=
+sim<-Simulate(
+	PhyloSim(
+		root.seq=root.seq,
+		phylo=rcoal(3)
+	)
+)
+plot(sim,num.pages=1,plot.ancestors=FALSE)
+@
+
+\subsection{Simulating indels}
+
+\subsubsection{Insertion and deletions having the same length distribution}
+
+Set up the substitution process and the root sequence:
+<<echo=TRUE>>=
+p<-JC69()
+root.seq<-NucleotideSequence(len=50,processes=list(list(p)))
+sampleStates(root.seq)
+@
+
+Construct a deletion process proposing deletions with rate 0.25 according to a discrete length 
+distribution:
+<<echo=TRUE>>=
+ d<-DiscreteDeletor(
+                     rate=0.25,
+                     sizes=c(1,2),
+                     probs=c(1/2,1/2)
+   )
+@
+
+Construct an insertion process proposing insertions with rate 0.25 according to a discrete length 
+distribution:
+<<echo=TRUE>>=
+ i<-DiscreteInsertor(
+                     rate=0.25,
+                     sizes=c(1,2),
+                     probs=c(1/2,1/2)
+   )
+@
+
+Set the template sequence for the insertion process:
+<<echo=TRUE>>=
+i$templateSeq<-NucleotideSequence(length=2,processes=list( list(p) ))
+@
+
+The states of the template sequence are undefined.
+The actual states will be sampled from the equilibrium distribution of the attached substitution process 
+before performing the insertion.
+
+Attaching the indel processes:
+<<echo=TRUE>>=
+attachProcess(root.seq,d)
+attachProcess(root.seq,i)
+@
+
+Construct the \psim\ object, set the phylo object and run the simulation:
+<<echo=TRUE>>=
+sim<-Simulate(PhyloSim(
+	root.seq=root.seq,
+	phylo=rcoal(3)
+))
+@
+
+Plot the alignment alongside the tree, skip sequences at ancestral nodes:
+<<echo=TRUE,fig=TRUE,width=180,height=40>>=
+plot(sim,num.pages=1,plot.ancestors=FALSE)
+@
+
+\subsubsection{Insertion and deletions having different length distributions}
+
+The following code reuses the objects constructed in the previous example to simulate 
+deletions and insertions with different length distributions.
+
+Construct a new insertion process proposing insertions of \code{C}s with rate 0.5 according to a discrete length 
+distribution:
+<<echo=TRUE>>=
+ i2<-DiscreteInsertor(
+                     rate=0.25,
+                     sizes=c(1,2,3,4),
+                     probs=c(1,2,3,4)/10,
+		     template.seq=NucleotideSequence(string="C")	
+   )
+@
+
+Clear the states of the root sequence object:
+<<echo=TRUE>>=
+clearStates(root.seq)
+@
+
+Define a new set of processes (\code{p} - substitution, \code{d} - deletion, \code{i2} - 
+the new insertion process) for the root sequence using the \code{processes} virtual field:
+<<echo=TRUE>>=
+root.seq$processes<-list(list(i2, d, p))
+@
+
+Construct the \psim\ object, sample states, set the phylo object and run the simulation:
+<<echo=TRUE>>=
+sim<-Simulate(PhyloSim(
+	root.seq=sampleStates(root.seq),
+	phylo=rcoal(3)	
+))
+@
+
+Plot the alignment alongside the tree, skip sequences at ancestral nodes:
+<<echo=TRUE,fig=TRUE,width=180,height=40>>=
+plot(sim,num.pages=1,plot.ancestors=FALSE)
+@
+
+\subsection{Simulating partitions}
+
+The following example demonstrates how to use the processes and site- and process-specific 
+parameters to simulate ``partitions'' with different properties.
+
+We will simulate four partitions:
+
+\begin{itemize}
+
+\item{Partition 1 in range \code{1:25} evolving by JC+d$\Gamma$ with a shape parameter $\alpha=1$}
+\item{Partition 2 in range \code{26:50} evolving by JC+d$\Gamma$ with a shape parameter $\alpha=0.5$}
+\item{Partition 3 in range \code{51:75} evolving by HKY+d$\Gamma$ with a shape parameter $\alpha=1$}
+\item{Partition 4 in range \code{76:100} evolving by HKY+d$\Gamma$ with a shape parameter $\alpha=0.5$}
+
+\end{itemize}
+
+First construct two substitution process objects:
+<<echo=TRUE>>=
+jc69<-JC69()
+hky<-HKY(rate.params=list( "Alpha"=5,"Beta"=2),
+                     base.freqs=c(4,3,2,1)/10
+      )
+@
+
+Construct a root sequence object of length 100:
+<<echo=TRUE>>=
+root.seq<-NucleotideSequence(length=100)
+@
+
+Attach process \code{jc69} to range \code{1:50}:
+<<echo=TRUE>>=
+attachProcess(root.seq,jc69,1:50)
+@
+
+Attach process \code{hky} to range \code{51:100}:
+<<echo=TRUE>>=
+attachProcess(root.seq,hky,51:100)
+@
+
+Sample rate multipliers in the four partitions:
+<<echo=TRUE>>=
+plusGamma(root.seq,jc69,1,1:25)
+plusGamma(root.seq,jc69,0.5,26:50)
+
+plusGamma(root.seq,hky,1,51:75)
+plusGamma(root.seq,hky,0.5,76:100)
+@
+
+Construct the \psim\ object, sample states, set root sequence, set the phylo object and run the simulation:
+<<echo=TRUE>>=
+sim<-Simulate(PhyloSim(
+	root.seq=sampleStates(root.seq),
+	phylo=rcoal(3)
+))
+@
+
+Plot the alignment alongside the tree, skip sequences at ancestral nodes:
+<<echo=TRUE,fig=TRUE,width=180,height=40>>=
+plot(sim,num.pages=1,plot.ancestors=FALSE)
+@
+
+\subsection{Simulating heterotachy}
+
+Set up the substitution process:
+<<echo=TRUE>>=
+p<-F84();
+p$kappa<-1;
+@
+
+Set up the root sequence:
+<<echo=TRUE>>=
+root.seq<-NucleotideSequence(length=50,processes=list(list(p)));
+@
+
+Sample the rate multipliers from a +d$\Gamma$ model with shape parameter 1.0:
+<<echo=TRUE>>=
+plusGamma(root.seq,p,1)
+@
+
+
+Construct the \psim\ object, sample states, set root sequence, and set the phylo object:
+<<echo=TRUE>>=
+sim<-PhyloSim(
+	root.seq=sampleStates(root.seq),
+	phylo=rcoal(4)
+)
+@
+
+A ``node hook'' is a function which accepts a \code{Sequence} object
+through the named argument ``seq'' and returns a \code{Sequence} object.
+After simulating the branch leading to the node, the resulting
+\code{Sequence} object is passed to the node hook and the returned object
+is used to simulate the downstream branches.
+
+Create a node hook function which will create heterotachy by resampling the site rates 
+from the +d$\Gamma$ model with shape parameter 1.0:
+<<echo=TRUE>>=
+node.hook <- function(seq) {
+
+	if(!isAttached(seq$sites[[1]],p)){
+		return(seq);
+	}
+
+	cat("Resampling rate multipliers!\n");
+	plusGamma(seq,p,1)
+	return(seq)
+}
+@
+
+Attach the hook to node 7:
+<<echo=TRUE>>=
+attachHookToNode(sim, node = 7, fun = node.hook)
+@
+
+Run the simulation:
+<<echo=TRUE>>=
+Simulate(sim)
+@
+
+Plot the alignment alongside the tree, skip sequences at ancestral nodes:
+<<echo=TRUE,fig=TRUE,width=180,height=40>>=
+plot(sim,num.pages=1,plot.ancestors=FALSE)
+@
+
+\subsection{Simulating many replications}
+
+Constructing \code{Sequence} objects with a large number of sites is expensive, so it is a good idea to do that outside the cycle when simulating many replications with the same root sequence length.
+
+Reusing the root sequence object is easy, but do not forget to do the modifications needed to get independent simulations (e.g. clear the states of the root sequence, resample the rate multipliers).
+
+The following code illustrates how to simulate many replications under the JC69+d$\Gamma$ model.
+
+Construct the root sequence object and attach the substitution process:
+<<echo=TRUE>>=
+p<-JC69();
+root.seq<-NucleotideSequence(length=10)
+attachProcess(root.seq,p)
+@
+
+Generate a random coalescent tree with three leaves:
+<<echo=TRUE>>=
+tree<-rcoal(3)
+@
+
+Simulate three replications. Note that the states are cleared and resampled. The rate multipliers are resampled as well:
+<<echo=TRUE>>=
+for(i in 1:3){
+	cat(paste("Simulating replication",i,"\n\n",sep=""))	
+
+	clearStates(root.seq)
+	plusGamma(root.seq,p,0.25)
+	sampleStates(root.seq)
+
+	sim<-Simulate(PhyloSim(
+		root.seq=root.seq,
+		phylo=tree	
+	))	
+	
+	saveAlignment(sim,file=paste("aln_",i,".fas",sep=""))
+}
+@
+
+<<echo=FALSE>>=
+unlink("aln_1.fas");
+unlink("aln_2.fas");
+unlink("aln_3.fas");
+@
+
+\section{Advanced examples}
+
+\subsection{Simulating ``domains'' and heterogeneous evolution}
+
+The following code illustrates how to set up a more complicated simulation of amino acid sequences involving ``domains'' and heterogeneous evolution.
 
 Use the \code{ll()} method to list the methods and virtual fields implemented in the \code{Site} class:
 <<echo=TRUE>>=
@@ -141,7 +599,7 @@ Setting up the insert hook for the insertion processes:
 
 Insert hook functions are called just before inserting the sequence generated by the insertion process.
 This function allows for arbitrary modifications to be made to the inserted sequence object. In this case the
-insert hook functions sample the site-process specific rate multipliers of the substitution processes from an invariants plus discrete gamma (+I+$\Gamma$) model:
+insert hook functions sample the site-process specific rate multipliers of the substitution processes from an invariants plus discrete gamma (+I+d$\Gamma$) model:
 
 <<echo=TRUE>>=
 cont.ins.wag$insertHook <- function(seq, target.seq, event.pos, 
@@ -266,7 +724,7 @@ saveAlignment(sim, file = "example_V1_aln.fas", skip.internal = TRUE)
 @
 Plot the resulting alignment alongside the tree (including seqeunces at internal nodes):
 <<echo=TRUE,fig=TRUE,width=180, height=80>>=
-plot(sim)
+plot(sim,num.pages=1)
 @
 <<echo=FALSE,results=hide>>=
 file.remove("example_V1_aln.fas")
@@ -382,7 +840,7 @@ Simulate(sim)
 
 Plot the resulting alignment alongside the tree:
 <<echo=TRUE,fig=TRUE,width=180, height=80>>=
-plot(sim)
+plot(sim,num.pages=1)
 @
 
 Export the nonsynonymous substitution counts as a phylo object:
@@ -493,7 +951,7 @@ Simulate(sim)
 @
 Plot tree and alignment:
 <<echo=TRUE,fig=TRUE,width=180, height=80>>=
-plot(sim)
+plot(sim,num.pages=1)
 @
 
 Save alignment:
