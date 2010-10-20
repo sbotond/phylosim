@@ -3453,7 +3453,7 @@ setMethodS3(
       n.leaves <- length(names)
       
       if (max(tree.df$event.count) > 0) {
-        print(paste("Coloring tree by",color.branches))
+        #print(paste("Coloring tree by",color.branches))
         q <- ggplot(tree.df,aes(colour=event.count))
         q <- q + scale_colour_gradient()
       } else {
