@@ -3349,7 +3349,7 @@ setMethodS3(
       df$page <- factor(df$page,levels=page.numbers,labels=page.labels)
 
       num.pages <- length(page.labels)
-      print(paste("Num pages:",num.pages))
+      #print(paste("Num pages:",num.pages))
     }    
 
     if (color.scheme == 'auto') {
@@ -3372,7 +3372,7 @@ setMethodS3(
       } else {
         color.scheme <- 'combined'
       }
-      print(paste("Color scheme:",color.scheme))
+      #print(paste("Color scheme:",color.scheme))
     }
 
    legend.title <- color.scheme
