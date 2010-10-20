@@ -16,7 +16,7 @@ simulate_aa<-function(phylo,seq,len,rep){
 		# set all site states to NA
 		clearStates(seq);
                 # sample rates from a discrete gamma model
-                plusGamma(seq,wag,shape=wag.true.gamma.shape);
+                plusGamma(seq,wag,shape=wag.true.gamma.shape,ncat=8);
                 # sample states
                 sampleStates(seq);
                 # construct simulation object

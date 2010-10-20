@@ -23,7 +23,7 @@
         kappa = .3   * initial or fixed kappa
     fix_omega = 0   * 1: omega or omega_1 fixed, 0: estimate 
         omega = 1.3  * initial or fixed omega, for codons or codon-based AAs
-        ncatG = 4   * # of categories in the dG or AdG models of rates
+        ncatG = 8   * # of categories in the dG or AdG models of rates
 
         getSE = 0   * 0: don't want them, 1: want S.E.s of estimates
  RateAncestor = 0   * (0,1,2): rates (alpha>0) or ancestral states (1 or 2)

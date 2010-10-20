@@ -20,7 +20,7 @@
     fix_alpha = 0   * 0: estimate alpha; 1: fix alpha at value below
         alpha = 1   * initial or fixed alpha, 0:infinity (constant rate)
        Malpha = 0   * 1: different alpha's for genes, 0: one alpha
-        ncatG = 4   * # of categories in the dG, AdG, or nparK models of rates
+        ncatG = 8   * # of categories in the dG, AdG, or nparK models of rates
         nparK = 0   * rate-class models. 1:rK, 2:rK&fK, 3:rK&MK(1/K), 4:rK&MK 
 
         nhomo = 0   * 0 & 1: homogeneous, 2: kappa for branches, 3: N1, 4: N2

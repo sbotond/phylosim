@@ -20,7 +20,7 @@ simulate_nuc<-function(phylo,seq,len,rep){
 	# set all states to NA
 	clearStates(seq);
         # sample rates from a discrete gamma model
-        plusGamma(seq,f84,shape=f84.true.gamma.shape);
+        plusGamma(seq,f84,shape=f84.true.gamma.shape,ncat=8);
         # sample states
         sampleStates(seq);
         # construct simulation object
