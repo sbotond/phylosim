@@ -3,7 +3,7 @@
 source("common.R");
 
 # GY94 model parameters:
-gy94.true.omega<-2;
+gy94.true.omega<-0.3;
 gy94.true.kappa<-4;
 
 source("codon_funcs.R");
