@@ -3322,7 +3322,7 @@ setMethodS3(
     
     if (!plot.ancestors) {
                                         # Remove the ancestral nodes from the plot.
-      tip.name.indices <- grep("node",names,ignore.case=T,invert=T)
+      tip.name.indices <- grep("node",names,ignore.case=TRUE,invert=TRUE)
       names <- names[tip.name.indices]
       df$id <- factor(df$id,levels=names)
       df <- subset(df,id %in% names)
