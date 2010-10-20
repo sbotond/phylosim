@@ -61,7 +61,7 @@ detachProcess(s,p)
 plusGamma(s,ivd,pinv=0.5,shape=0.5)
 
 # construct simulation object
-sim<-PhyloSim(root.seq=s, phylo=read.tree("smalldemotree.nwk"));
+sim<-PhyloSim(root.seq=s, phylo=read.tree("data/smalldemotree.nwk"));
 
 # run simulation
 Simulate(sim)

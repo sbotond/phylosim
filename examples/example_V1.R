@@ -156,7 +156,7 @@ plot(seq);  # Plot the "rate landscape".
 
 # Read in the tree using APE:
 tree<-read.tree(
-		file="smalldemotree.nwk"	# the path to the tree file
+		file="data/smalldemotree.nwk"	# the path to the tree file
 	);
 
 # Create the simulation object:
