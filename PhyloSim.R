@@ -5779,9 +5779,8 @@ setMethodS3(
 #	fname<-paste("PhyloSim_dummy_fas_",Sys.getpid(),sep="")
 #	# write out a fasta alignment
 #	cat("(a,(b,c));",file=fname);
-#	# construct a PhyloSim object,
-#	# set the phylo object
-#	sim<-PhyloSim(_
+#	# construct a PhyloSim object:
+#	sim<-PhyloSim()
 #	# read the alignment
 #	readTree(sim,fname)
 #	# remove alignment file
