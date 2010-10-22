@@ -492,7 +492,7 @@ tree<-rcoal(3)
 Simulate three replications. Note that the states are cleared and resampled. The rate multipliers are resampled as well:
 <<echo=TRUE>>=
 for(i in 1:3){
-	cat(paste("Simulating replication",i,"\n\n",sep=""))	
+	cat(paste("\n\nSimulating replication",i,"\n",sep=""))	
 
 	clearStates(root.seq)
 	plusGamma(root.seq,p,0.25)

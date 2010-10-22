@@ -2793,7 +2793,7 @@ setMethodS3(
 #       # Plot the alignment without the tree or ancestral sequences.
 #       plot(sim, plot.ancestors=FALSE, plot.tree=FALSE)
 #       # Force a DNA-based color scheme (default is 'auto' to auto-detect based on the sequence composition)
-#       plot(sim, color.scheme='dna', plot.legend=T)
+#       plot(sim, color.scheme='dna', plot.legend=TRUE)
 # } 
 # 
 # @author 
@@ -2923,7 +2923,7 @@ setMethodS3(
    yend<-NA;
    y<-NA;
    substitutions<-NA;
-
+   event.count<-NA;
 
     ### First, we need to define a bunch of sparsely-documented utility functions. ###
 
@@ -6079,6 +6079,7 @@ setMethodS3(
 # \alias{plot.PSRoot}
 # \alias{revComp}
 # \alias{readAlignment}
+# \alias{readTree}
 # \alias{getOmegaScalingFactor}
 # 
 # @title "Undocumented generic method (PhyloSim package)" 
