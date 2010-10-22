@@ -34,7 +34,7 @@ print_times<-function(d,f){
 }
 
 save_times_latex<-function(d,name){
-        d<-(round(d,digits=5));
+        d<-(round(d,digits=3));
 
         row1.sim<-as.character(d[1,]);
 
