@@ -2248,7 +2248,7 @@ setMethodS3(
 	fr<-max(zz) - min(zz);	
 	# visual aspect tuned by "magic" formulas :)
 	my.plot<-(qplot(x=xx,y=yy,size=zz,xlab="Symbol",ylab="Prob:",main="Equlibrium distribution") + geom_point(colour="green") + 
-	scale_area(limits=c(0,max(zz)),to=c(0.5,(scale * 4 * log(128/size))), name="Size:",breaks=c(min(zz),min(zz) + fr*(1/3),min(zz) + fr*(2/3),max(zz)))
+	scale_area(limits=c(0,max(zz)),to=c(0.5,(scale * 4 * log(128/size))), name="Size:",breaks=c(min(zz),min(zz) + fr*(1/3),min(zz) + fr*(2/3),max(zz))) + xlim(xx)
 	);
 	print(my.plot,vp=vp2);
 	popViewport(1);
