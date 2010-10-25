@@ -3560,7 +3560,7 @@ setMethodS3(
 		this,
 		process,
 		id,
-		index=NA,
+		index,
 		...
 	){
 
@@ -3570,7 +3570,7 @@ setMethodS3(
       	return(invisible(FALSE));
     	}
     	if(missing(index)) {
-      		index<-seq(along.with=3:this$length,by=1);
+      		index<-seq(along.with=1:this$.length,by=1);
     	}
 		what<-apply(as.array(index),1,
 			function(pos){
