@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 ##
-## Example V2.2: Evolving codon sequences
+## Example V3.2: Evolving codon sequences
 ## See also the package vignette (vignette("PhyloSim",package="phylosim")).
 ##
 

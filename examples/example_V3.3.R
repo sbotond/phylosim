@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 ##
-## Example V2.3 - implementing an inverted duplication process
+## Example V3.3 - implementing an inverted duplication process
 ## 
 ##
 

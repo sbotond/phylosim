@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 ##
-## Example V24 - evolving a genomic region containing a "gene"
+## Example V3.4 - evolving a genomic region containing a "gene"
 ## 
 ##
 
