@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 ##
-## Example V1: Simulating amino acid sequences with "domains" and heterogeneous evolution.
+## Example V2.1: Simulating amino acid sequences with "domains" and heterogeneous evolution.
 ## See also the package vignette (vignette("PhyloSim",package="phylosim")).
 ##
 
