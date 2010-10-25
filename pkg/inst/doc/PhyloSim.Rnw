@@ -59,26 +59,39 @@ options(width=90)
 library(phylosim)
 @
 
+Create the tree files used in the basic examples:
+<<echo=TRUE>>=
+cat("((t1:0.3,t2:0.3):0.2,t3:0.1);",file="3taxa.nwk")
+cat("((t1:0.3,t2:0.3):0.2,(t3:0.1,t4:0.1):0.4);",file="4taxa.nwk")
+@
+
+
 \subsection{Simulating substitutions under the JC69 model}
 
 We will simulate the evolution of nucleotide sequences of length 50 along a random coalescent tree
-with 3 tips under the JC69 model. The following two examples are equivalent.
+with 3 tips under the JC69 model. The following two examples are essentially equivalent.
 
 \subsubsection{Compact example}
 
 <<echo=TRUE>>=
 Simulate(PhyloSim(
 	root.seq=sampleStates( NucleotideSequence(len=50,proc=list(list(JC69())) )),
-	phylo=rcoal(3)
+	phylo=read.tree("3taxa.nwk")
 ))$alignment
 @
 
 \subsubsection{``Unrolled'' example}
 
-Construct the root sequence:
+Construct the root sequence object:
 <<echo=TRUE>>=
 root.seq<-NucleotideSequence(length=50)
 @
+
+Print out the root sequence:
+<<echo=TRUE>>=
+print(root.seq)
+@
+Note, that all states are still undefined.
 
 Construct a JC69 substitution process object:
 <<echo=TRUE>>=
@@ -96,9 +109,20 @@ substitution process:
 sampleStates(root.seq)
 @
 
-Generate a random coalescent tree with 3 leaves:
+Print out the root sequence, now with the sampled states:
 <<echo=TRUE>>=
-tree<-rcoal(3)
+print(root.seq)
+@
+
+Read in tree from file using \code{APE}:
+<<echo=TRUE>>=
+tree<-read.tree("3taxa.nwk")
+@
+
+Plot the tree:
+
+<<echo=TRUE,fig=TRUE>>=
+plot(tree)
 @
 
 Construct a \psim\ object:
@@ -135,18 +159,28 @@ p<-HKY(rate.params=list( "Alpha"=10,"Beta"=2),
    )
 @
 
+Get a plot of the instantaneous substitution matrix and equilibrium distribution of the \code{p} process (bubble plot):
+<<echo=TRUE,fig=TRUE>>=
+plot(p,scale=0.5)
+@
+
 Construct the root sequence, attach the substitution
 process to root sequence via the constructor and sample states:
 <<echo=TRUE>>=
-root.seq<-NucleotideSequence(length=50,processes=list(list(p)))
-sampleStates(root.seq)
+root.len50.seq<-NucleotideSequence(length=50,processes=list(list(p)))
+sampleStates(root.len50.seq)
+@
+
+Print out root sequence:
+<<echo=TRUE>>=
+print(root.len50.seq)
 @
 
 Construct a \psim\ object, set the phylo object and the root sequence:
 <<echo=TRUE>>=
 sim<-PhyloSim(
-	root.seq=root.seq,
-	phylo=rcoal(3)
+	root.seq=root.len50.seq,
+	phylo=read.tree("3taxa.nwk")
 );
 @
 
@@ -155,7 +189,7 @@ Run simulation:
 Simulate(sim)
 @
 
-Save the resulting alignment:
+Save the resulting alignment (fasta format):
 <<echo=TRUE>>=
 saveAlignment(sim,file="HKY_sim.fas")
 @
@@ -184,12 +218,18 @@ Construct a GTR subsection process object:
              )
 @
 
+Summary of object \code{p}:
+<<echo=TRUE>>=
+summary(p)
+@
+
+
 Construct the root sequence, attach substitution process:
 <<echo=TRUE>>=
 root.seq<-NucleotideSequence(length=50,processes=list( list(p) ))
 @
 
-Sample rate multipliers form a discrete gamma distribution with 4 categories and
+Sample rate multipliers from a discrete gamma distribution with 4 categories and
 shape parameter 0.5:
 
 <<echo=TRUE>>=
@@ -205,7 +245,7 @@ Construct the \psim\ object, sample states and set the phylo object:
 <<echo=TRUE>>=
 sim<-PhyloSim(
 	root.seq=sampleStates(root.seq),
-	phylo=rcoal(3)	
+	phylo=read.tree("3taxa.nwk")
 )
 @
 
@@ -219,6 +259,14 @@ Plot the alignment alongside the tree, skip sequences at ancestral nodes:
 plot(sim,num.pages=1,plot.ancestors=FALSE)
 @
 
+Save the resulting alignment, skip sequences from internal nodes:
+<<echo=TRUE>>=
+saveAlignment(sim,file="Gamma_sim.fas",skip.internal=TRUE)
+@
+<<echo=FALSE,results=hide>>=
+file.remove("Gamma_sim.fas")
+@
+
 
 \subsubsection{Simulating under the invariants and discrete gamma (GTR+I+d$\Gamma$) model}
 
@@ -230,7 +278,7 @@ clearStates(root.seq)
 sampleStates(root.seq)
 @
 
-Sample rate multipliers form a +I+d$\Gamma$ model:
+Sample rate multipliers from a +I+d$\Gamma$ model:
 <<echo=TRUE>>=
 plusInvGamma(root.seq,p,pinv=0.8,shape=0.5)
 @
@@ -244,6 +292,14 @@ sim<-Simulate(
 	)
 )
 plot(sim,num.pages=1,plot.ancestors=FALSE)
+@
+
+Save the resulting alignment, skip sequences from internal nodes:
+<<echo=TRUE>>=
+saveAlignment(sim,file="InvGamma_sim.fas",skip.internal=TRUE)
+@
+<<echo=FALSE,results=hide>>=
+file.remove("InvGamma_sim.fas")
 @
 
 \subsection{Simulating indels}
@@ -292,7 +348,7 @@ attachProcess(root.seq,d)
 attachProcess(root.seq,i)
 @
 
-Construct the \psim\ object, set the phylo object and run the simulation:
+Construct the \psim\ object, set the phylo object (random coalescent tree for three taxa) and run the simulation:
 <<echo=TRUE>>=
 sim<-Simulate(PhyloSim(
 	root.seq=root.seq,
@@ -303,6 +359,14 @@ sim<-Simulate(PhyloSim(
 Plot the alignment alongside the tree, skip sequences at ancestral nodes:
 <<echo=TRUE,fig=TRUE,width=180,height=40>>=
 plot(sim,num.pages=1,plot.ancestors=FALSE)
+@
+
+Save the resulting alignment, skip sequences from internal nodes:
+<<echo=TRUE>>=
+saveAlignment(sim,file="indel1_sim.fas",skip.internal=TRUE)
+@
+<<echo=FALSE,results=hide>>=
+file.remove("indel1_sim.fas")
 @
 
 \subsubsection{Insertion and deletions having different length distributions}
@@ -336,13 +400,21 @@ Construct the \psim\ object, sample states, set the phylo object and run the sim
 <<echo=TRUE>>=
 sim<-Simulate(PhyloSim(
 	root.seq=sampleStates(root.seq),
-	phylo=rcoal(3)	
+	phylo=read.tree("3taxa.nwk")
 ))
 @
 
 Plot the alignment alongside the tree, skip sequences at ancestral nodes:
 <<echo=TRUE,fig=TRUE,width=180,height=40>>=
 plot(sim,num.pages=1,plot.ancestors=FALSE)
+@
+
+Save the resulting alignment, skip sequences from internal nodes:
+<<echo=TRUE>>=
+saveAlignment(sim,file="indel2_sim.fas",skip.internal=TRUE)
+@
+<<echo=FALSE,results=hide>>=
+file.remove("indel2_sim.fas")
 @
 
 \subsection{Simulating partitions}
@@ -354,10 +426,10 @@ We will simulate four partitions:
 
 \begin{itemize}
 
-\item{Partition 1 in range \code{1:25} evolving by JC+d$\Gamma$ with a shape parameter $\alpha=1$}
-\item{Partition 2 in range \code{26:50} evolving by JC+d$\Gamma$ with a shape parameter $\alpha=0.5$}
-\item{Partition 3 in range \code{51:75} evolving by HKY+d$\Gamma$ with a shape parameter $\alpha=1$}
-\item{Partition 4 in range \code{76:100} evolving by HKY+d$\Gamma$ with a shape parameter $\alpha=0.5$}
+\item{Partition 1: sites in range \code{1:25} evolving by JC+d$\Gamma$ with a shape parameter $\alpha=1$}
+\item{Partition 2: sites in range \code{26:50} evolving by JC+d$\Gamma$ with a shape parameter $\alpha=0.5$}
+\item{Partition 3: sites in range \code{51:75} evolving by HKY+d$\Gamma$ with a shape parameter $\alpha=1$}
+\item{Partition 4: sites in range \code{76:100} evolving by HKY+d$\Gamma$ with a shape parameter $\alpha=0.5$}
 
 \end{itemize}
 
@@ -393,7 +465,7 @@ plusGamma(root.seq,hky,1,51:75)
 plusGamma(root.seq,hky,0.5,76:100)
 @
 
-Construct the \psim\ object, sample states, set root sequence, set the phylo object and run the simulation:
+Construct the \psim\ object, sample states, set root sequence, set the phylo object (random coalescent tree for three taxa) and run the simulation:
 <<echo=TRUE>>=
 sim<-Simulate(PhyloSim(
 	root.seq=sampleStates(root.seq),
@@ -410,7 +482,7 @@ plot(sim,num.pages=1,plot.ancestors=FALSE)
 
 Set up the substitution process:
 <<echo=TRUE>>=
-p<-F84();
+p<-F84(base.freqs=c(1,2,3,4));
 p$kappa<-1;
 @
 
@@ -424,12 +496,17 @@ Sample the rate multipliers from a +d$\Gamma$ model with shape parameter 1.0:
 plusGamma(root.seq,p,1)
 @
 
+Read a tree from file:
+<<echo=TRUE>>=
+tree<-read.tree("4taxa.nwk")
+@
+
 
 Construct the \psim\ object, sample states, set root sequence, and set the phylo object:
 <<echo=TRUE>>=
 sim<-PhyloSim(
 	root.seq=sampleStates(root.seq),
-	phylo=rcoal(4)
+	phylo=tree
 )
 @
 
@@ -454,9 +531,15 @@ node.hook <- function(seq) {
 }
 @
 
-Attach the hook to node 7:
+Plot the \psim\ object:
+<<echo=TRUE,fig=TRUE>>=
+plot(sim)
+@
+Notice, that node 6 is the ancestor of taxa \code{t1} and \code{t2}.
+
+Attach the hook to node 6:
 <<echo=TRUE>>=
-attachHookToNode(sim, node = 7, fun = node.hook)
+attachHookToNode(sim, node = 6, fun = node.hook)
 @
 
 Run the simulation:
@@ -473,7 +556,7 @@ plot(sim,num.pages=1,plot.ancestors=FALSE)
 
 Constructing \code{Sequence} objects with a large number of sites is expensive, so it is a good idea to do that outside the cycle when simulating many replications with the same root sequence length.
 
-Reusing the root sequence object is easy, but do not forget to do the modifications needed to get independent simulations (e.g. clear the states of the root sequence, resample the rate multipliers).
+Reusing the root sequence object is easy, but do not forget to do the modifications needed to get independent simulations (e.g. clearing the states of the root sequence, resampling the rate multipliers).
 
 The following code illustrates how to simulate many replications under the JC69+d$\Gamma$ model.
 
@@ -484,15 +567,15 @@ root.seq<-NucleotideSequence(length=10)
 attachProcess(root.seq,p)
 @
 
-Generate a random coalescent tree with three leaves:
+Read the required phylogeny from file (this will remain fixed in the simulated replications):
 <<echo=TRUE>>=
-tree<-rcoal(3)
+tree<-read.tree("3taxa.nwk");
 @
 
 Simulate three replications. Note that the states are cleared and resampled. The rate multipliers are resampled as well:
 <<echo=TRUE>>=
 for(i in 1:3){
-	cat(paste("\n\nSimulating replication",i,"\n",sep=""))	
+	cat(paste("\n\nSimulating replication ",i,"\n\n",sep=""))	
 
 	clearStates(root.seq)
 	plusGamma(root.seq,p,0.25)
@@ -511,9 +594,17 @@ for(i in 1:3){
 unlink("aln_1.fas");
 unlink("aln_2.fas");
 unlink("aln_3.fas");
+
+unlink("3taxa.nwk");
+unlink("4taxa.nwk");
 @
 
 \section{Advanced examples}
+
+Creating the tree file used in the advanced examples:
+<<echo=TRUE>>=
+cat("(((t2:0.1231297638,t4:0.1231297638):0.2131353685,(t3:0.02843331083,t5:0.02843331083):0.3078318214):0.1698207644,t1:0.5060858966);",file="smalldemotree.nwk")
+@
 
 \subsection{Simulating ``domains'' and heterogeneous evolution}
 
@@ -665,14 +756,8 @@ plot(aa.seq)
 @
 
 Read in a tree using the \code{ape} package:
-<<echo=FALSE,results=hide>>=
-cat("(((t2:0.1231297638,t4:0.1231297638):0.2131353685,(t3:0.02843331083,t5:0.02843331083):0.3078318214):0.1698207644,t1:0.5060858966);",file="smalldemotree.nwk")
-@
 <<echo=TRUE>>=
 tree <- read.tree(file = "smalldemotree.nwk")
-@
-<<echo=FALSE,results=hide>>=
-file.remove("smalldemotree.nwk");
 @
 
 Construct the simulation object and get an object summary:
@@ -805,15 +890,10 @@ Sample states:
 sampleStates(s)
 @
 Construct the simulation object:
-<<echo=FALSE,results=hide>>=
-cat("(((t2:0.1231297638,t4:0.1231297638):0.2131353685,(t3:0.02843331083,t5:0.02843331083):0.3078318214):0.1698207644,t1:0.5060858966);",file="smalldemotree.nwk")
-@
 <<echo=TRUE>>=
 sim <- PhyloSim(root.seq = s, phylo = read.tree("smalldemotree.nwk"))
 @
-<<echo=FALSE,results=hide>>=
-file.remove("smalldemotree.nwk");
-@
+
 Create a node hook function and attach to node 8:
 <<echo=TRUE>>=
 node.hook <- function(seq) {
@@ -936,9 +1016,6 @@ process by sampling rate multipliers from an I+G model:
 plusInvGamma(s,ivd,pinv=0.7,shape=0.5)
 @
 Construct simulation object:
-<<echo=FALSE,results=hide>>=
-cat("(((t2:0.1231297638,t4:0.1231297638):0.2131353685,(t3:0.02843331083,t5:0.02843331083):0.3078318214):0.1698207644,t1:0.5060858966);",file="smalldemotree.nwk")
-@
 <<echo=TRUE>>=
 sim<-PhyloSim(root.seq=s, phylo=read.tree("smalldemotree.nwk"));
 @
