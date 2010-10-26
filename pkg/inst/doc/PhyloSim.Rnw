@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper,twosided]{article}
 
 %\VignetteIndexEntry{PhyloSim}
 %\VignettePackage{phylosim}
@@ -261,7 +261,7 @@ Plot the alignment alongside the tree, skip sequences at ancestral nodes:
 plot(sim,num.pages=1,plot.ancestors=FALSE)
 @
 
-Save the resulting alignment, skip sequences from internal nodes:
+Save the resulting alignment, omitting sequences at internal nodes:
 <<echo=TRUE>>=
 saveAlignment(sim,file="Gamma_sim.fas",skip.internal=TRUE)
 @
@@ -285,7 +285,7 @@ Sample rate multipliers from a +I+d$\Gamma$ model:
 plusInvGamma(root.seq,p,pinv=0.8,shape=0.5)
 @
 
-Deal with the rest of the simulation:
+Deal with the rest of the simulation (note that for variety we use a random coalescent tree in this example):
 <<echo=TRUE,fig=TRUE,width=180,height=40>>=
 sim<-Simulate(
 	PhyloSim(
@@ -537,7 +537,8 @@ Plot the \psim\ object:
 <<echo=TRUE,fig=TRUE>>=
 plot(sim)
 @
-Notice, that node 6 is the ancestor of taxa \code{t1} and \code{t2}.
+
+{Notice that node 6 is the ancestor of taxa \code{t1} and \code{t2}.}
 
 Attach the hook to node 6:
 <<echo=TRUE>>=
@@ -574,7 +575,7 @@ Read the required phylogeny from file (this will remain fixed in the simulated r
 tree<-read.tree("3taxa.nwk");
 @
 
-Simulate three replications. Note that the states are cleared and resampled. The rate multipliers are resampled as well:
+Simulate three replications. Note that the states are cleared and resampled; the rate multipliers are resampled as well. The resulting aligments are stored in files aln\_1.fas, aln\_2.fas, aln\_3.fas.
 <<echo=TRUE>>=
 for(i in 1:3){
 	cat(paste("\n\nSimulating replication ",i,"\n\n",sep=""))	
@@ -605,7 +606,7 @@ unlink("4taxa.nwk");
 
 Creating the tree file used in the advanced examples:
 <<echo=TRUE>>=
-cat("(((t2:0.1231297638,t4:0.1231297638):0.2131353685,(t3:0.02843331083,t5:0.02843331083):0.3078318214):0.1698207644,t1:0.5060858966);",file="smalldemotree.nwk")
+cat("(((t2:0.1231,t4:0.1231):0.2131,(t3:0.0284,t5:0.0284):0.3078):0.1698,t1:0.5060);",file="smalldemotree.nwk")
 @
 
 \subsection{Simulating ``domains'' and heterogeneous evolution}
@@ -639,7 +640,7 @@ plot(wag, scale = 0.8)
 
 Construct a continuous deletor process:
 <<echo=TRUE>>=
-cont.del <- ContinuousDeletor(rate = 0.025, max.length = 10, 
+cont.del <- ContinuousDeletor(rate = 0.6, max.length = 10, 
     dist = expression(rnorm(1, mean = 5, sd = 3)))
 @
 Construct the template sequence for the \code{cont.ins.lg} insertion process:
@@ -654,13 +655,13 @@ templ.seq.lg <- clone(templ.seq.wag)
 
 Construct continuous insertor process object \code{cont.ins.wag}:
 <<echo=TRUE>>=
-cont.ins.wag <- ContinuousInsertor(rate = 0.025, max.length = 10, 
+cont.ins.wag <- ContinuousInsertor(rate = 0.6, max.length = 10, 
     dist = expression(rnorm(1, mean = 5, sd = 3)))
 @
 
 Construct continuous insertor process object \code{cont.ins.lg}:
 <<echo=TRUE>>=
-cont.ins.lg <- ContinuousInsertor(rate = 0.025, max.length = 10, 
+cont.ins.lg <- ContinuousInsertor(rate = 0.6, max.length = 10, 
     dist = expression(rnorm(1, mean = 5, sd = 3)))
 @
 
@@ -697,12 +698,12 @@ insert hook functions sample the site-process specific rate multipliers of the s
 <<echo=TRUE>>=
 cont.ins.wag$insertHook <- function(seq, target.seq, event.pos, 
     insert.pos) {
-    plusInvGamma(seq, process = wag, pinv = 0.4, shape = 0.6)
+    plusInvGamma(seq, process = wag, pinv = 0.1, shape = 1)
     return(seq)
 }
 cont.ins.lg$insertHook <- function(seq, target.seq, event.pos, 
     insert.pos) {
-    plusInvGamma(seq, process = lg, pinv = 0.4, shape = 0.6)
+    plusInvGamma(seq, process = lg, pinv = 0.1, shape = 1)
     return(seq)
 }
 @
@@ -736,11 +737,11 @@ for (i in 1:aa.seq$length) {
         setRateMultipliers(aa.seq, jtt, qnorm(runif(1,min=0.5,max=1),mean=0.001,sd=0.01), index = i)
     }
     else if (isAttached(aa.seq$sites[[i]], wag)) {
-        plusInvGamma(aa.seq, process = wag, pinv = 0.4, shape = 0.6, 
+        plusInvGamma(aa.seq, process = wag, pinv = 0.1, shape = 1, 
             index = i)
     }
     else if (isAttached(aa.seq$sites[[i]], lg)) {
-        plusInvGamma(aa.seq, process = lg, pinv = 0.4, shape = 0.6, 
+        plusInvGamma(aa.seq, process = lg, pinv = 0.1, shape = 1, 
             index = i)
     }
 }
@@ -796,7 +797,7 @@ Attach the hook to node 8:
 attachHookToNode(sim, node = 8, fun = node.hook)
 @
 
-The \code{node.hook} function will attach the \code{pam} substitution process to all
+This \code{node.hook} function will attach the \code{pam} substitution process to all
 sites which have the \code{jtt} process attached (the ``core'' region). The affected sites 
 will evolve with a doubled rate by a mixture of substitution processes (\code{jtt} and \code{pam}) in the clade defined by the node - \code{(t4, t2)}.
 
@@ -809,7 +810,7 @@ Save the resulting alignment, omitting the internal nodes:
 <<echo=TRUE>>=
 saveAlignment(sim, file = "example_V1_aln.fas", skip.internal = TRUE)
 @
-Plot the resulting alignment alongside the tree (including seqeunces at internal nodes):
+Plot the resulting alignment alongside the tree (including sequences at internal nodes):
 <<echo=TRUE,fig=TRUE,width=180, height=80>>=
 plot(sim,num.pages=1)
 @
@@ -821,7 +822,6 @@ Disable fast mode:
 <<echo=TRUE>>=
 rm(PSIM_FAST)
 @
-
 
 \subsection{Evolving codon sequences}
 
@@ -1421,14 +1421,17 @@ Geometric, ${\rm Geom}(\lambda)$
 	& $\lambda^{k-1}(1-\lambda)$ 
 	& ${ d \frac{1-\lambda}{1 - d\lambda}}$ 
 	& ${\rm Geom}(d\lambda)$ \\
+	&&&\\
 Poisson + 1, ${\rm Po_{+1}}(\lambda)$	
 	& ${ \frac{e^{-\lambda}\lambda^{k-1}}{\Gamma(k)}  }$ 
 	& $d { e^{-\lambda (1-d)} }$ 
 	& ${\rm Po_{+1}}(d\lambda)$ \\
+	&&&\\
 Conway-Maxwell Poisson + 1, ${\rm CMP_{+1}}(\lambda,\nu)$ 
 	& ${ \frac{\lambda^{k-1}}{\Gamma(k)^\nu {\cal Z}(\lambda,\nu)} }$ 
 	& ${d \frac{ {\cal Z}(\lambda,\nu)}{ {\cal Z}(d\lambda,\nu)}}$ 
 	&  ${\rm CMP_{+1}}(d\lambda,\nu)$ \\
+	&&&\\
 Negative Binomial + 1, ${\rm NB_{+1}}(\lambda,r)$ 
 	& ${  \frac{\Gamma(r+k-1)}{\Gamma(k)\Gamma(r)} (1-\lambda)^r \lambda^{k-1} } $
 	& ${ d\frac{(1-\lambda)^r}{(1-d\lambda)^r} }$ 
