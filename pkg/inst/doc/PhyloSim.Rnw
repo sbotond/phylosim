@@ -51,7 +51,7 @@
 
 \section{Basic examples}
 
-The following examples illustrates how to set up simple simulations.
+The following examples illustrate how to set up simple simulations.
 
 First load the package:
 <<echo=FALSE,results=hide>>=
@@ -70,7 +70,7 @@ cat("((t1:0.3,t2:0.3):0.2,(t3:0.1,t4:0.1):0.4);",file="4taxa.nwk")
 
 \subsection{Simulating substitutions under the JC69 model}
 
-We will simulate the evolution of nucleotide sequences of length 50 along a random coalescent tree
+We will simulate the evolution of nucleotide sequences of length 50 along a tree
 with 3 tips under the JC69 model. The following two examples are essentially equivalent.
 
 \subsubsection{Compact example}
