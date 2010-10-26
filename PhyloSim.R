@@ -5726,7 +5726,7 @@ setMethodS3(
 	aln<-toupper(read.dna(file=file,format=format,as.matrix=TRUE,as.character=TRUE));
 	aln.names<-dimnames(aln)[[1]];
 
-        if (!is.na(this$.phylo)) {
+        if (!all(is.na(this$.phylo))) {
           tip.labels<-this$tipLabels;
           length.overlap <- length(intersect(tip.labels,aln.names))
           if(length.overlap != length(tip.labels)){
