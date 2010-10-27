@@ -6080,13 +6080,14 @@ setMethodS3(
 # \alias{readAlignment}
 # \alias{readTree}
 # \alias{getOmegaScalingFactor}
+# \alias{saveLoadReference}
 # 
-# @title "Undocumented generic method (PhyloSim package)" 
+# @title "Undocumented object (PhyloSim package)" 
 #
 # \description{ 
 #	@get "title".
 #
-#	See the corresponding specific methods.
+#	See the corresponding specific methods if applicable.
 # } 
 # 
 # @synopsis 
