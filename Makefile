@@ -23,14 +23,14 @@ pkg: *.R rd cat
 	cp PAMLdat/* pkg/data/
 	R CMD build pkg
 checkpkg: pkg 
-	R CMD check phylosim_0.1.tar.gz
+	R CMD check phylosim_0.11.tar.gz
 clean:
-	(rm *.log; rm phylosim_0.1.tar.gz;rm -r ./phylosim.Rcheck;rm ./pkg/man/*.Rd;rm ./pkg/R/*.R;true ) 2>&1 > /dev/null
+	(rm *.log; rm phylosim_0.11.tar.gz;rm -r ./phylosim.Rcheck;rm ./pkg/man/*.Rd;rm ./pkg/R/*.R;true ) 2>&1 > /dev/null
 inst: pkg
-	R CMD INSTALL	phylosim_0.1.tar.gz
+	R CMD INSTALL	phylosim_0.11.tar.gz
 reinst: pkg
 	R CMD REMOVE	phylosim
-	R CMD INSTALL	phylosim_0.1.tar.gz
+	R CMD INSTALL	phylosim_0.11.tar.gz
 remove:
 	R CMD REMOVE  phylosim
 aareload: cat
