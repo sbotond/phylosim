@@ -419,6 +419,82 @@ saveAlignment(sim,file="indel2_sim.fas",skip.internal=TRUE)
 file.remove("indel2_sim.fas")
 @
 
+\subsubsection{Simulating indels under selective constraints}
+
+Set up the substitution process and the root sequence:
+<<echo=TRUE>>=
+p<-JC69()
+root.seq<-NucleotideSequence(len=100,processes=list(list(p)))
+sampleStates(root.seq)
+@
+
+Construct a deletion process proposing deletions with rate 1 according to a discrete length
+distribution:
+<<echo=TRUE>>=
+d<-DiscreteDeletor(
+                     rate=1,
+                     sizes=c(1,2,3),
+                     probs=c(3/6,2/6,1/6)
+)
+@
+
+Construct an insertion process proposing insertions with rate 1 according to a discrete length
+distribution:
+<<echo=TRUE>>=
+i<-DiscreteInsertor(
+                     rate=1,
+                     sizes=c(1,2,3),
+                     probs=c(3/6,2/6,1/6)
+)
+@
+
+Set the template sequence for the insertion process:
+<<echo=TRUE>>=
+i$templateSeq<-NucleotideSequence(length=2,processes=list( list(p) ))
+@
+
+Attaching the indel processes:
+<<echo=TRUE>>=
+attachProcess(root.seq,d)
+attachProcess(root.seq,i)
+@
+
+Set deletion tolerance values:
+<<echo=TRUE>>=
+setDeletionTolerance(root.seq,d,0.08 + c(1/2:51,1/51:2))
+@
+
+Plot deletion tolerance values:
+<<echo=TRUE,fig=TRUE>>=
+plotParametersAtSites(root.seq,d,"deletion.tolerance")
+@
+
+Set insertion tolerance values:
+<<echo=TRUE>>=
+setInsertionTolerance(root.seq,i,0.08 + c(1/2:51,1/51:2))
+@
+
+Construct the PhyloSim object, read phylo object from file:
+<<echo=TRUE>>=
+sim<-Simulate(PhyloSim(
+        root.seq=root.seq,
+        phylo=read.tree("4taxa.nwk")
+))
+@
+
+Plot the alignment alongside the tree, skip sequences at ancestral nodes:
+<<echo=TRUE,fig=TRUE,width=180,height=80>>=
+plot(sim,plot.ancestors=FALSE)
+@
+
+Save the resulting alignment, skip sequences from internal nodes:
+<<echo=TRUE>>=
+saveAlignment(sim,file="indel3_sim.fas",skip.internal=TRUE)
+@
+<<echo=FALSE,results=hide>>=
+file.remove("indel3_sim.fas")
+@
+
 \subsection{Simulating partitions}
 
 The following example demonstrates how to use the processes and site- and process-specific 
