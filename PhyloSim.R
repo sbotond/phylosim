@@ -797,6 +797,11 @@ setMethodS3(
 
 			this$.root.sequence<-clone(value);
 			this$.root.sequence$name<-paste("Root node",this$rootNode);
+        
+            # Call garbage collection:
+            gc();
+            gc();
+
 			return(this$.root.sequence);
 
 		}
@@ -1284,6 +1289,11 @@ cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if(!is.na(this$.log.connection)){
 				close(this$.log.connection);
 		}
+
+        # Call the garbage collector:
+        gc();
+        gc();
+
 		return(invisible(this));
   },
   private=FALSE,
@@ -1495,7 +1505,9 @@ setMethodS3(
 
 		} #/while
 
-	  	gc();	
+        # Calling garbage collection:
+        gc();
+        gc();
 		return(seq);
 
   },
@@ -2501,6 +2513,10 @@ setMethodS3(
 		if(paranoid){
 			.checkAlignmentConsistency(this, alignment);
 		}
+
+        # Call garbage collection:
+        gc();
+        gc();
 
 		# The whole alignment is associated with the root node:
 		return(alignment);
