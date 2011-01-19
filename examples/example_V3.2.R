@@ -98,6 +98,6 @@ nodelabels()
 # Save the resulting alignment:
 saveAlignment(
                 sim,                            # the phylo object      
-                file="example_V2_aln.fas",      # filename for alignment
+                file="example_V3.2_aln.fas",      # filename for alignment
 );
 

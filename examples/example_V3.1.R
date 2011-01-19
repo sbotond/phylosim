@@ -191,7 +191,7 @@ plot(sim)
 # Save the resulting alignment, skip internal nodes:
 saveAlignment(
 		sim,				# the phylo object	
-		file="example_V1_aln.fas",
+		file="example_V3.1_aln.fas",
 		skip.internal=TRUE		# filename for alignment
 );
 

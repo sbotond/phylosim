@@ -69,7 +69,7 @@ Simulate(sim)
 # plot tree and alignment
 plot(sim)
 # save alingment
-saveAlignment(sim,file="example_V3.fas");
+saveAlignment(sim,file="example_V3.3.fas");
 
 # disable fast & careless mode
 rm(PSIM_FAST)
