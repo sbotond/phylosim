@@ -884,14 +884,14 @@ Simulate(sim)
 
 Save the resulting alignment, omitting the internal nodes:
 <<echo=TRUE>>=
-saveAlignment(sim, file = "example_V1_aln.fas", skip.internal = TRUE)
+saveAlignment(sim, file = "example_V3.1_aln.fas", skip.internal = TRUE)
 @
 Plot the resulting alignment alongside the tree (including sequences at internal nodes):
 <<echo=TRUE,fig=TRUE,width=180, height=80>>=
 plot(sim,num.pages=1)
 @
 <<echo=FALSE,results=hide>>=
-file.remove("example_V1_aln.fas")
+file.remove("example_V3.1_aln.fas")
 @
 
 Disable fast mode:
@@ -1014,10 +1014,10 @@ nodelabels()
 
 Save the resulting alignment:
 <<echo=TRUE>>=
-saveAlignment(sim, file = "example_V2_aln.fas", )
+saveAlignment(sim, file = "example_V3.2_aln.fas", )
 @
 <<echo=FALSE,results=hide>>=
-file.remove("example_V2_aln.fas")
+file.remove("example_V3.2_aln.fas")
 @
 
 \subsection{Implementing a new process}
@@ -1111,10 +1111,10 @@ plot(sim,num.pages=1)
 
 Save alignment:
 <<echo=TRUE>>=
-saveAlignment(sim,file="example_V3.fas");
+saveAlignment(sim,file="example_V3.3.fas");
 @
 <<echo=FALSE,results=hide>>=
-file.remove("example_V3.fas");
+file.remove("example_V3.3.fas");
 @
 Disable fast \& careless mode:
 <<echo=TRUE>>=
@@ -1461,10 +1461,10 @@ plot(sim,num.pages="auto",plot.ancestors=FALSE)
 
 Save alignment:
 <<echo=TRUE>>=
-saveAlignment(sim,file="example_V4.fas");
+saveAlignment(sim,file="example_V3.4.fas");
 @
 <<echo=FALSE,results=hide>>=
-file.remove("example_V4.fas");
+file.remove("example_V3.4.fas");
 @
 
 Disable fast \& careless mode:
