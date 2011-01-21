@@ -3581,10 +3581,10 @@ setMethodS3(
        }
 
        # Adjust bar position if we have y_lo and y_hi values.
-       if(any(!is.na(sub.track$y_lo))) {
+       if(any(!is.null(sub.track$y_lo))) {
          sub.track$ymin <- sub.track$ymin + track.height*sub.track$y_lo         
        }
-       if(any(!is.na(sub.track$y_hi))) {
+       if(any(!is.null(sub.track$y_hi))) {
          sub.track$ymax <- sub.track$ymin + track.height*sub.track$y_hi         
        }
        
