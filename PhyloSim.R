@@ -2786,6 +2786,20 @@ setMethodS3(
 # 	\item{axis.text.size}{Text size for the sequence labels along the y-axis. This may require tweaking depending on the DPI and output format. Defaults to 'auto'.}
 #       \item{color.scheme}{Color scheme to use ("auto", "binary", "dna", "protein", "codon", "everything").}
 #       \item{color.branches}{The event count used to color the branches ("substitutions" by default). See \code{\link{getBranchEvents.PhyloSim}}.}
+#       \item{tracks}{Tracks to display above or below the alignment as colored blocks. The input format is a list of data frames with the following possible fields: (Note, only the 'pos' field is mandatory.)
+# pos:     The sequence position (starting with 1) of the feature
+# score:   The score (between 0 and 1) of the feature. Scores above 1 or below
+#          zero will be truncated.
+# y_lo:    The lower Y offset (between 0 and 1) of the feature block.
+# y_hi:    The upper Y offset (between 0 and 1) of the feature block. These two
+#          values allow bars to be positioned along the y-axis.
+# [fields below are unique per track; the value from the first row is used.]
+# id:      The display ID for the track.
+# layout:  Set to 'above' to put the track above the alignment, 'below' for below.
+# height:  The number of alignment rows for the track to span in height.
+# color.gradient: A comma-separated list of colors to interpolate between when coloring
+#              the blocks. Examples: 'white,red' 'blue,gray,red' '#FF00FF,#FFFFFF'
+# }
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2835,6 +2849,9 @@ setMethodS3(
     axis.text.size,
     color.scheme,
     color.branches,
+    tree.xlim,
+    aln.xlim,
+    tracks,
     ...
   ){
 		
@@ -2874,7 +2891,15 @@ setMethodS3(
                 if(missing(color.scheme)){
                         color.scheme='auto'
                 }
-
+                if(missing(tree.xlim)){
+                  tree.xlim=NULL
+                }
+                if(missing(aln.xlim)){
+                  aln.xlim=NULL
+                }
+                if(missing(tracks)){
+                  tracks=NULL
+                }
                 if(any(is.na(x$.phylo))) {
                   plot.tree <- FALSE
                 }
@@ -2891,7 +2916,10 @@ setMethodS3(
                                 char.text.size=char.text.size,
                                 axis.text.size=axis.text.size,
                                 color.scheme=color.scheme,
-                                color.branches=color.branches
+                                color.branches=color.branches,
+                                tree.xlim=tree.xlim,
+                                aln.xlim=aln.xlim,
+                                tracks=tracks
 			);
 			return(invisible(x));
 		}
@@ -2904,7 +2932,7 @@ setMethodS3(
   },
   private=FALSE,
   protected=FALSE,
-  overwrite=FALSE,
+  overwrite=TRUE,
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
@@ -2929,6 +2957,9 @@ setMethodS3(
     axis.text.size,
     color.scheme,
     color.branches,
+    tree.xlim,
+    aln.xlim,
+    tracks,
     ...
   ){
 
@@ -3271,6 +3302,11 @@ setMethodS3(
         cols <- codon.colors
       } else if (scheme == 'combined') {
         dna.colors <- alignment.colors('dna')
+        binary.colors <- alignment.colors('binary')
+        protein.colors <- alignment.colors('protein')
+        cols <- c(dna.colors,protein.colors,binary.colors)
+      } else if (scheme == 'combined_codon') {
+        dna.colors <- alignment.colors('dna')
                                         # Make the DNA stand out here by being a little darker
         for (i in 1:length(dna.colors)) {
           color <- dna.colors[i]
@@ -3290,6 +3326,12 @@ setMethodS3(
       x <- col2rgb(color)
       x <- round(x * 0.7)
       y <- rgb(x[1],x[2],x[3],maxColorValue=255)
+      return(y)
+    }
+    lighter <- function(color) {
+      x <- col2rgb(color)
+      x <- round(x * 1.2)
+      y <- rgb(min(x[1],255),min(x[2],255),min(x[3],255),maxColorValue=255)
       return(y)
     }
     
@@ -3344,8 +3386,72 @@ setMethodS3(
       df <- subset(df,id %in% names)
     }
 
-   #print(paste("Plot df size:",nrow(df),"rows"))
+   # Track input format is a list of data frames with one row per feature to be
+   # displayed, with the following columns. The only mandatory column is 'pos';
+   # all others have sensible default values.
+   # ---
+   # [fields below are unique per row]
+   # pos:     The sequence position (starting with 1) of the feature
+   # score:   The score (between 0 and 1) of the feature. Scores above 1 or below
+   #          zero will be truncated.
+   # y_lo:    The lower Y offset (between 0 and 1) of the feature block.
+   # y_hi:    The upper Y offset (between 0 and 1) of the feature block. These two
+   #          values allow bars to be positioned along the y-axis.
+   # [fields below are unique per track; the value from the first row is used.]
+   # id:      The display ID for the track.
+   # layout:  Set to 'above' to put the track above the alignment, 'below' for below.
+   # height:  The number of alignment rows for the track to span in height.
+   # color.gradient: A comma-separated list of colors to interpolate between when coloring
+   #              the blocks. Examples: 'white,red' 'blue,gray,red' '#FF00FF,#FFFFFF'
+   # 
+   # ---
+   #
    
+   # What we do is add the track data to the alignment data frame (so it gets
+   # paged and scaled properly along with the alignment data) and then separate
+   # it out before plotting, so it can be plotted separately from the alignment.
+   df$type <- 'aln'
+   df$track_index <- -1
+   if (!is.null(tracks)) {
+     df$score <- NA
+     i <- 0
+     for (track in tracks) {
+       i <- i + 1
+       track$track_index <- i
+       track$type <- 'track'
+       
+       # Add default values.
+       if (is.null(track$layout)) {
+         track$layout <- 'above'
+       }
+       if (is.null(track$color.gradient)) {
+         track$color.gradient <- 'white,black'
+       }
+       if (is.null(track$score)) {
+         track$score <- 1
+       }
+       if (is.null(track$id)) {
+         track$id <- paste('Track',i)
+       }
+       if (is.null(track$height)) {
+         track$height <- 4
+       }
+
+       # Limit score range
+       track$score <- pmin(track$score,1)
+       track$score <- pmax(track$score,0)
+       
+       # Sync the two data frame's columns, fill empty stuff with NAs.
+       columns.from.aln <- colnames(df)[!(colnames(df) %in% colnames(track))]
+       columns.from.track <- colnames(track)[!(colnames(track) %in% colnames(df))]
+       track[,columns.from.aln] <- NA
+       df[,columns.from.track] <- NA
+
+       track$type <- 'track'
+       df <- rbind(df,track)
+     }
+   }
+
     if (tolower(num.pages) == 'auto' || num.pages > 1) {
                                         # Plotting a multi-page alignment.
       aln.length <- length(aln[1,])
@@ -3375,37 +3481,129 @@ setMethodS3(
       all.chars <- all.chars[all.chars != '-']
       n.chars <- length(unique(toupper(all.chars)))
 
-      # Detect coloring scheme based on the character content. Use some fudge factors
-      # to allow for Ns and Xs in DNA, protein, and codon sets.
-      if (n.chars <= 2) {
-        color.scheme <- 'binary'
-      } else if (n.chars <= 4+2) {
-        color.scheme <- 'dna'
-      } else if (sum(all.chars %in% 0:9) > 4) { # For numeric coloring, it's a bit special...
-        color.scheme <- 'numeric'
-      } else if (n.chars <= 20+2) {
-        color.scheme <- 'protein'
-      } else if (n.chars <= 64+2) {
-        color.scheme <- 'codon'
-      } else {
+      dna <- c('a','t','g','c')
+      dna <- c(dna,toupper(dna))
+
+      protein <- letters
+      protein <- protein[!(protein %in% c('b','j','o','u','x','z'))]
+      protein <- c(protein,toupper(protein))
+
+      ca <- CodonAlphabet()
+      nucs <- c('G','A','C','T')
+      codon.grid <- expand.grid(nucs,nucs,nucs,stringsAsFactors=F)
+      codons <- c()
+      for (i in 1:nrow(codon.grid)) {
+        codons <- c(codons,paste(codon.grid[i,],collapse=''))
+      }
+      if(any(all.chars %in% codons)) {
+                                        # If we see any codon alphabets, use the combined_codon
+        color.scheme <- 'combined_codon'
+      } else {      
+                                        # Else just use the combined color scheme. It's good enough!
         color.scheme <- 'combined'
       }
-      #print(paste("Color scheme:",color.scheme))
     }
 
-   legend.title <- color.scheme
+    legend.title <- color.scheme
+
+    # Remove any tracks from the main aln data frame.
+   tracks <- subset(df,type=='track')
+   df <- subset(df,type=='aln')
+
+   # Set positional values in the aln data frame.
+   df$xx <- df$pos
+   df$yy <- as.numeric(df$id)
+   df$xmin <- df$xx - .5
+   df$xmax <- df$xx + .5
+   df$ymin <- df$yy - .5
+   df$ymax <- df$yy + .5
+   color.map <- alignment.colors(color.scheme)
+   df$colors <- color.map[as.character(df$char)]
    
-                                        # Create the ggplot panel.
-    p <- ggplot(df,aes(x=pos,y=as.numeric(id)))
-    p <- p + geom_tile(aes(fill=as.character(char)))
-    p <- p + scale_fill_manual(legend.title,values=alignment.colors(color.scheme))
-    p <- p + scale_x_continuous(limits=c(0,max(df$pos)+1),expand=c(0,0))
+   # Set the base for y-axis configurations.
+   y.lim <- c(0,length(names)+1)
+   y.breaks <- 1:length(names)
+   y.labels <- names
+   
+   # Create the ggplot panel.
+   p <- ggplot(df,aes(x=xx,y=yy,xmin=xmin,xmax=xmax,ymin=ymin,ymax=ymax))
+   p <- p + geom_rect(aes(fill=colors))
 
-    if (plot.labels) {
-      p <- p + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=names,expand=c(0,0))
-    } else {
-      p <- p + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=rep('',length(names)),expand=c(0,0))
-    }
+   if (!is.null(aln.xlim)) {
+     aln.limits <- aln.xlim
+   } else {
+     aln.limits <- c(0,max(df$pos)+1)
+   }
+   
+   if (nrow(tracks) > 0) {
+     # Handle tracks.
+
+     # These variables hold the current above and below offsets.
+     cur.y.above <- length(names) + 1 - .5
+     y.lim[2] <- length(names) + 1 - .5
+     cur.y.below <- 0.5
+
+     track.out <- data.frame()
+     track.indices <- sort(unique(tracks$track_index))
+     for (track.index in track.indices) {
+       sub.track <- subset(tracks,track_index==track.index)
+
+       # Collect the track-wide features.
+       track.id <- sub.track[1,]$id
+       track.height <- sub.track[1,]$height
+       track.layout <- sub.track[1,]$layout
+       color.gradient <- strsplit(sub.track[1,]$color.gradient,',')[[1]]
+       track.ramp <- colorRamp(colors=color.gradient)
+       sub.track$colors <- rgb(track.ramp(sub.track$score),maxColorValue=255)
+       
+       sub.track$xx <- sub.track$pos
+       sub.track$xmin <- sub.track$pos-.5
+       sub.track$xmax <- sub.track$pos+.5
+
+       if (track.layout == 'below') {
+         sub.track$yy <- cur.y.below
+         sub.track$ymin <- cur.y.below - track.height
+         sub.track$ymax <- cur.y.below
+
+         y.lim[1] <- cur.y.below - track.height
+         cur.y.below <- cur.y.below - track.height
+         y.breaks <- c(y.lim[1] + track.height/2,y.breaks)
+         y.labels <- c(as.character(track.id),y.labels)
+       } else {
+         sub.track$yy <- cur.y.above
+         sub.track$ymin <- cur.y.above
+         sub.track$ymax <- cur.y.above + track.height
+         
+         y.lim[2] <- cur.y.above + track.height
+         cur.y.above <- cur.y.above + track.height
+         y.breaks <- c(y.breaks,y.lim[2] - track.height/2)
+         y.labels <- c(y.labels,as.character(track.id))
+       }
+
+       # Adjust bar position if we have y_lo and y_hi values.
+       if(any(!is.na(sub.track$y_lo))) {
+         sub.track$ymin <- sub.track$ymin + track.height*sub.track$y_lo         
+       }
+       if(any(!is.na(sub.track$y_hi))) {
+         sub.track$ymax <- sub.track$ymin + track.height*sub.track$y_hi         
+       }
+       
+       track.out <- rbind(track.out,sub.track)
+     }
+
+     p <- p + geom_rect(aes(fill=colors),data=track.out)
+   }
+
+   #color.map <- alignment.colors(color.scheme)
+   p <- p + scale_fill_identity(labels=color.map)
+
+   p <- p + scale_x_continuous(limits=aln.limits,expand=c(0,0))
+   
+   if (plot.labels) {
+     p <- p + scale_y_continuous(limits=y.lim,breaks=y.breaks,labels=y.labels,expand=c(0,0))
+   } else {
+     p <- p + scale_y_continuous(limits=y.lim,breaks=y.breaks,labels=rep('',length(y.labels)),expand=c(0,0))
+   }
 
    if (aspect.ratio) {
       axis.text.size <- 5
@@ -3440,6 +3638,7 @@ setMethodS3(
 		  axis.title.x = theme_blank(),
 		  axis.title.y = theme_blank(),
                   axis.ticks = theme_blank(),
+                  panel.grid.minor = theme_blank(),
                   plot.margin = unit(c(0,0,0,0),'npc')
                   )
     p <- p + plot.opts
@@ -3478,11 +3677,16 @@ setMethodS3(
 
       q <- q + geom_segment(aes(x=x,y=y,xend=xend,yend=yend))
       if (plot.labels) {
-        q <- q + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=names,expand=c(0,0))
+        q <- q + scale_y_continuous(limits=y.lim,breaks=y.breaks,labels=y.labels,expand=c(0,0))
       } else {
-        q <- q + scale_y_continuous(limits=c(0,length(names)+1),breaks=1:length(names),labels=rep('',length(names)),expand=c(0,0))
+        q <- q + scale_y_continuous(limits=y.lim,breaks=y.breaks,labels=rep('',length(y.labels)),expand=c(0,0))
       }
-      q <- q + scale_x_continuous(limits=c(0,max.length),expand=c(0.05,0))
+      if (!is.null(tree.xlim)) {
+        tree.limits <- tree.xlim
+      } else {
+        tree.limits <- c(0,max.length)
+      }
+      q <- q + scale_x_continuous(limits=tree.limits,expand=c(0.05,0))
       q <- q + plot.opts
 #      q <- q + opts(plot.margin = unit(c(0,0,0,0),'npc'))
       if (num.pages > 1) {
@@ -3510,7 +3714,7 @@ setMethodS3(
   },
   private=TRUE,
   protected=FALSE,
-  overwrite=FALSE,
+  overwrite=TRUE,
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
