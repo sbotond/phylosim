@@ -46,34 +46,39 @@ ins.c   <- DiscreteInsertor(rate=0.03, sizes=1:6, probs=id.dist )
 ins.nc$templateSeq  <- NucleotideSequence(length=1,processes=list(list( k80, del.nc, ins.nc ) ))
 ins.c$templateSeq   <- CodonSequence(length=1,processes=list(list( gy94, del.c, ins.c ) ))
 
-# Attach processes:
+# Attach processes to root sequence:
 setProcesses(root.sequence, list(list(k80, del.nc, ins.nc)), noncoding.pos)
 setProcesses(root.sequence, list(list(gy94, del.c, ins.c)), coding.pos)
 
-# Fix the stop codons:
+# Fix the stop codon:
 start.pos   <- coding.pos[1]
 setStates(root.sequence, "ATG", start.pos);                       # Set the state.
 setRateMultipliers(root.sequence, gy94, 0, c(start.pos) )         # Make the site invariable.
 setDeletionTolerance(root.sequence, del.c, 0, c(start.pos));      # Make the site reject deletions.
-setInsertionTolerance(root.sequence,ins.c ,0, c(start.pos) );     # Make the site rject neighboring insertions.
+setInsertionTolerance(root.sequence,ins.c ,0, c(start.pos) );     # Make the site reject neighboring insertions.
 
 # Construct a substitution process acting on stop codons only:
 stop.alphabet   <- Alphabet(symbols=c("TAG", "TAA", "TGA"))
 stop.subst<-GeneralSubstitution(
         alphabet=stop.alphabet,
-        rate.list=list("TAG->TAA"=1, "TAG->TGA"=2, "TAA->TAG"=3, "TAA->TGA"=1, 
-                       "TGA->TAG"=2, "TGA->TAA"=3)
+        rate.list=list("TAG->TAA"=1, 
+                       "TAG->TGA"=2, 
+                       "TAA->TAG"=3,
+                       "TAA->TGA"=1, 
+                       "TGA->TAG"=2,
+                       "TGA->TAA"=3
+        )
 )
 stop.pos    <- tail(coding.pos, 1)
-root.sequence$sites[[stop.pos]]$alphabet    <- stop.alphabet
-setProcesses(root.sequence,list(list(stop.subst)), stop.pos)
+root.sequence$sites[[stop.pos]]$alphabet    <- stop.alphabet    # Set alphabet for stop codon site.
+setProcesses(root.sequence,list(list(stop.subst)), stop.pos)    # Set substitution process for stop codon site.
 
 # Fix splicing sites:
 splicing.sites<-c(51, 52, 89, 90);
-setStates(root.sequence, c("G","T","A","G"), splicing.sites)
-setRateMultipliers(root.sequence, k80, 0, splicing.sites)
-setDeletionTolerance(root.sequence, del.nc , 0, splicing.sites)
-setInsertionTolerance(root.sequence, ins.nc , 0, splicing.sites)
+setStates(root.sequence, c("G", "T", "A", "G"), splicing.sites) # Set site states.
+setRateMultipliers(root.sequence, k80, 0, splicing.sites)       # Make sites invariable.
+setDeletionTolerance(root.sequence, del.nc , 0, splicing.sites) # Make sites reject deletions.
+setInsertionTolerance(root.sequence, ins.nc , 0, splicing.sites)# Make sites reject neighboring insertions.
 
 # Sample site states:
 sampleStates(root.sequence)
