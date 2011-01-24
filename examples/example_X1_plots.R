@@ -36,7 +36,7 @@ pdf("example_plots.pdf",width=10,height=10)
 # Plot just a tree.
 sim <- PhyloSim()
 readTree(sim,pax.sub.tree)
-plot(sim)
+#plot(sim)
 
 # Plot just an alignment.
 sim <- PhyloSim()
@@ -48,6 +48,22 @@ sim <- PhyloSim()
 readAlignment(sim,pax.sub.aln)
 readTree(sim,pax.sub.tree)
 plot(sim)
+
+# Plot the tree and alignment with some tracks.
+score.f <- function(n) {return(sin(2*pi*(1:(n))/n)/2 + 0.5)}
+t1 <- data.frame(id='Simple track',layout='above',pos=1:300,score=score.f(300),color.gradient='blue,red',background='white')
+print(head(t1))
+t2 <- t1
+t2$background <- 'lightblue'
+t2$layout <- 'below'
+t2$color.gradient <- 'white,pink'
+t3 <- t1
+t3$background <- 'lightgreen'
+t3$layout <- 'below'
+t3$color.gradient <- 'blue,red'
+t4 <- data.frame(id='asdfasdf',layout='below',background='pink')
+t5 <- data.frame(id='space!!!!',layout='above')
+plot(sim,tracks=list(t5,t1,t2,t4,t3))
 
 # Gives an error when the tree is larger than the alignment.
 #sim <- PhyloSim()
@@ -83,6 +99,7 @@ sim <- PhyloSim()
 readAlignment(sim,pfam.aln)
 readTree(sim,pfam.tree)
 plot(sim,plot.chars=T,plot.legend=T)
+
 
 # TODO: make a quick simulation and plot it too.
 
