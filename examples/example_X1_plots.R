@@ -1,5 +1,7 @@
+#!/usr/bin/env Rscript                                                                                                                     
+
 ##
-## Extra example 1: plotting trees and alignments
+## Extra example X1: plotting trees and alignments
 ##
 
 library(phylosim)
