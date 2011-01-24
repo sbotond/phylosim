@@ -88,29 +88,3 @@ Simulate(sim)
 # Save the resulting alignment:
 saveAlignment(sim,file="example_A1.fas",skip.internal=TRUE)
 
-site.types<-numeric()
-
-for (s in as.character(sim$.alignment["Human",])){
-
-    tmp<-strsplit(s,"")[[1]]
-    if( length(tmp) == 3 ){
-        site.types<-c(site.types, 111)
-    } else {
-        site.types<-c(site.types, 2)
-    }
-    print(tmp)
-    
-
-}
-
-hs<-as.character(sim$.alignment["Human",])
-hs<-paste(hs, collapse="")
-hs<-strsplit(hs,"")[[1]]
-write.table(hs, "human_seq.tab")
-
-site.types<-paste(site.types,collapse="")
-site.types<-strsplit(site.types,"")[[1]]
-
-write.table(as.numeric(site.types), file="true_types.tab")
-
-
