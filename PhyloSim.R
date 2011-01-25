@@ -3580,8 +3580,6 @@ setMethodS3(
       page.labels <- paste((0:(num.pages-1))*chars.per.page+1,(1:num.pages)*chars.per.page,sep="-")
       page.numbers <- sort(unique(df$page))
       page.labels <- page.labels[page.numbers]
-      print(page.labels)
-      print(page.numbers)
       df$page <- factor(df$page,levels=page.numbers,labels=page.labels)
 
       num.pages <- length(page.labels)
