@@ -2223,7 +2223,7 @@ setMethodS3(
     ...
   ){
 
-		virtualAssignmentForbidden(this);
+               virtualAssignmentForbidden(this);
 
   },
   private=FALSE,
@@ -2852,6 +2852,7 @@ setMethodS3(
     tree.xlim,
     aln.xlim,
     tracks,
+    indels,
     ...
   ){
 		
@@ -2903,6 +2904,9 @@ setMethodS3(
                 if(any(is.na(x$.phylo))) {
                   plot.tree <- FALSE
                 }
+                if(missing(indels)){
+                  indels=NULL
+                }
                 
 		if(all(!is.na(x$.alignment), is.matrix(x$.alignment))){
 			.plotWithAlignment(x,
@@ -2919,7 +2923,8 @@ setMethodS3(
                                 color.branches=color.branches,
                                 tree.xlim=tree.xlim,
                                 aln.xlim=aln.xlim,
-                                tracks=tracks
+                                tracks=tracks,
+                                indels=indels
 			);
 			return(invisible(x));
 		}
@@ -2932,7 +2937,7 @@ setMethodS3(
   },
   private=FALSE,
   protected=FALSE,
-  overwrite=FALSE,
+  overwrite=TRUE,
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
@@ -2960,6 +2965,7 @@ setMethodS3(
     tree.xlim,
     aln.xlim,
     tracks,
+    indels,
     ...
   ){
 
@@ -3228,7 +3234,7 @@ setMethodS3(
     }
 
     # Creates a color aesthetic for alignments
-    alignment.colors <- function(scheme) {
+    alignment.colors <- function(scheme,darken=F) {
       scheme <- tolower(scheme)
       if (scheme == 'binary') {
         cols <- c(
@@ -3319,12 +3325,21 @@ setMethodS3(
                                         # Put them all together. (One remaining issue: the protein G,A,T,C will be colored as DNA!)
         cols <- c(dna.colors,protein.colors,binary.colors,codon.colors)
       }
+
+      if (darken) {
+        for (i in 1:length(cols)) {
+          color <- cols[i]
+          darker.color <- darker(color,0.85)
+          cols[i] <- darker.color
+        }
+      }
+      
       return(cols)
     }
 
-    darker <- function(color) {
+    darker <- function(color,factor=0.7) {
       x <- col2rgb(color)
-      x <- round(x * 0.7)
+      x <- round(x * factor)
       y <- rgb(x[1],x[2],x[3],maxColorValue=255)
       return(y)
     }
@@ -3386,6 +3401,72 @@ setMethodS3(
       df <- subset(df,id %in% names)
     }
 
+   df$type <- 'aln'
+   
+   ### Add indels to the data frame.
+   if (!is.null(indels)) {
+     # For each non-gap sequence of each chunk deleted, add a row
+     # to the data frame.
+     del.df <- data.frame()
+
+     # For each position, store the count of indels in a track.
+     max.pos <- max(c(df$pos,indels$pos))
+     indel.histogram <- data.frame(
+       pos=1:max.pos - 0.5,
+       count=0,
+       length=0
+     )
+     for (i in 1:nrow(indels)) {
+       row <- indels[i,]
+       #print(row)
+       seqs <- strsplit(row$nongap.str,";")[[1]]
+       cur.df <- data.frame(
+         id=seqs,
+         pos=row$pos,
+         length=row$length,
+         type='indel'
+       )
+       del.df <- rbind(del.df,cur.df)
+
+       # Tick up the histogram.
+       indel.histogram[row$pos,]$count <- indel.histogram[row$pos,]$count + 1
+       indel.histogram[row$pos,]$length <- indel.histogram[row$pos,]$length + row$length
+     }
+
+     # Sync the two data frame's columns, fill empty stuff with NAs.
+     columns.from.df <- colnames(df)[!(colnames(df) %in% colnames(del.df))]
+     columns.from.del <- colnames(del.df)[!(colnames(del.df) %in% colnames(df))]
+     del.df[,columns.from.df] <- NA
+     df[,columns.from.del] <- NA
+
+     df <- rbind(del.df,df)
+
+     # Transform the histogram and add it to our tracks.
+     max.count <- max(indel.histogram$count)
+     max.length <- max(indel.histogram$length)
+     indel.histogram$y_lo <- 0
+     indel.histogram$score <- indel.histogram$count / (max.count+1)
+     indel.histogram$y_hi <- indel.histogram$score
+     indel.histogram$id <- 'Hidden Indels'
+     indel.histogram$height <- 5
+     indel.histogram$layout <- 'below'
+     indel.histogram$color.gradient <- 'darkblue,darkblue'
+     indel.histogram$type <- 'track'
+
+     indel.len <- indel.histogram
+     indel.len$id <- 'Hidden Length'
+     indel.len$score <- indel.len$length / (max.length+1)
+     indel.len$y_hi <- indel.len$score
+     indel.len$color.gradient <- 'darkgreen,darkgreen'
+     
+     if (!is.null(tracks)) {
+       tracks <- c(tracks,list(indel.histogram,indel.len))
+     } else {
+       tracks <- list(indel.histogram,indel.len)
+     }
+     
+   }
+   
    # Track input format is a list of data frames with one row per feature to be
    # displayed, with the following columns. The only mandatory column is 'pos';
    # all others have sensible default values.
@@ -3410,7 +3491,6 @@ setMethodS3(
    # What we do is add the track data to the alignment data frame (so it gets
    # paged and scaled properly along with the alignment data) and then separate
    # it out before plotting, so it can be plotted separately from the alignment.
-   df$type <- 'aln'
    df$track_index <- -1
    if (!is.null(tracks)) {
      df$score <- NA
@@ -3454,7 +3534,7 @@ setMethodS3(
 
     if (tolower(num.pages) == 'auto' || num.pages > 1) {
                                         # Plotting a multi-page alignment.
-      aln.length <- length(aln[1,])
+      aln.length <- max(df$pos)
       if (tolower(num.pages) == 'auto') {
         num.seqs <- length(names)
                                         # Formula to get a square-ish total plot.
@@ -3466,10 +3546,15 @@ setMethodS3(
                                         # Add a 'page' factor to the data frame and use facet_grid.
       chars.per.page <- ceiling(aln.length / num.pages)
       df$page <- floor((df$pos-1) / chars.per.page) + 1
+      if (nrow(subset(df,page <= 0)) > 0) {
+        df[df$page <= 0,]$page <- 1  # Fix errors where pos=0.5 goes to page 0
+      }
       df$pos <- df$pos - (chars.per.page*(df$page-1))
       page.labels <- paste((0:(num.pages-1))*chars.per.page+1,(1:num.pages)*chars.per.page,sep="-")
       page.numbers <- sort(unique(df$page))
       page.labels <- page.labels[page.numbers]
+      print(page.labels)
+      print(page.numbers)
       df$page <- factor(df$page,levels=page.numbers,labels=page.labels)
 
       num.pages <- length(page.labels)
@@ -3508,6 +3593,7 @@ setMethodS3(
 
     # Remove any tracks from the main aln data frame.
    tracks <- subset(df,type=='track')
+   indels <- subset(df,type=='indel')
    df <- subset(df,type=='aln')
 
    # Set positional values in the aln data frame.
@@ -3517,7 +3603,13 @@ setMethodS3(
    df$xmax <- df$xx + .5
    df$ymin <- df$yy - .5
    df$ymax <- df$yy + .5
-   color.map <- alignment.colors(color.scheme)
+
+   darken.colors <- FALSE
+   if (nrow(indels) > 0) {
+     darken.colors <- TRUE
+   }
+   
+   color.map <- alignment.colors(color.scheme,darken=darken.colors)
    df$colors <- color.map[as.character(df$char)]
    
    # Set the base for y-axis configurations.
@@ -3594,6 +3686,21 @@ setMethodS3(
      p <- p + geom_rect(aes(fill=colors),data=track.out)
    }
 
+   if (nrow(indels) > 0) {
+     # Plot indels as small bars on top of characters.
+     indel.width <- 0.25
+     indels$pos <- indels$pos - .5 # Position indel on seq boundary.
+     indels$xx <- indels$pos
+     indels$yy <- as.numeric(indels$id)
+     indels$xmin <- indels$xx - indel.width
+     indels$xmax <- indels$xx + indel.width
+     indels$ymin <- indels$yy - .5
+     indels$ymax <- indels$yy + .5
+     indels$colors <- 'black'
+
+     p <- p + geom_rect(aes(fill=colors),data=indels)
+   }
+   
    #color.map <- alignment.colors(color.scheme)
    p <- p + scale_fill_identity(labels=color.map)
 
@@ -3639,6 +3746,8 @@ setMethodS3(
 		  axis.title.y = theme_blank(),
                   axis.ticks = theme_blank(),
                   panel.grid.minor = theme_blank(),
+                  panel.grid.major = theme_blank(),
+                      
                   plot.margin = unit(c(0,0,0,0),'npc')
                   )
     p <- p + plot.opts
@@ -3714,7 +3823,7 @@ setMethodS3(
   },
   private=TRUE,
   protected=FALSE,
-  overwrite=FALSE,
+  overwrite=TRUE,
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
