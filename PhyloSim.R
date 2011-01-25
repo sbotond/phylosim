@@ -2799,6 +2799,7 @@ setMethodS3(
 # height:  The number of alignment rows for the track to span in height.
 # color.gradient: A comma-separated list of colors to interpolate between when coloring
 #              the blocks. Examples: 'white,red' 'blue,gray,red' '#FF00FF,#FFFFFF'
+# background: A color for the background of the track. Defaults to white.
 # }
 # 	\item{...}{Not used.} 
 # } 
@@ -3501,6 +3502,16 @@ setMethodS3(
        track$type <- 'track'
        
        # Add default values.
+       if (is.null(track$background)) {
+         track$background <- 'white'
+       }
+       if (length(track$pos) == 0) {
+         # If no positions are included in the data frame, set the first position
+         # to 1 and put the foreground color same as the background.
+         # This has the effect of creating a 'spacer' row.
+         track$pos <- 1
+         track$color.gradient <- paste(track[1,]$background,track[1,]$background,sep=',')
+       }
        if (is.null(track$layout)) {
          track$layout <- 'above'
        }
@@ -3516,6 +3527,9 @@ setMethodS3(
        if (is.null(track$height)) {
          track$height <- 4
        }
+
+       # Ensure we don't have positions at zero or below.
+       track[track$pos <= 0,'pos'] <- 1
 
        # Limit score range
        track$score <- pmin(track$score,1)
@@ -3537,6 +3551,19 @@ setMethodS3(
       aln.length <- max(df$pos)
       if (tolower(num.pages) == 'auto') {
         num.seqs <- length(names)
+
+        # If we have tracks, add the total track height to the 'num.seqs' variable.
+        track.rows <- subset(df,type != 'aln')
+        if (nrow(track.rows) > 0) {
+          track.indices <- sort(unique(track.rows$track_index))
+          for (track.index in track.indices) {
+            sub.track <- subset(track.rows,track_index==track.index)
+            if (nrow(sub.track) > 0) {
+              num.seqs <- num.seqs + sub.track[1,]$height 
+            }
+          }
+        }
+
                                         # Formula to get a square-ish total plot.
         num.pages <- sqrt(aln.length/num.seqs)
         num.pages <- ceiling(num.pages)+1
@@ -3559,6 +3586,7 @@ setMethodS3(
 
       num.pages <- length(page.labels)
       #print(paste("Num pages:",num.pages))
+
     }    
 
     if (color.scheme == 'auto') {
@@ -3635,6 +3663,7 @@ setMethodS3(
      y.lim[2] <- length(names) + 1 - .5
      cur.y.below <- 0.5
 
+     bg.out <- data.frame()
      track.out <- data.frame()
      track.indices <- sort(unique(tracks$track_index))
      for (track.index in track.indices) {
@@ -3645,6 +3674,7 @@ setMethodS3(
        track.height <- sub.track[1,]$height
        track.layout <- sub.track[1,]$layout
        color.gradient <- strsplit(sub.track[1,]$color.gradient,',')[[1]]
+       track.bg <- sub.track[1,]$background
        track.ramp <- colorRamp(colors=color.gradient)
        sub.track$colors <- rgb(track.ramp(sub.track$score),maxColorValue=255)
        
@@ -3658,31 +3688,63 @@ setMethodS3(
          sub.track$ymax <- cur.y.below
 
          y.lim[1] <- cur.y.below - track.height
-         cur.y.below <- cur.y.below - track.height
          y.breaks <- c(y.lim[1] + track.height/2,y.breaks)
          y.labels <- c(as.character(track.id),y.labels)
+
+         # Temporarily store the current min and max for y.
+         cur.y.min <- cur.y.below - track.height
+         cur.y.max <- cur.y.below
+
+         # Add our track height to the state variable.
+         cur.y.below <- cur.y.below - track.height
        } else {
          sub.track$yy <- cur.y.above
          sub.track$ymin <- cur.y.above
          sub.track$ymax <- cur.y.above + track.height
          
          y.lim[2] <- cur.y.above + track.height
-         cur.y.above <- cur.y.above + track.height
          y.breaks <- c(y.breaks,y.lim[2] - track.height/2)
          y.labels <- c(y.labels,as.character(track.id))
+
+         # Temporarily store the current min and max for y.
+         cur.y.min <- cur.y.above
+         cur.y.max <- cur.y.above + track.height
+
+         # Add our track height to the state variable.
+         cur.y.above <- cur.y.above + track.height
        }
 
        # Adjust bar position if we have y_lo and y_hi values.
-       if(any(!is.na(sub.track$y_lo))) {
-         sub.track$ymin <- sub.track$ymin + track.height*sub.track$y_lo         
+       if(length(sub.track$y_lo) > 0) {
+         sub.track$ymin <- cur.y.above - track.height + track.height*sub.track$y_lo
        }
-       if(any(!is.na(sub.track$y_hi))) {
-         sub.track$ymax <- sub.track$ymin + track.height*sub.track$y_hi         
+       if (length(sub.track$y_hi) > 0) {
+         sub.track$ymax <- cur.y.above - track.height + track.height*sub.track$y_hi
        }
-       
+
        track.out <- rbind(track.out,sub.track)
+
+       # Create a background rectangle for each page, to place behind the current track.
+       pages <- sort(unique(df$page))
+       page.indices <- sort(unique(as.integer(df$page)))
+       for (page.index in 1:length(pages)) {
+         pg <- pages[page.index]
+         current.track.bg <- data.frame(
+           page=pg,
+           colors=track.bg,
+           xx=0.5,
+           yy=cur.y.above,
+           xmin=0.5,
+           xmax=chars.per.page + 0.5,
+           ymin=cur.y.min,
+           ymax=cur.y.max
+         )
+         bg.out <- rbind(bg.out,current.track.bg)
+       }
      }
 
+     # Add layers for the backgrounds and tracks.
+     p <- p + geom_rect(aes(fill=colors),data=bg.out)
      p <- p + geom_rect(aes(fill=colors),data=track.out)
    }
 
@@ -3702,7 +3764,7 @@ setMethodS3(
    }
    
    #color.map <- alignment.colors(color.scheme)
-   p <- p + scale_fill_identity(labels=color.map)
+   p <- p + scale_fill_identity()
 
    p <- p + scale_x_continuous(limits=aln.limits,expand=c(0,0))
    
