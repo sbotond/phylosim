@@ -2223,7 +2223,7 @@ setMethodS3(
     ...
   ){
 
-               virtualAssignmentForbidden(this);
+               this$alignment <- value;
 
   },
   private=FALSE,
@@ -3358,7 +3358,9 @@ setMethodS3(
     df <- data.frame()
     aln <- x$.alignment
     phylo <- x$.phylo
-
+    if (is.null(indels)) {
+      indels <- x$.indels
+    }
                                         # Do some reordering of alignment & tree.
     if (!any(is.na(phylo))) {
       x$.phylo <- reorder(x$.phylo, order="cladewise");
@@ -3419,8 +3421,13 @@ setMethodS3(
      )
      for (i in 1:nrow(indels)) {
        row <- indels[i,]
-       #print(row)
        seqs <- strsplit(row$nongap.str,";")[[1]]
+       if (length(seqs) == 0) {
+         # Edge case: an indel row came from a column with no aligned sequence,
+         # so the 'nongap.str' is empty. Just continue on...
+         next()
+       }
+
        cur.df <- data.frame(
          id=seqs,
          pos=row$pos,
@@ -3440,7 +3447,7 @@ setMethodS3(
      del.df[,columns.from.df] <- NA
      df[,columns.from.del] <- NA
 
-     df <- rbind(del.df,df)
+     df <- rbind(df,del.df)
 
      # Transform the histogram and add it to our tracks.
      max.count <- max(indel.histogram$count)
@@ -3464,8 +3471,7 @@ setMethodS3(
        tracks <- c(tracks,list(indel.histogram,indel.len))
      } else {
        tracks <- list(indel.histogram,indel.len)
-     }
-     
+     }     
    }
    
    # Track input format is a list of data frames with one row per feature to be
@@ -3493,6 +3499,7 @@ setMethodS3(
    # paged and scaled properly along with the alignment data) and then separate
    # it out before plotting, so it can be plotted separately from the alignment.
    df$track_index <- -1
+
    if (!is.null(tracks)) {
      df$score <- NA
      i <- 0
@@ -3524,11 +3531,11 @@ setMethodS3(
        if (is.null(track$id)) {
          track$id <- paste('Track',i)
        }
-       if (is.null(track$height)) {
+       if (is.null(track$height) || is.na(track$height)) {
          track$height <- 4
        }
 
-       # Ensure we don't have positions at zero or below.
+       # Ensure that we don't have positions at zero or below.
        track[track$pos <= 0,'pos'] <- 1
 
        # Limit score range
@@ -3546,14 +3553,20 @@ setMethodS3(
      }
    }
 
+   if (num.pages != 'auto') {
+     num.pages <- as.numeric(num.pages)
+   }
+
+    aln.length <- max(df$pos)
+    chars.per.page <- aln.length
+   
     if (tolower(num.pages) == 'auto' || num.pages > 1) {
                                         # Plotting a multi-page alignment.
-      aln.length <- max(df$pos)
       if (tolower(num.pages) == 'auto') {
         num.seqs <- length(names)
 
         # If we have tracks, add the total track height to the 'num.seqs' variable.
-        track.rows <- subset(df,type != 'aln')
+        track.rows <- subset(df,type == 'track')
         if (nrow(track.rows) > 0) {
           track.indices <- sort(unique(track.rows$track_index))
           for (track.index in track.indices) {
@@ -3563,7 +3576,6 @@ setMethodS3(
             }
           }
         }
-
                                         # Formula to get a square-ish total plot.
         num.pages <- sqrt(aln.length/num.seqs)
         num.pages <- ceiling(num.pages)+1
@@ -3585,7 +3597,15 @@ setMethodS3(
       num.pages <- length(page.labels)
       #print(paste("Num pages:",num.pages))
 
-    }    
+    } else {
+      # We've only got one page. Create a factor...
+      df$page <- 1
+      df$page <- factor(df$page,levels=c(1),labels=c('1'))
+
+      # Store some values which will be used later.
+      aln.length <- max(df$pos)
+      chars.per.page <- aln.length
+    }
 
     if (color.scheme == 'auto') {
       all.chars <- unlist(aln)
@@ -3675,7 +3695,7 @@ setMethodS3(
        track.bg <- sub.track[1,]$background
        track.ramp <- colorRamp(colors=color.gradient)
        sub.track$colors <- rgb(track.ramp(sub.track$score),maxColorValue=255)
-       
+
        sub.track$xx <- sub.track$pos
        sub.track$xmin <- sub.track$pos-.5
        sub.track$xmax <- sub.track$pos+.5
@@ -3714,10 +3734,10 @@ setMethodS3(
 
        # Adjust bar position if we have y_lo and y_hi values.
        if(length(sub.track$y_lo) > 0) {
-         sub.track$ymin <- cur.y.above - track.height + track.height*sub.track$y_lo
+         sub.track$ymin <- cur.y.min + track.height*sub.track$y_lo
        }
        if (length(sub.track$y_hi) > 0) {
-         sub.track$ymax <- cur.y.above - track.height + track.height*sub.track$y_hi
+         sub.track$ymax <- cur.y.min + track.height*sub.track$y_hi
        }
 
        track.out <- rbind(track.out,sub.track)
@@ -3731,7 +3751,7 @@ setMethodS3(
            page=pg,
            colors=track.bg,
            xx=0.5,
-           yy=cur.y.above,
+           yy=cur.y.min,
            xmin=0.5,
            xmax=chars.per.page + 0.5,
            ymin=cur.y.min,
