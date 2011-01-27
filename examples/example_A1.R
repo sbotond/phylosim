@@ -31,7 +31,7 @@ setAlphabets(root.sequence, list(codon.alph), coding.pos)
 k80     <-K80(rate.params=list("Alpha"=2,"Beta"=1), base.freqs=c(2, 1, 2, 1)/4)
 gy94    <-GY94(kappa=2, omega.default=0.1, scale.nuc=TRUE)
 
-# Set up indel distribution:
+# Set up indel length distribution:
 id.dist<-exp(6:1)/sum(exp(6:1))
 
 # Construct the deletion processes:
@@ -59,7 +59,7 @@ setInsertionTolerance(root.sequence,ins.c ,0, c(start.pos) );     # Make the sit
 
 # Construct a substitution process acting on stop codons only:
 stop.alphabet   <- Alphabet(symbols=c("TAG", "TAA", "TGA"))
-stop.subst<-GeneralSubstitution(
+stop.subst      <-GeneralSubstitution(
         alphabet=stop.alphabet,
         rate.list=list("TAG->TAA"=1, 
                        "TAG->TGA"=2, 
