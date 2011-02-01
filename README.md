@@ -28,7 +28,7 @@ Key features
 
 * The possibility of having a different set of processes and site-process specific parameters for every site, which allows for an arbitrary number of partitions in the simulated data.
 
-* The possibility to evolve sites by a mixture of substitution processes along a single branch.
+* The possibility to evolve sites by a combination of substitution processes along a single branch.
 
 * Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes.
 
