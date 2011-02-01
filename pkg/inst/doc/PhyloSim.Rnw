@@ -875,7 +875,7 @@ attachHookToNode(sim, node = 8, fun = node.hook)
 
 This \code{node.hook} function will attach the \code{pam} substitution process to all
 sites which have the \code{jtt} process attached (the ``core'' region). The affected sites 
-will evolve with a doubled rate by a mixture of substitution processes (\code{jtt} and \code{pam}) in the clade defined by the node - \code{(t4, t2)}.
+will evolve with a doubled rate by a combination of substitution processes (\code{jtt} and \code{pam}) in the clade defined by the node - \code{(t4, t2)}.
 
 Run the simulation:
 <<echo=TRUE>>=

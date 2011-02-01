@@ -25,7 +25,6 @@
 #	\item Simulation with one or more separate insertion and/or deletion processes acting on the sequences, which sample the insertion/deletion length from an arbitrary discrete distribution or an \code{R} expression (so all the probability distributions implemented in \code{R} are readily available for this purpose).
 #	\item Simulation of the effects of variable functional constraints over the sites by site-process-specific insertion and deletion tolerance parameters, which determine the rejection probability of a proposed insertion/deletion.
 #	\item The possibility of having a different set of processes and site-process-specific parameters for every site, which allow for an arbitrary number of partitions in the simulated data.
-#	\item The possibility to evolve sites by a mixture of substitution processes along a single branch.
 #	\item Simulation of heterotachy and other cases of non-homogeneous evolution by allowing the user to set "node hook" functions altering the site properties at internal nodes of the phylogeny.
 #	\item The possibility to export the counts of various events ("branch statistics") as phylo objects (see \code{\link{exportStatTree.PhyloSim}}).
 #	}
@@ -276,7 +275,7 @@
 #	setRateMultipliers(s,wag,0.5,seq(from=13,to=30,by=3))
 #	setRateMultipliers(s,lg,0.5,seq(from=13,to=30,by=3))
 #	# Now every third site in the range 11:30 evolves
-#	# according to a mixture of amino acid substitution models!
+#	# according to a combination of amino acid substitution models!
 #
 #	# sample states
 #	sampleStates(s)
