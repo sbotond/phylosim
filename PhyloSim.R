@@ -2785,6 +2785,8 @@ setMethodS3(
 # 	\item{axis.text.size}{Text size for the sequence labels along the y-axis. This may require tweaking depending on the DPI and output format. Defaults to 'auto'.}
 #       \item{color.scheme}{Color scheme to use ("auto", "binary", "dna", "protein", "codon", "everything").}
 #       \item{color.branches}{The event count used to color the branches ("substitutions" by default). See \code{\link{getBranchEvents.PhyloSim}}.}
+#       \item{tree.xlim}{The x-axis limits of the tree panel.}
+#       \item{aln.xlim}{The x-axis limits of the alignment panel (in alignment column coordinates).}
 #       \item{tracks}{Tracks to display above or below the alignment as colored blocks. The input format is a list of data frames with the following possible fields: (Note, only the 'pos' field is mandatory.)
 # pos:     The sequence position (starting with 1) of the feature
 # score:   The score (between 0 and 1) of the feature. Scores above 1 or below
@@ -2964,13 +2966,21 @@ setMethodS3(
   ){
 
    # ugly empirical fix of some R CMD check warnings:
-   pos<-NA;
-   char<-NA;
-   xend<-NA;
-   yend<-NA;
-   y<-NA;
+   pos          <-NA;
+   char         <-NA;
+   xend         <-NA;
+   yend         <-NA;
+   y            <-NA;
    substitutions<-NA;
-   event.count<-NA;
+   event.count  <-NA;
+   type         <-NA;
+   track_index  <-NA;
+   xx           <-NA;
+   yy           <-NA;
+   xmin         <-NA;
+   xmax         <-NA;
+   ymin         <-NA;
+   ymax         <-NA;
 
     ### First, we need to define a bunch of sparsely-documented utility functions. ###
 
