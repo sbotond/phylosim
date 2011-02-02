@@ -9,7 +9,7 @@ Suggests:
 Imports: ape, R.oo, compoisson, ggplot2
 Description: PhyloSim is an extensible object-oriented framework for the Monte Carlo simulation of sequence evolution written in 100 percent R. It is built on the top of the R.oo and ape packages and uses Gillespie's direct method to simulate substitutions, insertions and deletions.
 License: GPL (>= 3)
-URL: http://github.com/sbotond/phylosim
+URL: http://www.ebi.ac.uk/goldman-srv/phylosim
 DevelURL: http://github.com/sbotond/phylosim
 LazyLoad: TRUE
 Packaged: 2009-10-27 03:03:27 UTC; sb
