@@ -2222,7 +2222,7 @@ setMethodS3(
     ...
   ){
 
-		virtualAssignmentForbidden(this);
+               this$alignment <- value;
 
   },
   private=FALSE,
@@ -2779,29 +2779,45 @@ setMethodS3(
 # 	\item{plot.chars}{Whether to plot the actual text of the characters.}
 # 	\item{plot.legend}{Whether to plot the legend showing the character-to-color mapping.}
 # 	\item{plot.labels}{Whether to plot the sequence labels along the y-axis}
-# 	\item{aspect.ratio}{Constraints the alignment residues to have a certain aspect ratio; values above 1 cause vertically-stretched blocks. FALSE disables aspect ratio control, numerical values set the aspect ratio; defaults to FALSE.}
+# 	\item{aspect.ratio}{(Experimental; when set, this option forces the num.pages value to 1) Constrains the alignment residues to have a certain aspect ratio; values above 1 cause vertically-stretched blocks. FALSE disables aspect ratio control, numerical values set the aspect ratio; defaults to FALSE.}
 # 	\item{num.pages}{Optionally split the alignment over a number of vertically-stacked pages. This is useful for long alignments. 'auto' chooses a sensible number of pages, numerical values specify a number; defaults to 'auto'.}
 # 	\item{char.text.size}{Text size for the aligned characters. This may require tweaking depending on the DPI and output format. Defaults to 'auto'.}
 # 	\item{axis.text.size}{Text size for the sequence labels along the y-axis. This may require tweaking depending on the DPI and output format. Defaults to 'auto'.}
-#       \item{color.scheme}{Color scheme to use ("auto", "binary", "dna", "protein", "codon", "everything").}
+#       \item{color.scheme}{Color scheme to use ("auto", "binary", "dna", "protein", "codon", "combined", "combined_codon"). Defaults to 'auto'. When set to 'auto', the function will choose an appropriate coloring scheme based on the alignment content.}
 #       \item{color.branches}{The event count used to color the branches ("substitutions" by default). See \code{\link{getBranchEvents.PhyloSim}}.}
 #       \item{tree.xlim}{The x-axis limits of the tree panel.}
 #       \item{aln.xlim}{The x-axis limits of the alignment panel (in alignment column coordinates).}
-#       \item{tracks}{Tracks to display above or below the alignment as colored blocks. The input format is a list of data frames with the following possible fields: (Note, only the 'pos' field is mandatory.)
-# pos:     The sequence position (starting with 1) of the feature
-# score:   The score (between 0 and 1) of the feature. Scores above 1 or below
-#          zero will be truncated.
-# y_lo:    The lower Y offset (between 0 and 1) of the feature block.
-# y_hi:    The upper Y offset (between 0 and 1) of the feature block. These two
-#          values allow bars to be positioned along the y-axis.
-# [fields below are unique per track; the value from the first row is used.]
-# id:      The display ID for the track.
-# layout:  Set to 'above' to put the track above the alignment, 'below' for below.
-# height:  The number of alignment rows for the track to span in height.
-# color.gradient: A comma-separated list of colors to interpolate between when coloring
-#              the blocks. Examples: 'white,red' 'blue,gray,red' '#FF00FF,#FFFFFF'
-# background: A color for the background of the track. Defaults to white.
-# }
+#       \item{tracks}{Tracks to display above or below the alignment as colored blocks.
+#
+# The input format for tracks is a list of data frames with the following possible fields, all of which are optional and can be omitted:
+# \itemize{
+# \item pos - the sequence position (starting with 1) of the feature. Defaults to NULL.
+# \item score - the score (between 0 and 1) of the feature. Scores above 1 or below zero will be truncated.
+# Defaults to 1.
+# \item y_lo - the lower Y offset (between 0 and 1) of the feature. Defaults to 0. Use a y_lo and y_hi
+# value for each row in the track data frame to create a wiggle plot like effect.
+# \item y_hi - the upper Y offset (between 0 and 1) of the feature. Defaults to 1. Use just a y_hi value
+# for each row in the track data frame to create a bar plot like effect.
+# \item [the fields below are considered unique per track; the values from the first row in the track
+# data frame are used.]
+# \item id - the display ID for the track. Defaults to 'Track'.
+# \item layout - set to 'above' to put the track above the alignment, 'below' for below.
+# \item height - the number of alignment rows for the track to span in height. Defaults to 3.
+# \item color.gradient - a comma-separated list of colors to interpolate between when coloring
+# the blocks. Examples: 'white,red' 'blue,gray,red' '#FF00FF,#FFFFFF'. Defaults to 'white,black'.
+# \item color - a single color to use when coloring the blocks. Mutually exclusive with color.gradient,
+# and if a color.gradient value exists then this value will be ignored. Defaults to black.
+# \item background - a color for the background of the track. Defaults to white.
+# }}
+#       \item{aln.length.tolerance}{The desired alignment/sequence length ratio (A/S ratio) to trim the alignment to.
+#       The A/S ratio is defined as the ratio between the alignment length and the mean ungapped sequence length, and
+#       the alignment trimming procedure will remove blocks of indel-containing columns (in a sensible order) until 
+#       either (a) the desired indel tolerance is reached, or (b) no more columns can be removed without yielding an empty
+#       alignment. A track is added below the alignment to indicate how many indels each resulting alignment column used
+#       used to harbor, and black squares are overlaid onto the alignment where extant sequence data has been trimmed.
+#       Defaults to NULL (no trimming); values in the range of 0.9 to 1.3 tend to work well at improving the
+#       legibility of very gappy alignments.}
+#       \item{plot.nongap.bl}{If set to TRUE, plots the non-gap branch length (defined as the branch length of the subtree of non-gapped sequences) as a track below the alignment. Defaults to FALSE.}
 # 	\item{...}{Not used.} 
 # } 
 # 
@@ -2854,6 +2870,8 @@ setMethodS3(
     tree.xlim,
     aln.xlim,
     tracks,
+    aln.length.tolerance,
+    plot.nongap.bl,
     ...
   ){
 		
@@ -2905,6 +2923,12 @@ setMethodS3(
                 if(any(is.na(x$.phylo))) {
                   plot.tree <- FALSE
                 }
+                if(missing(aln.length.tolerance)){
+                  aln.length.tolerance=NULL
+                }
+                if(missing(plot.nongap.bl)){
+                  plot.nongap.bl=FALSE
+                }
                 
 		if(all(!is.na(x$.alignment), is.matrix(x$.alignment))){
 			.plotWithAlignment(x,
@@ -2921,7 +2945,9 @@ setMethodS3(
                                 color.branches=color.branches,
                                 tree.xlim=tree.xlim,
                                 aln.xlim=aln.xlim,
-                                tracks=tracks
+                                tracks=tracks,
+                                aln.length.tolerance=aln.length.tolerance,
+                                plot.nongap.bl=plot.nongap.bl
 			);
 			return(invisible(x));
 		}
@@ -2962,6 +2988,8 @@ setMethodS3(
     tree.xlim,
     aln.xlim,
     tracks,
+    aln.length.tolerance,
+    plot.nongap.bl,
     ...
   ){
 
@@ -3065,6 +3093,11 @@ setMethodS3(
     }
     nsyn.count <- function(sim,node) {
       return(generic.count(sim,node,'non-synonymous'))
+    }
+
+    # Finds the node with a given label.
+    node.with.label <- function(tree,label) {
+      return(which(tree$tip.label %in% label))
     }
    
     # Extracts the length of the branch above the given node. Returns 0 if the node is root.
@@ -3238,7 +3271,7 @@ setMethodS3(
     }
 
     # Creates a color aesthetic for alignments
-    alignment.colors <- function(scheme) {
+    alignment.colors <- function(scheme,darken=F) {
       scheme <- tolower(scheme)
       if (scheme == 'binary') {
         cols <- c(
@@ -3329,12 +3362,21 @@ setMethodS3(
                                         # Put them all together. (One remaining issue: the protein G,A,T,C will be colored as DNA!)
         cols <- c(dna.colors,protein.colors,binary.colors,codon.colors)
       }
+
+      if (darken) {
+        for (i in 1:length(cols)) {
+          color <- cols[i]
+          darker.color <- darker(color,0.85)
+          cols[i] <- darker.color
+        }
+      }
+      
       return(cols)
     }
 
-    darker <- function(color) {
+    darker <- function(color,factor=0.7) {
       x <- col2rgb(color)
-      x <- round(x * 0.7)
+      x <- round(x * factor)
       y <- rgb(x[1],x[2],x[3],maxColorValue=255)
       return(y)
     }
@@ -3344,11 +3386,173 @@ setMethodS3(
       y <- rgb(min(x[1],255),min(x[2],255),min(x[3],255),maxColorValue=255)
       return(y)
     }
+
+    # Scores each column according to the branch length of the subtree created by
+    # non-gap residues (we use nongap.bl as the var name), and stores the 'nongap.str'
+    # which is the pasted list of labels for non-gapped sequences at this site.
+    # This information is used by the 'remove.gaps' function to remove columns to
+    # reach a certain alignment length threshold.
+    score.aln.columns <- function(tree,aln) {
+      aln.length <- length(aln[1,])
+
+      score.df <- data.frame()
+      for (i in 1:aln.length) {
+        aln.column <- aln[,i]
+
+        nongap.seqs <- names(aln.column[aln.column != '-'])
+        gap.seqs <- names(aln.column[aln.column == '-'])
+
+        # Get the non-gap branch length.
+        if (length(nongap.seqs) == 1) {
+          nongap.node <- node.with.label(tree,nongap.seqs[1])
+          nongap.bl <- branch.length(tree,nongap.node)
+        } else {
+          nongap.tree <- drop.tip(tree,gap.seqs)
+          nongap.bl <- sum(nongap.tree$edge.length)
+        }
+
+        nongap.str <- paste(nongap.seqs,collapse=';')
+        cur.df <- data.frame(
+          pos=i,
+          score=nongap.bl,
+          nongap.str=nongap.str,
+          stringsAsFactors=F
+        )
+        score.df <- rbind(score.df,cur.df)
+      }
+      score.df <- score.df[order(score.df$score,score.df$pos),]
+      return(score.df) 
+    }
+
+    # Goes through the alignment of the sim object and removes columns until either the desired
+    # tolerance is reached or there are no more low-scoring columns to remove (whichever comes
+    # first). Tolerance is defined as the ratio of the alignment length to the mean sequence
+    # length. So, an alignment with no indels at all is exactly 1; an alignment with lots
+    # of deletions (but no insertion) is less than 1; an alignment with lots of insertion is
+    # greater than 1.
+    #
+    # Values of 0.9 - 1.3 tend to give good results in a variety of situations.
+    #
+    remove.gaps <- function(sim,tolerance) {
+      aln <- sim$.alignment
+      tree <- sim$.phylo
+      col.scores <- score.aln.columns(tree,aln)
+
+      # Store the deletion markers in a separate data frame.
+      deletion.df <- NULL
+
+      # Get the mean sequence length
+      lengths <- apply(aln,1,function(x) {
+        x <- x[x != '-']
+        return(stringLength(paste(x,collapse='')))
+      })
+      mean.seq.length <- mean(lengths)
+
+      repeat {
+        aln.length <- length(aln[1,])  
+        ratio <- aln.length / mean.seq.length
+        if (ratio < tolerance) {
+          break;
+        }
+
+        # Take the next site from the sorted scores
+        lowest.scores <- col.scores[1,]
+        col.scores <- col.scores[-c(1),]
+        cur.pos <- lowest.scores$pos # Current position of lowest-scoring column.
+        cur.score <- lowest.scores$score # The current column score.
+        cur.str <- lowest.scores$nongap.str # The current column's nongap pattern.
+
+        # Grab the entire 'current chunk' of alignment which has the same
+        # score and non-gap string.
+        repeat {
+          first.pos <- col.scores[1,'pos']
+          first.score <- col.scores[1,'score']
+          first.str <- col.scores[1,'nongap.str']
+          if (cur.score == max(col.scores$score)) {
+            lowest.scores <- NULL
+            cur.ratio <- length(aln[1,]) / mean.seq.length
+            print(sprintf("Nothing left to remove at ratio %.2f!",cur.ratio))
+            break;
+          }
+          if (first.pos == cur.pos + 1 && first.score == cur.score && first.str == cur.str) {
+            cur.pos <- col.scores[1,]$pos
+            lowest.scores <- rbind(lowest.scores,col.scores[1,])
+            col.scores <- col.scores[-1,]
+          } else {
+            #print("Done!")
+            break;
+          }
+        }
+
+        if (is.null(lowest.scores)) {
+          break;
+        }
+
+        # remove.us should be a contiguous vector of integers,
+        # representing the set of columns to remove.
+        remove.us <- lowest.scores$pos
+
+        if (any(diff(remove.us) > 1)) {
+          print("ERROR: Removing a non-consecutive set of columns!")
+        }
+
+        #print(paste("Removing at ",paste(remove.us[1])))
+
+        # Go through columns from right to left, making sure to update
+        # the new positions of columns on the right side of the splice.
+        rev.pos <- rev(remove.us)
+        for (i in 1:length(rev.pos)) {
+          cur.pos <- rev.pos[i]
+          aln <- splice.column(aln, cur.pos)
+
+          # Update new positions of column scores
+          above <- which(col.scores$pos > cur.pos)
+          col.scores[above,]$pos <- col.scores[above,]$pos - 1
+
+          # Update new positions of deletion locations.
+          if (!is.null(deletion.df) && nrow(deletion.df) > 0) {
+            above <- which(deletion.df$pos > cur.pos)
+            deletion.df[above,]$pos <- deletion.df[above,]$pos - 1
+          }
+        }
+
+
+        # Add a single entry to the data frame of deletions, to be used
+        # by the plot function to indicate deletion points.
+        cur.deletion <- data.frame(
+          pos = cur.pos, # The first position AFTER the deletion splice.
+          length = length(rev.pos), # The length of the block removed.
+          nongap.str = as.character(cur.str), # nongap sequence IDs for this deletion
+          stringsAsFactors=F
+        )
+        #print(cur.deletion)
+        deletion.df <- rbind(deletion.df,cur.deletion)
+      }
+
+      # Create a new PhyloSim object, assign the tree & aln, and return.
+      sim.temp <- PhyloSim();
+      sim.temp$.alignment <- aln
+      sim.temp$.phylo <- tree
+      sim.temp$.indels <- deletion.df
+      return(sim.temp)
+    }
+
+    splice.column <- function(aln,pos) {
+      return(aln[,-pos])
+    }
     
     ####################################
     ### Let the real plotting begin! ###
     ####################################
     
+    # Apply the deletion tolerance if needed.
+    if (!is.null(aln.length.tolerance)) {
+      x <- remove.gaps(x, tolerance=aln.length.tolerance)
+      indels <- x$.indels
+    } else {
+      indels <- NULL
+    }
+
     df <- data.frame()
     aln <- x$.alignment
     phylo <- x$.phylo
@@ -3396,6 +3600,95 @@ setMethodS3(
       df <- subset(df,id %in% names)
     }
 
+   df$type <- 'aln'
+   
+   ### Add indels to the data frame.
+   if (!is.null(indels)) {
+     # For each non-gap sequence of each chunk deleted, add a row
+     # to the data frame.
+     del.df <- data.frame()
+
+     # For each position, store the count of indels in a track.
+     max.pos <- max(c(df$pos,indels$pos))
+     indel.histogram <- data.frame(
+       pos=1:max.pos - 0.5,
+       count=0,
+       length=0
+     )
+     for (i in 1:nrow(indels)) {
+       row <- indels[i,]
+       seqs <- strsplit(row$nongap.str,";")[[1]]
+       if (length(seqs) == 0) {
+         # Edge case: an indel row came from a column with no aligned sequence,
+         # so the 'nongap.str' is empty. Just continue on...
+         next()
+       }
+
+       cur.df <- data.frame(
+         id=seqs,
+         pos=row$pos,
+         length=row$length,
+         type='indel'
+       )
+       del.df <- rbind(del.df,cur.df)
+
+       # Tick up the histogram.
+       indel.histogram[row$pos,]$count <- indel.histogram[row$pos,]$count + 1
+       indel.histogram[row$pos,]$length <- indel.histogram[row$pos,]$length + row$length
+     }
+
+     # Sync the two data frame's columns, fill empty stuff with NAs.
+     columns.from.df <- colnames(df)[!(colnames(df) %in% colnames(del.df))]
+     columns.from.del <- colnames(del.df)[!(colnames(del.df) %in% colnames(df))]
+     del.df[,columns.from.df] <- NA
+     df[,columns.from.del] <- NA
+
+     df <- rbind(df,del.df)
+
+     # Transform the histogram and add it to our tracks.
+     max.count <- max(indel.histogram$count)
+     max.length <- max(indel.histogram$length)
+     indel.histogram$y_lo <- 0
+     indel.histogram$score <- indel.histogram$count / (max.count+1)
+     indel.histogram$y_hi <- indel.histogram$score
+     indel.histogram$id <- 'Hidden Indel Count'
+     indel.histogram$height <- 5
+     indel.histogram$layout <- 'below'
+     indel.histogram$color.gradient <- 'darkblue,darkblue'
+     indel.histogram$type <- 'track'
+
+     #indel.len <- indel.histogram
+     #indel.len$id <- 'Hidden Indel Length'
+     #indel.len$score <- indel.len$length / (max.length+1)
+     #indel.len$y_hi <- indel.len$score
+     #indel.len$color.gradient <- 'darkgreen,darkgreen'
+     
+     if (!is.null(tracks)) {
+       tracks <- c(tracks,list(indel.histogram))
+     } else {
+       tracks <- list(indel.histogram)
+     }     
+   }
+
+
+   if (plot.nongap.bl && is.phylo(phylo)) {
+     score.df <- score.aln.columns(phylo,aln)
+     max.bl <- max(score.df$score)
+     bl.track <- data.frame(
+       id = 'Non-gap Branch Length',
+       layout = 'below',
+       pos = score.df$pos,
+       score = score.df$score / max.bl * 0.9,
+       y_hi = score.df$score / max.bl * 0.9,
+       color.gradient = 'red,black,black'
+     )
+     if (!is.null(tracks)) {
+       tracks <- c(tracks,list(bl.track))
+     } else {
+       tracks <- list(bl.track)
+     }
+   }
+   
    # Track input format is a list of data frames with one row per feature to be
    # displayed, with the following columns. The only mandatory column is 'pos';
    # all others have sensible default values.
@@ -3412,7 +3705,9 @@ setMethodS3(
    # layout:  Set to 'above' to put the track above the alignment, 'below' for below.
    # height:  The number of alignment rows for the track to span in height.
    # color.gradient: A comma-separated list of colors to interpolate between when coloring
-   #              the blocks. Examples: 'white,red' 'blue,gray,red' '#FF00FF,#FFFFFF'
+   #          the blocks. Examples: 'white,red' 'blue,gray,red' '#FF00FF,#FFFFFF'
+   # color:   A single color to use for the track, no matter what the scores. Overridden
+   #          color.gradient if both exist.
    # 
    # ---
    #
@@ -3420,8 +3715,8 @@ setMethodS3(
    # What we do is add the track data to the alignment data frame (so it gets
    # paged and scaled properly along with the alignment data) and then separate
    # it out before plotting, so it can be plotted separately from the alignment.
-   df$type <- 'aln'
    df$track_index <- -1
+
    if (!is.null(tracks)) {
      df$score <- NA
      i <- 0
@@ -3439,25 +3734,37 @@ setMethodS3(
          # to 1 and put the foreground color same as the background.
          # This has the effect of creating a 'spacer' row.
          track$pos <- 1
-         track$color.gradient <- paste(track[1,]$background,track[1,]$background,sep=',')
+         track$color <- track[1,]$background
        }
        if (is.null(track$layout)) {
          track$layout <- 'above'
        }
        if (is.null(track$color.gradient)) {
-         track$color.gradient <- 'white,black'
+         if (!is.null(track$color)) {
+           # No color gradient exists, but we have 'color' instead. Use that.
+           track$color.gradient <- paste(track[1,]$color, track[1,]$color, sep=',')
+         } else {
+           # No color.gradient OR color value exists, so use the default white-to-black.
+           track$color.gradient <- 'white,black'
+         }
        }
        if (is.null(track$score)) {
          track$score <- 1
        }
+       if (is.null(track$y_lo)) {
+         track$y_lo = 0
+       }
+       if (is.null(track$y_hi)) {
+         track$y_hi = 1
+       }
        if (is.null(track$id)) {
          track$id <- paste('Track',i)
        }
-       if (is.null(track$height)) {
+       if (is.null(track$height) || is.na(track$height)) {
          track$height <- 4
        }
 
-       # Ensure we don't have positions at zero or below.
+       # Ensure that we don't have positions at zero or below.
        track[track$pos <= 0,'pos'] <- 1
 
        # Limit score range
@@ -3475,14 +3782,20 @@ setMethodS3(
      }
    }
 
+   if (num.pages != 'auto') {
+     num.pages <- as.numeric(num.pages)
+   }
+
+    aln.length <- max(df$pos)
+    chars.per.page <- aln.length
+    num.seqs <- length(names)
+   
     if (tolower(num.pages) == 'auto' || num.pages > 1) {
                                         # Plotting a multi-page alignment.
-      aln.length <- length(aln[1,])
       if (tolower(num.pages) == 'auto') {
-        num.seqs <- length(names)
 
         # If we have tracks, add the total track height to the 'num.seqs' variable.
-        track.rows <- subset(df,type != 'aln')
+        track.rows <- subset(df,type == 'track')
         if (nrow(track.rows) > 0) {
           track.indices <- sort(unique(track.rows$track_index))
           for (track.index in track.indices) {
@@ -3492,7 +3805,6 @@ setMethodS3(
             }
           }
         }
-
                                         # Formula to get a square-ish total plot.
         num.pages <- sqrt(aln.length/num.seqs)
         num.pages <- ceiling(num.pages)+1
@@ -3502,6 +3814,9 @@ setMethodS3(
                                         # Add a 'page' factor to the data frame and use facet_grid.
       chars.per.page <- ceiling(aln.length / num.pages)
       df$page <- floor((df$pos-1) / chars.per.page) + 1
+      if (nrow(subset(df,page <= 0)) > 0) {
+        df[df$page <= 0,]$page <- 1  # Fix errors where pos=0.5 goes to page 0
+      }
       df$pos <- df$pos - (chars.per.page*(df$page-1))
       page.labels <- paste((0:(num.pages-1))*chars.per.page+1,(1:num.pages)*chars.per.page,sep="-")
       page.numbers <- sort(unique(df$page))
@@ -3511,7 +3826,15 @@ setMethodS3(
       num.pages <- length(page.labels)
       #print(paste("Num pages:",num.pages))
 
-    }    
+    } else {
+      # We've only got one page. Create a factor...
+      df$page <- 1
+      df$page <- factor(df$page,levels=c(1),labels=c('1'))
+
+      # Store some values which will be used later.
+      aln.length <- max(df$pos)
+      chars.per.page <- aln.length
+    }
 
     if (color.scheme == 'auto') {
       all.chars <- unlist(aln)
@@ -3544,7 +3867,8 @@ setMethodS3(
     legend.title <- color.scheme
 
     # Remove any tracks from the main aln data frame.
-   tracks <- subset(df,type != 'aln')
+   tracks <- subset(df,type=='track')
+   indels <- subset(df,type=='indel')
    df <- subset(df,type=='aln')
 
    # Set positional values in the aln data frame.
@@ -3554,7 +3878,13 @@ setMethodS3(
    df$xmax <- df$xx + .5
    df$ymin <- df$yy - .5
    df$ymax <- df$yy + .5
-   color.map <- alignment.colors(color.scheme)
+
+   darken.colors <- FALSE
+   if (nrow(indels) > 0) {
+     darken.colors <- TRUE
+   }
+   
+   color.map <- alignment.colors(color.scheme,darken=darken.colors)
    df$colors <- color.map[as.character(df$char)]
    
    # Set the base for y-axis configurations.
@@ -3594,7 +3924,7 @@ setMethodS3(
        track.bg <- sub.track[1,]$background
        track.ramp <- colorRamp(colors=color.gradient)
        sub.track$colors <- rgb(track.ramp(sub.track$score),maxColorValue=255)
-       
+
        sub.track$xx <- sub.track$pos
        sub.track$xmin <- sub.track$pos-.5
        sub.track$xmax <- sub.track$pos+.5
@@ -3633,10 +3963,10 @@ setMethodS3(
 
        # Adjust bar position if we have y_lo and y_hi values.
        if(length(sub.track$y_lo) > 0) {
-         sub.track$ymin <- cur.y.above - track.height + track.height*sub.track$y_lo
+         sub.track$ymin <- cur.y.min + track.height*sub.track$y_lo
        }
        if (length(sub.track$y_hi) > 0) {
-         sub.track$ymax <- cur.y.above - track.height + track.height*sub.track$y_hi
+         sub.track$ymax <- cur.y.min + track.height*sub.track$y_hi
        }
 
        track.out <- rbind(track.out,sub.track)
@@ -3650,7 +3980,7 @@ setMethodS3(
            page=pg,
            colors=track.bg,
            xx=0.5,
-           yy=cur.y.above,
+           yy=cur.y.min,
            xmin=0.5,
            xmax=chars.per.page + 0.5,
            ymin=cur.y.min,
@@ -3665,6 +3995,21 @@ setMethodS3(
      p <- p + geom_rect(aes(fill=colors),data=track.out)
    }
 
+   if (nrow(indels) > 0) {
+     # Plot indels as small bars on top of characters.
+     indel.width <- 0.25
+     indels$pos <- indels$pos - .5 # Position indel on seq boundary.
+     indels$xx <- indels$pos
+     indels$yy <- as.numeric(indels$id)
+     indels$xmin <- indels$xx - indel.width
+     indels$xmax <- indels$xx + indel.width
+     indels$ymin <- indels$yy - .5
+     indels$ymax <- indels$yy + .5
+     indels$colors <- 'black'
+
+     p <- p + geom_rect(aes(fill=colors),data=indels)
+   }
+   
    #color.map <- alignment.colors(color.scheme)
    p <- p + scale_fill_identity()
 
@@ -3686,7 +4031,7 @@ setMethodS3(
     }
 
     if (char.text.size == 'auto') {
-      char.text.size <- 125 / (num.pages * (length(names)+1))
+      char.text.size <- 125 / (num.pages * (num.seqs+1))
       char.text.size <- min(char.text.size,10)
       char.text.size <- max(char.text.size,1)
     }
@@ -3699,7 +4044,7 @@ setMethodS3(
     }
 
     if (axis.text.size == 'auto') {
-      axis.text.size <- 500 / (num.pages * (length(names)+1))
+      axis.text.size <- 500 / (num.pages * (num.seqs+1))
       axis.text.size <- min(axis.text.size,10)
       axis.text.size <- max(axis.text.size,1)
     }
@@ -3710,6 +4055,8 @@ setMethodS3(
 		  axis.title.y = theme_blank(),
                   axis.ticks = theme_blank(),
                   panel.grid.minor = theme_blank(),
+                  panel.grid.major = theme_blank(),
+                      
                   plot.margin = unit(c(0,0,0,0),'npc')
                   )
     p <- p + plot.opts
@@ -6039,6 +6386,72 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
+##
+## Method: getTreeLength
+##
+###########################################################################/**
+#
+# @RdocMethod getAlignmentLength
+# 
+# @title "Get the alignment length from a PhyloSim object" 
+# 
+# \description{ 
+#	@get "title".
+#
+#	This method retruns the number of columns in the alignment stored in the PhyloSim object.
+# } 
+# 
+# @synopsis 
+# 
+# \arguments{ 
+# 	\item{this}{A PhyloSim object.} 
+# 	\item{...}{Not used.} 
+# } 
+# 
+# \value{ 
+# 	A numeric vector of length one.
+# } 
+# 
+# \examples{
+#	# create a PhyloSim object
+#	sim<-PhyloSim();
+#       # read in an alignment
+#       readAlignment(sim, alignment.file.name)
+#	# get the alignment length
+#	getAlignmentLength
+# } 
+# 
+# @author 
+# 
+# \seealso{ 
+# 	@seeclass 
+# } 
+# 
+#*/###########################################################################
+setMethodS3(
+  "getAlignmentLength",
+  class="PhyloSim",
+  function(
+    this,
+    ...
+  ){
+		
+		if(!all(is.na(this$.alignment))){
+                  return(length(this$.alignment[1,]));
+		}
+		else{
+			throw("The alignment object is not set!\n");
+		}
+
+  },
+  private=FALSE,
+  protected=FALSE,
+  overwrite=FALSE,
+  conflict="warning",
+  validators=getOption("R.methodsS3:validators:setMethodS3")
+);
+
 ###########################################################################/**
 #
 # @RdocMethod readTree
