@@ -2807,7 +2807,7 @@ setMethodS3(
 # \item color - a single color to use when coloring the blocks. Mutually exclusive with color.gradient,
 # and if a color.gradient value exists then this value will be ignored. Defaults to black.
 # \item background - a color for the background of the track. Defaults to white.
-# }
+# }}
 #       \item{aln.length.tolerance}{The desired alignment/sequence length ratio (A/S ratio) to trim the alignment to.
 #       The A/S ratio is defined as the ratio between the alignment length and the mean ungapped sequence length, and
 #       the alignment trimming procedure will remove blocks of indel-containing columns (in a sensible order) until 
@@ -2815,7 +2815,7 @@ setMethodS3(
 #       alignment. A track is added below the alignment to indicate how many indels each resulting alignment column used
 #       used to harbor, and black squares are overlaid onto the alignment where extant sequence data has been trimmed.
 #       Defaults to NULL (no trimming); values in the range of 0.9 to 1.3 tend to work well at improving the
-#       legibility of very gappy alignments.
+#       legibility of very gappy alignments.}
 #       \item{plot.nongap.bl}{If set to TRUE, plots the non-gap branch length (defined as the branch length of the subtree of non-gapped sequences) as a track below the alignment. Defaults to FALSE.}
 # 	\item{...}{Not used.} 
 # } 
