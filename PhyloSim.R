@@ -6388,7 +6388,7 @@ setMethodS3(
 );
 
 ##
-## Method: getTreeLength
+## Method: getAlignmentLength
 ##
 ###########################################################################/**
 #
@@ -6414,12 +6414,12 @@ setMethodS3(
 # } 
 # 
 # \examples{
-#	# create a PhyloSim object
-#	sim<-PhyloSim();
-#       # read in an alignment
-#       readAlignment(sim, alignment.file.name)
+#	# create a PhyloSim object and run a simulation:
+#	sim<-Simulate(
+#                     PhyloSim(phy=rcoal(3),root=NucleotideSequence(string="ATGC", proc=list(list(JC69())) ) )
+#             )
 #	# get the alignment length
-#	getAlignmentLength
+#	getAlignmentLength(sim)
 # } 
 # 
 # @author 
@@ -6438,7 +6438,7 @@ setMethodS3(
   ){
 		
 		if(!all(is.na(this$.alignment))){
-                  return(length(this$.alignment[1,]));
+                  return(dim(this$.alignment)[2]);
 		}
 		else{
 			throw("The alignment object is not set!\n");
@@ -6785,6 +6785,7 @@ setMethodS3(
 # \alias{readTree}
 # \alias{getOmegaScalingFactor}
 # \alias{saveLoadReference}
+# \alias{getAlignmentLength}
 # 
 # @title "Undocumented object (PhyloSim package)" 
 #
