@@ -5,6 +5,7 @@
 ##########################################################################/** 
 #
 # @RdocClass PhyloSim
+# \alias{phylosim}
 # 
 # @title "The PhyloSim class"
 # 
