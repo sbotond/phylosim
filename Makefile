@@ -21,7 +21,6 @@ pkg: *.R rd cat
 	(rm PhyloSimSource.R;true)
 	cp *.R pkg/R/
 	cp RData/* pkg/data/
-	cp PAMLdat/* pkg/data/
 	R CMD build pkg
 checkpkg: pkg 
 	R CMD check $(PKG)
