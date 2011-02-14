@@ -1,5 +1,5 @@
 Package: phylosim
-Version: 0.12
+Version: 0.13
 Date: 2010-10-27
 Title: R packge for simulating biological sequence evolution
 Author: Botond Sipos <sbotond@ebi.ac.uk>, Gregory Jordan <greg@ebi.ac.uk>
@@ -12,4 +12,4 @@ License: GPL (>= 3)
 URL: http://www.ebi.ac.uk/goldman-srv/phylosim
 DevelURL: http://github.com/sbotond/phylosim
 LazyLoad: TRUE
-Packaged: 2009-10-27 03:03:27 UTC; sb
+Packaged: 2011-02-14 03:03:27 UTC; sb
