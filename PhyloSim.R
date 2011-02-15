@@ -115,20 +115,18 @@
 #	)$alignment
 #
 #	# Construct a phylo object for the following
-#	# simulations, scale total tree length to 2:
+#	# simulations, scale total tree length to 1:
 #
 #	tmp<-PhyloSim(phylo=rcoal(3))
-#	scaleTree(tmp,2/tmp$treeLength)
+#	scaleTree(tmp,1/tmp$treeLength)
 #	tmp$treeLength
 #	t<-tmp$phylo
 #
 #	## Example 2 - An "unrolled" example:
 #	## simulate sequences of binary characters.
 #
-#	# generate a random tree
-#	t<-rcoal(3)
 #	# construct root sequence object
-#	s<-BinarySequence(string="00000000")
+#	s<-BinarySequence(string="000000")
 #	# construct a substitution process object
 #	p<-BinarySubst(rate.list=list("0->1"=1,"1->0"=0.5))
 #	# display a bubble plot
@@ -180,7 +178,7 @@
 #	# create among-site rate variation by sampling
 #	# the "rate.multiplier" site-process-specific parameter
 #	# from a discrete gamma distribution (GTR+G).
-#	plusGamma(s,gtr,shape=0.5)
+#	plusGamma(s,gtr,shape=0.1)
 #	# make the range 11:20 invariable
 #	setRateMultipliers(s,gtr,0,11:20)
 #	# get the rate multipliers for s and gtr
@@ -189,7 +187,7 @@
 	# construct a deletion process object
 #	# proposing lengths in the range 1:3
 #	d<-DiscreteDeletor(
-#		rate=1,
+#		rate=0.1,
 #		name="MyDel",
 #		sizes=c(1:3),
 #		probs=c(3/6,2/6,1/6)
@@ -206,7 +204,7 @@
 #	# construct an insertion process object
 #	# proposing lengths in the range 1:3
 #	i<-DiscreteInsertor(
-#		rate=1,
+#		rate=0.1,
 #		name="MyDel",
 #		sizes=c(1:2),
 #		probs=c(1/2,1/2),
