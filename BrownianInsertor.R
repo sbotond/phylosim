@@ -125,7 +125,6 @@ setConstructorS3(
 				proc<-getProcesses(start);
 				
 			} else {
-
 				start<-clone(target.seq$.sites[[insert.pos]]);
 				start$.state=NA;
 				end<-clone(target.seq$.sites[[insert.pos + 1]]);
@@ -135,20 +134,21 @@ setConstructorS3(
 				proc.end<-getProcesses(end);
 
 				# Calculate the intersection of process list:
-			
+
 				proc<-PSRoot$intersect.list(proc.start,proc.end);
 
-				start$processes<-proc;
-				start$processes<-proc;
-				
 				# No common processes:
 
 				if(length(proc) == 0){
-					start<-sample(c(start,end),1);
-					end<-clone(start);
-					proc<-getProcesses();
+					coin.flip<-sample(c(0,1),1);
+                                        if (coin.flip) {
+                                          proc <- getProcesses(start)
+                                          end <- clone(start)
+                                        } else {
+                                          proc <- getProcesses(end)
+                                          start <- clone(end)
+                                        }
 				}
-
 			}
 		
 
@@ -257,7 +257,7 @@ setMethodS3(
   },
   private=FALSE,
   protected=FALSE,
-  overwrite=FALSE,
+  overwrite=TRUE,
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
