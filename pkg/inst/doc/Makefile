@@ -9,10 +9,4 @@ all: PhyloSim.tex
 	rm *.eps
 	rm PhyloSim-*.pdf
 	rm Rplots.pdf
-sw:
-	R CMD Sweave PhyloSim.Rnw
-clean:
-	rm PhyloSim.pdf
-v:
-	okular PhyloSim.pdf
 	
