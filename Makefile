@@ -1,6 +1,6 @@
 
 .PHONY: ct cat com push gt checkpkg clean remove aareload
-PKG=phylosim_0.13.tar.gz
+PKG=phylosim_0.14.tar.gz
 
 ct:
 	git log --graph
