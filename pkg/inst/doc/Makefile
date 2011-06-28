@@ -6,7 +6,7 @@ all: PhyloSim.tex
 	rm PhyloSim.toc
 	rm PhyloSim.out
 	rm PhyloSim.tex
-	rm *.eps
+	(rm *.eps; true)
 	rm PhyloSim-*.pdf
 	rm Rplots.pdf
 	
