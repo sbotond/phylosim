@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 ##
-## Example V2.6: Simulating many replications in parallel
+## Example V2.7: Simulating many replications in parallel
 ## See also the package vignette (vignette("PhyloSim",package="phylosim")).
 ##
 
