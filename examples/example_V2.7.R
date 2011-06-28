@@ -8,7 +8,7 @@
 # load PhyloSim
 library("phylosim")
 
-# The the speed of the above method for running replicates can be improved on a multicore machine by running
+# The the speed of the above method for simulating replicates can be improved on a multicore machine by running
 # many replications in parallel by using the mclapply method from the multicore package. 
 
 # Under default settings, the mclapply method launches one replication per core and this approach needs enough memory to run all

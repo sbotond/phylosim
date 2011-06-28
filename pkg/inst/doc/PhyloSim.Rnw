@@ -677,10 +677,10 @@ unlink("aln_3.fas");
 
 \subsection{Simulating many replications in parallel}
 
-The the speed of the above method for running replicates can be improved on a multicore machine by running
+The the speed of the above method for simulating replicates can be improved on a multicore machine by running
 many replications in parallel by using the {\tt mclapply} method from the {\tt multicore} package. 
 
-Under default settings, the mclapply method launches one replication per core and this approach needs enough memory to run all
+Under default settings, the {\tt mclapply} method launches one replication per core and this approach needs enough memory to run all
 of them in parallel.
 
 The following code illustrates how to simulate many replications in parallel under the JC69+d$\Gamma$ model.
