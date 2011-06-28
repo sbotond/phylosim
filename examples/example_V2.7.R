@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 ##
-## Example V2.7: Simulating many replications in parallel
+## Example V2.7: Simulating many replicates in parallel
 ## See also the package vignette (vignette("PhyloSim",package="phylosim")).
 ##
 
@@ -9,19 +9,19 @@
 library("phylosim")
 
 # The the speed of the above method for simulating replicates can be improved on a multicore machine by running
-# many replications in parallel by using the mclapply method from the multicore package. 
+# many replicates in parallel by using the mclapply method from the multicore package. 
 
 # Under default settings, the mclapply method launches one replication per core and this approach needs enough memory to run all
 # of them in parallel.
 
-# The following code illustrates how to simulate many replications in parallel under the JC69+dG model.
+# The following code illustrates how to simulate many replicates in parallel under the JC69+dG model.
 
 # Construct the root sequence object and attach the substitution process:
 p<-JC69();
 root.seq<-NucleotideSequence(length=50)
 attachProcess(root.seq,p)
 
-# Read the required phylogeny from file (this will remain fixed in the simulated replications):
+# Read the required phylogeny from file (this will remain fixed in the simulated replicates):
 tree<-read.tree("data/3taxa.nwk");
 
 # Function to simulate a single replication: 
@@ -53,9 +53,9 @@ sim.replicate<-function(i){
 # Load the multicore package:
 library(multicore)
 
-# Run replications in parallel:
-nr.replications <-3
-res.objects<-mclapply(1:nr.replications, sim.replicate)
+# Run replicates in parallel:
+nr.replicates <-3
+res.objects<-mclapply(1:nr.replicates, sim.replicate)
 
 # Print the resulting PhyloSim objects:
 print(res.objects)
