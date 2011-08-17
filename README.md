@@ -6,6 +6,11 @@ It is built on the top of the [R.oo](http://cran.r-project.org/web/packages/R.oo
 
 <tt>PhyloSim</tt> was brought to you by the [Goldman group](http://www.ebi.ac.uk/goldman) from [EMBL-EBI](http://www.ebi.ac.uk).
 
+Publication
+-----------
+
+Botond Sipos, Tim Massingham, Gregory E Jordan and Nick Goldman (2011) <it>PhyloSim - Monte Carlo simulation of sequence evolution in the R statistical computing environment</it> - BMC Bioinformatics 12:104 [doi:10.1186/1471-2105-12-104](http://dx.doi.org/10.1186/1471-2105-12-104)
+
 Download an install
 -------------------
 
