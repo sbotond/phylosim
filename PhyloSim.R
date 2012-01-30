@@ -2993,6 +2993,7 @@ setMethodS3(
   ){
 
    # ugly empirical fix of some R CMD check warnings:
+   id           <-NA;
    pos          <-NA;
    char         <-NA;
    xend         <-NA;

@@ -617,7 +617,7 @@ setMethodS3(
 		# Use the package data directory if loaded:
 		if(length(intersect(search(),c("package:phylosim"))) == 1){
 			RDATDIR<-paste(.path.package("phylosim"),"/data/",sep="");
-			PAMLDIR<-RDATDIR;
+			PAMLDIR<-paste(.path.package("phylosim"),"/extdata/",sep="");
 		}
 		
 		rdname<-paste(RDATDIR,"/",name,".RData",sep="");

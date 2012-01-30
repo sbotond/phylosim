@@ -1,6 +1,6 @@
 
 .PHONY: ct cat com push gt checkpkg clean remove aareload
-PKG=phylosim_0.15.tar.gz
+PKG=phylosim_0.16.tar.gz
 
 ct:
 	git log --graph
@@ -20,6 +20,7 @@ pkg: *.R rd cat
 	(rm pkg/R/*.R;true)
 	(rm PhyloSimSource.R;true)
 	cp *.R pkg/R/
+	cp PAMLdat/*.dat pkg/extdata/
 	cp RData/* pkg/data/
 	R CMD build pkg
 checkpkg: pkg 
