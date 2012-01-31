@@ -230,7 +230,7 @@ setConstructorS3(
 		if(!STATIC) {
 			if ( len > 0 ) {
 				for(position in 1:len) {
-					 this$.sites[[position]]<-clone.PSRoot(site.template);
+					 this$.sites[[position]]<-clone.Object(site.template);
 				}
 			}
 
@@ -3022,51 +3022,33 @@ setMethodS3(
 		...
 	){
 
-		## WARNING: This method might fail if the internal workings
-		## of the R.oo package changes!
-
 		# Cloning the whole sequence object:
-		that<-clone.PSRoot(this);
-
+		that<-clone.Object(this)
 		# Disabling write protection:
-
 		if(that$writeProtected) {
-			that$writeProtected<-FALSE;
+			that$writeProtected<-FALSE
 		}
-
 		# Setting the ancestral sequence:
-		that$.ancestral.obj<-this;
-
+		that$.ancestral.obj<-this
 		# Resetting comments:
-		that$.comments<-list();
-		
-		clone.sites<-that$.sites;
+		that$.comments<-list()
 
-		# Cloning sites;
-		if(this$.length > 0) {
-		  for (i in 1:this$.length) {
-		    # Circumventing the call to .Object methods
-		    # in order to gain some speed.
-		    site<-.Internal(get(".sites", attr(this,".env"), "any", FALSE))[[i]];
-		    clone<-clone.PSRoot(site);
-		    clone.env<-attr(clone, ".env");
-		    #clone$.ancestral<-site;
-		    attr(site, "R.oo::.clone.Object") <- NULL
-		    .Internal(assign(".ancestral", site, clone.env, FALSE));
-		    #clone$.sequence<-that;
-		    .Internal(assign(".sequence", that, clone.env, FALSE));
-		    #that$.sites[[i]]<-clone;
-		    clone.sites[[i]]<-clone;	
-		  }
-		}
-		    
-		that$.sites<-clone.sites;
+		# Cloning sites:
+		clone.sites<-that$.sites
+        if(this$.length > 0) {
+            for (i in 1:this$.length) {
+                site<-this$.sites[[i]]
+                clone<-clone.Object(site)
+                clone$.ancestral<-site
+                clone$.sequence<-that
+                clone.sites[[i]]<-clone
+            }
+        }
+		that$.sites<-clone.sites
 		
 		# Setting the name:
-		that$name<-paste("clone of",this$.name);
-	
-		return(that);
-
+		that$name<-paste("clone of",this$.name)
+		return(that)
 	},
 	private=FALSE,
 	protected=FALSE,
