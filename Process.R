@@ -1382,7 +1382,7 @@ setMethodS3(
     ...
   ){
 
-			tmp<-clone.PSRoot(this);
+			tmp<-clone.Object(this);
 			if(tmp$writeProtected){
 					tmp$writeProtected<-FALSE;
 			}
