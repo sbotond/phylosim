@@ -1,7 +1,8 @@
 
-R version 2.11.1 (2010-05-31)
-Copyright (C) 2010 The R Foundation for Statistical Computing
+R version 2.14.1 (2011-12-22)
+Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -22,23 +23,34 @@ Type 'q()' to quit R.
 > source("common.R");
 Loading required package: R.oo
 Loading required package: R.methodsS3
-R.methodsS3 v1.2.0 (2010-03-13) successfully loaded. See ?R.methodsS3 for help.
-R.oo v1.7.3 (2010-06-04) successfully loaded. See ?R.oo for help.
+R.methodsS3 v1.2.1 (2010-09-18) successfully loaded. See ?R.methodsS3 for help.
+R.oo v1.8.3 (2011-11-01) successfully loaded. See ?R.oo for help.
+
+Attaching package: ‘R.oo’
+
+The following object(s) are masked from ‘package:R.methodsS3’:
+
+    throw.default
+
+The following object(s) are masked from ‘package:methods’:
+
+    getClass, getClasses, getMethods
+
+The following object(s) are masked from ‘package:base’:
+
+    attach, detach, environment, gc, load, save
+
 Loading required package: ape
 Loading required package: compoisson
 Loading required package: MASS
 Loading required package: ggplot2
-Loading required package: reshape
-Loading required package: plyr
-Loading required package: grid
-Loading required package: proto
 processor	: 0
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 1
 siblings	: 8
@@ -49,8 +61,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.30
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.31
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -62,7 +74,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 0
 siblings	: 8
@@ -73,7 +85,7 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
 bogomips	: 4800.19
 clflush size	: 64
 cache_alignment	: 64
@@ -86,7 +98,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 1
 siblings	: 8
@@ -97,8 +109,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.15
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.10
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -110,7 +122,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 0
 siblings	: 8
@@ -121,8 +133,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.41
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.30
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -134,7 +146,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 1
 siblings	: 8
@@ -145,8 +157,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.13
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.15
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -158,7 +170,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 0
 siblings	: 8
@@ -169,8 +181,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.21
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.22
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -182,7 +194,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 1
 siblings	: 8
@@ -193,8 +205,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.12
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.26
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -206,7 +218,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 0
 siblings	: 8
@@ -217,8 +229,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.42
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.21
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -230,7 +242,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 1
 siblings	: 8
@@ -241,8 +253,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.13
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.27
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -254,7 +266,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 0
 siblings	: 8
@@ -265,8 +277,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.23
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.29
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -278,7 +290,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 1
 siblings	: 8
@@ -289,8 +301,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.34
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.11
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -302,7 +314,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 0
 siblings	: 8
@@ -313,8 +325,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.29
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.49
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -326,7 +338,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 1
 siblings	: 8
@@ -337,8 +349,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.13
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.28
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -350,7 +362,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 0
 siblings	: 8
@@ -361,8 +373,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.21
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -374,7 +386,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 1
 siblings	: 8
@@ -385,8 +397,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.40
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.12
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
@@ -398,7 +410,7 @@ cpu family	: 6
 model		: 26
 model name	: Intel(R) Xeon(R) CPU           E5530  @ 2.40GHz
 stepping	: 5
-cpu MHz		: 2400.153
+cpu MHz		: 2400.155
 cache size	: 8192 KB
 physical id	: 0
 siblings	: 8
@@ -409,8 +421,8 @@ fpu		: yes
 fpu_exception	: yes
 cpuid level	: 11
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 cx16 xtpr popcnt lahf_lm
-bogomips	: 4800.08
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm syscall nx rdtscp lm constant_tsc ida nonstop_tsc pni monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr sse4_1 sse4_2 popcnt lahf_lm
+bogomips	: 4800.20
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 40 bits physical, 48 bits virtual
