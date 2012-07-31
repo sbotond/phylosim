@@ -1,7 +1,7 @@
 Package: phylosim
 Version: 0.17
 Date: 2011-06-28
-Title: R packge for simulating biological sequence evolution
+Title: R package for simulating biological sequence evolution
 Author: Botond Sipos <sbotond@ebi.ac.uk>, Gregory Jordan <greg@ebi.ac.uk>
 Maintainer: Botond Sipos <sbotond@ebi.ac.uk>
 Depends: R (>= 2.8.0), R.oo (>= 1.4.6), ape (>= 2.3), compoisson (>= 0.3), ggplot2 (>= 0.9)
