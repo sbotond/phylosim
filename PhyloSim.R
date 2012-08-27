@@ -4049,20 +4049,20 @@ setMethodS3(
       axis.text.size <- max(axis.text.size,1)
     }
    
-    plot.opts <- opts(
-		  axis.text.y = theme_text(size=axis.text.size,hjust=1),
-		  axis.title.x = theme_blank(),
-		  axis.title.y = theme_blank(),
-                  axis.ticks = theme_blank(),
-                  panel.grid.minor = theme_blank(),
-                  panel.grid.major = theme_blank(),
+    plot.theme <- theme(
+		  axis.text.y = element_text(size=axis.text.size,hjust=1),
+		  axis.title.x = element_blank(),
+		  axis.title.y = element_blank(),
+                  axis.ticks = element_blank(),
+                  panel.grid.minor = element_blank(),
+                  panel.grid.major = element_blank(),
                       
                   plot.margin = unit(c(0,0,0,0),'npc')
                   )
-    p <- p + plot.opts
+    p <- p + plot.theme
 
     if (!plot.legend) {
-       p <- p + opts(legend.position='none')
+       p <- p + theme(legend.position='none')
     }
     
     if (plot.tree) {      
@@ -4105,15 +4105,15 @@ setMethodS3(
         tree.limits <- c(0,max.length)
       }
       q <- q + scale_x_continuous(limits=tree.limits,expand=c(0.05,0))
-      q <- q + plot.opts
-#      q <- q + opts(plot.margin = unit(c(0,0,0,0),'npc'))
+      q <- q + plot.theme
+#      q <- q + theme(plot.margin = unit(c(0,0,0,0),'npc'))
       if (num.pages > 1) {
         q <- q + facet_grid(page ~ .)
-        q <- q + opts(strip.text.y=theme_blank())
+        q <- q + theme(strip.text.y=element_blank())
       }
 
       if (!plot.legend) {
-        q <- q + opts(legend.position='none')
+        q <- q + theme(legend.position='none')
       }
 
       if (aspect.ratio) {
@@ -4124,7 +4124,7 @@ setMethodS3(
       print(p,vp=subplot(2:4,1))
       print(q,vp=subplot(1,1))
     } else {
-      p <- p + plot.opts
+      p <- p + plot.theme
       print(p)
     }
     
