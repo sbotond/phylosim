@@ -22,9 +22,9 @@ pkg: *.R rd cat
 	cp *.R pkg/R/
 	cp PAMLdat/*.dat pkg/extdata/
 	cp RData/* pkg/data/
-	R CMD build pkg
+	R CMD build --compact-vignettes=both pkg
 checkpkg: pkg 
-	R CMD check $(PKG)
+	R CMD check --as-cran $(PKG)
 clean:
 	(rm *.log; rm $(PKG);rm -r ./phylosim.Rcheck;rm ./pkg/man/*.Rd;rm ./pkg/R/*.R;true ) 2>&1 > /dev/null
 inst: pkg
