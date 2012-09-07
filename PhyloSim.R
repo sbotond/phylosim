@@ -122,33 +122,6 @@
 #	tmp$treeLength
 #	t<-tmp$phylo
 #
-#	## Example 2 - An "unrolled" example:
-#	## simulate sequences of binary characters.
-#
-#	# construct root sequence object
-#	s<-BinarySequence(string="000000")
-#	# construct a substitution process object
-#	p<-BinarySubst(rate.list=list("0->1"=1,"1->0"=0.5))
-#	# display a bubble plot
-#	plot(p)
-#	# attach process to sequence
-#	attachProcess(s,p)
-#	# construct simulation object
-#	sim<-PhyloSim(root.seq=s, phylo=t)
-#	# run simulation
-#	Simulate(sim)
-#	# display alignment matrix
-#	sim$alignment
-#	# plot tree and alignment
-#	plot(sim)
-#
-#	## Check the consistency of object p
-#	print(checkConsistency(p))
-#
-#	## Check the consistency of all PhyloSim
-#	## related objects.
-#	PSRoot$globalConsistencyCheck();
-#
 #	## Example 3 - simulating rate variation,
 #	## insertions and deletions.
 #	## See the examples/example_3_clean.R file
@@ -246,84 +219,11 @@
 #	# delete Fasta file
 #	unlink(file);
 #
-#	## Example 4 - simulating amino acid sequences
-#	## and exploring more facilities.
-#
-#	# enable fast & careless mode
-#	# WARNING: do not do this only
-#	# if you are sure, that your simulation
-#	# settings are 100% flawless!
-#
-#	PSIM_FAST<-TRUE;
-#	
-#	# construct substitution model objects
-#	wag<-WAG()
-#	lg<-LG()
-#	# display a bubble plot of wag
-#	plot(wag)
-#	# construct root sequence
-#	s<-AminoAcidSequence(length=50)
-#	# attach process wag to the range 1:10
-#	attachProcess(s,wag,1:10)
-#	# attach process lg to the range 31:50
-#	attachProcess(s,lg,31:50)
-#	# create a pattern of processes in the range 11:30
-#	setProcesses(s,list(list(wag),list(lg),list(wag,lg)),11:30)
-#	# set rate multipliers to reduce 
-#	# the rate to half at every third site
-#	setRateMultipliers(s,wag,0.5,seq(from=13,to=30,by=3))
-#	setRateMultipliers(s,lg,0.5,seq(from=13,to=30,by=3))
-#	# Now every third site in the range 11:30 evolves
-#	# according to a combination of amino acid substitution models!
-#
-#	# sample states
-#	sampleStates(s)
-#	# construct simulation object
-#	sim<-PhyloSim(root.seq=s, phylo=t)
-#	# set a log file
-#	sim$logFile<-paste("PhyloSim_dummy_log_",Sys.getpid(),sep="")
-#	# set log level to debug
-#	sim$logLevel<-1
-#	# run simulation
-#	Simulate(sim)
-#	# get a sequence object 
-#	rs<-sim$sequences[[4]]
-#	# print sequence string
-#	rs$string
-#	# show alignment matrix
-#	sim$alignment
-#	# plot tree and alignment, omitting ancestral sequences
-#	plot(sim,plot.ancestors=FALSE)
-#	# display the head of the log file
-#	cat(paste(scan(nmax=20,file=sim$logFile,what=character(),sep="\n"),collapse="\n"));cat("\n");
-#	# delete log file
-#	unlink(sim$logFile);
-#
-#	# Reading alignments:
-#
-#	# get a safe file name  
-#       fname<-paste("PhyloSim_dummy_fas_",Sys.getpid(),sep="")
-#       # write out a fasta alignment
-#       cat("> t3\nGTCTTT-CG-\n",file=fname);
-#       cat("> t4\nG--TC-TCGG\n",file=fname,append=TRUE);
-#       cat("> t2\nG--TC-TCGG\n",file=fname,append=TRUE);
-#       cat("> t1\nGTC-G-TCGG",file=fname,append=TRUE);
-#       # construct a PhyloSim object,
-#       # set the phylo object
-#       sim<-PhyloSim(phylo=rcoal(4))
-#       # read the alignment
-#       readAlignment(sim,fname)
-#       # remove alignment file
-#       unlink(fname)
-#       # plot the tree & alignment
-#       plot(sim)
-
-#
-#	# disable fast & careless mode
-#	rm(PSIM_FAST)
-#
+#   # See \url{http://github.com/sbotond/phylosim/tree/master/examples/examples_class.R}
+#   # for the full list of PhyloSim constructor examples.
+#   
 #	## See the package vignette and 
-#	## the GitHub repository for more examples.
+#	## the GitHub repository for even more examples.
 # }
 # 
 # @author
