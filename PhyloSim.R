@@ -2550,6 +2550,7 @@ setMethodS3(
   conflict="warning",
   validators=getOption("R.methodsS3:validators:setMethodS3")
 );
+
 ##
 ## Method: saveAlignment
 ##
@@ -5431,8 +5432,7 @@ setMethodS3(
 		if(!all(is.na(this$.phylo))){
 			if(is.phylo(this$.phylo)){
 					# This is dumb but safe:
-					#return(sort(unique(as.vector(this$.phylo$edge))));
-					return(1:( 2*getNtips(this) - 1));
+					return(sort(unique(as.vector(this$.phylo$edge))));
 			}
 			else{
 				throw("The phylo object is invalid!\n");
