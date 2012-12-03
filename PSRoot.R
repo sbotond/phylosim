@@ -469,12 +469,13 @@ setMethodS3(
     ...
   ){
 
-			class<-class(this)[[1]];
-			mlist<-getMethods.Class(this);
+            cls   <- class(this)[[1]]
+            clazz <- Class$forName(cls);
+            mlist <- getMethods(clazz);
 
 			# If the class has no methods, do not 
 			# consider the methods from the parent class.
-			if(names(mlist)[[1]] == class){	
+			if(names(mlist)[[1]] == cls){	
       			as.character(names(mlist[[1]]));
 			}
 			else {
