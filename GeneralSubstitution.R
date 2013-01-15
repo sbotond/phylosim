@@ -652,7 +652,7 @@ setMethodS3(
 			tmp<-abs(exp(eigen$values));
 			index<-which(tmp == max(tmp));
 			# ... and the corresponding eigenvector:
-			dist<-as.real(eigen$vectors[,index]);
+			dist<-as.double(eigen$vectors[,index]);
 		}	
 
 		# Normalize the eigenvector:
@@ -2227,7 +2227,7 @@ setMethodS3(
 
 	# visual aspect tuned by "magic" formulas :)
 	my.plot<-(qplot(x=xx,y=yy,size=zz,xlab="To:",ylab="From:",main="Rate matrix") + geom_point(colour="blue") +
-	scale_area(limits=c(0,max(zz)),range=c(0,(scale * 5 * log(128/size))), name="Size:")
+	scale_size_area(limits=c(0,max(zz)), name="Size:")
 	) + xlim(colnames(qmat)) + ylim(rev(rownames(qmat)));
 	print(my.plot, vp=vp1);
 	popViewport(1);
@@ -2248,7 +2248,7 @@ setMethodS3(
 	fr<-max(zz) - min(zz);	
 	# visual aspect tuned by "magic" formulas :)
 	my.plot<-(qplot(x=xx,y=yy,size=zz,xlab="Symbol",ylab="Prob:",main="Equlibrium distribution") + geom_point(colour="green") + 
-	scale_area(limits=c(0,max(zz)),range=c(0.5,(scale * 4 * log(128/size))), name="Size:",breaks=c(min(zz),min(zz) + fr*(1/3),min(zz) + fr*(2/3),max(zz))) + xlim(xx)
+	scale_size_area(limits=c(0,max(zz)), name="Size:",breaks=c(min(zz),min(zz) + fr*(1/3),min(zz) + fr*(2/3),max(zz))) + xlim(xx)
 	);
 	print(my.plot,vp=vp2);
 	popViewport(1);
