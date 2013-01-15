@@ -59,6 +59,7 @@ options(width=90)
 @
 <<echo=TRUE>>=
 library(phylosim)
+set.seed(833)
 @
 
 Create the tree files used in the basic examples:
@@ -745,11 +746,12 @@ if(have.mcore){
 }
 @
 
-Plot one of the resulting alignments:
-<<echo=TRUE,fig=TRUE,width=180,height=80>>=
+Print one of the resulting alignments:
+<<echo=TRUE>>=
 if(have.mcore){
-    plot(res.objects[[1]])
-}
+    print(res.objects[[1]]$alignment)
+} 
+
 @
 
 <<echo=FALSE>>=
