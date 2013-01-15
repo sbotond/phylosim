@@ -92,6 +92,7 @@
 # }
 # 
 # \examples{ 
+#   set.seed(1)
 #	## The following examples demonstrate
 #	## the typical use of the framework.
 #	## See the package vignette and
