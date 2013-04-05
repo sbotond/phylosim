@@ -1,3 +1,6 @@
+
+![Gillespie algorithm](https://raw.github.com/sbotond/phylosim/master/misc/gillespie.png)
+
 PhyloSim
 ========
 
