@@ -611,8 +611,8 @@ setMethodS3(
 	){
 
 
-		PAMLDIR<-"PAMLdat";
-		RDATDIR<-"RData";
+		PAMLDIR<-"../PAMLdat";
+		RDATDIR<-"../RData";
 
 		# Use the package data directory if loaded:
 		if(length(intersect(search(),c("package:phylosim"))) == 1){

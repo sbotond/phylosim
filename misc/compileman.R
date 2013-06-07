@@ -1,10 +1,9 @@
 library("R.oo");
 system("make cat");
-source("PhyloSimSource.R");
 
-author<-"Botond Sipos";
-dest.path<-"./pkg/man";
-Rdoc$compile("./PhyloSimSource.R", destPath=dest.path,verbose=TRUE);
+dest.path<-"./man";
+sf       <-list.files()
+Rdoc$compile(filename="../PhyloSimSource.R", destPath=dest.path,verbose=TRUE, source=TRUE);
 warnings();
 
 

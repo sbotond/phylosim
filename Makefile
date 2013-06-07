@@ -14,12 +14,13 @@ fetch:
 	git fetch --all
 gt:
 	gitk --all
-rd: *.R
-	( R --vanilla < ./misc/compileman.R; perl misc/RdClean.pl)
-pkg: *.R rd cat
-	(rm pkg/R/*.R;true)
-	(rm PhyloSimSource.R;true)
+sc: *.R
+	(rm -f pkg/R/*.R;true)
 	cp *.R pkg/R/
+rd: *.R
+	( cd pkg/; R --vanilla < ../misc/compileman.R; perl ../misc/RdClean.pl)
+pkg: cat sc *.R rd 
+	(rm PhyloSimSource.R;true)
 	cp PAMLdat/*.dat pkg/extdata/
 	cp RData/* pkg/data/
 	R CMD build --compact-vignettes=both pkg

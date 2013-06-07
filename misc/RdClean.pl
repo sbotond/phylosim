@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-chdir("./pkg/man");
+chdir("./man");
 
 for my $file (<*.Rd>){
 
