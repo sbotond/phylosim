@@ -4,8 +4,8 @@ Date: 2011-06-28
 Title: R package for simulating biological sequence evolution
 Author: Botond Sipos <sbotond@ebi.ac.uk>, Gregory Jordan <greg@ebi.ac.uk>
 Maintainer: Botond Sipos <sbotond@ebi.ac.uk>
-Depends: R (>= 2.15.2), R.oo (>= 1.4.6), ape (>= 2.3), compoisson (>= 0.3), ggplot2 (>= 0.9.3)
-Suggests: multicore
+Depends: R (>= 2.15.2), R.oo (>= 1.13.0), ape (>= 2.3), compoisson (>= 0.3), ggplot2 (>= 0.9.3)
+Suggests: 
 Imports: ape, R.oo, compoisson, ggplot2
 Description: PhyloSim is an extensible object-oriented framework for the Monte Carlo simulation of sequence evolution written in 100 percent R. It is built on the top of the R.oo and ape packages and uses Gillespie's direct method to simulate substitutions, insertions and deletions.
 License: GPL (>= 3)
