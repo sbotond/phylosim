@@ -464,7 +464,10 @@ setMethodS3(
 # \examples{
 #	# create a GeneralSubstitution object
 #	# provide an Alphabet object and the rates
-#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	p<-GeneralSubstitution(
+#                           alphabet=BinaryAlphabet(),
+#                           rate.list=list("1->0"=1,"0->1"=1)
+#                           )
 #	# get equlibrium distribution 
 #	getEquDist(p)
 #	# get equilibrium distribution via virtual field
@@ -724,7 +727,10 @@ setMethodS3(
 # \examples{
 #	# create a GeneralSubstitution object
 #	# provide an Alphabet object and the rates
-#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(), rate.list=list("1->0"=1,"0->1"=1))
+#	p<-GeneralSubstitution(
+#                           alphabet=BinaryAlphabet(),
+#                           rate.list=list("1->0"=1,"0->1"=1)
+#                         )
 #	# get equlibrium distribution 
 #	getEquDist(p)
 #	# get equilibrium distribution via virtual field
@@ -2075,7 +2081,11 @@ setMethodS3(
 # 
 # \examples{
 #	# create a GeneralSubstitution object
-#	p<-GeneralSubstitution(alphabet=BinaryAlphabet(),rate.list=list("0->1"=1,"1->0"=2),name="MyBinary")
+#	p<-GeneralSubstitution(
+#                           alphabet=BinaryAlphabet(),
+#                           rate.list=list("0->1"=1,"1->0"=2),
+#                           name="MyBinary"
+#                           )
 #	# clone p
 #	pp<-clone(p)
 #	# do some checks

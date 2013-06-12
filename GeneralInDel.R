@@ -34,7 +34,11 @@
 #	# create a GeneralInDel object
 #	# rejecting half of the events
 #	# and proposing sizes in the range 1:10
-#	o<-GeneralInDel(rate=1, propose.by=function(process){sample(1:10,1)}, accept.by=function(){sample(c(TRUE,FALSE),1)});
+#	o<-GeneralInDel(
+#                   rate=1,
+#                   propose.by=function(process){sample(1:10,1)},
+#                   accept.by=function(){sample(c(TRUE,FALSE),1)}
+#                   );
 #	# check if inherits from GeneralInDel
 #	is.GeneralInDel(o)
 #	# check if it has undefined rates
@@ -536,7 +540,11 @@ setMethodS3(
 # \examples{
 #	# create a GeneralInDel object
 #	# rejecting half of the events
-#	o<-GeneralInDel(rate=1, propose.by=function(process){return(5)}, accept.by=function( ){sample(c(TRUE,FALSE),1)});
+#	o<-GeneralInDel(
+#                   rate=1,
+#                   propose.by=function(process){return(5)},
+#                   accept.by=function( ){sample(c(TRUE,FALSE),1)}
+#                   );
 #	# set/get the acceptBy function
 #	setAcceptBy(o,value=function(){return(FALSE)})	# reject all events
 #	getAcceptBy(o)
@@ -602,7 +610,11 @@ setMethodS3(
 # \examples{
 #	# create a GeneralInDel object
 #	# rejecting half of the events
-#	o<-GeneralInDel(rate=1, propose.by=function(process){return(5)}, accept.by=function( ){sample(c(TRUE,FALSE),1)});
+#	o<-GeneralInDel(
+#                   rate=1, 
+#                   propose.by=function(process){return(5)},
+#                   accept.by=function( ){sample(c(TRUE,FALSE),1)}
+#                   );
 #	# set/get the acceptBy function
 #	setAcceptBy(o,value=function( ){return(FALSE)})	# reject all events
 #	getAcceptBy(o)
@@ -891,11 +903,11 @@ setMethodS3(
 #	i<-GeneralInsertor(
 #		name="GIN",
 #		rate=1,
-#		propose.by=function(process){4}, 			# fixed insert length
-#		acceptBy=function(process,sequence,window){TRUE},	# always accept insertions
-#		template.seq=NucleotideSequence(string="A"),		# a boring template sequence
-#		insert.hook=function(seq){ return(seq)},		# a boring insert hook
-#		accept.win=2						# 4 sites affecting acceptance
+#		propose.by=function(process){4}, # fixed insert length
+#		acceptBy=function(process,sequence,window){TRUE},# always accept insertions
+#		template.seq=NucleotideSequence(string="A"),# a boring template sequence
+#		insert.hook=function(seq){ return(seq)},# a boring insert hook
+#		accept.win=2 #4 sites affecting acceptance
 #	)
 #	i
 #	# check if object inherits from GeneralInsertor
@@ -921,10 +933,18 @@ setMethodS3(
 #	# set/get acceptWin
 #	i$acceptWin<-1;
 #	# set/get insert hook
-#	i$insertHook<-function(seq, target.seq, event.pos, insert.pos){ attachProcess(seq, GTR() );seq} # attach a substitution process
+#	i$insertHook<-function(
+#                           seq, 
+#                           target.seq,
+#                           event.pos,
+#                           insert.pos
+#                           ){ attachProcess(seq, GTR() );seq} 
 #	i$insertHook
 #	# set/get template sequence
-#	i$templateSeq<-NucleotideSequence(length=5, processes=list(list(JC69()))) # length: 5, states: NA
+#	i$templateSeq<-NucleotideSequence(
+#                                       length=5,
+#                                       processes=list(list(JC69()))
+#                                   ) # length: 5, states: NA
 #	i$templateSeq
 #	# generate an insert sequence
 #	generateInsert(i)
@@ -1501,7 +1521,15 @@ setMethodS3(
 #	# save insert generator
 #	old.gen<-getGenerateBy(i)
 #	# set a new insert generator
-#	i$generateBy<-function(process, length, target.seq, event.pos, insert.pos){ return(NucleotideSequence(string="AATTGGCC"))}
+#	i$generateBy<-function(
+#                           process,
+#                           length, 
+#                           target.seq,
+#                           event.pos,
+#                           insert.pos
+#                        ){ 
+#                           return(NucleotideSequence(string="AATTGGCC"))
+#                           }
 #	# get the generator function
 #	i$generateBy
 #	# generate insert
@@ -1575,7 +1603,14 @@ setMethodS3(
 #	# save insert generator
 #	old.gen<-getGenerateBy(i)
 #	# set a new insert generator
-#	i$generateBy<-function(process, length, target.seq, event.pos, insert.pos){ return(NucleotideSequence(string="AATTGGCC"))}
+#	i$generateBy<-function(
+#                           process,
+#                           length,
+#                           target.seq,
+#                           event.pos,
+#                           insert.pos){ 
+#                   return(NucleotideSequence(string="AATTGGCC"))
+#                   }
 #	# get the generator function
 #	i$generateBy
 #	# generate insert
@@ -2235,7 +2270,8 @@ setMethodS3(
 #	d$proposeBy<-function(process, sequence, position){ sample(3:6,1) }
 #	d$proposeBy
 #	# set/get acceptBy
-#	d$acceptBy<-function(process, sequence, range){ sample(c(TRUE, FALSE), 1)} # reject half of the events
+#   # reject half of the events
+#	d$acceptBy<-function(process, sequence, range){ sample(c(TRUE, FALSE), 1)} 
 #	d$acceptBy
 #	# create a sequence object, attach process
 #	s<-NucleotideSequence(string="AATTGGCCCCGGTTAA", processes=list(list(d)))

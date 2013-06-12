@@ -112,7 +112,8 @@
 #	## the resulting alignment matrix.
 #
 #	Simulate(
-#		PhyloSim(phy=rcoal(3),root=NucleotideSequence(string="ATGC", proc=list(list(JC69())) ) )
+#		PhyloSim(phy=rcoal(3),
+#       root=NucleotideSequence(string="ATGC", proc=list(list(JC69())) ) )
 #	)$alignment
 #
 #	# Construct a phylo object for the following
@@ -2741,7 +2742,8 @@ setMethodS3(
 #	Simulate(sim)
 #       # Plot the alignment without the tree or ancestral sequences.
 #       plot(sim, plot.ancestors=FALSE, plot.tree=FALSE)
-#       # Force a DNA-based color scheme (default is 'auto' to auto-detect based on the sequence composition)
+#       # Force a DNA-based color scheme 
+#       # (default is 'auto' to auto-detect based on the sequence composition)
 #       plot(sim, color.scheme='dna', plot.legend=TRUE)
 # } 
 # 
@@ -4777,7 +4779,9 @@ setMethodS3(
 #	# NOTE: this will be a little bit slow
 #	sim<-PhyloSim(
 #		phylo=rcoal(3),
-#		root.seq=CodonSequence(string="ATGATTATT",processes=list(list(GY94(kappa=2,omega.default=0.5))))
+#		root.seq=CodonSequence(
+#                               string="ATGATTATT",
+#                               processes=list(list(GY94(kappa=2,omega.default=0.5))))
 #	);
 #	# make the tree longer to have more events
 #	scaleTree(sim,5)
@@ -4918,7 +4922,10 @@ setMethodS3(
 #	# NOTE: this will be a little bit slow
 #	sim<-PhyloSim(
 #		phylo=rcoal(3),
-#		root.seq=CodonSequence(string="ATGATTATT",processes=list(list(GY94(kappa=2,omega.default=0.5))))
+#		root.seq=CodonSequence(
+#                               string="ATGATTATT",
+#                               processes=list(list(GY94(kappa=2,omega.default=0.5)))
+#                               )
 #	);
 #	# make the tree longer to have more events
 #	scaleTree(sim,5)
@@ -6317,7 +6324,8 @@ setMethodS3(
 # \examples{
 #	# create a PhyloSim object and run a simulation:
 #	sim<-Simulate(
-#                     PhyloSim(phy=rcoal(3),root=NucleotideSequence(string="ATGC", proc=list(list(JC69())) ) )
+#                     PhyloSim(phy=rcoal(3),
+#                     root=NucleotideSequence(string="ATGC", proc=list(list(JC69())) ) )
 #             )
 #	# get the alignment length
 #	getAlignmentLength(sim)

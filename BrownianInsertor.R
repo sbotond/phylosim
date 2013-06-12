@@ -1,4 +1,4 @@
-##	
+
 ## Copyright 2009 Botond Sipos	
 ## See the package description for licensing information.	
 ##	
@@ -41,7 +41,13 @@
 # 
 # \examples{ 
 #	# create a BrownianInsertor process, discrete type
-#	p<-BrownianInsertor(type="discrete",scale=0.05, sizes=1:4,probs=c(3/6,1/6,1/6,1/6),rate=0.05)
+#	p<-BrownianInsertor(
+#                       type="discrete",
+#                       scale=0.05, 
+#                       sizes=1:4,
+#                       probs=c(3/6,1/6,1/6,1/6),
+#                       rate=0.05
+#                       )
 #	# get object summary
 #	summary(p)
 #	# plot insert length distribution
@@ -612,7 +618,13 @@ setMethodS3(
 # \examples{
 #
 #       # create an object
-#	p<-BrownianInsertor(type="discrete",scale=0.05, sizes=1:4,probs=c(3/6,1/6,1/6,1/6),rate=0.05)
+#	p<-BrownianInsertor(
+#                       type="discrete",
+#                       scale=0.05, 
+#                       sizes=1:4,
+#                       probs=c(3/6,1/6,1/6,1/6),
+#                       rate=0.05
+#                       )
 #       # get a summary
 #       summary(p)
 # }

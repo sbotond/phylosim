@@ -1339,7 +1339,12 @@ setMethodS3(
 # 
 # \examples{
 #	# create a Sequence object with some Alphabet objects attached
-#	s<-Sequence(alphabets=list(NucleotideAlphabet(),BinaryAlphabet(),NucleotideAlphabet()),length=10)	
+#	s<-Sequence(
+#               alphabets=list(NucleotideAlphabet(),
+#               BinaryAlphabet(),
+#               NucleotideAlphabet()),
+#               length=10
+#               )	
 #	# get the list of attached alphabets
 #	s$alphabets
 #	# get the unique list of attahced Alphabet objects
@@ -1619,7 +1624,11 @@ setMethodS3(
 # 
 # \examples{
 #	# create a sequence object with some processes attached
-#	s<-Sequence(length=4,alphabets=list(NucleotideAlphabet()),processes=list(list(JC69(),K80()),list(GTR())))
+#	s<-Sequence(
+#               length=4,
+#               alphabets=list(NucleotideAlphabet()),
+#               processes=list(list(JC69(),K80()),list(GTR()))
+#               )
 #	# get the list of lists of attached processes from positions 1 and 3
 #	getProcesses(s,c(1,3))
 #	# get processes via virtual field
@@ -1690,7 +1699,11 @@ setMethodS3(
 # \examples{
 #	# create a sequence object and attach processes
 #	p<-JC69()
-#	s<-Sequence(length=4,alphabets=list(NucleotideAlphabet()),processes=list(list(p,K80()),list(p)))
+#	s<-Sequence(
+#               length=4,
+#               alphabets=list(NucleotideAlphabet()),
+#               processes=list(list(p,K80()),list(p))
+#               )
 #	# get the unique list of attached Process instances
 #	getUniqueProcesses(s)
 #	# via virtual field
@@ -1918,7 +1931,8 @@ setMethodS3(
 #	# create a sequence, attach a process
 #	p<-K80()
 #	s<-Sequence(length=6,alphabets=list(NucleotideAlphabet()),processes=list(list(p)))
-#	# set a new pattern of rate multipliers in the range 1:3, the default value is 1.0 by the way
+#	# set a new pattern of rate multipliers in the range 1:3,
+#   # the default value is 1.0 by the way
 #	setParameterAtSites(s,p,"rate.multiplier",c(2,3),1:3)
 #	# get rate multipliers
 #	getParameterAtSites(s,p,"rate.multiplier")
@@ -2165,7 +2179,8 @@ setMethodS3(
 #	# create a sequence, attach a process
 #	p<-K80()
 #	s<-Sequence(length=6,alphabets=list(NucleotideAlphabet()),processes=list(list(p)))
-#	# set a new pattern of rate multipliers in the range 1:3, the default value is 1.0 by the way
+#	# set a new pattern of rate multipliers in the 
+#   # range 1:3, the default value is 1.0 by the way
 #	setParameterAtSites(s,p,"rate.multiplier",c(2,3),1:3)
 #	# get rate multipliers
 #	getParameterAtSites(s,p,"rate.multiplier")
@@ -2255,7 +2270,11 @@ setMethodS3(
 # 
 # \examples{
 #	# create a sequence with a process attached
-#	s<-Sequence(string="ATGC",alphabets=list(NucleotideAlphabet()),processes=list(list(JC69())))
+#	s<-Sequence(
+#               string="ATGC",
+#               alphabets=list(NucleotideAlphabet()),
+#               processes=list(list(JC69()))
+#               )
 #	# get the active events from range 1:3
 #	getEvents(s,1:3)
 #	# get all active events via virtual field
@@ -2329,7 +2348,11 @@ setMethodS3(
 # 
 # \examples{
 #	# create a sequence with some processes attached
-#	s<-Sequence(string="ATGC",alphabets=list(NucleotideAlphabet()),processes=list(list(JC69()),list(JC69(),GTR())))
+#	s<-Sequence(
+#               string="ATGC",
+#               alphabets=list(NucleotideAlphabet()),
+#               processes=list(list(JC69()),list(JC69(),GTR()))
+#               )
 #	# get total rates for positions 1 and 3
 #	getTotalRatesFromRange(s,c(1,3))
 #	# get all total rates via virtual field
@@ -2561,7 +2584,11 @@ setMethodS3(
 # 
 # \examples{
 #	# create a sequence with some processes attached
-#	s<-Sequence(string="ATGC",alphabets=list(NucleotideAlphabet()),processes=list(list(JC69()),list(JC69(),GTR())))
+#	s<-Sequence(
+#               string="ATGC",
+#               alphabets=list(NucleotideAlphabet()),
+#               processes=list(list(JC69()),list(JC69(),GTR()))
+#               )
 #	# get cumulative rates for positions 1 and 3
 #	getCumulativeRatesFromRange(s,c(1,3))
 #	# get all cumulative rates via virtual field
