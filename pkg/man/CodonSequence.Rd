@@ -37,7 +37,10 @@ extends \link{Sequence}\cr
  }
 
  \usage{
-CodonSequence(name=NA, string=NA, length=NA, table.id=1, processes=NA, ancestral.obj=NA, ...)
+CodonSequence(
+    name=NA, string=NA, length=NA, 
+    table.id=1, processes=NA, ancestral.obj=NA, ...
+    )
 }
 
  \arguments{

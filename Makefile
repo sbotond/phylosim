@@ -19,7 +19,7 @@ sc: *.R
 	cp *.R pkg/R/
 rd: *.R
 	( cd pkg/; R --vanilla < ../misc/compileman.R; perl ../misc/RdClean.pl)
-pkg: cat sc *.R rd 
+pkg: cat sc *.R
 	(rm PhyloSimSource.R;true)
 	cp PAMLdat/*.dat pkg/extdata/
 	cp RData/* pkg/data/
@@ -27,7 +27,7 @@ pkg: cat sc *.R rd
 checkpkg: pkg 
 	R CMD check --as-cran $(PKG)
 clean:
-	(rm *.log; rm $(PKG);rm -r ./phylosim.Rcheck;rm ./pkg/man/*.Rd;rm ./pkg/R/*.R;true ) 2>&1 > /dev/null
+	(rm *.log; rm $(PKG);rm -r ./phylosim.Rcheck;rm ./pkg/R/*.R;true ) 2>&1 > /dev/null
 inst: pkg
 	R CMD INSTALL	$(PKG)
 remove:

@@ -49,7 +49,10 @@ extends \link{UNREST}\cr
  }
 
  \usage{
-GTR(name="Anonymous", rate.params=list(a = 1, b = 1, c = 1, d = 1, e = 1, f = 1), base.freqs=rep(0.25, times = 4), ...)
+GTR(
+        name="Anonymous", rate.params=list(a = 1, b = 1, c = 1, d = 1, e = 1, f = 1),
+        base.freqs=rep(0.25, times = 4), ...
+        )
 }
 
  \arguments{

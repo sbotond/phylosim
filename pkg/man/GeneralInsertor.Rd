@@ -66,7 +66,10 @@ extends \link{GeneralInDel}\cr
  }
 
  \usage{
-GeneralInsertor(name="Anonymous", rate=NA, propose.by=NA, accept.by=NA, template.seq=NA, insert.hook=NA, accept.win=NA, ...)
+GeneralInsertor(
+    name="Anonymous", rate=NA, propose.by=NA, 
+    accept.by=NA, template.seq=NA, insert.hook=NA, accept.win=NA, ...
+    )
 }
 
  \arguments{

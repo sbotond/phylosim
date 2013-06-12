@@ -70,7 +70,10 @@ extends \link{CodonUNREST}\cr
  }
 
  \usage{
-GY94(name="Anonymous", table.id=1, kappa=1, omega.default=1, codon.freqs=NA, scale.nuc=FALSE, ...)
+GY94(
+        name="Anonymous", table.id=1, kappa=1, 
+        omega.default=1, codon.freqs=NA, scale.nuc=FALSE, ...
+       )
 }
 
  \arguments{

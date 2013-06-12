@@ -49,7 +49,10 @@ extends \link{GTR}\cr
  }
 
  \usage{
-TN93(name="Anonymous", rate.params=list(Alpha1 = 1, Alpha2 = 1, Beta = 1), base.freqs=c(0.25, 0.25, 0.25, 0.25), ...)
+TN93(
+    name="Anonymous", rate.params=list(Alpha1 = 1, Alpha2 = 1, Beta = 1), 
+    base.freqs=c(0.25, 0.25, 0.25, 0.25), ...
+    )
 }
 
  \arguments{

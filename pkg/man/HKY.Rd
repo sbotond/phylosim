@@ -48,7 +48,10 @@ extends \link{GTR}\cr
  }
 
  \usage{
-HKY(name="Anonymous", rate.params=list(Alpha = 1, Beta = 1), base.freqs=c(0.25, 0.25, 0.25, 0.25), ...)
+HKY(
+    name="Anonymous", rate.params=list(Alpha = 1, Beta = 1), 
+    base.freqs=c(0.25, 0.25, 0.25, 0.25), ...
+    )
 }
 
  \arguments{

@@ -63,7 +63,10 @@ extends \link{GeneralDeletor}\cr
  }
 
  \usage{
-FastFieldDeletor(name="Anonymous", type="geometric", length.param.1=NA, length.param.2=NA, tolerance.margin=0, ...)
+FastFieldDeletor(
+            name="Anonymous", type="geometric", 
+            length.param.1=NA, length.param.2=NA, tolerance.margin=0, ...
+            )
 }
 
  \arguments{
