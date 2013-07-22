@@ -1,5 +1,6 @@
 .gitignore
 R/.gitignore
 man/.gitignore
-inst/doc/.gitignore
+vignettes/.gitignore
+inst/.gitignore
 data/.gitignore
