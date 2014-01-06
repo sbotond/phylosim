@@ -6447,6 +6447,8 @@ setMethodS3(
 #
 # @RdocMethod Undocumented
 # \alias{Undocumented}
+# \alias{newMatrix}
+# \alias{setEquDist.CodonSubst}
 # \alias{BrownianPath}
 # \alias{buildFromPAML}
 # \alias{checkConsistency}
