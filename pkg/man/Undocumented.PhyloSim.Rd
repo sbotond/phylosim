@@ -9,6 +9,8 @@
  \name{Undocumented.PhyloSim}
 \alias{Undocumented.PhyloSim}
 \alias{PhyloSim.Undocumented}
+\alias{newMatrix}
+\alias{setEquDist.CodonSubst}
 \alias{Undocumented,PhyloSim-method}
  \alias{Undocumented}
  \alias{BrownianPath}
