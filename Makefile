@@ -36,3 +36,8 @@ aareload: cat
 	(rm RData/*;true)
 	R --vanilla < misc/recreate_aamodels.R
 
+codonreload: cat
+	(rm RData/*;true)
+	R --vanilla < misc/recreate_codonmodels.R
+
+
