@@ -85,8 +85,6 @@ $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCa
 	p<-CodonSubst()
 	# build rate matrix from paml file
 	# buildFromPAML(p,"path_to_paml_file")	# do not run this
-	# set a rate
-	setRate(p,"A->D",2)
 	# get object summary
 	summary(p)
  }
