@@ -1,5 +1,5 @@
 
-.PHONY: ct cat com push gt checkpkg clean remove aareload
+.PHONY: ct cat com push gt checkpkg clean remove aareload 
 PKG=phylosim_2.0.3.tar.gz
 
 ct:
@@ -35,9 +35,5 @@ remove:
 aareload: cat
 	(rm RData/*;true)
 	R --vanilla < misc/recreate_aamodels.R
-
-codonreload: cat
-	(rm RData/*;true)
 	R --vanilla < misc/recreate_codonmodels.R
-
 
