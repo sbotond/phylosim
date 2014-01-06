@@ -4528,9 +4528,6 @@ CODON.TABLES<-list(
 			}
 	}
 
-	# Sort the codons alphabetically:
-	symbols<-sort(symbols);
-
 	this<-Alphabet(
 		type=CODON.TABLES[[table.id]]$name,
 		symbols=symbols
