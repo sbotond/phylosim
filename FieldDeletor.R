@@ -111,13 +111,6 @@ setConstructorS3(
 				throw("The specified field model type is invalid!\n");
 			}
 
-			# Load the compoisson package if the type is Conway-Maxwell Poisson:
-			if(type == "compoisson"){
-				if(!require(compoisson)){
-					throw("The compoisson package cannot be loaded, so cannot use the Conway-Maxwell Poisson density for sampling deletion lengths!\n");
-				}
-			}
-
 			# Extending as FastFieldDeletor:
     	this<-extend(
       	this,
