@@ -21,7 +21,7 @@ rd: *.R
 	( cd pkg/; R --vanilla < ../misc/compileman.R; perl ../misc/RdClean.pl)
 pkg: cat sc *.R
 	(rm PhyloSimSource.R;true)
-	cp PAMLdat/*.dat pkg/extdata/
+	cp PAMLdat/*.dat pkg/inst/extdata/
 	cp RData/* pkg/data/
 	R CMD build --compact-vignettes=both pkg
 checkpkg: pkg 
