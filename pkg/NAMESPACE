@@ -1,4 +1,8 @@
 exportPattern("^[^\\.]");
 import(grid)
-import("R.methodsS3")
+import(R.oo)
+import(ape)
+import(compoisson)
+import(ggplot2)
+import(R.methodsS3)
 
