@@ -16,18 +16,17 @@
  \description{
 
 
-	Package:  R_GlobalEnv \cr
 \bold{Class ECMunrest}\cr
 
 \code{\link[R.oo]{Object}}\cr
 \code{~~|}\cr
-\code{~~+--}\code{\link[R_GlobalEnv]{PSRoot}}\cr
+\code{~~+--}\code{\link{PSRoot}}\cr
 \code{~~~~~~~|}\cr
-\code{~~~~~~~+--}\code{\link[R_GlobalEnv]{Process}}\cr
+\code{~~~~~~~+--}\code{\link{Process}}\cr
 \code{~~~~~~~~~~~~|}\cr
-\code{~~~~~~~~~~~~+--}\code{\link[R_GlobalEnv]{GeneralSubstitution}}\cr
+\code{~~~~~~~~~~~~+--}\code{\link{GeneralSubstitution}}\cr
 \code{~~~~~~~~~~~~~~~~~|}\cr
-\code{~~~~~~~~~~~~~~~~~+--}\code{\link[R_GlobalEnv]{CodonSubst}}\cr
+\code{~~~~~~~~~~~~~~~~~+--}\code{\link{CodonSubst}}\cr
 \code{~~~~~~~~~~~~~~~~~~~~~~|}\cr
 \code{~~~~~~~~~~~~~~~~~~~~~~+--}\code{ECMunrest}\cr
 
@@ -35,7 +34,7 @@
 \cr
 
 public static class \bold{ECMunrest}\cr
-extends \link[R_GlobalEnv]{CodonSubst}\cr
+extends \link{CodonSubst}\cr
 
 
  }

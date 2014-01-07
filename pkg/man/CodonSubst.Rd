@@ -20,24 +20,23 @@
 	The rate matrix can be built from PAML files specified by the \code{paml.file} argument.
 	Alternatively the rates can be specified as a list through the \code{rate.list} parameter.
 
-	Package:  R_GlobalEnv \cr
 \bold{Class CodonSubst}\cr
 
 \code{\link[R.oo]{Object}}\cr
 \code{~~|}\cr
-\code{~~+--}\code{\link[R_GlobalEnv]{PSRoot}}\cr
+\code{~~+--}\code{\link{PSRoot}}\cr
 \code{~~~~~~~|}\cr
-\code{~~~~~~~+--}\code{\link[R_GlobalEnv]{Process}}\cr
+\code{~~~~~~~+--}\code{\link{Process}}\cr
 \code{~~~~~~~~~~~~|}\cr
-\code{~~~~~~~~~~~~+--}\code{\link[R_GlobalEnv]{GeneralSubstitution}}\cr
+\code{~~~~~~~~~~~~+--}\code{\link{GeneralSubstitution}}\cr
 \code{~~~~~~~~~~~~~~~~~|}\cr
 \code{~~~~~~~~~~~~~~~~~+--}\code{CodonSubst}\cr
 
 \bold{Directly known subclasses:}\cr
-\link[R_GlobalEnv]{ECMrest}, \link[R_GlobalEnv]{ECMunrest}\cr
+\link{ECMrest}, \link{ECMunrest}\cr
 
 public static class \bold{CodonSubst}\cr
-extends \link[R_GlobalEnv]{GeneralSubstitution}\cr
+extends \link{GeneralSubstitution}\cr
 
 
  }
