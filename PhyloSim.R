@@ -2923,7 +2923,7 @@ setMethodS3(
        return(aln)
      }
      newPositions <- rev(match(tree$tip.label,names))
-     aln[newPositions,] <- aln
+     aln <- aln[newPositions,]
      dimnames(aln) <- list(names[newPositions])
      return(aln)
    }
@@ -3464,6 +3464,7 @@ setMethodS3(
                                         # Do some reordering of alignment & tree.
     if (!any(is.na(phylo))) {
       x$.phylo <- reorder(x$.phylo, order="cladewise");
+      phylo    <- x$.phylo
       aln <- sort.aln.by.tree(aln,phylo)
     }
 
