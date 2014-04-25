@@ -10,7 +10,6 @@
 \alias{setEquDist.ToleranceSubstitution}
 \alias{ToleranceSubstitution.setEquDist}
 \alias{setEquDist,ToleranceSubstitution-method}
- \alias{setEquDist.AminoAcidSubst}
 
  \title{Set the equilibrium distribution for a ToleranceSubstitution object}
 
