@@ -75,7 +75,7 @@
 # plotParametersAtSites(s,p,"substitution.tolerance")
 # 
 # # Construct simulation object:
-# sim <-PhyloSim(root.seq=s, phylo=rtree(10))
+# sim <-PhyloSim(root.seq=s, phylo=rtree(3))
 # 
 # # Run simulation:
 # Simulate(sim)
@@ -451,7 +451,6 @@ setMethodS3(
 ###########################################################################/**
 #
 # @RdocMethod setEquDist
-# \alias{setEquDist.AminoAcidSubst}
 #
 # @title "Set the equilibrium distribution for a ToleranceSubstitution object" 
 # 
