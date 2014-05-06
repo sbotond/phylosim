@@ -171,7 +171,8 @@ setConstructorS3(
 				# Return details:
 				return(
 					list(
-						type="substitution"
+						type="substitution",
+                        accepted=TRUE
 					)
 				);	
 		}	

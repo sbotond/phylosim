@@ -4667,7 +4667,9 @@ setMethodS3(
 	){
 
 		if(details$type == "substitution"){
-			
+		
+            if(details$accepted) {
+	
 			if(is.null(this$.branch.stats[[as.character(branch.number)]]$substitution)){
 				this$.branch.stats[[as.character(branch.number)]]$substitution<-1;
 			} else {
@@ -4677,9 +4679,12 @@ setMethodS3(
 	
 			if(is.null(this$.branch.stats[[as.character(branch.number)]][[name]])){
 				this$.branch.stats[[as.character(branch.number)]][[name]]<-1;
-			}
+
+            }
 			else {
 				this$.branch.stats[[as.character(branch.number)]][[name]]<-(this$.branch.stats[[as.character(branch.number)]][[name]] + 1);
+			}
+
 			}
 		
 			# Special stuff for the GY94 codon model:	
